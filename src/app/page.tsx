@@ -1,101 +1,55 @@
-import Image from "next/image";
+"use client"
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import Pricing from "@/components/landing-page/pricing";
+import PageLayout from "@/components/layout/page-layout";
+import Features from "@/components/landing-page/features";
+import AccordionFAQ from "@/components/landing-page/faq-accordion";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 export default function Home() {
+  const user = useCurrentUser();
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <PageLayout isLandingPage>
+      <section className="flex justify-center items-center text-center flex-col space-y-6 pt-4 sm:pt-32 w-full bg-[url(/bg.svg)]" id="hero">
+        <div className="text-4xl sm:text-5xl md:text-6xl space-y-5 font-bold">
+          <h1>Ձեր ռեզյումեն՝ վայրկյանների ընթացքում</h1>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+        <p className="text-sm md:text-xl font-light text-zinc-700 dark:text-zinc-400">Ստեղծեք պրոֆեսիոնալ ռեզյումե արագ և հեշտ, և ներբեռնեք անվճար</p>
+        <Link href={!user ? "/auth/register" : "/dashboard"} className={buttonVariants({variant: "default"})}>Սկսել անվճար</Link>
+        <p className="text-xs md:text-sm font-normal text-zinc-700 dark:text-zinc-400">Կրեդիտ քարտ չի պահանջվում։</p>
+        <div className="w-full bg-gradient-to-b from-transparent to-background h-32"></div>
+      </section>
+      <section className="flex justify-center items-center flex-col space-y-4 w-full px-3" id="how-it-works">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl space-y-5 font-bold">Ինչպե՞ս է աշխատում</h2>
+        <ul className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full max-w-5xl text-center">
+          {/* TODO: Add Demo Images */}
+          <li className="flex flex-col items-center justify-start space-y-4 mt-12 pb-24">
+            <div className="bg-card p-4 shadow-sm border rounded-xl w-[250px] h-[250px]"></div>
+            <p>1. Ընտրել ռեզյումեի շաբլոն հարմար և պրոֆեսիոնալ ռեզյումե պատրաստելու համար։</p>
+          </li>
+          <li className="flex flex-col items-center justify-start space-y-4 mt-12 pb-24">
+          <div className="bg-card p-4 shadow-sm border rounded-xl w-[250px] h-[250px]"></div>
+            <p>2. Լրացնել ձեր տվյալները ձեր ռեզյումեի համար։</p>
+          </li>
+          <li className="flex flex-col items-center justify-start space-y-4 mt-12 pb-24">
+            <div className="bg-card p-4 shadow-sm border rounded-xl w-[250px] h-[250px]"></div>
+            <p>3. Ստեղծել և ներբեռնել ռեզյումեն որպես PDF ֆայլ։</p>
+          </li>
+        </ul>
+      </section>
+      <section className="flex justify-center items-center flex-col space-y-4 w-full px-3 pb-5" id="features">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl space-y-5 font-bold">Հնարավորություններ</h2>
+        <Features/>
+      </section>
+      <section className="flex justify-center items-center flex-col space-y-4 w-full px-3" id="pricing">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl space-y-5 font-bold">Առաջարկներ և գներ</h2>
+        <Pricing/>
+      </section>
+      <section className="flex justify-center items-center flex-col space-y-4 w-full px-3" id="faq">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl space-y-5 font-bold">Հաճախակի տրվող հարցեր</h2>
+        <AccordionFAQ/>
+      </section>
+    </PageLayout>
+  )
 }

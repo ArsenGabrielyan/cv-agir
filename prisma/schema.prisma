@@ -1,0 +1,208 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type ResumeLink {
+  name String?
+  url  String?
+}
+
+type ResumeExperience {
+  job       String?
+  company   String?
+  startDate DateTime?
+  endDate   DateTime?
+  city      String?
+  jobInfo   String?
+}
+
+type ResumeEducation {
+  degree    String?
+  faculty   String?
+  startDate DateTime?
+  endDate   DateTime?
+  school    String?
+  city      String?
+}
+
+type ResumeCourses {
+  name        String?
+  institution String?
+  startDate   DateTime?
+  endDate     DateTime?
+}
+
+type ResumeReferences {
+  fullName String?
+  position String?
+  company  String?
+  phone    String?
+  email    String?
+}
+
+type ResumeSkill {
+  name       String?
+  percentage Int?
+}
+
+model User {
+  id                    String                 @id @default(auto()) @map("_id") @db.ObjectId
+  name                  String?
+  email                 String?                @unique
+  emailVerified         DateTime?
+  image                 String?
+  password              String?
+  isTwoFactorEnabled    Boolean                @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
+  accounts              Account[]
+  sessions              Session[]
+  resumes               Resume[]
+  jobTitle              String?
+  phone                 String?
+  address               String?
+  summary               String?
+  hobbies               String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorToken {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorConfirmation {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId])
+}
+
+model ResumeTemplateCategory {
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  templates ResumeTemplate[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ResumeTemplate {
+  id           String                 @id @default(auto()) @map("_id") @db.ObjectId
+  name         String?
+  description  String?
+  imageName    String?
+  htmlTemplate String?
+  cssStyle     String?
+  categoryId   String                 @db.ObjectId
+  isPremium    Boolean?
+  category     ResumeTemplateCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  resumes      Resume[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Resume {
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  fname       String?
+  lname       String?
+  jobTitle    String?
+  phone       String?
+  address     String?
+  profileImg  String?
+  email       String?            @unique
+  links       ResumeLink[]
+  qrImg       String?
+  summary     String?
+  experience  ResumeExperience[]
+  education   ResumeEducation[]
+  courses     ResumeCourses[]
+  references  ResumeReferences[]
+  skills      ResumeSkill[]
+  languages   ResumeSkill[]
+  hobbies     String?
+
+  userId String @unique @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  templateId String?         @unique @db.ObjectId
+  template   ResumeTemplate? @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
