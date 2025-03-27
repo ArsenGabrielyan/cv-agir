@@ -30,7 +30,7 @@ export const LoginSchema = z.object({
 })
 
 export const RegisterSchema = z.object({
-     name: z.string().min(2,"Մուտքագրեք ձեր անունը և ազգանունը").max(100,"Անունը և ազգանունը շատ երկար է"),
+     name: z.string().min(2,"Մուտքագրեք Ձեր անունը և ազգանունը").max(100,"Անունը և ազգանունը շատ երկար է"),
      email: z.string().email("Մուտքագրեք վավերական էլ․ փոստ"),
      password: z.string().min(8,"Գաղտնաբառը պետք է ունենա առնվազն 8 նիշ")
 })

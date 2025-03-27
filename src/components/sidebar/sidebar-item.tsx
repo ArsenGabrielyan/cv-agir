@@ -4,7 +4,7 @@ import {
      SidebarMenuItem,
      SidebarMenuButton,
      SidebarMenuAction
-} from "../ui/sidebar";
+} from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
 import {
      DropdownMenu,

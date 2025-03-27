@@ -16,7 +16,7 @@ export const GET = async (req: NextRequest) => {
      const data = await db.resumeTemplate.findMany({
           where: {
                name: {
-                    contains: filter.name,
+                    contains: filter.name || "",
                     mode: 'insensitive'
                },
                isPremium: filter.isPremium,

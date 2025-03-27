@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-     title: "Հետադարձ կապ | CV-ագիր"
+     title: "Հետադարձ կապ"
 }
 
 export default function ContactPage(){

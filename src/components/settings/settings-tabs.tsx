@@ -1,6 +1,6 @@
 "use client"
 import { ISettingsPage } from "@/data/types";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AccountSettings from "./pages/account-settings";
 import Customization from "./pages/customization";
 import ResumeSettings from "./pages/resume-settings";

@@ -3,9 +3,11 @@ import { Metadata } from "next";
 import ResumeEditor from "@/app/(protected)/editor/resume-editor";
 import { db } from "@/lib/db";
 import { ResumeTemplate } from "@prisma/client";
+import { currentUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-     title: "Ձևավորել ձեր ռեզյումեն | CV-ագիր"
+     title: "Ձևավորել Ձեր ռեզյումեն"
 }
 
 export default async function ResumeEditorPage({
@@ -14,16 +16,32 @@ export default async function ResumeEditorPage({
      searchParams: Promise<{ resumeId?: string, templateId?: string }>
 }){
      const {templateId, resumeId} = await searchParams;
+     const user = await currentUser();
+     if(!user || !user.id){
+          redirect("/auth/login")
+     }
 
-     const template: ResumeTemplate | null = templateId ? await db.resumeTemplate.findUnique({
+     const resumeToEdit = resumeId ? await db.resume.findUnique({
           where: {
-               id: templateId
-          }
+               id: resumeId,
+               userId: user.id
+          },
      }) : null
+
+     let template: ResumeTemplate | null = null;
+     if (templateId) {
+          template = await db.resumeTemplate.findUnique({
+               where: { id: templateId },
+          });
+     } else if (resumeToEdit && resumeToEdit.templateId) {
+          template = await db.resumeTemplate.findUnique({
+               where: { id: resumeToEdit.templateId },
+          });
+     }
 
      return (
           <PageLayout resumeEditor>
-               <ResumeEditor template={template}/>
+               <ResumeEditor resumeToEdit={resumeToEdit} template={template}/>
           </PageLayout>
      )
 }

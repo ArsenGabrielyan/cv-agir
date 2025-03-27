@@ -58,3 +58,14 @@ export const PLACEHOLDERS: Record<PlaceholdersName,string[]> = {
      jobName: JOB_NAMES,
      degrees: DEGREES
 }
+
+export const AI_MODEL = "gemini-2.0-flash-lite"
+
+export const GEN_CONFIG = (type = "text/plain") => ({
+     temperature: 1,
+     topP: 0.95,
+     topK: 40,
+     maxOutputTokens: 8192,
+     responseModalities: [],
+     responseMimeType: type,
+})

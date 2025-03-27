@@ -30,7 +30,7 @@ export default function Home() {
           </li>
           <li className="flex flex-col items-center justify-start space-y-4 mt-12 pb-24">
           <div className="bg-card p-4 shadow-sm border rounded-xl w-[250px] h-[250px]"></div>
-            <p>2. Լրացնել ձեր տվյալները ձեր ռեզյումեի համար։</p>
+            <p>2. Լրացնել Ձեր տվյալները Ձեր ռեզյումեի համար։</p>
           </li>
           <li className="flex flex-col items-center justify-start space-y-4 mt-12 pb-24">
             <div className="bg-card p-4 shadow-sm border rounded-xl w-[250px] h-[250px]"></div>

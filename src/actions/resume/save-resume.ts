@@ -6,18 +6,10 @@ import { ResumeFormType } from "@/schemas/types"
 import {del, put} from "@vercel/blob"
 import path from "path"
 
-export const saveResume = async(values: ResumeFormType) => {
+export const saveResume = async(values: ResumeFormType,templateId?: string) => {
      const {id} = values
 
-     const validatedFields = ResumeFormSchema.safeParse(values);
-
-     if(!validatedFields.success){
-          throw new Error("Ռեզյումեն վալիդացրած չէ")
-     }
-
-     const {
-          profileImg, education, experience, courses, ...resumeValues
-     } = validatedFields.data;
+     const {profileImg, experience, education, courses, ...resumeValues} = ResumeFormSchema.parse(values)
 
      const user = await currentUser();
 
@@ -29,7 +21,7 @@ export const saveResume = async(values: ResumeFormType) => {
 
      const existingResume = id ? await db.resume.findUnique({
           where: {
-               id,userId: user.id
+               id, userId: user.id
           }
      }) : null
 
@@ -56,7 +48,7 @@ export const saveResume = async(values: ResumeFormType) => {
      }
 
      if(id){
-          return await db.resume.update({
+          return db.resume.update({
                where: {id},
                data: {
                     ...resumeValues,
@@ -76,11 +68,12 @@ export const saveResume = async(values: ResumeFormType) => {
                          startDate: course?.startDate ? new Date(course.startDate) : undefined,
                          endDate: course?.endDate ? new Date(course.endDate) : undefined
                     })),
+                    templateId,
                     updatedAt: new Date()
                }
           })
      } else {
-          return await db.resume.create({
+          return db.resume.create({
                data: {
                     ...resumeValues,
                     profileImg: newImgUrl,
@@ -101,6 +94,7 @@ export const saveResume = async(values: ResumeFormType) => {
                          startDate: course?.startDate ? new Date(course.startDate) : undefined,
                          endDate: course?.endDate ? new Date(course.endDate) : undefined
                     })),
+                    templateId,
                     updatedAt: new Date()
                }
           })

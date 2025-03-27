@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-     title: "Ռեզյումեի շաբլոններ | CV-ագիր"
+     title: "Ռեզյումեի շաբլոններ"
 }
 
 export default async function TemplatesPage(){

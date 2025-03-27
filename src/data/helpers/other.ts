@@ -24,46 +24,46 @@ export const mapToResumeValues = (data: Resume): ResumeFormType => ({
      profileImg: data.profileImg || undefined,
      email: data.email || undefined,
      links: data.links.map(link=>({
-          name: link.name,
-          url: link.url
+          name: link.name || undefined,
+          url: link.url || undefined
      })) || undefined,
      summary: data.summary || undefined,
      experience: data.experience.map(exp=>({
-          job: exp.job,
-          company: exp.company,
-          startDate: exp.startDate.toISOString().split("T")[0],
-          endDate: exp.endDate.toISOString().split("T")[0],
-          city: exp.city,
-          jobInfo: exp.jobInfo
+          job: exp.job || undefined,
+          company: exp.company || undefined,
+          startDate: exp.startDate?.toISOString().split("T")[0],
+          endDate: exp.endDate?.toISOString().split("T")[0],
+          city: exp.city || undefined,
+          jobInfo: exp.jobInfo || undefined
      })) || undefined,
      education: data.education.map(edu=>({
-          degree: edu.degree,
-          faculty: edu.faculty,
-          startDate: edu.startDate.toISOString().split("T")[0],
-          endDate: edu.endDate.toISOString().split("T")[0],
-          school: edu.school,
-          city: edu.city
+          degree: edu.degree || undefined,
+          faculty: edu.faculty || undefined,
+          startDate: edu.startDate?.toISOString().split("T")[0],
+          endDate: edu.endDate?.toISOString().split("T")[0],
+          school: edu.school || undefined,
+          city: edu.city || undefined
      })) || undefined,
      courses: data.courses.map(course=>({
-          name: course.name,
-          institution: course.institution,
-          startDate: course.startDate.toISOString().split("T")[0],
-          endDate: course.endDate.toISOString().split("T")[0],
+          name: course.name || undefined,
+          institution: course.institution || undefined,
+          startDate: course.startDate?.toISOString().split("T")[0],
+          endDate: course.endDate?.toISOString().split("T")[0],
      })) || undefined,
      references: data.references.map(ref=>({
-          fullName: ref.fullName,
-          position: ref.position,
-          company: ref.company,
-          phone: ref.phone,
-          email: ref.email
+          fullName: ref.fullName || undefined,
+          position: ref.position || undefined,
+          company: ref.company || undefined,
+          phone: ref.phone || undefined,
+          email: ref.email || undefined
      })) || undefined,
      skills: data.skills.map(skill=>({
-          name: skill.name,
-          percentage: skill.percentage
+          name: skill.name || undefined,
+          percentage: skill.percentage || undefined
      })) || undefined,
      languages: data.languages.map(lang=>({
-          name: lang.name,
-          percentage: lang.percentage
+          name: lang.name || undefined,
+          percentage: lang.percentage || undefined
      })) || undefined,
      hobbies: data.hobbies || undefined,
      qrImg: data.qrImg || undefined
@@ -109,4 +109,13 @@ export function getBorderRadius(borderStyle: BorderStyles,type: "default" | "bad
      if(borderStyle===BorderStyles.Square) return "0px"
      if(borderStyle===BorderStyles.Circle) return "9999px"
      return type==="default" ? "10%" : "8px"
+}
+
+export function fileReplacer(_: unknown, value: unknown){
+     return value instanceof File ? {
+          name: value.name,
+          size: value.size,
+          type: value.type,
+          lastModified: value.lastModified,
+     } : value
 }

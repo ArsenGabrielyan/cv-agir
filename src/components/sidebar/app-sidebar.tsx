@@ -7,7 +7,7 @@ import {
      SidebarGroupLabel,
      SidebarHeader,
      SidebarMenu
-} from "../ui/sidebar";
+} from "@/components/ui/sidebar";
 import { SIDEBAR_LINKS } from "@/data/constants/links";
 import Logo from "../layout/logo";
 import SidebarItem from "./sidebar-item";

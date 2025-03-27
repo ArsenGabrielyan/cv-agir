@@ -12,7 +12,7 @@ import {
      FormLabel,
      FormMessage
 } from "@/components/ui/form"
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { FormError } from "../form/form-error";
 import { FormSuccess } from "../form/form-success";
 import { PasswordStrengthInput } from "../form/password-input";

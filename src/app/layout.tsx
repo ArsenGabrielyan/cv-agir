@@ -7,7 +7,10 @@ import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "CV-ագիր - Ստեղծիր CV արագ",
+  title: {
+    template: "%s | CV-ագիր բետա",
+    absolute: "CV-ագիր (բետա) - Ստեղծիր CV արագ"
+  },
   description: "CV-ագիրը ռեզյումե գեներացնելու հավելված է։",
   authors: {
     url: "https://github.com/ArsenGabrielyan",

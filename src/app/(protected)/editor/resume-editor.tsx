@@ -12,15 +12,16 @@ import ResumePreviewSection from "./resume-preview-section"
 import { cn } from "@/lib/utils"
 import useUnsavedChangesWarning from "@/hooks/use-unsaved-changes"
 import useAutoSave from "@/hooks/use-auto-save"
+import { mapToResumeValues } from "@/data/helpers/other"
 
 interface ResumeEditorProps {
-     resumeToEdit?: Resume | null;
+     resumeToEdit: Resume | null;
      template: ResumeTemplate | null;
 }
-export default function ResumeEditor({template}: ResumeEditorProps){
+export default function ResumeEditor({resumeToEdit,template}: ResumeEditorProps){
      const searchParams = useSearchParams();
      const router = useRouter();
-     const [resumeData, setResumeData] = useState<ResumeFormType>({} as ResumeFormType);
+     const [resumeData, setResumeData] = useState<ResumeFormType>(resumeToEdit ? mapToResumeValues(resumeToEdit) : {});
      const [showSmResumePreview, setShowSmResumePreview] = useState(false);
      const {isSaving, hasUnsavedChanges} = useAutoSave(resumeData,template?.id)
      const currStep = searchParams.get("step") || steps[0].key;
@@ -47,14 +48,14 @@ export default function ResumeEditor({template}: ResumeEditorProps){
                <header className="border-b px-3 py-5 flex flex-col items-center justify-center gap-y-4">
                     <div className="space-y-1.5 text-center">
                          <h1 className="text-lg md:text-xl lg:text-2xl font-semibold flex justify-between items-start">
-                              Պատրաստել ձեր ռեզյումեն
+                              Պատրաստել Ձեր ռեզյումեն
                               {isSaving && (
                                    <span className="text-base font-normal flex items-center gap-2 text-muted-foreground">
                                         <Loader className="animate-spin"/>Պահպանվում է․․․
                                    </span>
                               )}
                          </h1>
-                         <p className="text-sm text-muted-foreground">Պատրաստել ձեր ռեզյումեն հետևելով նշված քայլերին։ Ձեր գործընթացը ավտոմատիկ կպահպանվի։</p>
+                         <p className="text-sm text-muted-foreground">Պատրաստել Ձեր ռեզյումեն հետևելով նշված քայլերին։ Ձեր գործընթացը ավտոմատիկ կպահպանվի։</p>
                     </div>
                </header>
                <main className="relative grow">

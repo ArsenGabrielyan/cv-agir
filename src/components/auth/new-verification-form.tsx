@@ -36,7 +36,7 @@ export const NewVerificationForm = () => {
 
      return (
           <CardWrapper
-               headerLabel="Հաստատում ենք ձեր էլ․ փոստը"
+               headerLabel="Հաստատում ենք Ձեր էլ․ փոստը"
                backButtonHref="/auth/login"
                backButtonLabel="Վերադառնալ մուտք"
           >

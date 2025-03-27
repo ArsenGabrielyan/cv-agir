@@ -2,7 +2,7 @@
 import Navbar from "./navbar";
 import Footer from "./footer";
 import AppSidebar from "../sidebar/app-sidebar";
-import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UserButton } from "../auth/user-button";
 
 interface PageLayoutProps{

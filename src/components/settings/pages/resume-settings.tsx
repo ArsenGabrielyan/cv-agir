@@ -136,7 +136,7 @@ export default function ResumeSettings(){
                                              <FormControl>
                                                   <Textarea
                                                        {...field}
-                                                       placeholder="Նկարագրեք ձեր մասին կարճ տեղեկություն"
+                                                       placeholder="Նկարագրեք Ձեր մասին կարճ տեղեկություն"
                                                   />
                                              </FormControl>
                                              <FormMessage/>
@@ -152,7 +152,7 @@ export default function ResumeSettings(){
                                              <FormControl>
                                                   <Textarea
                                                        {...field}
-                                                       placeholder="Նկարագրեք ձեր սիրած հոբբիները այստեղ"
+                                                       placeholder="Նկարագրեք Ձեր սիրած հոբբիները այստեղ"
                                                   />
                                              </FormControl>
                                              <FormMessage/>

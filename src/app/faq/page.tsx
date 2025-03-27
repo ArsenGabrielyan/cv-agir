@@ -4,7 +4,7 @@ import { CircleHelp } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-     title: "Հարցեր և պատասխաններ | CV-ագիր"
+     title: "Հարցեր և պատասխաններ"
 }
 
 export default function FAQPage(){

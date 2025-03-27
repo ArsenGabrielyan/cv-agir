@@ -18,6 +18,7 @@ import { useEffect, useRef } from "react"
 import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input"
 import { ResumeFormProps } from "@/data/types"
 import { Button } from "@/components/ui/button"
+import GenerateSummaryButton from "../ai-buttons/generate-summary"
 
 export default function ResumeInfoForm({resumeData, setResumeData}: ResumeFormProps){
      const form = useForm<ResumeInfoType>({
@@ -45,7 +46,7 @@ export default function ResumeInfoForm({resumeData, setResumeData}: ResumeFormPr
      },[form, resumeData, setResumeData])
 
      const imgInputRef = useRef<HTMLInputElement>(null);
-
+     const isDisabled = !resumeData.jobTitle && !resumeData.experience?.length && !resumeData.education?.length || !resumeData.skills?.length || !resumeData.languages?.length
      return (
           <Form {...form}>
                <form className="space-y-4">
@@ -85,7 +86,7 @@ export default function ResumeInfoForm({resumeData, setResumeData}: ResumeFormPr
                               )}
                          />
                     </ResumeFormCardWrapper>
-                    <ResumeFormCardWrapper title="Անձնական ինֆորմացիա" description="Տեղադրել ձեր մասին ինֆորմացիան այստեղ">
+                    <ResumeFormCardWrapper title="Անձնական ինֆորմացիա" description="Տեղադրել Ձեր մասին ինֆորմացիան այստեղ">
                          <FormField
                               control={form.control}
                               name="profileImg"
@@ -231,10 +232,15 @@ export default function ResumeInfoForm({resumeData, setResumeData}: ResumeFormPr
                                         <FormControl>
                                              <Textarea
                                                   {...field}
-                                                  placeholder="Նկարագրեք կարճ տեղեկություն ձեր մասին"
+                                                  placeholder="Նկարագրեք կարճ տեղեկություն Ձեր մասին"
                                              />
                                         </FormControl>
                                         <FormMessage/>
+                                        <GenerateSummaryButton
+                                             resumeData={resumeData}
+                                             onSummaryGenerated={summary=>field.onChange(summary)}
+                                             disabled={isDisabled}
+                                        />
                                    </FormItem>
                               )}
                          />
@@ -250,7 +256,7 @@ export default function ResumeInfoForm({resumeData, setResumeData}: ResumeFormPr
                                                   placeholder="Լուսանկարչություն, Ֆուտբոլ և այլն․․․"
                                              />
                                         </FormControl>
-                                        <FormDescription>Լրացրեք ձեր սիրած հոբբիները այստեղ</FormDescription>
+                                        <FormDescription>Լրացրեք Ձեր սիրած հոբբիները այստեղ</FormDescription>
                                         <FormMessage/>
                                    </FormItem>
                               )}

@@ -1,10 +1,10 @@
 import { ResumeFormType } from "@/schemas/types";
 import useDebounce from "./use-debounce";
 import { useEffect, useState } from "react";
-import { isEqual } from "lodash";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { saveResume } from "@/actions/resume/save-resume";
+import { fileReplacer } from "@/data/helpers/other";
 
 export default function useAutoSave(resumeData: ResumeFormType, templateId?: string){
      const searchParams = useSearchParams();
@@ -22,55 +22,46 @@ export default function useAutoSave(resumeData: ResumeFormType, templateId?: str
      },[debouncedData])
 
      useEffect(()=>{
-          const save = async()=>{
+          async function save(){
                try{
                     setIsSaving(true);
                     setIsError(false);
-                    const newData = structuredClone(debouncedData)
-                    const updatedResume = await saveResume({
+                    const newData = structuredClone(debouncedData);
+                    const updated = await saveResume({
                          ...newData,
-                         ...(lastSaved.profileImg?.toString()===newData?.profileImg?.toString() && {
+                         ...(JSON.stringify(lastSaved.profileImg, fileReplacer)===JSON.stringify(newData.profileImg,fileReplacer) && {
                               profileImg: undefined
                          }),
                          id: resumeId,
-                         templateId
-                    })
-
-                    setResumeId(updatedResume.id)
+                    },templateId);
+                    setResumeId(updated.id);
                     setLastSaved(newData);
-
-                    if(searchParams.get("resumeId") !== updatedResume.id){
+                    if(searchParams.get("resumeId")!==updated.id){
                          const newSearchParams = new URLSearchParams(searchParams);
-                         newSearchParams.set("resumeId",updatedResume.id);
-                         router.push(`?${newSearchParams.toString()}`)
+                         newSearchParams.set("resumeId",updated.id);
+                         router.replace(`?${newSearchParams.toString()}`)
                     }
-
-                    setIsSaving(false);
-               } catch (error) {
-                    setIsError(true)
-                    console.error(error);
-                    toast.error("Վայ, մի բան սխալ տեղի ունեցավ։",{
-                         description: "Չհաջողվեց պահպանել փոփոխությունները",
+               } catch(error){
+                    setIsError(true);
+                    console.error(error)
+                    toast.error("Չհաջողվեց պահպանել ռեզյումեն",{
                          action: {
                               label: "Նորից փորձել",
-                              onClick(){
-                                   save();
-                              }
+                              onClick: () => save()
                          }
                     })
                } finally {
-                    setIsSaving(false);
+                    setIsSaving(false)
                }
           }
-          const hasUnsavedChanges = !isEqual(debouncedData,lastSaved);
-
+          const hasUnsavedChanges = JSON.stringify(debouncedData,fileReplacer)!==JSON.stringify(lastSaved,fileReplacer);
           if(hasUnsavedChanges && debouncedData && !isSaving && !isError){
-               save();
+               save()
           }
-     },[debouncedData,isSaving,lastSaved,isError, resumeId, searchParams,router, templateId])
+     },[debouncedData, isError, isSaving, lastSaved, resumeId, router, searchParams, templateId])
 
      return {
           isSaving,
-          hasUnsavedChanges: !isEqual(resumeData,lastSaved)
+          hasUnsavedChanges: JSON.stringify(resumeData)!==JSON.stringify(lastSaved)
      }
 }

@@ -2,7 +2,7 @@ import { NewVerificationForm } from "@/components/auth/new-verification-form";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-     title: "Հաստատեք ձեր էլ․ փոստը | CV-ագիր"
+     title: "Հաստատեք Ձեր էլ․ փոստը"
 }
 
 export default function NewVerificationPage(){

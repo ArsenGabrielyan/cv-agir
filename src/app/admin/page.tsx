@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-     title: "Ադմինիստրատորի վահանակ | CV-ագիր"
+     title: "Ադմինիստրատորի վահանակ"
 }
 
 export default async function AdminPage(){

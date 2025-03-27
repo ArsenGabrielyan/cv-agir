@@ -1,19 +1,20 @@
 import { ResumeArrayFieldProps } from "@/data/types"
 import { ResumeDetailsType } from "@/schemas/types"
-import { FieldValues, Path } from "react-hook-form"
+import { Path } from "react-hook-form"
 import DynamicFieldWrapper from "../wrappers/resume-dynamic-field-wrapper"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import GenerateWorkExpButton from "../ai-buttons/generate-work-experience"
 
-export default function WorkExperienceField<TSchema extends FieldValues = ResumeDetailsType>({form,index,remove,id}: ResumeArrayFieldProps<TSchema>){
-     const jobField = `experience.${index}.job` as Path<TSchema>
-     const companyField = `experience.${index}.company` as Path<TSchema>
-     const startDateField = `experience.${index}.startDate` as Path<TSchema>
-     const endDateField = `experience.${index}.endDate` as Path<TSchema>
-     const cityField = `experience.${index}.city` as Path<TSchema>
-     const jobInfoField = `experience.${index}.jobInfo` as Path<TSchema>
+export default function WorkExperienceField({form,index,remove,id}: ResumeArrayFieldProps<ResumeDetailsType>){
+     const jobField = `experience.${index}.job` as Path<ResumeDetailsType>
+     const companyField = `experience.${index}.company` as Path<ResumeDetailsType>
+     const startDateField = `experience.${index}.startDate` as Path<ResumeDetailsType>
+     const endDateField = `experience.${index}.endDate` as Path<ResumeDetailsType>
+     const cityField = `experience.${index}.city` as Path<ResumeDetailsType>
+     const jobInfoField = `experience.${index}.jobInfo` as Path<ResumeDetailsType>
      return (
           <DynamicFieldWrapper
                title="Աշխատանքային փորձ"
@@ -21,6 +22,11 @@ export default function WorkExperienceField<TSchema extends FieldValues = Resume
                remove={remove}
                id={id}
           >
+               <div className="flex justify-center items-center">
+                    <GenerateWorkExpButton
+                         onWorkExpGenerated={exp=>form.setValue(`experience.${index}`,exp)}
+                    />
+               </div>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                          control={form.control}
@@ -31,6 +37,7 @@ export default function WorkExperienceField<TSchema extends FieldValues = Resume
                                    <FormControl>
                                         <RandomPlaceholderInput
                                              {...field}
+                                             value={typeof field.value === 'string' ? field.value : ''}
                                              placeholderKey="jobName"
                                         />
                                    </FormControl>
@@ -47,6 +54,7 @@ export default function WorkExperienceField<TSchema extends FieldValues = Resume
                                    <FormControl>
                                         <Input
                                              {...field}
+                                             value={typeof field.value === 'string' ? field.value : ''}
                                              placeholder="Ինչ-որ ընկերություն"
                                         />
                                    </FormControl>
@@ -66,7 +74,7 @@ export default function WorkExperienceField<TSchema extends FieldValues = Resume
                                         <Input
                                              {...field}
                                              type="date"
-                                             value={field.value?.slice(0,10)}
+                                             value={typeof field.value === 'string' ? field.value.slice(0, 10) : ''}
                                         />
                                    </FormControl>
                                    <FormMessage/>
@@ -83,7 +91,7 @@ export default function WorkExperienceField<TSchema extends FieldValues = Resume
                                         <Input
                                              {...field}
                                              type="date"
-                                             value={field.value?.slice(0,10)}
+                                             value={typeof field.value === 'string' ? field.value.slice(0, 10) : ''}
                                         />
                                    </FormControl>
                                    <FormMessage/>
@@ -101,6 +109,7 @@ export default function WorkExperienceField<TSchema extends FieldValues = Resume
                               <FormControl>
                                    <Input
                                         {...field}
+                                        value={typeof field.value === 'string' ? field.value : ''}
                                         placeholder="Երևան, Հայաստան"
                                    />
                               </FormControl>
@@ -118,6 +127,7 @@ export default function WorkExperienceField<TSchema extends FieldValues = Resume
                                    <Textarea
                                         {...field}
                                         cols={5}
+                                        value={typeof field.value === 'string' ? field.value : ''}
                                         placeholder="Ստեղծել եմ վեբ կայքեր՝ օգտագործելով HTML, CSS և JavaScript։"
                                    />
                               </FormControl>

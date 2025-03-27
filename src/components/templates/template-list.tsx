@@ -2,7 +2,7 @@
 import { ResumeTemplate } from "@prisma/client";
 import TemplateCard from "./template-card";
 import { useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 interface TemplateListProps{
      templates: ResumeTemplate[]

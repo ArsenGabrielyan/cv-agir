@@ -2,7 +2,7 @@ import LoginForm from "@/components/auth/login-form";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-     title: "Մուտք | CV-ագիր"
+     title: "Մուտք"
 }
 
 export default function LoginPage(){

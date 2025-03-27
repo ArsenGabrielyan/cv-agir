@@ -3,7 +3,7 @@ import SettingsContent from "@/components/settings/settings-tabs"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-     title: "Կարգավորումներ | CV-ագիր"
+     title: "Կարգավորումներ"
 }
 
 export default function SettingsPage(){

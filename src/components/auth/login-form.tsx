@@ -14,13 +14,13 @@ import {
      FormLabel,
      FormMessage
 } from "@/components/ui/form"
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { FormError } from "../form/form-error";
 import { FormSuccess } from "../form/form-success";
 import { login } from "@/actions/auth/login";
 import { getOAuthNotLinkedError } from "@/data/helpers/auth";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { LoginType } from "@/schemas/types";
 
 export default function LoginForm(){

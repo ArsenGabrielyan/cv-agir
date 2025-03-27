@@ -3,7 +3,7 @@ import Pricing from "@/components/landing-page/pricing";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-     title: "Առաջարկներ և գներ | CV-ագիր"
+     title: "Առաջարկներ և գներ"
 }
 
 export default function PricingPage(){
