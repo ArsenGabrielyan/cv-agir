@@ -1,6 +1,6 @@
 import * as React from "react"
-import { Input } from "./ui/input"
-import { Progress } from "./ui/progress"
+import { Input } from "@/components/ui/input"
+import { Progress } from "@/components/ui/progress"
 import zxcvbn from "zxcvbn"
 
 const PasswordStrengthInput = React.forwardRef<HTMLInputElement,React.ComponentProps<"input">>(
