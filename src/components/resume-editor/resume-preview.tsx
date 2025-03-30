@@ -13,9 +13,18 @@ interface ResumePreviewProps{
      template: ResumeTemplate | null
      resumeData: ResumeFormType,
      className?: string,
-     qrImg?: string
+     qrImg?: string,
+     isEditing?: boolean,
+     contentRef?: React.Ref<HTMLDivElement>
 }
-export default function ResumePreview({template,resumeData,className,qrImg}: ResumePreviewProps){
+export default function ResumePreview({
+     template,
+     resumeData,
+     className,
+     qrImg,
+     isEditing,
+     contentRef
+}: ResumePreviewProps){
      const containerRef = useRef<HTMLDivElement>(null);
      const {width} = useDimensions(containerRef)
      const [photoSrc, setPhotoSrc] = useState(resumeData.profileImg instanceof File ? "" : resumeData.profileImg)
@@ -33,6 +42,7 @@ export default function ResumePreview({template,resumeData,className,qrImg}: Res
                const context: ResumeFormType = {
                     ...resumeData,
                     qrImg,
+                    id: resumeData.id || template.id,
                     profileImg: photoSrc,
                     experience: resumeData.experience?.map(val => ({
                          ...val,
@@ -50,15 +60,16 @@ export default function ResumePreview({template,resumeData,className,qrImg}: Res
                          endDate: !val.endDate ? "Այսօր" : format(val.endDate,"MM/yyyy")
                     }))
                };
+               console.log(context.id)
                setCompiledHTML(compileHTML(template.htmlTemplate,context))
           }
      },[template, qrImg, resumeData, photoSrc])
      return (
           <div className={cn("bg-white text-black h-full w-full aspect-[210/297]",className)} ref={containerRef}>
-               <div className={!template ? cn("space-y-6 p-6", !width && "invisible") : cn("h-full", !width && "invisible")} style={{zoom: (1/794) * width}}>
+               <div className={!template ? cn("space-y-6 p-6", !width && "invisible") : cn("h-full", !width && "invisible")} style={{zoom: (1/794) * width}} ref={contentRef} id="resumePreviewContent">
                     {!template ? (
                          <>
-                              <HeaderSection resumeData={resumeData} photoSrc={photoSrc} qrImg={qrImg}/>
+                              <HeaderSection resumeData={resumeData} photoSrc={photoSrc} isEditing={isEditing}/>
                               <div className="grid gap-5" style={{gridTemplateColumns: "2fr 1fr"}}>
                                    <div className="space-y-4">
                                         <SummarySection resumeData={resumeData}/>
@@ -77,8 +88,8 @@ export default function ResumePreview({template,resumeData,className,qrImg}: Res
                          </>
                     ) : (
                          <>
-                              <style>{template.cssStyle}</style>
-                              <div className="h-full break-inside-avoid" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(compiledHTML,{
+                              <style>{template.cssStyle?.replaceAll("cv-template",`cv-template-${resumeData.id || template.id}`)}</style>
+                              <div id="resume-body" className="h-full break-inside-avoid" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(compiledHTML,{
                                    ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|blob):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
                               })}}/>
                          </>

@@ -187,7 +187,6 @@ model Resume {
   profileImg  String?
   email       String?            
   links       ResumeLink[]
-  qrImg       String?
   summary     String?
   experience  ResumeExperience[]
   education   ResumeEducation[]
@@ -200,7 +199,7 @@ model Resume {
   userId String? @db.ObjectId
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  templateId String?         @unique @db.ObjectId
+  templateId String?          @db.ObjectId
   template   ResumeTemplate? @relation(fields: [templateId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())

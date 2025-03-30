@@ -25,7 +25,7 @@ export default function AboutPage(){
                          <li className="flex gap-x-2"><CheckCircle className="text-primary"/><p><strong>Անվճար տարբերակ</strong>՝ ստեղծեք մինչև 3 ռեզյումե առանց որևէ վճարի։</p></li>
                          <li className="flex gap-x-2"><CheckCircle className="text-primary"/><p><strong>Պրոֆեսիոնալ շաբլոններ</strong>՝ ընտրեք տարբեր դիզայններից։</p></li>
                          <li className="flex gap-x-2"><CheckCircle className="text-primary"/><p><strong>AI առաջարկներ</strong>՝ ստացեք օպտիմալացված հմտություններ և տեքստեր։</p></li>
-                         <li className="flex gap-x-2"><CheckCircle className="text-primary"/><p><strong>PDF և Word ներբեռնում</strong>՝ Ձեր ռեզյումեն պատրաստ է ցանկացած աշխատանքի դիմումի համար։</p></li>
+                         <li className="flex gap-x-2"><CheckCircle className="text-primary"/><p><strong>PDF ներբեռնում</strong>՝ Ձեր ռեզյումեն պատրաստ է ցանկացած աշխատանքի դիմումի համար։</p></li>
                          <li className="flex gap-x-2"><CheckCircle className="text-primary"/><p><strong>QR կոդով ռեզյումե</strong>՝ հեշտությամբ կիսվեք Ձեր ռեզյումեով։</p></li>
                     </ul>
                </section>

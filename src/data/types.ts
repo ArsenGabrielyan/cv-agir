@@ -1,4 +1,5 @@
 import { ResumeFormType } from "@/schemas/types";
+import { Prisma } from "@prisma/client";
 import { LucideProps } from "lucide-react";
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
@@ -121,3 +122,10 @@ export interface IResumeDynamicFields{
           percentage: number
      }
 }
+export const resumeDataInclude = {
+     template: true
+} satisfies Prisma.ResumeInclude
+
+export type ResumeServerData = Prisma.ResumeGetPayload<{
+     include: typeof resumeDataInclude
+}>

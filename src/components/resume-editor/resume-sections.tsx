@@ -8,13 +8,15 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import ResumeSectionWrapper from "./wrappers/resume-section-wrapper"
 import { BorderStyles } from "@/app/(protected)/editor/style-buttons/border-style-button"
+import QRCode from "react-qr-code"
+import { absoluteUrl } from "@/lib/utils"
 
 interface ResumeSectionProps{
      photoSrc?: string | null,
-     qrImg?: string,
-     resumeData: ResumeFormType
+     resumeData: ResumeFormType,
+     isEditing?: boolean
 }
-export function HeaderSection({photoSrc, resumeData, qrImg}: ResumeSectionProps){
+export function HeaderSection({photoSrc, resumeData, isEditing}: ResumeSectionProps){
      const {fname, lname, jobTitle, address, phone, email, colorHex, borderStyle} = resumeData;
      return (
           <div className="flex justify-between items-center gap-4">
@@ -41,9 +43,16 @@ export function HeaderSection({photoSrc, resumeData, qrImg}: ResumeSectionProps)
                          </p>
                     </div>
                </div>
-               {qrImg && (
+               {isEditing ? (
+                    <QRCode
+                         value={absoluteUrl(`/cv/${resumeData.id}`)}
+                         width={100}
+                         height={100}
+                         className="aspect-square object-cover max-w-[100px] max-h-[100px]"
+                    />
+               ) : (
                     <Image
-                         src={qrImg}
+                         src="/qr-placeholder.png"
                          alt="Ռեզյումեի նկար"
                          width={100}
                          height={100}

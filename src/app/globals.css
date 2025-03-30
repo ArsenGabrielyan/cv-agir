@@ -103,3 +103,14 @@ body {
     @apply bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-primary via-accent to-background
   }
 }
+
+@media print{
+  #resumePreviewContent{
+    zoom: 1 !important;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 0.6cm;
+}

@@ -11,14 +11,16 @@ interface ResumePreviewSectionProps{
      setResumeData: React.Dispatch<React.SetStateAction<ResumeFormType>>,
      qrImg?: string,
      template: ResumeTemplate | null,
-     className?: string
+     className?: string,
+     isEditing?: boolean
 }
 export default function ResumePreviewSection({
      resumeData,
      setResumeData,
      qrImg,
      template,
-     className
+     className,
+     isEditing
 }: ResumePreviewSectionProps){
      return (
           <div className={cn("group relative hidden w-full md:w-1/2 md:flex",className)}>
@@ -42,6 +44,7 @@ export default function ResumePreviewSection({
                               className="max-w-2xl shadow"
                               qrImg={qrImg}
                               template={template}
+                              isEditing={isEditing}
                          />
                     </div>
                </ScrollArea>

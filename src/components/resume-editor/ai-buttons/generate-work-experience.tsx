@@ -22,7 +22,7 @@ export default function GenerateWorkExpButton({onWorkExpGenerated}: GenerateWork
                {/* TODO: Block For Free Users */}
                <Button variant="outline" type="button" onClick={()=>setShowInputDialog(true)}>
                     <Sparkles className="size-4"/>
-                    Խելացի լրացում (ԱԲ)
+                    Տվյալների լրացում (ԱԲ)
                </Button>
                <InputDialog
                     open={showInputDialog}

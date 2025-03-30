@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { steps } from "./steps"
 import Breadcrumbs from "./breadcrumbs"
 import FormFooter from "./form-footer"
-import { Loader } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ResumeFormType } from "@/schemas/types"
 import ResumePreviewSection from "./resume-preview-section"
@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils"
 import useUnsavedChangesWarning from "@/hooks/use-unsaved-changes"
 import useAutoSave from "@/hooks/use-auto-save"
 import { mapToResumeValues } from "@/data/helpers/other"
+import { absoluteUrl } from "@/lib/utils";
+import QRCode from "qrcode";
 
 interface ResumeEditorProps {
      resumeToEdit: Resume | null;
@@ -24,6 +26,7 @@ export default function ResumeEditor({resumeToEdit,template}: ResumeEditorProps)
      const [resumeData, setResumeData] = useState<ResumeFormType>(resumeToEdit ? mapToResumeValues(resumeToEdit) : {});
      const [showSmResumePreview, setShowSmResumePreview] = useState(false);
      const {isSaving, hasUnsavedChanges} = useAutoSave(resumeData,template?.id)
+     const [qrImg, setQrImg] = useState("/qr-placeholder.png");
      const currStep = searchParams.get("step") || steps[0].key;
      const setStep = (key: string) => {
           const newSearchParams = new URLSearchParams(searchParams);
@@ -34,8 +37,6 @@ export default function ResumeEditor({resumeToEdit,template}: ResumeEditorProps)
           step=>step.key===currStep
      )?.component
 
-     const qrImg = "/qr-placeholder.png"
-
      useUnsavedChangesWarning(hasUnsavedChanges);
 
      useEffect(()=>{
@@ -43,6 +44,18 @@ export default function ResumeEditor({resumeToEdit,template}: ResumeEditorProps)
                setResumeData(prev=>({...prev,templateId: template.id}))
           }
      },[template])
+
+     useEffect(()=>{
+          if(resumeToEdit){
+               const initQR = async() => {
+                    const img = resumeToEdit.id ? await QRCode.toDataURL(absoluteUrl(`/cv/${resumeToEdit.id}`)) : "/qr-placeholder.png";
+                    setQrImg(img)
+               }
+               initQR();
+          } else {
+               setQrImg("/qr-placeholder.png")
+          }
+     },[resumeToEdit])
      return (
           <div className="flex grow flex-col">
                <header className="border-b px-3 py-5 flex flex-col items-center justify-center gap-y-4">
@@ -51,7 +64,7 @@ export default function ResumeEditor({resumeToEdit,template}: ResumeEditorProps)
                               Պատրաստել Ձեր ռեզյումեն
                               {isSaving && (
                                    <span className="text-base font-normal flex items-center gap-2 text-muted-foreground">
-                                        <Loader className="animate-spin"/>Պահպանվում է․․․
+                                        <Loader2 className="animate-spin"/>Պահպանվում է․․․
                                    </span>
                               )}
                          </h1>
@@ -78,6 +91,7 @@ export default function ResumeEditor({resumeToEdit,template}: ResumeEditorProps)
                               template={template}
                               qrImg={qrImg}
                               className={cn(showSmResumePreview && "flex")}
+                              isEditing={!!resumeToEdit}
                          />
                     </div>
                </main>

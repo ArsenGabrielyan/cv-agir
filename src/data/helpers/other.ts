@@ -66,7 +66,6 @@ export const mapToResumeValues = (data: Resume): ResumeFormType => ({
           percentage: lang.percentage || undefined
      })) || undefined,
      hobbies: data.hobbies || undefined,
-     qrImg: data.qrImg || undefined
 })
 
 export function getLanguageLevel(level: number){
@@ -119,3 +118,5 @@ export function fileReplacer(_: unknown, value: unknown){
           lastModified: value.lastModified,
      } : value
 }
+
+export const isObjectId = (id: string) => /^[0-9a-fA-F]{24}$/.test(id)
