@@ -1,9 +1,9 @@
-"use client"
 import Navbar from "./navbar";
 import Footer from "./footer";
 import AppSidebar from "../sidebar/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UserButton } from "../auth/user-button";
+import PremiumModal from "../premium/premium-modal";
 
 interface PageLayoutProps{
      children: React.ReactNode,
@@ -23,6 +23,7 @@ export default function PageLayout({children,isLandingPage=false,sidebarMode=fal
                     </div>
                     {children}
                </main>
+               <PremiumModal/>
           </SidebarProvider>
      ) : (
           <div className="flex min-h-screen flex-col">
@@ -35,6 +36,7 @@ export default function PageLayout({children,isLandingPage=false,sidebarMode=fal
                {!resumeEditor && (
                     <Footer isLandingPage={isLandingPage || landingFooter}/>
                )}
+               <PremiumModal/>
           </div>
      )
 }

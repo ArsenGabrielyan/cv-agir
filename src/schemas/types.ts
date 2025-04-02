@@ -1,6 +1,6 @@
 import * as z from "zod"
 import { AccountSettingsSchema, ResumeSettingsSchema } from "./settings"
-import { ContactSchema, LoginSchema, NewPasswordSchema, RegisterSchema, ResetSchema, ResumeDetailsSchema, ResumeFormSchema, ResumeInfoSchema, ResumeOptionalDetailsSchema, ResumeStyleSchema } from "."
+import { CheckoutFormSchema, ContactSchema, LoginSchema, NewPasswordSchema, RegisterSchema, ResetSchema, ResumeDetailsSchema, ResumeFormSchema, ResumeInfoSchema, ResumeOptionalDetailsSchema, ResumeStyleSchema } from "."
 import { GenerateDescriptionSchema, GenerateSummarySchema } from "./ai"
 
 // Settings
@@ -25,9 +25,11 @@ export type ResumeInfoType = z.infer<typeof ResumeInfoSchema>
 export type ResumeDetailsType = z.infer<typeof ResumeDetailsSchema>
 export type ResumeOptionalDetailsType = z.infer<typeof ResumeOptionalDetailsSchema>
 export type ResumeStyleType = z.infer<typeof ResumeStyleSchema>
+export type WorkExperienceType = NonNullable<ResumeDetailsType["experience"]>[number]
 
 // Gemini AI Inputs To Generate From AI
 export type GenerateSummaryInput = z.infer<typeof GenerateSummarySchema>
 export type GenerateDescriptionInput = z.infer<typeof GenerateDescriptionSchema>
 
-export type WorkExperienceType = NonNullable<ResumeDetailsType["experience"]>[number]
+// Subscription Form
+export type CheckoutFormType = z.infer<typeof CheckoutFormSchema>

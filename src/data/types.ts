@@ -1,5 +1,5 @@
 import { ResumeFormType } from "@/schemas/types";
-import { Prisma } from "@prisma/client";
+import { Prisma, UserPlan } from "@prisma/client";
 import { LucideProps } from "lucide-react";
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
@@ -19,6 +19,7 @@ export interface IPricing{
      price: number,
      perks: IPricingPerk[],
      highlighted: boolean,
+     planName: UserPlan
 }
 export interface IPricingPerk{
      id: number

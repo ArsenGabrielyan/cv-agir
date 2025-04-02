@@ -5,9 +5,21 @@ import { GenerateDescriptionInput, GenerateSummaryInput, WorkExperienceType } fr
 import {getLanguageLevel} from "@/data/helpers/other"
 import gemini from "@/lib/gemini"
 import { AI_MODEL, GEN_CONFIG } from "@/data/constants/other"
+import { currentUser } from "@/lib/auth"
+import { getSubscriptionLevel } from "./subscription-system"
+import { getAvailableFeatures } from "@/lib/permission"
 
 export const generateSummary = async(input: GenerateSummaryInput) => {
-     // TODO: Block for Free Users Only
+     const user = await currentUser();
+     if(!user || !user.id){
+          throw new Error("Այս օգտատերը նույնականացված չէ։")
+     }
+     const subscriptionLevel = await getSubscriptionLevel(user.id);
+     const {canUseAITools} = getAvailableFeatures(subscriptionLevel)
+
+     if(!canUseAITools){
+          throw new Error("Այս հմտությունը օգտագործելու համար անցեք պրեմիում տարբերակի։")
+     }
 
      const {jobTitle, education, experience, skills, languages} = GenerateSummarySchema.parse(input);
 
@@ -62,7 +74,16 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
 }
 
 export const generateWorkExperience = async(input: GenerateDescriptionInput) => {
-     // TODO: Block for Free Users Only
+     const user = await currentUser();
+     if(!user || !user.id){
+          throw new Error("Այս օգտատերը նույնականացված չէ։")
+     }
+     const subscriptionLevel = await getSubscriptionLevel(user.id);
+     const {canUseAITools} = getAvailableFeatures(subscriptionLevel)
+
+     if(!canUseAITools){
+          throw new Error("Այս հմտությունը օգտագործելու համար անցեք պրեմիում տարբերակի։")
+     }
 
      const validatedFields = GenerateDescriptionSchema.safeParse(input);
      if(!validatedFields.success){

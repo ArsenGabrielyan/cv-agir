@@ -4,7 +4,7 @@ import { ResumeFormType } from "@/schemas/types";
 import { PlaceholdersName } from "../types";
 import Handlebars from "handlebars"
 import { marked } from "marked"
-import { BorderStyles } from "@/app/(protected)/editor/style-buttons/border-style-button";
+import {BorderStyles} from "@prisma/client"
 
 export const getRandomPlaceholder = (placeholderKey: PlaceholdersName) => {
      const placeholders = PLACEHOLDERS[placeholderKey];
@@ -66,6 +66,8 @@ export const mapToResumeValues = (data: Resume): ResumeFormType => ({
           percentage: lang.percentage || undefined
      })) || undefined,
      hobbies: data.hobbies || undefined,
+     colorHex: data.colorHex || undefined,
+     borderStyle: data.borderStyle || undefined
 })
 
 export function getLanguageLevel(level: number){
@@ -105,8 +107,8 @@ export function compileHTML(html: string, data: ResumeFormType){
 }
 
 export function getBorderRadius(borderStyle: BorderStyles,type: "default" | "badge" = "default"){
-     if(borderStyle===BorderStyles.Square) return "0px"
-     if(borderStyle===BorderStyles.Circle) return "9999px"
+     if(borderStyle===BorderStyles.square) return "0px"
+     if(borderStyle===BorderStyles.circle) return "9999px"
      return type==="default" ? "10%" : "8px"
 }
 
@@ -120,3 +122,34 @@ export function fileReplacer(_: unknown, value: unknown){
 }
 
 export const isObjectId = (id: string) => /^[0-9a-fA-F]{24}$/.test(id)
+
+export const isValidCard = (card: string) => {
+     let s = 0, isSecond = false
+     for(let i=card.length-1;i>=0;i--){
+          let digit = + card[i];
+          if(isSecond){
+               digit*=2;
+               if(digit>9) digit-=9;
+          }
+          s+=digit;
+          isSecond = !isSecond;
+     }
+     return s%10===0;
+}
+
+export const parseExpiryDate = (date: string) : {
+     error?: string,
+     date?: Date
+} => {
+     const parts = date.split("/").map(val=>+val)
+     if(parts.length!==2){
+          return {error: "Ժամկետի ֆորմատը սխալ է։ Պետք է լինի MM/YY ֆորմատով"}
+     }
+     const [month, year] = parts;
+     if (isNaN(month) || isNaN(year) || month < 1 || month > 12) {
+          throw new Error('Տարեթիվը և ամիսը վավեր չեն');
+     }
+     const fullYear = year <= 50 ? 2000 + year : 1900 + year;
+
+     return { date: new Date(fullYear,month,0) }
+}

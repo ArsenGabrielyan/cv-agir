@@ -1,4 +1,4 @@
-import { getTemplates } from "@/actions/get-templates";
+import { getResumeTemplates } from "@/data/db/resumes";
 import PageLayout from "@/components/layout/page-layout";
 import TemplateList from "@/components/templates/template-list";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 export default async function TemplatesPage(){
-     const templates = await getTemplates();
+     const templates = await getResumeTemplates();
      return (
           <TooltipProvider>
                <PageLayout landingFooter>

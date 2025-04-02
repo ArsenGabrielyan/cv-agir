@@ -1,4 +1,5 @@
 "use server"
+import { getCurrentResumeByUserId } from "@/data/db/resumes";
 import { currentUser } from "@/lib/auth"
 import { db } from "@/lib/db";
 import { del } from "@vercel/blob";
@@ -9,12 +10,7 @@ export const deleteResume = async (id: string) => {
      if(!user || !user.id){
           throw new Error("Օգտագործողը նույնականացված չէ")
      }
-     const resume = await db.resume.findUnique({
-          where: {
-               id,
-               userId: user.id
-          }
-     })
+     const resume = await getCurrentResumeByUserId(user.id,id);
      if(!resume){
           throw new Error("Ռեզյումեն չի գտնվել")
      }

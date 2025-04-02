@@ -12,13 +12,13 @@ import {
      FormLabel,
      FormMessage
 } from "@/components/ui/form"
-import { Button } from "@/components/ui/button";
 import { FormError } from "../form/form-error";
 import { FormSuccess } from "../form/form-success";
 import { PasswordStrengthInput } from "../form/password-input";
 import { useSearchParams } from "next/navigation";
 import { newPassword } from "@/actions/auth/new-password";
 import { NewPasswordType } from "@/schemas/types";
+import LoadingButton from "../loading-button";
 
 export default function NewPasswordForm(){
      const [isPending, startTransition] = useTransition();
@@ -75,7 +75,7 @@ export default function NewPasswordForm(){
                          </div>
                          <FormError message={error}/>
                          <FormSuccess message={success}/>
-                         <Button type="submit" className="w-full" disabled={isPending}>{isPending ? "Խնդրում ենք սպասել..." : "Վերականգնել գաղտնաբառը"}</Button>
+                         <LoadingButton type="submit" className="w-full" loading={isPending}>Վերականգնել գաղտնաբառը</LoadingButton>
                     </form>
                </Form>
           </CardWrapper>

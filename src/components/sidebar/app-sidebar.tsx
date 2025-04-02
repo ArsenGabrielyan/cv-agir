@@ -2,37 +2,35 @@ import {
      Sidebar,
      SidebarContent,
      SidebarFooter,
-     SidebarGroup,
-     SidebarGroupContent,
-     SidebarGroupLabel,
-     SidebarHeader,
-     SidebarMenu
+     SidebarHeader
 } from "@/components/ui/sidebar";
-import { SIDEBAR_LINKS } from "@/data/constants/links";
 import Logo from "../layout/logo";
-import SidebarItem from "./sidebar-item";
+import SidebarLinks from "./sidebar-links";
+import { currentUser } from "@/lib/auth";
+import FreeCounter from "./free-counter";
+import { getResumeCountByUserId } from "@/data/db/resumes";
+import { getSubscriptionLevel } from "@/actions/subscription-system";
 
-export default function AppSidebar(){
+export default async function AppSidebar(){
+     const user = await currentUser();
+     if(!user || !user.id){
+          return null;
+     }
+     const subscriptionLevel = await getSubscriptionLevel(user.id)
+     const resumeCount = await getResumeCountByUserId(user.id)
      return (
           <Sidebar>
                <SidebarHeader className="items-center pt-4">
                     <Logo href="/dashboard" mode="navbar" width={200} height={40}/>
                </SidebarHeader>
                <SidebarContent>
-                    <SidebarGroup>
-                         <SidebarGroupLabel>Մենյու</SidebarGroupLabel>
-                         <SidebarGroupContent>
-                              <SidebarMenu>
-                                   {SIDEBAR_LINKS.map((link)=>(
-                                        <SidebarItem key={link.id} data={link}/>
-                                   ))}
-                              </SidebarMenu>
-                         </SidebarGroupContent>
-                    </SidebarGroup>
+                    <SidebarLinks/>
                </SidebarContent>
-               <SidebarFooter>
-                    TODO: Add an API Limit With Upgrade Button
-               </SidebarFooter>
+               {subscriptionLevel==="free" && (
+                    <SidebarFooter>
+                         <FreeCounter resumeCount={resumeCount}/>
+                    </SidebarFooter>
+               )}
           </Sidebar>
      )
 }

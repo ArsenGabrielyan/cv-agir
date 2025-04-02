@@ -10,21 +10,21 @@ import {
 import { CheckCircle, MinusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { IPricing } from "@/data/types";
+import { IPricing } from "../../data/types";
 import { useMemo } from "react";
+import Link from "next/link";
+import { UserPlan } from "@prisma/client";
 
 interface PricingCardProps{
      data: IPricing,
      isYearly: boolean,
-     selected: string,
-     onSelect: (name: string) => void
+     selected: UserPlan
 }
-export default function PricingCard({data,isYearly,selected,onSelect}: PricingCardProps){
-     const {id,name,description,price,highlighted,perks} = data;
+export default function PricingCard({data,isYearly, selected}: PricingCardProps){
+     const {id,name,description,price,highlighted,perks,planName} = data;
      const cardPrice = useMemo(()=>isYearly ? price * 12 : price,[isYearly, price])
-     const isSelected = name===selected
-     // TODO: Handle A isFree Button On Buying a Subscription
-     // const isFree = price===0
+     const isFree = cardPrice===0
+     const isSelected = planName===selected
      return (
           <Card key={id} className={cn("text-left",highlighted && "border-primary",)}>
                <CardHeader>
@@ -40,8 +40,17 @@ export default function PricingCard({data,isYearly,selected,onSelect}: PricingCa
                     </ul>
                </CardContent>
                <CardFooter className="w-full">
-                    {/* TODO: Integrate Custom Subscription System And Make This Button Functional (Replace isSelected, selected, setSelected and Change onSelect Function) */}
-                    <Button variant={highlighted ? "default" : "secondary"} className="w-full" disabled={isSelected} onClick={()=>onSelect(name)}>{isSelected ? "Ընտրված է" : "Գնել առաջարկը"}</Button>
+                    {isFree && selected==="premium" ? (
+                         <Button variant={highlighted ? "default" : "secondary"} className="w-full" disabled={isFree && selected==="premium"}>Դուք արդեն պրեմիում պլանում եք</Button>
+                    ) : (isFree || isSelected) ? (
+                         <Button variant={highlighted ? "default" : "secondary"} className="w-full" disabled={isFree || isSelected}>
+                              Ընթացիկ տարբերակ
+                         </Button>
+                    ) : (
+                         <Button variant={highlighted ? "default" : "secondary"} className="w-full" asChild>
+                              <Link href={`/checkout?plan=${data.planName}&planType=${isYearly ? "yearly" : "monthly"}`}>Գնել առաջարկը</Link>
+                         </Button>
+                    )}
                </CardFooter>
           </Card>
      )

@@ -1,4 +1,5 @@
-import { ISidebarLink } from "@/data/types";
+"use client"
+import { ISidebarLink } from "../../data/types";
 import Link from "next/link";
 import {
      SidebarMenuItem,
@@ -29,7 +30,7 @@ export default function SidebarItem({data}: SidebarItemProps){
                     </Link>
                </SidebarMenuButton>
                {dropdown && (
-                    <DropdownMenu>
+                    <DropdownMenu modal={false}>
                          <DropdownMenuTrigger asChild>
                               <SidebarMenuAction>
                                    <MoreHorizontal/>

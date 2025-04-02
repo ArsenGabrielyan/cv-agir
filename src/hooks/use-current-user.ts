@@ -4,3 +4,8 @@ export const useCurrentUser = () => {
      const session = useSession();
      return session.data?.user
 }
+
+export const useCurrentSubscriptionLevel = () => {
+     const session = useSession();
+     return session.data?.user.currentPlan || "free"
+}

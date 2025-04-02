@@ -22,6 +22,7 @@ import { login } from "@/actions/auth/login";
 import { getOAuthNotLinkedError } from "@/data/helpers/auth";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { LoginType } from "@/schemas/types";
+import LoadingButton from "../loading-button";
 
 export default function LoginForm(){
      const searchParams = useSearchParams();
@@ -141,7 +142,7 @@ export default function LoginForm(){
                          </div>
                          <FormError message={error || urlError}/>
                          <FormSuccess message={success}/>
-                         <Button type="submit" className="w-full" disabled={isPending}>{isPending ? "Խնդրում ենք սպասել..." : showTwoFactor ? 'Հաստատել' : "Մուտք"}</Button>
+                         <LoadingButton type="submit" className="w-full" loading={isPending}>{showTwoFactor ? 'Հաստատել' : "Մուտք"}</LoadingButton>
                     </form>
                </Form>
           </CardWrapper>

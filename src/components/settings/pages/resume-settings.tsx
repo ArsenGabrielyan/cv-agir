@@ -5,7 +5,7 @@ import { useTransition, useState } from "react";
 import { useSession } from "next-auth/react";
 import { ResumeSettingsSchema } from "@/schemas/settings";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import LoadingButton from "@/components/loading-button";
 import { applyResumeDefaultsSettings } from "@/actions/settings";
 import {
      Form,
@@ -19,7 +19,6 @@ import { Input } from "@/components/ui/input";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { FormSuccess } from "@/components/form/form-success";
 import { FormError } from "@/components/form/form-error";
-import {isEqual} from "lodash"
 import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input";
 import { Textarea } from "@/components/ui/textarea";
 import { ResumeSettingsType } from "@/schemas/types";
@@ -63,7 +62,7 @@ export default function ResumeSettings(){
      }
 
      const currData = form.watch();
-     const isSameSettings = isEqual(currData,defaultSettings)
+     const isSameSettings = JSON.stringify(currData) === JSON.stringify(defaultSettings);
      return (
           <Form {...form}>
                <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -161,7 +160,7 @@ export default function ResumeSettings(){
                               />
                          </CardContent>
                     </Card>
-                    <Button type="submit" disabled={isPending || isSameSettings}>{isPending ? "Խնդրում ենք սպասել" : 'Պահպանել'}</Button>
+                    <LoadingButton type="submit" disabled={isSameSettings} loading={isPending}>Պահպանել</LoadingButton>
                </form>
           </Form>
      )

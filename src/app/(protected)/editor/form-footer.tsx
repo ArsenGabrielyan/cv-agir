@@ -7,20 +7,23 @@ interface FormFooterProps{
      currStep: string,
      setCurrStep: (step: string) => void
      showSmResumePreview: boolean,
-     setShowSmResumePreview: (show: boolean) => void
+     setShowSmResumePreview: (show: boolean) => void,
+     onPrint: () => void
 }
 export default function FormFooter({
      currStep,
      setCurrStep,
      showSmResumePreview,
-     setShowSmResumePreview
+     setShowSmResumePreview,
+     onPrint
 }: FormFooterProps){
      const prevStep = steps.find(
           (_,i)=> steps[i+1]?.key===currStep
      )?.key
      const nextStep = steps.find(
           (_,i)=>steps[i-1]?.key===currStep
-     )?.key
+     )?.key;
+     const lastStep = currStep === steps[steps.length-1].key;
      return (
           <footer className="w-full border-t px-3 py-5">
                <div className="max-w-7xl mx-auto flex flex-wrap justify-between gap-3 items-center">
@@ -30,10 +33,18 @@ export default function FormFooter({
                               onClick={prevStep ? () => setCurrStep(prevStep) : undefined}
                               disabled={!prevStep}
                          >Նախորդ էջ</Button>
-                         <Button
-                              onClick={nextStep ? () => setCurrStep(nextStep) : undefined}
-                              disabled={!nextStep}
-                         >Հաջորդ էջ</Button>
+                         {!lastStep ? (
+                              <Button
+                                   onClick={nextStep ? () => setCurrStep(nextStep) : undefined}
+                                   disabled={!nextStep}
+                              >Հաջորդ էջ</Button>
+                         ) : (
+                              <Button
+                                   onClick={onPrint}
+                              >
+                                   Տպել ռեզյումեն
+                              </Button>
+                         )}
                     </div>
                     <Button
                          variant="outline"

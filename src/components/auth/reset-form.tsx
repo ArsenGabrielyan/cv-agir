@@ -13,11 +13,11 @@ import {
      FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { FormError } from "../form/form-error";
 import { FormSuccess } from "../form/form-success";
 import { reset } from "@/actions/auth/reset";
 import { ResetPassType } from "@/schemas/types";
+import LoadingButton from "../loading-button";
 
 export default function ResetForm(){
      const [isPending, startTransition] = useTransition();
@@ -73,7 +73,7 @@ export default function ResetForm(){
                          </div>
                          <FormError message={error}/>
                          <FormSuccess message={success}/>
-                         <Button type="submit" className="w-full" disabled={isPending}>{isPending ? "Խնդրում ենք սպասել..." : "Ուղարկել վերականգման հղումը"}</Button>
+                         <LoadingButton type="submit" className="w-full" loading={isPending}>Ուղարկել վերականգման հղումը</LoadingButton>
                     </form>
                </Form>
           </CardWrapper>

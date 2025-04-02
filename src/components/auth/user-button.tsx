@@ -20,7 +20,7 @@ import Link from "next/link"
 export const UserButton = () => {
      const user = useCurrentUser();
      return (
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
                <DropdownMenuTrigger>
                     <Avatar>
                          <AvatarImage src={user?.image || ""}/>

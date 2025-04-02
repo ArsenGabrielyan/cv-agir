@@ -1,7 +1,7 @@
 import PageLayout from "@/components/layout/page-layout";
-import ResumeInfo from "@/components/resume-info";
+import ResumeInfo from "@/components/resumes/resume-info";
+import { getResumeById } from "@/data/db/resumes";
 import { isObjectId } from "@/data/helpers/other";
-import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 
 export default async function CVPage({
@@ -13,7 +13,7 @@ export default async function CVPage({
      if(!isObjectId(id)){
           notFound();
      }
-     const resume = await db.resume.findUnique({ where: { id } })
+     const resume = await getResumeById(id);
      if(!resume){
           notFound()
      }

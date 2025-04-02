@@ -12,12 +12,12 @@ import {
      FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form/form-error";
 import { submitContactForm } from "@/actions/contact-form";
 import { Textarea } from "@/components/ui/textarea";
 import { FormSuccess } from "./form-success";
 import { ContactFormType } from "@/schemas/types";
+import LoadingButton from "../loading-button";
 
 export default function ContactForm(){
      const [isPending, startTransition] = useTransition();
@@ -138,7 +138,7 @@ export default function ContactForm(){
                          />
                          <FormError message={error}/>
                          <FormSuccess message={success}/>
-                         <Button type="submit" disabled={isPending}>{isPending ? "Ուղարկվում է․․․" : "Ուղարկել հաղորդագրություն"}</Button>
+                         <LoadingButton type="submit" loading={isPending}>Ուղարկել հաղորդագրություն</LoadingButton>
                     </div>
                </form>
           </Form>

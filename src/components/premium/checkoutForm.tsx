@@ -1,0 +1,169 @@
+"use client"
+import { CheckoutFormSchema } from "@/schemas";
+import { CheckoutFormType } from "@/schemas/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useState, useTransition } from "react";
+import { FormError } from "../form/form-error";
+import { FormSuccess } from "../form/form-success";
+import { proceedToCheckout } from "@/actions/subscription-system";
+import { useRouter } from "next/navigation";
+import CreditCardIcon from "../credit-card-icon";
+import LoadingButton from "../loading-button";
+
+export default function CheckoutForm(){
+     const [error, setError] = useState<string | undefined>("");
+     const [success, setSuccess] = useState<string | undefined>("");
+     const [isPending, startTransition] = useTransition();
+     const router = useRouter();
+     const form = useForm<CheckoutFormType>({
+          resolver: zodResolver(CheckoutFormSchema),
+          defaultValues: {
+               email: "",
+               cardNumber: "",
+               expiryDate: "",
+               cvv: "",
+               cardName: "",
+               city: ""
+          }
+     });
+     const handleSubmit = (values: CheckoutFormType) => {
+          setError("");
+          setSuccess("");
+          startTransition(()=>{
+               proceedToCheckout(values)
+               .then(data=>{
+                    if(data.error){
+                         setError(data.error);
+                    }
+                    if(data.success){
+                         setSuccess(data.success);
+                         router.push("/billing-success")
+                    }
+               })
+               .catch(()=>setError("Վայ, մի բան սխալ տեղի ունեցավ"))
+          })
+     }
+     return (
+          <Form {...form}>
+               <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
+                    <FormField
+                         control={form.control}
+                         name="email"
+                         render={({field})=>(
+                              <FormItem>
+                                   <FormLabel>Էլ․ հասցե</FormLabel>
+                                   <FormControl>
+                                        <Input
+                                             {...field}
+                                             type="email"
+                                             placeholder="name@example.com"
+                                             disabled={isPending}
+                                        />
+                                   </FormControl>
+                                   <FormMessage/>
+                              </FormItem>
+                         )}
+                    />
+                    <FormField
+                         control={form.control}
+                         name="cardNumber"
+                         render={({field})=>(
+                              <FormItem>
+                                   <FormLabel>Վարկային քարտի համար</FormLabel>
+                                        <FormControl>
+                                             <div className="flex items-center gap-2">
+                                                  <CreditCardIcon value={field.value}/>
+                                                  <Input
+                                                       {...field}
+                                                       placeholder="1234567890123456"
+                                                       maxLength={16}
+                                                       disabled={isPending}
+                                                  />
+                                             </div>
+                                        </FormControl>
+                                   <FormMessage/>
+                              </FormItem>
+                         )}
+                    />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                         <FormField
+                              control={form.control}
+                              name="expiryDate"
+                              render={({field})=>(
+                                   <FormItem>
+                                        <FormLabel>Քարտի ժամկետ</FormLabel>
+                                        <FormControl>
+                                             <Input
+                                                  {...field}
+                                                  placeholder="MM/YY"
+                                                  maxLength={5}
+                                                  disabled={isPending}
+                                             />
+                                        </FormControl>
+                                        <FormMessage/>
+                                   </FormItem>
+                              )}
+                         />
+                         <FormField
+                              control={form.control}
+                              name="cvv"
+                              render={({field})=>(
+                                   <FormItem>
+                                        <FormLabel>CVV</FormLabel>
+                                        <FormControl>
+                                             <Input
+                                                  {...field}
+                                                  placeholder="123"
+                                                  maxLength={4}
+                                                  disabled={isPending}
+                                             />
+                                        </FormControl>
+                                        <FormMessage/>
+                                   </FormItem>
+                              )}
+                         />
+                    </div>
+                    <FormField
+                         control={form.control}
+                         name="cardName"
+                         render={({field})=>(
+                              <FormItem>
+                                   <FormLabel>Օգտատիրոջ անուն ազգանուն</FormLabel>
+                                   <FormControl>
+                                        <Input
+                                             {...field}
+                                             placeholder="Պետրոս Պողոսյան"
+                                             disabled={isPending}
+                                        />
+                                   </FormControl>
+                                   <FormMessage/>
+                              </FormItem>
+                         )}
+                    />
+                    <FormField
+                         control={form.control}
+                         name="city"
+                         render={({field})=>(
+                              <FormItem>
+                                   <FormLabel>Օգտատիրոջ հասցեն</FormLabel>
+                                   <FormControl>
+                                        <Input
+                                             {...field}
+                                             placeholder="Երևան, Հայաստան"
+                                             disabled={isPending}
+                                        />
+                                   </FormControl>
+                                   <FormMessage/>
+                              </FormItem>
+                         )}
+                    />
+                    <FormError message={error}/>
+                    <FormSuccess message={success}/>
+                    <LoadingButton type="submit" className="w-full" loading={isPending}>Բաժանորդագրվել</LoadingButton>
+               </form>
+          </Form>
+     )
+}

@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useSubscriptionLevel } from "@/context/subscription-level-provider";
 import { useIsMobile } from "@/hooks/use-mobile";
+import usePremiumModal from "@/hooks/use-premium-modal";
+import { getAvailableFeatures } from "@/lib/permission";
 import { PaletteIcon } from "lucide-react";
 import { useState } from "react"
 import {Color, ColorChangeHandler, TwitterPicker} from "react-color"
@@ -10,6 +13,9 @@ interface ColorPickerProps{
      onChange: ColorChangeHandler,
 }
 export default function ColorPicker({color,onChange}: ColorPickerProps){
+     const subscriptionMethod = useSubscriptionLevel();
+     const premiumModal = usePremiumModal();
+     const {canUseCustomization} = getAvailableFeatures(subscriptionMethod)
      const [showPopover, setShowPopover] = useState(false);
      const isMobile = useIsMobile();
      return (
@@ -19,7 +25,14 @@ export default function ColorPicker({color,onChange}: ColorPickerProps){
                          size="icon"
                          variant="outline"
                          title="Փոխել ռեզյումեի գույնը"
-                         onClick={()=>setShowPopover(true)}
+                         onClick={()=>{
+                              if(!canUseCustomization){
+                                   premiumModal.setOpen(true)
+                                   return;
+                              } else {
+                                   setShowPopover(true)
+                              }
+                         }}
                     >
                          <PaletteIcon className="size-5"/>
                     </Button>

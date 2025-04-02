@@ -1,5 +1,5 @@
 import { getIsAdmin } from "@/data/helpers/auth"
-import { IAdminAPISearchParams } from "@/data/types";
+import { IAdminAPISearchParams } from "../../../data/types";
 import { db } from "@/lib/db";
 import { ResumeTemplateCategory } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";

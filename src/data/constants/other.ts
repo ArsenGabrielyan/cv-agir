@@ -1,3 +1,4 @@
+import { UserPlan } from "@prisma/client"
 import { IResumeDynamicFields, PlaceholdersName } from "../types"
 
 /**
@@ -69,3 +70,22 @@ export const GEN_CONFIG = (type = "text/plain") => ({
      responseModalities: [],
      responseMimeType: type,
 })
+
+export const MAX_FREE_RESUMES = 3;
+
+export const MAX_RESUME_MAP: Record<UserPlan, number> = {
+     free: MAX_FREE_RESUMES,
+     premium: Infinity
+}
+
+export const CREDIT_CARD_BRANDS = {
+     mir: /^220[0-4]\d{12}$/,
+     discover: /^65[4-9][0-9]{13}|64[4-9][0-9]{13}|6011[0-9]{12}|(622(?:12[6-9]|1[3-9][0-9]|[2-8][0-9][0-9]|9[01][0-9]|92[0-5])[0-9]{10})$/,
+     amex: /^3(4|7)[0-9]{13}$/,
+     diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+     jcb: /^(?:2131|1800|35\d{3})\d{11}$/,
+     visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+     mastercard: /^5[1-5][0-9]{14}$/,
+     unionPay: /^(62[0-9]{14,17})$/,
+     arca: /^9[0-9]{15}$/,
+}

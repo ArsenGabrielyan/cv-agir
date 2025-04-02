@@ -5,6 +5,9 @@ import { ResumeFormSchema } from "@/schemas"
 import { ResumeFormType } from "@/schemas/types"
 import {del, put} from "@vercel/blob"
 import path from "path"
+import { getSubscriptionLevel } from "../subscription-system"
+import { getAvailableFeatures } from "@/lib/permission"
+import { getCurrentResumeByUserId, getResumeCountByUserId } from "@/data/db/resumes"
 
 export const saveResume = async(values: ResumeFormType,templateId?: string) => {
      const {id} = values
@@ -17,16 +20,28 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
           throw new Error("Օգտագործողը նույնականացված չէ")
      }
 
-     // TODO: Check Resume Count For Free Users
+     const subscriptionLevel = await getSubscriptionLevel(user.id);
+     const {canCreateResume, canUseCustomization} = getAvailableFeatures(subscriptionLevel)
 
-     const existingResume = id ? await db.resume.findUnique({
-          where: {
-               id, userId: user.id
+     if(!id){
+          const resumeCount = await getResumeCountByUserId(user.id);
+          if(!canCreateResume(resumeCount)){
+               throw new Error("Անվճար բաժանորդագրության համար առավելագույն ռեզյումեների քանակը սպառվել է")
           }
-     }) : null
+     }
+
+     const existingResume = id ? await getCurrentResumeByUserId(user.id,id) : null;
 
      if(id && !existingResume){
           throw new Error("Ռեզյումեն չի գտնվել")
+     }
+
+     const hasCustomizations = (resumeValues.borderStyle && resumeValues.borderStyle!==existingResume?.borderStyle) || (resumeValues.colorHex && resumeValues.colorHex !== existingResume?.colorHex);
+
+     if(hasCustomizations && !canUseCustomization){
+          resumeValues.colorHex = undefined
+          resumeValues.borderStyle = undefined
+          throw new Error("Ամբողջական դիզայնի ձևափոխությունը այս բաժանորդագրությունում արգելված է")
      }
 
      let newImgUrl: string | undefined | null = undefined;

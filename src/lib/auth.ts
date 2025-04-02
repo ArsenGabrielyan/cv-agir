@@ -2,5 +2,11 @@ import { auth } from "@/auth"
 
 export const currentUser = async () => {
      const session = await auth();
-     return session?.user
+     const obj = session?.user;
+     if(obj){
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const {currentPlan,...user} = obj;
+          return user
+     }
+     return undefined
 }

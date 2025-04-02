@@ -1,0 +1,50 @@
+import { db } from "@/lib/db"
+
+export async function getResumeCountByUserId(userId: string){
+     try{
+          const resumeCount = await db.resume.count({
+               where: {userId}
+          })
+          return resumeCount
+     } catch{
+          return 0
+     }
+}
+
+export async function getResumeById(id: string){
+     try{
+          const resume = await db.resume.findUnique({
+               where: {id}
+          });
+          return resume
+     } catch {
+          return null
+     }
+}
+
+export async function getResumeTemplateById(id: string){
+     try{
+          const template = await db.resumeTemplate.findUnique({
+               where: {id}
+          });
+          return template
+     } catch {
+          return null
+     }
+}
+
+export async function getCurrentResumeByUserId(userId: string, resumeId: string){
+     try{
+          const currResume = await db.resume.findUnique({
+               where: {
+                    id: resumeId,
+                    userId
+               }
+          });
+          return currResume
+     } catch {
+          return null
+     }
+}
+
+export const getResumeTemplates = async () => await db.resumeTemplate.findMany();

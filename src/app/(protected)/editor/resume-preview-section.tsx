@@ -1,4 +1,4 @@
-import ResumePreview from "@/components/resume-editor/resume-preview";
+import ResumePreview from "@/components/resumes/resume-editor/resume-preview";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ResumeFormType } from "@/schemas/types";
 import { ResumeTemplate } from "@prisma/client";
@@ -12,7 +12,8 @@ interface ResumePreviewSectionProps{
      qrImg?: string,
      template: ResumeTemplate | null,
      className?: string,
-     isEditing?: boolean
+     isEditing?: boolean,
+     contentRef?: React.Ref<HTMLDivElement>
 }
 export default function ResumePreviewSection({
      resumeData,
@@ -20,7 +21,8 @@ export default function ResumePreviewSection({
      qrImg,
      template,
      className,
-     isEditing
+     isEditing,
+     contentRef
 }: ResumePreviewSectionProps){
      return (
           <div className={cn("group relative hidden w-full md:w-1/2 md:flex",className)}>
@@ -45,6 +47,7 @@ export default function ResumePreviewSection({
                               qrImg={qrImg}
                               template={template}
                               isEditing={isEditing}
+                              contentRef={contentRef}
                          />
                     </div>
                </ScrollArea>

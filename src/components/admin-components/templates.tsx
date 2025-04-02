@@ -2,8 +2,6 @@ import { useMediaQuery, Chip } from "@mui/material";
 import { ResumeTemplate } from "@prisma/client"
 import { List, Datagrid, TextField, Create, SimpleForm, Edit, TextInput, required, ReferenceField, ReferenceInput, AutocompleteInput, FunctionField, useRecordContext, Show, SimpleShowLayout, TextFieldProps, DateField, EditButton, DeleteButton, SimpleList, SearchInput, BooleanField, BooleanInput } from "react-admin"
 import StarIcon from "@mui/icons-material/Star"
-import { getImageUrl } from "@/data/helpers/storage";
-import {  } from '@mui/material';
 
 const TemplatesPanel = () => {
      const record = useRecordContext<ResumeTemplate>();
@@ -47,7 +45,7 @@ const CodeField = (props: TextFieldProps) => {
 const ImageUrlField = (props: TextFieldProps) => {
      const record = useRecordContext(props)
      return record ? (
-          <a href={getImageUrl(`templates/${record[props.source]}`)} target="_blank" rel="noopener noreferrer">{record[props.source]}</a>
+          <a href={`templates/${record[props.source]}`} target="_blank" rel="noopener noreferrer">{record[props.source]}</a>
      ) : null
 }
 
@@ -66,7 +64,7 @@ const templateFilters = [
      <ReferenceInput key="filter-categories" label="Կատեգորիա" source="categoryId" reference="categories" alwaysOn>
           <AutocompleteInput label="Կատեգորիա"/>
      </ReferenceInput>,
-     <QuickFilter key="premium-filter" source="isPremium" label="Պրեմիում Շաբլոն" defaultValue={true}/>
+     <QuickFilter key="premium-filter" source="isPremium" label="Պրեմիում շաբլոն" defaultValue={true}/>
 ]
 
 export const TemplatesList = () => {

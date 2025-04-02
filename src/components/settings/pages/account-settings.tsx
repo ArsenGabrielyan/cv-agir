@@ -10,7 +10,6 @@ import {
      CardTitle,
      CardContent
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { applyAccountSettings } from "@/actions/settings";
 import {
      Form,
@@ -26,8 +25,8 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { FormSuccess } from "@/components/form/form-success";
 import { FormError } from "@/components/form/form-error";
 import { Switch } from "@/components/ui/switch";
-import {isEqual} from "lodash"
 import { AccountSettingsType } from "@/schemas/types";
+import LoadingButton from "@/components/loading-button";
 
 export default function AccountSettings(){
      const user = useCurrentUser();
@@ -68,7 +67,7 @@ export default function AccountSettings(){
      }
 
      const currData = form.watch();
-     const isSameSettings = isEqual(currData,defaultSettings)
+     const isSameSettings = JSON.stringify(currData) === JSON.stringify(defaultSettings);
 
      return (
           <Form {...form}>
@@ -188,7 +187,7 @@ export default function AccountSettings(){
                               </CardContent>
                          </Card>
                     )}
-                    <Button type="submit" disabled={isPending || isSameSettings}>{isPending ? "Խնդրում ենք սպասել" : 'Պահպանել'}</Button>
+                    <LoadingButton type="submit" disabled={isSameSettings} loading={isPending}>Պահպանել</LoadingButton>
                </form>
           </Form>
      )

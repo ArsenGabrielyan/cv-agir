@@ -56,6 +56,25 @@ type ResumeSkill {
   percentage Int?
 }
 
+type CreditCard{
+  cardNumber String
+  expiryDate DateTime
+  cvv String
+  fullName String
+  city String
+}
+
+enum UserPlan {
+  free
+  premium
+}
+
+enum BorderStyles {
+  square
+  circle
+  squircle
+}
+
 model User {
   id                    String                 @id @default(auto()) @map("_id") @db.ObjectId
   name                  String?
@@ -73,6 +92,8 @@ model User {
   address               String?
   summary               String?
   hobbies               String?
+  currentPlan UserPlan @default(free)
+  creditCard CreditCard?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -195,6 +216,9 @@ model Resume {
   skills      ResumeSkill[]
   languages   ResumeSkill[]
   hobbies     String?
+
+  colorHex String?
+  borderStyle BorderStyles?
 
   userId String? @db.ObjectId
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)

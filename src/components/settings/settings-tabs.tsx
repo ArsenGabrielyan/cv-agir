@@ -1,15 +1,14 @@
 "use client"
-import { ISettingsPage } from "@/data/types";
+import { ISettingsPage } from "../../data/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AccountSettings from "./pages/account-settings";
-import Customization from "./pages/customization";
-import ResumeSettings from "./pages/resume-settings";
+import {AccountSettings, Customization, ResumeSettings, SubscriptionSettings} from "./pages"
 import { useState } from "react";
 
 const settingsPages: ISettingsPage[] = [
      {id: 1, name: "Հաշիվ", tabName: "account", component: <AccountSettings/>},
      {id: 2, name: "Հավելված", tabName: "customization",component: <Customization/>},
-     {id: 3, name: "Ռեզյումեի կարգավորումներ", tabName: "resume", component: <ResumeSettings/>}
+     {id: 3, name: "Ռեզյումեի կարգավորումներ", tabName: "resume", component: <ResumeSettings/>},
+     {id: 4, name: "Բաժանորդագրություն", tabName: "subscription", component: <SubscriptionSettings/>}
 ]
 
 export default function SettingsContent(){

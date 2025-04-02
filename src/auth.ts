@@ -5,6 +5,7 @@ import { db } from "./lib/db"
 import { getUserById } from "./data/db/user"
 import { getTwoFactorConfirmationByUserId } from "./data/db/two-factor-confirmation"
 import { getAccountByUserId } from "./data/db/account"
+import { UserPlan } from "@prisma/client"
  
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -64,6 +65,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.address = token.address as string
         session.user.summary = token.summary as string
         session.user.hobbies = token.hobbies as string
+        session.user.currentPlan = token.currentPlan as UserPlan
       }
 
       return session
@@ -86,6 +88,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       token.address = existingUser.address
       token.summary = existingUser.summary
       token.hobbies = existingUser.hobbies
+      token.currentPlan = existingUser.currentPlan
 
       return token
     }

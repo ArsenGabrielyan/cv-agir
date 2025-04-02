@@ -1,7 +1,7 @@
-import ResumeDetailsForm from "@/components/resume-editor/forms/resume-details-form"
-import ResumeInfoForm from "@/components/resume-editor/forms/resume-info-form"
-import ResumeOptionalDetailsForm from "@/components/resume-editor/forms/resume-optional-details-form"
-import { ResumeFormProps } from "@/data/types"
+import ResumeDetailsForm from "@/components/resumes/resume-editor/forms/resume-details-form"
+import ResumeInfoForm from "@/components/resumes/resume-editor/forms/resume-info-form"
+import ResumeOptionalDetailsForm from "@/components/resumes/resume-editor/forms/resume-optional-details-form"
+import { ResumeFormProps } from "../../../data/types"
 
 export const steps: {
      title: string,

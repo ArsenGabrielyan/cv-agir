@@ -21,7 +21,6 @@ export default function Footer({isLandingPage=false}: FooterProps){
                "pb-3"
           )
      }
-     // TODO: Add a Help Page Soon
      return (
           <footer className={cn("relative bg-background border-primary border-t p-6 z-20", !isLandingPage && "grid gap-3 grid-cols-1 md:grid-cols-2 place-items-center")}>
                {isLandingPage ? (

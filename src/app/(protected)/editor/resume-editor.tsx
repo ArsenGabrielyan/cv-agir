@@ -6,15 +6,16 @@ import { steps } from "./steps"
 import Breadcrumbs from "./breadcrumbs"
 import FormFooter from "./form-footer"
 import { Loader2 } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ResumeFormType } from "@/schemas/types"
 import ResumePreviewSection from "./resume-preview-section"
 import { cn } from "@/lib/utils"
 import useUnsavedChangesWarning from "@/hooks/use-unsaved-changes"
-import useAutoSave from "@/hooks/use-auto-save"
+import useResumeAutoSave from "@/hooks/auto-save/use-resume-auto-save"
 import { mapToResumeValues } from "@/data/helpers/other"
 import { absoluteUrl } from "@/lib/utils";
 import QRCode from "qrcode";
+import { useReactToPrint } from "react-to-print"
 
 interface ResumeEditorProps {
      resumeToEdit: Resume | null;
@@ -25,9 +26,14 @@ export default function ResumeEditor({resumeToEdit,template}: ResumeEditorProps)
      const router = useRouter();
      const [resumeData, setResumeData] = useState<ResumeFormType>(resumeToEdit ? mapToResumeValues(resumeToEdit) : {});
      const [showSmResumePreview, setShowSmResumePreview] = useState(false);
-     const {isSaving, hasUnsavedChanges} = useAutoSave(resumeData,template?.id)
+     const {isSaving, hasUnsavedChanges} = useResumeAutoSave(resumeData,template?.id)
      const [qrImg, setQrImg] = useState("/qr-placeholder.png");
      const currStep = searchParams.get("step") || steps[0].key;
+     const contentRef = useRef<HTMLDivElement>(null);
+     const printResume = useReactToPrint({
+          contentRef,
+          documentTitle: resumeToEdit ? resumeToEdit.title : "Անանուն Ռեզյումե",
+     })
      const setStep = (key: string) => {
           const newSearchParams = new URLSearchParams(searchParams);
           newSearchParams.set("step",key);
@@ -92,10 +98,17 @@ export default function ResumeEditor({resumeToEdit,template}: ResumeEditorProps)
                               qrImg={qrImg}
                               className={cn(showSmResumePreview && "flex")}
                               isEditing={!!resumeToEdit}
+                              contentRef={contentRef}
                          />
                     </div>
                </main>
-               <FormFooter currStep={currStep} setCurrStep={setStep} setShowSmResumePreview={setShowSmResumePreview} showSmResumePreview={showSmResumePreview}/>
+               <FormFooter
+                    onPrint={printResume}
+                    currStep={currStep}
+                    setCurrStep={setStep}
+                    setShowSmResumePreview={setShowSmResumePreview}
+                    showSmResumePreview={showSmResumePreview}
+               />
           </div>
      )
 }

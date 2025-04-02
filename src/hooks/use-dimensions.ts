@@ -1,4 +1,4 @@
-import { UseDimensionsReturnType } from "@/data/types";
+import { UseDimensionsReturnType } from "../data/types";
 import React, { useEffect, useState } from "react";
 
 export default function useDimensions<T extends HTMLElement>(containerRef: React.RefObject<T | null>){

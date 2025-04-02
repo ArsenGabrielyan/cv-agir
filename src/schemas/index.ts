@@ -9,7 +9,8 @@ import {
      optionalEmailString,
      optionalString,
 } from "./resume"
-import { BorderStyles } from "@/app/(protected)/editor/style-buttons/border-style-button"
+import {BorderStyles} from "@prisma/client"
+import { isValidCard } from "@/data/helpers/other"
 
 function optionalArray<T>(arr: z.ZodType<T>){
      return z.optional(z.array(arr))
@@ -89,4 +90,13 @@ export const ResumeFormSchema = z.object({
      ...ResumeDetailsSchema.shape,
      ...ResumeOptionalDetailsSchema.shape,
      ...ResumeStyleSchema.shape
+})
+
+export const CheckoutFormSchema = z.object({
+     email: z.string().email("Մուտքագրեք վավերական էլ․ փոստ"),
+     cardNumber: z.string().regex(/^\d{16}$/, "Վարկային քարտը պետք է լինի մաքսիմում 16 նիշ").refine(data=>isValidCard(data),"Մուտքագրեք վավերական վարկային քարտ"),
+     expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Քարտի ժամկետը պետք է լինի MM/YY ֆորմատով"),
+     cvv: z.string().regex(/^\d{3,4}$/, "CVV-ն պետք է լինի 3-4 նիշ"),
+     cardName: z.string().min(1,"Պետք է նշել քարտի օգտատիրոջ անունը"),
+     city: z.string().min(1,"Նշել քաղաքը")
 })

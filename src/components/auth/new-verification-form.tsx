@@ -25,9 +25,7 @@ export const NewVerificationForm = () => {
                setSuccess(data.success);
                setError(data.error)
           })
-          .catch(()=>{
-               setError("Վայ, մի բան սխալ տեղի ունեցավ")
-          })
+          .catch(()=>setError("Վայ, մի բան սխալ տեղի ունեցավ"))
      },[token, success, error])
 
      useEffect(()=>{

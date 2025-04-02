@@ -13,12 +13,12 @@ import {
      FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { FormError } from "../form/form-error";
 import { FormSuccess } from "../form/form-success";
 import { register } from "@/actions/auth/register";
 import { PasswordStrengthInput } from "../form/password-input";
 import { RegisterFormType } from "@/schemas/types";
+import LoadingButton from "../loading-button";
 
 export default function RegisterForm(){
      const [isPending, startTransition] = useTransition();
@@ -111,7 +111,7 @@ export default function RegisterForm(){
                          </div>
                          <FormError message={error}/>
                          <FormSuccess message={success}/>
-                         <Button type="submit" className="w-full" disabled={isPending}>{isPending ? "Խնդրում ենք սպասել..." : "Գրանցվել"}</Button>
+                         <LoadingButton type="submit" className="w-full" loading={isPending}>Գրանցվել</LoadingButton>
                     </form>
                </Form>
           </CardWrapper>

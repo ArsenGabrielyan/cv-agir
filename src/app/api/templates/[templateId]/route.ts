@@ -1,3 +1,4 @@
+import { getResumeTemplateById } from "@/data/db/resumes";
 import { getIsAdmin } from "@/data/helpers/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
@@ -11,11 +12,7 @@ export const GET = async(
           return new NextResponse("Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",{ status: 401 })
      }
      const {templateId} = await params
-     const data = await db.resumeTemplate.findUnique({
-          where: {
-               id: templateId
-          }
-     })
+     const data = await getResumeTemplateById(templateId);
      return NextResponse.json(data)
 }
 
