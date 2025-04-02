@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useEffect, useRef } from "react"
 import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input"
-import { ResumeFormProps } from "../../../../data/types"
+import { ResumeFormProps } from "@/data/types"
 import { Button } from "@/components/ui/button"
 import GenerateSummaryButton from "../ai-buttons/generate-summary"
 

@@ -1,7 +1,7 @@
 "use client"
 import ResumePreview from "@/components/resumes/resume-editor/resume-preview"
 import { mapToResumeValues } from "@/data/helpers/other"
-import { ResumeServerData } from "../../data/types"
+import { ResumeServerData } from "@/data/types"
 import { formatDate } from "date-fns"
 import { hy } from "date-fns/locale"
 import Link from "next/link"

@@ -1,10 +1,10 @@
 import NextAuth from "next-auth"
 import authConfig from "@/auth.config"
 import {PrismaAdapter} from "@auth/prisma-adapter"
-import { db } from "./lib/db"
-import { getUserById } from "./data/db/user"
-import { getTwoFactorConfirmationByUserId } from "./data/db/two-factor-confirmation"
-import { getAccountByUserId } from "./data/db/account"
+import { db } from "@/lib/db"
+import { getUserById } from "@/data/db/user"
+import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmation"
+import { getAccountByUserId } from "@/data/db/account"
 import { UserPlan } from "@prisma/client"
  
 export const { auth, handlers, signIn, signOut } = NextAuth({

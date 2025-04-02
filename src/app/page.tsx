@@ -41,7 +41,7 @@ export default function Home() {
           <li className="flex flex-col items-center justify-start space-y-4 mt-12 pb-24">
             <Image
               src="/demos/demo-2.gif"
-              alt="select template"
+              alt="fill data"
               width={demoImgSize}
               height={demoImgSize}
               className="bg-card p-4 shadow-sm border rounded-xl"
@@ -52,7 +52,7 @@ export default function Home() {
           <li className="flex flex-col items-center justify-start space-y-4 mt-12 pb-24">
             <Image
               src="/demos/demo-3.gif"
-              alt="select template"
+              alt="print (download) resume"
               width={demoImgSize}
               height={demoImgSize}
               className="bg-card p-4 shadow-sm border rounded-xl"

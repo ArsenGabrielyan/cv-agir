@@ -2,7 +2,7 @@ import { getSubscriptionLevel } from "@/actions/subscription-system";
 import PageLayout from "@/components/layout/page-layout";
 import CreateResumeButton from "@/components/resumes/create-resume-button";
 import ResumeCard from "@/components/resumes/resume-card";
-import { resumeDataInclude } from "../../../data/types";
+import { resumeDataInclude } from "@/data/types";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { getAvailableFeatures } from "@/lib/permission";

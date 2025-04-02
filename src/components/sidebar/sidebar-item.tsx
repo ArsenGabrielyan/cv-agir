@@ -1,5 +1,5 @@
 "use client"
-import { ISidebarLink } from "../../data/types";
+import { ISidebarLink } from "@/data/types";
 import Link from "next/link";
 import {
      SidebarMenuItem,

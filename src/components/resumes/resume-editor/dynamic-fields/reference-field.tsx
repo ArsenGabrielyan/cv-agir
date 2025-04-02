@@ -1,4 +1,4 @@
-import { ResumeArrayFieldProps } from "../../../../data/types"
+import { ResumeArrayFieldProps } from "@/data/types"
 import { ResumeOptionalDetailsType } from "@/schemas/types"
 import { FieldValues, Path } from "react-hook-form"
 import DynamicFieldWrapper from "../wrappers/resume-dynamic-field-wrapper"

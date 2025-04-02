@@ -10,7 +10,7 @@ import {
 import { CheckCircle, MinusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { IPricing } from "../../data/types";
+import { IPricing } from "@/data/types";
 import { useMemo } from "react";
 import Link from "next/link";
 import { UserPlan } from "@prisma/client";

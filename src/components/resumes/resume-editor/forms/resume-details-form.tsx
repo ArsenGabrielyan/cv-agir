@@ -1,4 +1,4 @@
-import { ResumeFormProps } from "../../../../data/types"
+import { ResumeFormProps } from "@/data/types"
 import ResumeFormCardWrapper from "../wrappers/card-wrapper"
 import { useForm } from "react-hook-form"
 import { ResumeDetailsType } from "@/schemas/types"

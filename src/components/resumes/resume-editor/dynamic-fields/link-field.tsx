@@ -1,7 +1,7 @@
 import { FormControl, FormField, FormItem, FormMessage, FormLabel } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { FieldPath, FieldValues } from "react-hook-form"
-import { ResumeArrayFieldProps } from "../../../../data/types"
+import { ResumeArrayFieldProps } from "@/data/types"
 import { ResumeOptionalDetailsType } from "@/schemas/types"
 import DynamicFieldWrapper from "../wrappers/resume-dynamic-field-wrapper"
 

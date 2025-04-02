@@ -1,5 +1,5 @@
 "use client"
-import { ISettingsPage } from "../../data/types";
+import { ISettingsPage } from "@/data/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {AccountSettings, Customization, ResumeSettings, SubscriptionSettings} from "./pages"
 import { useState } from "react";
