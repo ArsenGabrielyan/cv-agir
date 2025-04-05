@@ -14,9 +14,9 @@ import { absoluteUrl } from "@/lib/utils"
 interface ResumeSectionProps{
      photoSrc?: string | null,
      resumeData: ResumeFormType,
-     isEditing?: boolean
+     resumeId?: string
 }
-export function HeaderSection({photoSrc, resumeData, isEditing}: ResumeSectionProps){
+export function HeaderSection({photoSrc, resumeData, resumeId}: ResumeSectionProps){
      const {fname, lname, jobTitle, address, phone, email, colorHex, borderStyle} = resumeData;
      return (
           <div className="flex justify-between items-center gap-4">
@@ -43,9 +43,9 @@ export function HeaderSection({photoSrc, resumeData, isEditing}: ResumeSectionPr
                          </p>
                     </div>
                </div>
-               {isEditing ? (
+               {resumeId ? (
                     <QRCode
-                         value={absoluteUrl(`/cv/${resumeData.id}`)}
+                         value={absoluteUrl(`/cv/${resumeId}`)}
                          width={100}
                          height={100}
                          className="aspect-square object-cover max-w-[100px] max-h-[100px]"

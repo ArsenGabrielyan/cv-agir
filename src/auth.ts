@@ -5,7 +5,8 @@ import { db } from "@/lib/db"
 import { getUserById } from "@/data/db/user"
 import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmation"
 import { getAccountByUserId } from "@/data/db/account"
-import { UserPlan } from "@prisma/client"
+import { CreditCard, UserPlan } from "@prisma/client"
+import { getSubscriptionById } from "./data/db/subscription"
  
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -66,6 +67,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.summary = token.summary as string
         session.user.hobbies = token.hobbies as string
         session.user.currentPlan = token.currentPlan as UserPlan
+        session.user.subscriptionId = token.subscriptionId as string
+        session.user.creditCards = token.creditCards as CreditCard[]
+      }
+
+      if(token.subscriptionEndDate && session.user){
+        session.user.subscriptionEndDate = token.subscriptionEndDate as Date
       }
 
       return session
@@ -78,6 +85,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if(!existingUser) return token;
 
       const existingAccount = await getAccountByUserId(existingUser.id);
+      const existingSubscription = existingUser.subscriptionId ? await getSubscriptionById(existingUser.subscriptionId) : null
 
       token.isOauth = !!existingAccount;
       token.name = existingUser.name;
@@ -89,6 +97,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       token.summary = existingUser.summary
       token.hobbies = existingUser.hobbies
       token.currentPlan = existingUser.currentPlan
+      token.subscriptionId = existingUser.subscriptionId
+      token.creditCards = existingUser.creditCards
+
+      if(existingSubscription){
+        token.subscriptionEndDate = existingSubscription.endDate
+      }
 
       return token
     }

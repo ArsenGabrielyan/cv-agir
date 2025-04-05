@@ -2,20 +2,28 @@
 import { ISettingsPage } from "@/data/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {AccountSettings, Customization, ResumeSettings, SubscriptionSettings} from "./pages"
-import { useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Subscription } from "@prisma/client";
 
 const settingsPages: ISettingsPage[] = [
-     {id: 1, name: "Հաշիվ", tabName: "account", component: <AccountSettings/>},
-     {id: 2, name: "Հավելված", tabName: "customization",component: <Customization/>},
-     {id: 3, name: "Ռեզյումեի կարգավորումներ", tabName: "resume", component: <ResumeSettings/>},
-     {id: 4, name: "Բաժանորդագրություն", tabName: "subscription", component: <SubscriptionSettings/>}
-]
+     { id: 1, name: "Հաշիվ", tabName: "account", SettingsContent: AccountSettings},
+     { id: 2, name: "Հավելված", tabName: "customization", SettingsContent: Customization},
+     { id: 3, name: "Ռեզյումեի կարգավորումներ", tabName: "resume", SettingsContent: ResumeSettings},
+     { id: 4, name: "Բաժանորդագրություն", tabName: "subscription", SettingsContent: SubscriptionSettings},
+];
 
-export default function SettingsContent(){
-     const [tab, setTab] = useState<string>(localStorage.getItem("curr-settings-page") || "account");
+export interface SettingsContentProps{
+     subscriptions?: Subscription[]
+     isExpired?: boolean
+}
+export default function SettingsContent(props: SettingsContentProps){
+     const searchParams = useSearchParams();
+     const tab = searchParams.get("tab") || "account"
+     const router = useRouter()
      const handleTabChange = (value: string) => {
-          setTab(value);
-          localStorage.setItem("curr-settings-page",value)
+          const newSearchParams = new URLSearchParams(searchParams);
+          newSearchParams.set("tab",value)
+          router.push(`?${newSearchParams.toString()}`)
      }
      return (
           <Tabs defaultValue={tab} onValueChange={handleTabChange}>
@@ -24,9 +32,9 @@ export default function SettingsContent(){
                          <TabsTrigger className="flex-1 w-full" key={id} value={tabName}>{name}</TabsTrigger>
                     ))}
                </TabsList>
-               {settingsPages.map(({id,tabName,component})=>(
+               {settingsPages.map(({id,tabName,SettingsContent})=>(
                     <TabsContent key={id} value={tabName}>
-                         {component}
+                         <SettingsContent {...props}/>
                     </TabsContent>
                ))}
           </Tabs>

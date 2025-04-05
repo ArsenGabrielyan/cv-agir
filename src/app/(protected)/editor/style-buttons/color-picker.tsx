@@ -29,9 +29,8 @@ export default function ColorPicker({color,onChange}: ColorPickerProps){
                               if(!canUseCustomization){
                                    premiumModal.setOpen(true)
                                    return;
-                              } else {
-                                   setShowPopover(true)
                               }
+                              setShowPopover(true)
                          }}
                     >
                          <PaletteIcon className="size-5"/>

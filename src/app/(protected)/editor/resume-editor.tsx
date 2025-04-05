@@ -20,8 +20,9 @@ import { useReactToPrint } from "react-to-print"
 interface ResumeEditorProps {
      resumeToEdit: Resume | null;
      template: ResumeTemplate | null;
+     resumeId?: string
 }
-export default function ResumeEditor({resumeToEdit,template}: ResumeEditorProps){
+export default function ResumeEditor({resumeToEdit,template,resumeId}: ResumeEditorProps){
      const searchParams = useSearchParams();
      const router = useRouter();
      const [resumeData, setResumeData] = useState<ResumeFormType>(resumeToEdit ? mapToResumeValues(resumeToEdit) : {});
@@ -52,16 +53,16 @@ export default function ResumeEditor({resumeToEdit,template}: ResumeEditorProps)
      },[template])
 
      useEffect(()=>{
-          if(resumeToEdit){
+          if(resumeId){
                const initQR = async() => {
-                    const img = resumeToEdit.id ? await QRCode.toDataURL(absoluteUrl(`/cv/${resumeToEdit.id}`)) : "/qr-placeholder.png";
+                    const img = resumeId ? await QRCode.toDataURL(absoluteUrl(`/cv/${resumeId}`)) : "/qr-placeholder.png";
                     setQrImg(img)
                }
                initQR();
           } else {
                setQrImg("/qr-placeholder.png")
           }
-     },[resumeToEdit])
+     },[resumeId])
      return (
           <div className="flex grow flex-col">
                <header className="border-b px-3 py-5 flex flex-col items-center justify-center gap-y-4">
@@ -97,7 +98,7 @@ export default function ResumeEditor({resumeToEdit,template}: ResumeEditorProps)
                               template={template}
                               qrImg={qrImg}
                               className={cn(showSmResumePreview && "flex")}
-                              isEditing={!!resumeToEdit}
+                              resumeId={resumeId}
                               contentRef={contentRef}
                          />
                     </div>

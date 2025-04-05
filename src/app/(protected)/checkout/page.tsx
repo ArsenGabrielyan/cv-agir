@@ -21,7 +21,7 @@ export default async function CheckoutPage({
      if(!selectedPlan || subscriptionLevel==="premium"){
           redirect("/dashboard")
      }
-     const cardPrice = planType==="yearly" ? selectedPlan.price*12 : selectedPlan.price;
+     const planPrice = planType==="yearly" ? selectedPlan.price*12 : selectedPlan.price;
      return (
           <div className="flex justify-center items-center min-h-dvh p-3 primary-main-bg">
                <div className="bg-card text-card-foreground p-4 shadow border rounded-xl space-y-3 max-w-4xl">
@@ -29,10 +29,10 @@ export default async function CheckoutPage({
                          <div className="space-y-4">
                               <Logo href="/dashboard" mode="navbar" width={200} height={40}/>
                               <h1 className="text-lg md:text-xl font-semibold">Բաժանորդագրվեք պրեմիում տարբերակին</h1>
-                              <p className="text-2xl md:text-3xl font-semibold">${cardPrice.toFixed(2)}/{planType==="yearly" ? "տարի" : "ամիս"}</p>
+                              <p className="text-2xl md:text-3xl font-semibold">${planPrice.toFixed(2)}/{planType==="yearly" ? "տարի" : "ամիս"}</p>
                               <p className="text-muted-foreground">Բաժանորդագրվեք մեր պրեմիում տարբերակի լիքը հնարավորություններ ձեռք բերելու համար</p>
                          </div>
-                         <CheckoutForm/>
+                         <CheckoutForm period={planType} price={planPrice} plan={plan}/>
                     </div>
                </div>
           </div>

@@ -1,3 +1,4 @@
+import { SettingsContentProps } from "@/components/settings/settings-tabs";
 import { ResumeFormType } from "@/schemas/types";
 import { Prisma, UserPlan } from "@prisma/client";
 import { LucideProps } from "lucide-react";
@@ -61,7 +62,7 @@ export type ISettingsPage = {
      id: number
      name: string;
      tabName: string;
-     component: React.JSX.Element;
+     SettingsContent: React.ComponentType<SettingsContentProps>
 }
 export type PlaceholdersName = "jobName" | "degrees"
 export interface UseDimensionsReturnType{

@@ -39,12 +39,7 @@ function AuthButton({responsive=false,className}:AuthButtonProps){
                     <Button>Մուտք</Button>
                </LoginButton>
           ) : (
-               <>
-                    <Button variant="outline" asChild>
-                         <Link href="/dashboard">Վահանակ</Link>
-                    </Button>
-                    <UserButton/>
-               </>
+               <UserButton/>
           )}
      </div>
 }

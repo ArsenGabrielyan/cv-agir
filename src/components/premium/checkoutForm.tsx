@@ -6,14 +6,20 @@ import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useState, useTransition } from "react";
-import { FormError } from "../form/form-error";
-import { FormSuccess } from "../form/form-success";
+import { FormError } from "@/components/form/form-error";
+import { FormSuccess } from "@/components/form/form-success";
 import { proceedToCheckout } from "@/actions/subscription-system";
 import { useRouter } from "next/navigation";
-import CreditCardIcon from "../credit-card-icon";
-import LoadingButton from "../loading-button";
+import LoadingButton from "@/components/buttons/loading-button";
+import { SubscriptionPeriod, UserPlan } from "@prisma/client";
+import CreditCardInput from "../form/credit-card-input";
 
-export default function CheckoutForm(){
+interface CheckoutFormProps{
+     period: SubscriptionPeriod,
+     price: number,
+     plan: UserPlan
+}
+export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
      const [error, setError] = useState<string | undefined>("");
      const [success, setSuccess] = useState<string | undefined>("");
      const [isPending, startTransition] = useTransition();
@@ -33,14 +39,14 @@ export default function CheckoutForm(){
           setError("");
           setSuccess("");
           startTransition(()=>{
-               proceedToCheckout(values)
+               proceedToCheckout(values,period,price,plan)
                .then(data=>{
                     if(data.error){
                          setError(data.error);
                     }
                     if(data.success){
                          setSuccess(data.success);
-                         router.push("/billing-success")
+                         router.push("/billing-success");
                     }
                })
                .catch(()=>setError("Վայ, մի բան սխալ տեղի ունեցավ"))
@@ -74,15 +80,10 @@ export default function CheckoutForm(){
                               <FormItem>
                                    <FormLabel>Վարկային քարտի համար</FormLabel>
                                         <FormControl>
-                                             <div className="flex items-center gap-2">
-                                                  <CreditCardIcon value={field.value}/>
-                                                  <Input
-                                                       {...field}
-                                                       placeholder="1234567890123456"
-                                                       maxLength={16}
-                                                       disabled={isPending}
-                                                  />
-                                             </div>
+                                             <CreditCardInput
+                                                  {...field}
+                                                  disabled={isPending}
+                                             />
                                         </FormControl>
                                    <FormMessage/>
                               </FormItem>

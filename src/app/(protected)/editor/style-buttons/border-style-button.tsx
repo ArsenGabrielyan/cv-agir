@@ -19,12 +19,11 @@ export default function BorderStyleButton({borderStyle, onChange}: BorderStyleBu
           if(!canUseCustomization){
                premiumModal.setOpen(true);
                return;
-          } else {
-               const currStyle = borderStyle ?? borderStyles[0]
-               const currIndex = borderStyles.indexOf(currStyle);
-               const nextIndex = (currIndex+1) % borderStyles.length;
-               onChange(borderStyles[nextIndex])
           }
+          const currStyle = borderStyle ?? borderStyles[0]
+          const currIndex = borderStyles.indexOf(currStyle);
+          const nextIndex = (currIndex+1) % borderStyles.length;
+          onChange(borderStyles[nextIndex])
      }
      const Icon = borderStyle === "square" ? Square : borderStyle === "circle" ? Circle : Squircle
      return (

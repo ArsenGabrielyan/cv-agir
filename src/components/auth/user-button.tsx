@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/avatar"
 import { useCurrentUser } from "@/hooks/use-current-user"
 import { LogoutButton } from "./logout-button"
-import { User, LogOut, Settings, FileUser, FileText, } from "lucide-react"
+import { User, LogOut, Settings, FileUser, FileText, LayoutDashboard, } from "lucide-react"
 import Link from "next/link"
 
 export const UserButton = () => {
@@ -36,6 +36,11 @@ export const UserButton = () => {
                     <DropdownMenuItem asChild className="cursor-pointer">
                          <Link href="/profile">
                               <User/> Իմ պրոֆիլը
+                         </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="cursor-pointer">
+                         <Link href="/dashboard">
+                              <LayoutDashboard/> Վահանակ
                          </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className="cursor-pointer">

@@ -12,13 +12,13 @@ import {
      FormLabel,
      FormMessage
 } from "@/components/ui/form"
-import { FormError } from "../form/form-error";
-import { FormSuccess } from "../form/form-success";
-import { PasswordStrengthInput } from "../form/password-input";
+import { FormError } from "@/components/form/form-error";
+import { FormSuccess } from "@/components/form/form-success";
+import { PasswordStrengthInput } from "@/components/form/password-input";
 import { useSearchParams } from "next/navigation";
 import { newPassword } from "@/actions/auth/new-password";
 import { NewPasswordType } from "@/schemas/types";
-import LoadingButton from "../loading-button";
+import LoadingButton from "@/components/buttons/loading-button";
 
 export default function NewPasswordForm(){
      const [isPending, startTransition] = useTransition();

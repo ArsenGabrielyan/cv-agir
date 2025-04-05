@@ -12,7 +12,7 @@ interface ResumePreviewSectionProps{
      qrImg?: string,
      template: ResumeTemplate | null,
      className?: string,
-     isEditing?: boolean,
+     resumeId?: string,
      contentRef?: React.Ref<HTMLDivElement>
 }
 export default function ResumePreviewSection({
@@ -21,7 +21,7 @@ export default function ResumePreviewSection({
      qrImg,
      template,
      className,
-     isEditing,
+     resumeId,
      contentRef
 }: ResumePreviewSectionProps){
      return (
@@ -46,7 +46,7 @@ export default function ResumePreviewSection({
                               className="max-w-2xl shadow"
                               qrImg={qrImg}
                               template={template}
-                              isEditing={isEditing}
+                              resumeId={resumeId}
                               contentRef={contentRef}
                          />
                     </div>

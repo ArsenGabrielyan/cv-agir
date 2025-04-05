@@ -1,5 +1,5 @@
 import { generateSummary } from "@/actions/ai";
-import LoadingButton from "@/components/loading-button";
+import LoadingButton from "@/components/buttons/loading-button";
 import { useSubscriptionLevel } from "@/context/subscription-level-provider";
 import usePremiumModal from "@/hooks/use-premium-modal";
 import { getAvailableFeatures } from "@/lib/permission";

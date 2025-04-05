@@ -1,10 +1,11 @@
-import { Resume } from "@prisma/client";
-import { PLACEHOLDERS } from "../constants/other"
-import { ResumeFormType } from "@/schemas/types";
+import { CreditCard, Resume } from "@prisma/client";
+import { CREDIT_CARD_BRANDS, PLACEHOLDERS } from "../constants/other"
+import { CreditCardType, ResumeFormType } from "@/schemas/types";
 import { PlaceholdersName } from "../types";
 import Handlebars from "handlebars"
 import { marked } from "marked"
 import {BorderStyles} from "@prisma/client"
+import { formatDate } from "date-fns";
 
 export const getRandomPlaceholder = (placeholderKey: PlaceholdersName) => {
      const placeholders = PLACEHOLDERS[placeholderKey];
@@ -68,6 +69,14 @@ export const mapToResumeValues = (data: Resume): ResumeFormType => ({
      hobbies: data.hobbies || undefined,
      colorHex: data.colorHex || undefined,
      borderStyle: data.borderStyle || undefined
+})
+
+export const mapToCreditCardValues = (data: CreditCard): CreditCardType => ({
+     cardName: data.fullName,
+     cardNumber: data.cardNumber,
+     cvv: data.cvv,
+     expiryDate: formatDate(data.expiryDate,"MM/yy"),
+     city: data.city
 })
 
 export function getLanguageLevel(level: number){
@@ -152,4 +161,18 @@ export const parseExpiryDate = (date: string) : {
      const fullYear = year <= 50 ? 2000 + year : 1900 + year;
 
      return { date: new Date(fullYear,month,0) }
+}
+
+export const getCreditCardBrandName = (card: string) => {
+     const {visa, mastercard, amex, mir, discover, diners, jcb, unionPay, arca} = CREDIT_CARD_BRANDS;
+     if(visa.test(card)) return "Visa";
+     if(mastercard.test(card)) return "Mastercard";
+     if(amex.test(card)) return "American Express";
+     if(mir.test(card)) return "Mir";
+     if(discover.test(card)) return "Discover";
+     if(diners.test(card)) return "Diners Club";
+     if(jcb.test(card)) return "JCB"
+     if(unionPay.test(card)) return "Union Pay";
+     if(arca.test(card)) return "ArCa";
+     return "Unknown Card"
 }

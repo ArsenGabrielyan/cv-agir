@@ -1,6 +1,9 @@
 import { auth } from "@/auth"
+import { ExtendedUser } from "@/next-auth";
 
-export const currentUser = async () => {
+export type CurrentUserReturnType = Omit<ExtendedUser,"currentPlan">
+
+export const currentUser = async (): Promise<CurrentUserReturnType | undefined> => {
      const session = await auth();
      const obj = session?.user;
      if(obj){

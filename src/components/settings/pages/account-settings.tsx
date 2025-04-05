@@ -4,12 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition, useState } from "react";
 import { useSession } from "next-auth/react";
 import { AccountSettingsSchema } from "@/schemas/settings";
-import {
-     Card,
-     CardHeader,
-     CardTitle,
-     CardContent
-} from "@/components/ui/card";
 import { applyAccountSettings } from "@/actions/settings";
 import {
      Form,
@@ -26,7 +20,8 @@ import { FormSuccess } from "@/components/form/form-success";
 import { FormError } from "@/components/form/form-error";
 import { Switch } from "@/components/ui/switch";
 import { AccountSettingsType } from "@/schemas/types";
-import LoadingButton from "@/components/loading-button";
+import LoadingButton from "@/components/buttons/loading-button";
+import SettingsCard from "../settings-card";
 
 export default function AccountSettings(){
      const user = useCurrentUser();
@@ -74,118 +69,104 @@ export default function AccountSettings(){
                <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
                     <FormError message={error}/>
                     <FormSuccess message={success}/>
-                    <Card>
-                         <CardHeader>
-                              <CardTitle>Հաշվի կարգավորումներ</CardTitle>
-                         </CardHeader>
-                         <CardContent>
-                              <div className="space-y-4">
-                                   <FormField
-                                        control={form.control}
-                                        name="name"
-                                        render={({field})=>(
-                                             <FormItem>
-                                                  <FormLabel>Անուն Ազգանուն</FormLabel>
-                                                  <FormControl>
-                                                       <Input
-                                                            {...field}
-                                                            placeholder="Պողոս Պետրոսյան"
-                                                            disabled={isPending}
-                                                       />
-                                                  </FormControl>
-                                                  <FormMessage/>
-                                             </FormItem>
-                                        )}
-                                   />
-                                   {!user?.isOauth && (
-                                        <FormField
-                                             control={form.control}
-                                             name="email"
-                                             render={({field})=>(
-                                                  <FormItem>
-                                                       <FormLabel>Էլ․ հասցե</FormLabel>
-                                                       <FormControl>
-                                                            <Input
-                                                                 {...field}
-                                                                 type="email"
-                                                                 placeholder="name@example.com"
-                                                                 disabled={isPending}
-                                                            />
-                                                       </FormControl>
-                                                       <FormMessage/>
-                                                  </FormItem>
-                                             )}
-                                        />
+                    <SettingsCard title="Հաշվի կարգավորումներ">
+                         <FormField
+                              control={form.control}
+                              name="name"
+                              render={({field})=>(
+                                   <FormItem>
+                                        <FormLabel>Անուն Ազգանուն</FormLabel>
+                                        <FormControl>
+                                             <Input
+                                                  {...field}
+                                                  placeholder="Պողոս Պետրոսյան"
+                                                  disabled={isPending}
+                                             />
+                                        </FormControl>
+                                        <FormMessage/>
+                                   </FormItem>
+                              )}
+                         />
+                         {!user?.isOauth && (
+                              <FormField
+                                   control={form.control}
+                                   name="email"
+                                   render={({field})=>(
+                                        <FormItem>
+                                             <FormLabel>Էլ․ հասցե</FormLabel>
+                                             <FormControl>
+                                                  <Input
+                                                       {...field}
+                                                       type="email"
+                                                       placeholder="name@example.com"
+                                                       disabled={isPending}
+                                                  />
+                                             </FormControl>
+                                             <FormMessage/>
+                                        </FormItem>
                                    )}
-                              </div>
-                         </CardContent>
-                    </Card>
+                              />
+                         )}
+                    </SettingsCard>
                     {!user?.isOauth && (
-                         <Card>
-                              <CardHeader>
-                                   <CardTitle>Գաղտնաբառ և նույնականացում</CardTitle>
-                              </CardHeader>
-                              <CardContent>
-                                   <div className="space-y-4">
-                                        <FormField
-                                             control={form.control}
-                                             name="password"
-                                             render={({field})=>(
-                                                  <FormItem>
-                                                       <FormLabel>Գաղտնաբառ</FormLabel>
-                                                       <FormControl>
-                                                            <Input
-                                                                 {...field}
-                                                                 placeholder="********"
-                                                                 type="password"
-                                                                 disabled={isPending}
-                                                            />
-                                                       </FormControl>
-                                                       <FormMessage/>
-                                                  </FormItem>
-                                             )}
-                                        />
-                                        <FormField
-                                             control={form.control}
-                                             name="newPassword"
-                                             render={({field})=>(
-                                                  <FormItem>
-                                                       <FormLabel>Նոր գաղտնաբառ</FormLabel>
-                                                       <FormControl>
-                                                            <Input
-                                                                 {...field}
-                                                                 placeholder="********"
-                                                                 type="password"
-                                                                 disabled={isPending}
-                                                            />
-                                                       </FormControl>
-                                                       <FormMessage/>
-                                                  </FormItem>
-                                             )}
-                                        />
-                                        <FormField
-                                             control={form.control}
-                                             name="isTwoFactorEnabled"
-                                             render={({field})=>(
-                                                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                                                       <div className="space-y-0.5">
-                                                            <FormLabel>Երկաստիճան վավերացում</FormLabel>
-                                                            <FormDescription>Միացնել երկաստիճան վավերացումը հաշվի պաշտպանությունը ուժեղացնելու համար</FormDescription>
-                                                            <FormMessage/>
-                                                       </div>
-                                                       <FormControl>
-                                                            <Switch
-                                                                 disabled={isPending}
-                                                                 checked={field.value}
-                                                                 onCheckedChange={field.onChange}
-                                                            />
-                                                       </FormControl>
-                                                  </FormItem>
-                                             )}
-                                        />
-                                   </div>
-                              </CardContent>
-                         </Card>
+                         <SettingsCard title="Գաղտնաբառ և նույնականացում">
+                              <FormField
+                                   control={form.control}
+                                   name="password"
+                                   render={({field})=>(
+                                        <FormItem>
+                                             <FormLabel>Գաղտնաբառ</FormLabel>
+                                             <FormControl>
+                                                  <Input
+                                                       {...field}
+                                                       placeholder="********"
+                                                       type="password"
+                                                       disabled={isPending}
+                                                  />
+                                             </FormControl>
+                                             <FormMessage/>
+                                        </FormItem>
+                                   )}
+                              />
+                              <FormField
+                                   control={form.control}
+                                   name="newPassword"
+                                   render={({field})=>(
+                                        <FormItem>
+                                             <FormLabel>Նոր գաղտնաբառ</FormLabel>
+                                             <FormControl>
+                                                  <Input
+                                                       {...field}
+                                                       placeholder="********"
+                                                       type="password"
+                                                       disabled={isPending}
+                                                  />
+                                             </FormControl>
+                                             <FormMessage/>
+                                        </FormItem>
+                                   )}
+                              />
+                              <FormField
+                                   control={form.control}
+                                   name="isTwoFactorEnabled"
+                                   render={({field})=>(
+                                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                             <div className="space-y-0.5">
+                                                  <FormLabel>Երկաստիճան վավերացում</FormLabel>
+                                                  <FormDescription>Միացնել երկաստիճան վավերացումը հաշվի պաշտպանությունը ուժեղացնելու համար</FormDescription>
+                                                  <FormMessage/>
+                                             </div>
+                                             <FormControl>
+                                                  <Switch
+                                                       disabled={isPending}
+                                                       checked={field.value}
+                                                       onCheckedChange={field.onChange}
+                                                  />
+                                             </FormControl>
+                                        </FormItem>
+                                   )}
+                              />
+                         </SettingsCard>
                     )}
                     <LoadingButton type="submit" disabled={isSameSettings} loading={isPending}>Պահպանել</LoadingButton>
                </form>

@@ -17,7 +17,7 @@ import { submitContactForm } from "@/actions/contact-form";
 import { Textarea } from "@/components/ui/textarea";
 import { FormSuccess } from "./form-success";
 import { ContactFormType } from "@/schemas/types";
-import LoadingButton from "../loading-button";
+import LoadingButton from "@/components/buttons/loading-button";
 
 export default function ContactForm(){
      const [isPending, startTransition] = useTransition();

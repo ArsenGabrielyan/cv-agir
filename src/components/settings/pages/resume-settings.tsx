@@ -4,8 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition, useState } from "react";
 import { useSession } from "next-auth/react";
 import { ResumeSettingsSchema } from "@/schemas/settings";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import LoadingButton from "@/components/loading-button";
+import LoadingButton from "@/components/buttons/loading-button";
 import { applyResumeDefaultsSettings } from "@/actions/settings";
 import {
      Form,
@@ -22,6 +21,7 @@ import { FormError } from "@/components/form/form-error";
 import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input";
 import { Textarea } from "@/components/ui/textarea";
 import { ResumeSettingsType } from "@/schemas/types";
+import SettingsCard from "../settings-card";
 
 export default function ResumeSettings(){
      const user = useCurrentUser();
@@ -68,74 +68,36 @@ export default function ResumeSettings(){
                <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
                     <FormError message={error}/>
                     <FormSuccess message={success}/>
-                    <Card>
-                         <CardHeader>
-                              <CardTitle>Սկզբնական արժեքներ</CardTitle>
-                         </CardHeader>
-                         <CardContent className="space-y-4">
+                    <SettingsCard title="Սկզբնական արժեքներ">
+                         <FormField
+                              control={form.control}
+                              name="jobTitle"
+                              render={({field})=>(
+                                   <FormItem>
+                                        <FormLabel>Մասնագիտություն</FormLabel>
+                                        <FormControl>
+                                             <RandomPlaceholderInput
+                                                  {...field}
+                                                  disabled={isPending}
+                                                  placeholderKey="jobName"
+                                             />
+                                        </FormControl>
+                                        <FormMessage/>
+                                   </FormItem>
+                              )}
+                         />
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <FormField
                                    control={form.control}
-                                   name="jobTitle"
+                                   name="phone"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Մասնագիտություն</FormLabel>
+                                             <FormLabel>Հեռախոսահամար</FormLabel>
                                              <FormControl>
-                                                  <RandomPlaceholderInput
+                                                  <Input
                                                        {...field}
+                                                       placeholder="(012) 34-56-78"
                                                        disabled={isPending}
-                                                       placeholderKey="jobName"
-                                                  />
-                                             </FormControl>
-                                             <FormMessage/>
-                                        </FormItem>
-                                   )}
-                              />
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                   <FormField
-                                        control={form.control}
-                                        name="phone"
-                                        render={({field})=>(
-                                             <FormItem>
-                                                  <FormLabel>Հեռախոսահամար</FormLabel>
-                                                  <FormControl>
-                                                       <Input
-                                                            {...field}
-                                                            placeholder="(012) 34-56-78"
-                                                            disabled={isPending}
-                                                       />
-                                                  </FormControl>
-                                                  <FormMessage/>
-                                             </FormItem>
-                                        )}
-                                   />
-                                   <FormField
-                                        control={form.control}
-                                        name="address"
-                                        render={({field})=>(
-                                             <FormItem>
-                                                  <FormLabel>Բնակության հասցե</FormLabel>
-                                                  <FormControl>
-                                                       <Input
-                                                            {...field}
-                                                            placeholder="12 Փողոցի անուն, Քաղաք, Երկիր"
-                                                            disabled={isPending}
-                                                       />
-                                                  </FormControl>
-                                                  <FormMessage/>
-                                             </FormItem>
-                                        )}
-                                   />
-                              </div>
-                              <FormField
-                                   control={form.control}
-                                   name="summary"
-                                   render={({field})=>(
-                                        <FormItem>
-                                             <FormLabel>Նկարագրություն</FormLabel>
-                                             <FormControl>
-                                                  <Textarea
-                                                       {...field}
-                                                       placeholder="Նկարագրեք Ձեր մասին կարճ տեղեկություն"
                                                   />
                                              </FormControl>
                                              <FormMessage/>
@@ -144,22 +106,55 @@ export default function ResumeSettings(){
                               />
                               <FormField
                                    control={form.control}
-                                   name="hobbies"
+                                   name="address"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Հոբբիներ</FormLabel>
+                                             <FormLabel>Բնակության հասցե</FormLabel>
                                              <FormControl>
-                                                  <Textarea
+                                                  <Input
                                                        {...field}
-                                                       placeholder="Նկարագրեք Ձեր սիրած հոբբիները այստեղ"
+                                                       placeholder="12 Փողոցի անուն, Քաղաք, Երկիր"
+                                                       disabled={isPending}
                                                   />
                                              </FormControl>
                                              <FormMessage/>
                                         </FormItem>
                                    )}
                               />
-                         </CardContent>
-                    </Card>
+                         </div>
+                         <FormField
+                              control={form.control}
+                              name="summary"
+                              render={({field})=>(
+                                   <FormItem>
+                                        <FormLabel>Նկարագրություն</FormLabel>
+                                        <FormControl>
+                                             <Textarea
+                                                  {...field}
+                                                  placeholder="Նկարագրեք Ձեր մասին կարճ տեղեկություն"
+                                             />
+                                        </FormControl>
+                                        <FormMessage/>
+                                   </FormItem>
+                              )}
+                         />
+                         <FormField
+                              control={form.control}
+                              name="hobbies"
+                              render={({field})=>(
+                                   <FormItem>
+                                        <FormLabel>Հոբբիներ</FormLabel>
+                                        <FormControl>
+                                             <Textarea
+                                                  {...field}
+                                                  placeholder="Նկարագրեք Ձեր սիրած հոբբիները այստեղ"
+                                             />
+                                        </FormControl>
+                                        <FormMessage/>
+                                   </FormItem>
+                              )}
+                         />
+                    </SettingsCard>
                     <LoadingButton type="submit" disabled={isSameSettings} loading={isPending}>Պահպանել</LoadingButton>
                </form>
           </Form>

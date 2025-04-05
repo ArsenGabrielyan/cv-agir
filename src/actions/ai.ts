@@ -21,7 +21,11 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
           throw new Error("Այս հմտությունը օգտագործելու համար անցեք պրեմիում տարբերակի։")
      }
 
-     const {jobTitle, education, experience, skills, languages} = GenerateSummarySchema.parse(input);
+     const validatedFields = GenerateSummarySchema.safeParse(input);
+     if(!validatedFields.success){
+          throw new Error("Բոլոր դաշտերը վալիդացրած չեն")
+     }
+     const {jobTitle, education, experience, skills, languages} = validatedFields.data
 
      const sysMsg = `You're a job resume generator AI. Your task is to write a professional introduction summary for a resume given the user's provided data. Only return the summary and don't include any other info in the response. Keep it concise, professional, and return the data in Armenian language. Maximum 70 words and Short.`;
 

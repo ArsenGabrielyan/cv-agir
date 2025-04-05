@@ -14,9 +14,8 @@ interface ResumeInfoProps{
 }
 export default function ResumeInfo({data}: ResumeInfoProps){
      const {fname, lname, jobTitle, phone, address, profileImg, email, summary, hobbies, links, experience, education, courses, references, skills, languages} = data
-     const resumeObj = {fname, lname, jobTitle, phone, address, profileImg, email, summary, hobbies, links, experience, education, courses, references, skills, languages}
-     console.log(Object.values(resumeObj).some(val=>!val))
-     return (
+     const isEmpty = Object.values({fname, lname, jobTitle, phone, address, profileImg, email, summary, hobbies, links, experience, education, courses, references, skills, languages}).every((val) => Array.isArray(val) ? !(val && val.length!==0) : !val);
+     return !isEmpty ? (
           <div className="max-w-screen-xl w-full p-5 space-y-6">
                <div className="bg-card text-card-foreground border shadow p-4 rounded-xl flex flex-col items-center justify-center gap-3">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-3 w-full">
@@ -167,6 +166,10 @@ export default function ResumeInfo({data}: ResumeInfoProps){
                          </section>
                     )}
                </div>
+          </div>
+     ) : (
+          <div className="px-3 py-9 text-center">
+               <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">Այս Ռեզյումեի մեջ տվյալներ չկա։</h1>
           </div>
      )
 }

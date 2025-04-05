@@ -1,4 +1,4 @@
-import { UserPlan } from "@prisma/client"
+import { CreditCard, UserPlan } from "@prisma/client"
 import type {DefaultSession} from "next-auth"
 
 export type ExtendedUser = DefaultSession["user"] & {
@@ -9,7 +9,10 @@ export type ExtendedUser = DefaultSession["user"] & {
   address?: string,
   summary?: string,
   hobbies?: string,
-  currentPlan?: UserPlan
+  currentPlan?: UserPlan,
+  subscriptionId?: string,
+  subscriptionEndDate?: Date,
+  creditCards: CreditCard[]
 }
 
 declare module "next-auth"{

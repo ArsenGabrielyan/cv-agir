@@ -52,6 +52,10 @@ export const DELETE = async(
           return new NextResponse("Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",{ status: 401 })
      }
      const {templateId} = await params
+     const currTemplate = await getResumeTemplateById(templateId);
+     if(!currTemplate){
+          return new NextResponse("Այս շաբլոնը գոյություն չունի",{ status: 400 })
+     }
      const data = await db.resumeTemplate.delete({
           where: {
                id: templateId

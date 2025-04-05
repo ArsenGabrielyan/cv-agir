@@ -92,11 +92,15 @@ export const ResumeFormSchema = z.object({
      ...ResumeStyleSchema.shape
 })
 
-export const CheckoutFormSchema = z.object({
-     email: z.string().email("Մուտքագրեք վավերական էլ․ փոստ"),
+export const CreditCardSchema = z.object({
      cardNumber: z.string().regex(/^\d{16}$/, "Վարկային քարտը պետք է լինի մաքսիմում 16 նիշ").refine(data=>isValidCard(data),"Մուտքագրեք վավերական վարկային քարտ"),
      expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Քարտի ժամկետը պետք է լինի MM/YY ֆորմատով"),
      cvv: z.string().regex(/^\d{3,4}$/, "CVV-ն պետք է լինի 3-4 նիշ"),
      cardName: z.string().min(1,"Պետք է նշել քարտի օգտատիրոջ անունը"),
      city: z.string().min(1,"Նշել քաղաքը")
+})
+
+export const CheckoutFormSchema = z.object({
+     email: z.string().email("Մուտքագրեք վավերական էլ․ փոստ"),
+     ...CreditCardSchema.shape
 })

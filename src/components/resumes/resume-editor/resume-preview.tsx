@@ -14,7 +14,7 @@ interface ResumePreviewProps{
      resumeData: ResumeFormType,
      className?: string,
      qrImg?: string,
-     isEditing?: boolean,
+     resumeId?: string,
      contentRef?: React.Ref<HTMLDivElement>
 }
 export default function ResumePreview({
@@ -22,7 +22,7 @@ export default function ResumePreview({
      resumeData,
      className,
      qrImg,
-     isEditing,
+     resumeId,
      contentRef
 }: ResumePreviewProps){
      const containerRef = useRef<HTMLDivElement>(null);
@@ -60,7 +60,6 @@ export default function ResumePreview({
                          endDate: !val.endDate ? "Այսօր" : format(val.endDate,"MM/yyyy")
                     }))
                };
-               console.log(context.id)
                setCompiledHTML(compileHTML(template.htmlTemplate,context))
           }
      },[template, qrImg, resumeData, photoSrc])
@@ -69,7 +68,7 @@ export default function ResumePreview({
                <div className={!template ? cn("space-y-6 p-6", !width && "invisible") : cn("h-full", !width && "invisible")} style={{zoom: (1/794) * width}} ref={contentRef} id="resumePreviewContent">
                     {!template ? (
                          <>
-                              <HeaderSection resumeData={resumeData} photoSrc={photoSrc} isEditing={isEditing}/>
+                              <HeaderSection resumeData={resumeData} photoSrc={photoSrc} resumeId={resumeId}/>
                               <div className="grid gap-5" style={{gridTemplateColumns: "2fr 1fr"}}>
                                    <div className="space-y-4">
                                         <SummarySection resumeData={resumeData}/>

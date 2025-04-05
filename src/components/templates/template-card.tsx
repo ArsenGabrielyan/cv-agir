@@ -1,36 +1,34 @@
 "use client"
-import { ResumeTemplate } from "@prisma/client";
+import { ResumeTemplate, UserPlan } from "@prisma/client";
 import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import Link from "next/link";
-import { useCurrentSubscriptionLevel } from "@/hooks/use-current-user";
 import { getAvailableFeatures } from "@/lib/permission";
-import usePremiumModal from "@/hooks/use-premium-modal";
+import PremiumButton from "@/components/buttons/premium-button";
 
 interface TemplateCardProps{
-     data: ResumeTemplate
+     data: ResumeTemplate,
+     subscriptionLevel: UserPlan
 }
-export default function TemplateCard({data}: TemplateCardProps){
+export default function TemplateCard({data, subscriptionLevel}: TemplateCardProps){
      const [imageUrl] = useState(data.imageName ? `/templates/${data.imageName}` : `/template-img.webp`);
-     const subscriptionLevel = useCurrentSubscriptionLevel();
      const {canUseTemplates} = getAvailableFeatures(subscriptionLevel)
      return (
-          <div className="rounded-xl bg-card text-card-foreground border shadow max-w-[350px]">
-               <Image src={imageUrl} alt="template-thumbnail" width={350} height={550}/>
+          <div className="group rounded-xl bg-card text-card-foreground border shadow max-w-[350px]">
+               <div className="relative">
+                    <Image src={imageUrl} alt="template-thumbnail" width={350} height={550}/>
+                    {data.isPremium && (
+                         <div className="absolute top-0 left-0 bg-background/95 text-foreground p-2 text-base rounded-br-xl flex items-center gap-2">
+                              <Star className="size-6 text-primary"/>
+                              <p className="hidden group-hover:block font-semibold">Պրեմիում</p>
+                         </div>
+                    )}
+               </div>
                <div className="space-y-4 p-4">
-                    <h2 className="text-lg font-semibold flex justify-between items-center">
+                    <h2 className="text-lg font-semibold">
                          {data.name}
-                         {data.isPremium && (
-                              <Tooltip>
-                                   <TooltipTrigger className="cursor-auto"><Star className="text-primary"/></TooltipTrigger>
-                                   <TooltipContent>
-                                        <p>Պրեմիում շաբլոն</p>
-                                   </TooltipContent>
-                              </Tooltip>
-                         )}
                     </h2>
                     <p className="text-sm text-muted-foreground">{data.description}</p>
                     <ResumeTemplateButton isPremium={data.isPremium! && !canUseTemplates} templateId={data.id}/>
@@ -44,14 +42,11 @@ interface ResumeTemplateButtonProps{
      templateId: string
 }
 function ResumeTemplateButton({isPremium, templateId}: ResumeTemplateButtonProps){
-     const {setOpen} = usePremiumModal();
      return !isPremium ? (
           <Button className="w-full" asChild>
                <Link href={`/editor?templateId=${templateId}`}>Օգտագործել</Link>
           </Button>
      ) : (
-          <Button className="w-full" onClick={()=>setOpen(true)}>
-               Օգտագործել
-          </Button>
+          <PremiumButton>Օգտագործել</PremiumButton>
      )
 }

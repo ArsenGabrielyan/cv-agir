@@ -19,7 +19,7 @@ export default async function DashboardPage(){
           return null;
      }
 
-     const [resumes, totalCount, level] = await Promise.all([
+     const [resumes, totalCount, subscriptionLevel] = await Promise.all([
           db.resume.findMany({
                where: { userId: user.id },
                orderBy: { updatedAt: "desc" },
@@ -29,7 +29,7 @@ export default async function DashboardPage(){
           getSubscriptionLevel(user.id)
      ])
 
-     const {canCreateResume} = getAvailableFeatures(level)
+     const {canCreateResume} = getAvailableFeatures(subscriptionLevel)
      return (
           <PageLayout sidebarMode>
                <div className="flex justify-between items-center gap-5 my-4">

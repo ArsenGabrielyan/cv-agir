@@ -12,7 +12,11 @@ import { getCurrentResumeByUserId, getResumeCountByUserId } from "@/data/db/resu
 export const saveResume = async(values: ResumeFormType,templateId?: string) => {
      const {id} = values
 
-     const {profileImg, experience, education, courses, ...resumeValues} = ResumeFormSchema.parse(values)
+     const validatedFields = ResumeFormSchema.safeParse(values);
+     if(!validatedFields.success){
+          throw new Error("Բոլոր դաշտերը վալիդացրած չէն")
+     }
+     const {profileImg, experience, education, courses, ...resumeValues} = validatedFields.data
 
      const user = await currentUser();
 

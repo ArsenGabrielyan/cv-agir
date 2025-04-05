@@ -13,9 +13,8 @@ import { Button } from "@/components/ui/button"
 import { MoreVertical, Printer, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 import { deleteResume } from "@/actions/resume/delete-resume"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import LoadingButton from "../loading-button"
 import {useReactToPrint} from "react-to-print"
+import DeleteConfirmationDialog from "../delete-confirmation-dialog"
 
 interface ResumeCardProps{
      data: ResumeServerData
@@ -53,9 +52,9 @@ export default function ResumeCard({data}: ResumeCardProps){
                               qrImg={qrImg}
                               contentRef={contentRef}
                               className="shadow-sm group-hover:shadow-lg transition-shadow"
-                              isEditing={true}
+                              resumeId={id}
                          />
-                         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
+                         <span className="inline-block absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
                     </Link>
                     <div className="p-4 space-y-1 text-center">
                          <p className="line-clamp-1 font-semibold">{title || "Անանուն Ռեզյումե"}</p>
@@ -110,7 +109,7 @@ function MoreMenu({resumeId,onPrintClick}: MoreMenuProps){
                     </DropdownMenuItem>
                </DropdownMenuContent>
           </DropdownMenu>
-          <DeleteConfirmationDialog
+          <DeleteResumeDialog
                resumeId={resumeId}
                open={showDelConfirmation}
                onOpenChange={setShowDelConfirmation}
@@ -119,12 +118,12 @@ function MoreMenu({resumeId,onPrintClick}: MoreMenuProps){
      )
 }
 
-interface DeleteConfirmationDialogProps{
+interface DeleteResumeDialogProps{
      resumeId: string,
      open: boolean,
      onOpenChange: (open: boolean) => void
 }
-function DeleteConfirmationDialog({resumeId,open,onOpenChange}: DeleteConfirmationDialogProps){
+function DeleteResumeDialog({resumeId,open,onOpenChange}: DeleteResumeDialogProps){
      const [isPending, startTransition] = useTransition();
 
      const handleDelete = async() => {
@@ -133,32 +132,18 @@ function DeleteConfirmationDialog({resumeId,open,onOpenChange}: DeleteConfirmati
                     await deleteResume(resumeId);
                     onOpenChange(false);
                } catch (error) {
-                    console.log(error);
+                    console.error(error);
                     toast.error("Վայ, ինչ-որ բան սխալ գնաց։ Խնդրում ենք նորից փորձել")
                }
           })
      }
 
      return (
-          <Dialog open={open} onOpenChange={onOpenChange}>
-               <DialogContent>
-                    <DialogHeader>
-                         <DialogTitle>Ջնջե՞լ ռեզյումեն</DialogTitle>
-                         <DialogDescription>Այս գործողությունը հնարավոր չէ հետարկել:</DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                         <LoadingButton
-                              variant="destructive"
-                              onClick={handleDelete}
-                              loading={isPending}
-                         >
-                              Ջնջել
-                         </LoadingButton>
-                         <Button variant="secondary" onClick={()=>onOpenChange(false)}>
-                              Փակել
-                         </Button>
-                    </DialogFooter>
-               </DialogContent>
-          </Dialog>
+          <DeleteConfirmationDialog
+               open={open}
+               onOpenChange={onOpenChange}
+               loading={isPending}
+               onAccept={handleDelete}
+          />
      )
 }

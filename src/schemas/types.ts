@@ -1,6 +1,6 @@
 import * as z from "zod"
 import { AccountSettingsSchema, ResumeSettingsSchema } from "./settings"
-import { CheckoutFormSchema, ContactSchema, LoginSchema, NewPasswordSchema, RegisterSchema, ResetSchema, ResumeDetailsSchema, ResumeFormSchema, ResumeInfoSchema, ResumeOptionalDetailsSchema, ResumeStyleSchema } from "."
+import { CheckoutFormSchema, ContactSchema, CreditCardSchema, LoginSchema, NewPasswordSchema, RegisterSchema, ResetSchema, ResumeDetailsSchema, ResumeFormSchema, ResumeInfoSchema, ResumeOptionalDetailsSchema, ResumeStyleSchema } from "."
 import { GenerateDescriptionSchema, GenerateSummarySchema } from "./ai"
 
 // Settings
@@ -33,3 +33,4 @@ export type GenerateDescriptionInput = z.infer<typeof GenerateDescriptionSchema>
 
 // Subscription Form
 export type CheckoutFormType = z.infer<typeof CheckoutFormSchema>
+export type CreditCardType = z.infer<typeof CreditCardSchema>

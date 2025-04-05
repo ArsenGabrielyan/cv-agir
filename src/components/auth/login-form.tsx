@@ -16,13 +16,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FormError } from "../form/form-error";
-import { FormSuccess } from "../form/form-success";
+import { FormError } from "@/components/form/form-error";
+import { FormSuccess } from "@/components/form/form-success";
 import { login } from "@/actions/auth/login";
 import { getOAuthNotLinkedError } from "@/data/helpers/auth";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { LoginType } from "@/schemas/types";
-import LoadingButton from "../loading-button";
+import LoadingButton from "@/components/buttons/loading-button";
 
 export default function LoginForm(){
      const searchParams = useSearchParams();

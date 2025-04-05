@@ -41,7 +41,7 @@ export default function PricingCard({data,isYearly, selected}: PricingCardProps)
                </CardContent>
                <CardFooter className="w-full">
                     {isFree && selected==="premium" ? (
-                         <Button variant={highlighted ? "default" : "secondary"} className="w-full" disabled={isFree && selected==="premium"}>Դուք արդեն պրեմիում պլանում եք</Button>
+                         <Button variant={highlighted ? "default" : "secondary"} className="w-full" disabled={isFree && selected==="premium"}>Դուք արդեն պրեմիում տարբերակում եք</Button>
                     ) : (isFree || isSelected) ? (
                          <Button variant={highlighted ? "default" : "secondary"} className="w-full" disabled={isFree || isSelected}>
                               Ընթացիկ տարբերակ

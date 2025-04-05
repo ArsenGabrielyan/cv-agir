@@ -41,7 +41,7 @@ export default async function ResumeEditorPage({
 
      return (
           <PageLayout resumeEditor>
-               <ResumeEditor resumeToEdit={resumeToEdit} template={template}/>
+               <ResumeEditor resumeToEdit={resumeToEdit} template={template} resumeId={resumeId}/>
           </PageLayout>
      )
 }

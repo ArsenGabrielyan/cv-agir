@@ -4,10 +4,11 @@ import { PRICING_DATA } from "@/data/constants/landing-page";
 import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
 import PricingCard from "@/components/landing-page/pricing-card";
-import { useCurrentSubscriptionLevel } from "@/hooks/use-current-user";
+import { useCurrentSubscriptionLevel, useCurrentUser } from "@/hooks/use-current-user";
 
 export default function Pricing(){
-     const subscriptionLevel = useCurrentSubscriptionLevel();
+     const user = useCurrentUser();
+     const subscriptionLevel = useCurrentSubscriptionLevel(user && user?.subscriptionEndDate ? new Date(user?.subscriptionEndDate) < new Date() : true);
      const [isYearly, setIsYearly] = useState(false)
      const getGridClass = () => {
           const count = PRICING_DATA.length;

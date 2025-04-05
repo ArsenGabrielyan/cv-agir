@@ -13,11 +13,11 @@ import {
      FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input";
-import { FormError } from "../form/form-error";
-import { FormSuccess } from "../form/form-success";
+import { FormError } from "@/components/form/form-error";
+import { FormSuccess } from "@/components/form/form-success";
 import { reset } from "@/actions/auth/reset";
 import { ResetPassType } from "@/schemas/types";
-import LoadingButton from "../loading-button";
+import LoadingButton from "@/components/buttons/loading-button";
 
 export default function ResetForm(){
      const [isPending, startTransition] = useTransition();

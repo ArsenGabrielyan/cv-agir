@@ -13,12 +13,12 @@ import {
      FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input";
-import { FormError } from "../form/form-error";
-import { FormSuccess } from "../form/form-success";
+import { FormError } from "@/components/form/form-error";
+import { FormSuccess } from "@/components/form/form-success";
 import { register } from "@/actions/auth/register";
-import { PasswordStrengthInput } from "../form/password-input";
+import { PasswordStrengthInput } from "@/components/form/password-input";
 import { RegisterFormType } from "@/schemas/types";
-import LoadingButton from "../loading-button";
+import LoadingButton from "@/components/buttons/loading-button";
 
 export default function RegisterForm(){
      const [isPending, startTransition] = useTransition();

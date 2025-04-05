@@ -1,5 +1,5 @@
 import { generateWorkExperience } from "@/actions/ai";
-import LoadingButton from "@/components/loading-button";
+import LoadingButton from "@/components/buttons/loading-button";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";

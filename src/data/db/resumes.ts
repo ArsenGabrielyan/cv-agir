@@ -48,3 +48,14 @@ export async function getCurrentResumeByUserId(userId: string, resumeId: string)
 }
 
 export const getResumeTemplates = async () => await db.resumeTemplate.findMany();
+
+export const getResumeTemplateCategoryById = async(id: string) => {
+     try{
+          const category = await db.resumeTemplateCategory.findUnique({
+               where: { id }
+          })
+          return category
+     } catch {
+          return null
+     }
+}

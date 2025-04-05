@@ -1,3 +1,4 @@
+import { getResumeTemplateCategoryById } from "@/data/db/resumes";
 import { getIsAdmin } from "@/data/helpers/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
@@ -11,11 +12,7 @@ export const GET = async(
           return new NextResponse("Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",{ status: 401 })
      }
      const {categoryId} = await params
-     const data = await db.resumeTemplateCategory.findUnique({
-          where: {
-               id: categoryId
-          }
-     })
+     const data = await getResumeTemplateCategoryById(categoryId)
      return NextResponse.json(data)
 }
 
@@ -48,7 +45,11 @@ export const DELETE = async(
      if(!isAdmin){
           return new NextResponse("Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",{ status: 401 })
      }
-     const {categoryId} = await params
+     const {categoryId} = await params;
+     const currCategory = await getResumeTemplateCategoryById(categoryId);
+     if(!currCategory){
+          return new NextResponse("Այս կատեգորիան գոյություն չունի",{ status: 400 })
+     }
      const data = await db.resumeTemplateCategory.delete({
           where: {
                id: categoryId

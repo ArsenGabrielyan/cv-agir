@@ -56,12 +56,12 @@ type ResumeSkill {
   percentage Int?
 }
 
-type CreditCard{
+type CreditCard {
   cardNumber String
   expiryDate DateTime
-  cvv String
-  fullName String
-  city String
+  cvv        String
+  fullName   String
+  city       String
 }
 
 enum UserPlan {
@@ -73,6 +73,11 @@ enum BorderStyles {
   square
   circle
   squircle
+}
+
+enum SubscriptionPeriod {
+  yearly
+  monthly
 }
 
 model User {
@@ -92,8 +97,12 @@ model User {
   address               String?
   summary               String?
   hobbies               String?
-  currentPlan UserPlan @default(free)
-  creditCard CreditCard?
+  currentPlan           UserPlan               @default(free)
+
+  subscriptionId String?       @db.ObjectId
+  subscription   Subscription?
+
+  creditCards CreditCard[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -206,7 +215,7 @@ model Resume {
   phone       String?
   address     String?
   profileImg  String?
-  email       String?            
+  email       String?
   links       ResumeLink[]
   summary     String?
   experience  ResumeExperience[]
@@ -217,15 +226,31 @@ model Resume {
   languages   ResumeSkill[]
   hobbies     String?
 
-  colorHex String?
+  colorHex    String?
   borderStyle BorderStyles?
 
   userId String? @db.ObjectId
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  templateId String?          @db.ObjectId
+  templateId String?         @db.ObjectId
   template   ResumeTemplate? @relation(fields: [templateId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Subscription {
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String             @unique @db.ObjectId
+  plan        UserPlan
+  period      SubscriptionPeriod
+  price       Float
+
+  startDate DateTime @default(now())
+  endDate   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
 }

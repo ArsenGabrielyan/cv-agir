@@ -33,8 +33,13 @@ export const newPassword = async(
      }
 
      const existingUser = await getUserByEmail(existingToken.email);
-     if(!existingUser){
+     if(!existingUser || !existingUser.password){
           return {error: "Այս էլ․ հասցեն գրանցված չէ"}
+     }
+
+     const isSamePassword = await bcrypt.compare(password,existingUser.password);
+     if(isSamePassword){
+          return {error: "Նոր գաղտնաբառը չի կարող համընկնել հին գաղտնաբառի հետ։"}
      }
 
      const hashedPassword = await bcrypt.hash(password,10);
