@@ -6,20 +6,21 @@ import Facebook from "next-auth/providers/facebook"
 import { LoginSchema } from "@/schemas"
 import { getUserByEmail } from "@/data/db/user"
 import bcrypt from "bcryptjs"
+import { env } from "./env"
  
 export default { 
      providers: [
           Github({
-               clientId: process.env.GITHUB_ID,
-               clientSecret: process.env.GITHUB_SECRET
+               clientId: env.GITHUB_ID,
+               clientSecret: env.GITHUB_SECRET
           }),
           Google({
-               clientId: process.env.GOOGLE_ID,
-               clientSecret: process.env.GOOGLE_SECRET,
+               clientId: env.GOOGLE_ID,
+               clientSecret: env.GOOGLE_SECRET,
           }),
           Facebook({
-               clientId: process.env.FACEBOOK_ID,
-               clientSecret: process.env.FACEBOOK_SECRET
+               clientId: env.FACEBOOK_ID,
+               clientSecret: env.FACEBOOK_SECRET
           }),
           Credentials({
                async authorize(credentials) {

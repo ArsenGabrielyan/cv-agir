@@ -1,8 +1,9 @@
 import {Resend} from "resend"
 import { absoluteUrl } from "./utils";
+import { env } from "@/env";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const onboardingEmail = process.env.ONBOARDING_EMAIL!
+const resend = new Resend(env.RESEND_API_KEY);
+const onboardingEmail = env.ONBOARDING_EMAIL
 
 export const sendMessage = async (
      name: string,
@@ -13,7 +14,7 @@ export const sendMessage = async (
 ) => {
      await resend.emails.send({
           from: onboardingEmail,
-          to: process.env.DEV_EMAIL!,
+          to: env.DEV_EMAIL,
           subject,
           html: `
                <h1 style="color: #002a4f">Նոր Հաղորդագրություն</h1>
@@ -44,7 +45,7 @@ export const sendVerificationEmail = async(
           html: `
                <h1 style="color: #002a4f">Հաստատեք Ձեր էլ․ հասցեն</h1>
                <p>Բարև ${firstName},</p>
-               <p>Շնորհակալություն մեր հարթակում գրանցվելու համար! Ձեր հաշիվը ակտիվացնելու համար, խնդրում ենք հաստատել Ձեր էլ․ փոստի հասցեն՝ սեղմելով ներքևի կոճակը։</p>
+               <p>Շնորհակալություն մեր հարթակում գրանցվելու համար։ Ձեր հաշիվը ակտիվացնելու համար, խնդրում ենք հաստատել Ձեր էլ․ փոստի հասցեն՝ սեղմելով ներքևի կոճակը։</p>
                <p>🔗 <a href="${confirmLink}">Հաստատել էլ․ փոստը</a></p>
                <p>Կամ պատճենեք այս հղումը և տեղադրեք Ձեր վեբ դիտարկիչում։</p>
                <p>🔗 <a href="${confirmLink}">${confirmLink}</a></p>
