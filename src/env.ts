@@ -19,7 +19,6 @@ export const env = createEnv({
           ONBOARDING_EMAIL: z.string().min(1,"Խնդրում ենք ավելացնել էլ․ փոստ ուղարկելու էլ․ հասցեն (այդպես անել, որ այս էլ․ հասցեն Resend-ով աշխատի)։"),
           AES_SECRET: z.string().min(1,"Գաղտնագրման բանալին (secret key) պարտադիր է։"),
           AES_ENCRYPTION_METHOD: z.string().min(1,"Գաղտնագրման ալգորիթմը (մեթոդը) պարտադիր է"),
-
      },
      client: {
           NEXT_PUBLIC_APP_URL: z.string().min(1,"Հիմնական հավելվածի URL-ը պարտադիր է։").url("Հիմնական հավելվածի URL-ը պետք է լինի վավերական URL։")
