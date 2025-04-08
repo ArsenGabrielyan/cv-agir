@@ -106,7 +106,7 @@ function DeleteCardDialog({index,open,onOpenChange}: DeleteCardDialogProps){
      const {update} = useSession();
      const [isPending, startTransition] = useTransition();
 
-     const handleCancel = () => {
+     const handleDelete = () => {
           startTransition(()=>{
                deleteCard(index)
                .then((data)=>{
@@ -126,7 +126,7 @@ function DeleteCardDialog({index,open,onOpenChange}: DeleteCardDialogProps){
                open={open}
                onOpenChange={onOpenChange}
                loading={isPending}
-               onAccept={handleCancel}
+               onAccept={handleDelete}
                dialogTitle="Համոզվա՞ծ եք, որ ուզում եք ջնջել այս վճարման մեթոդը:"
           />
      )

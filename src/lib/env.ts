@@ -7,13 +7,7 @@ export const env = createEnv({
           AUTH_SECRET: z.string().min(1,"Next Auth-ի բանալին (secret key) պարտադիր է։"),
           AUTH_URL: z.string().min(1,"Next Auth-ի URL-ը պարտադիր է։").url("Next Auth-ի URL-ը պետք է լինի վավերական URL։"),
           BLOB_READ_WRITE_TOKEN: z.string().min(1,"Հավելվածի հիշողության բանալին (token) պարտադիր է։"),
-          GITHUB_ID: z.string().min(1,"Github OAuth-ի ID-ն պարտադիր է"),
-          GITHUB_SECRET: z.string().min(1,"Github OAuth-ի բանալին (secret key) պարտադիր է"),
-          GOOGLE_ID: z.string().min(1,"Google OAuth-ի ID-ն պարտադիր է"),
-          GOOGLE_SECRET: z.string().min(1,"Google OAuth-ի բանալին (secret key) պարտադիր է"),
           GEMINI_API_KEY: z.string().min(1,"Google Gemini-ի բանալին (api key) պարտադիր է"),
-          FACEBOOK_ID: z.string().min(1,"Facebook OAuth-ի ID-ն պարտադիր է"),
-          FACEBOOK_SECRET: z.string().min(1,"Facebook OAuth-ի բանալին (secret key) պարտադիր է"),
           RESEND_API_KEY: z.string().min(1,"Resend-ի բանալին (api key) պարտադիր է"),
           DEV_EMAIL: z.string().min(1,"Խնդրում ենք ավելացնել այս հավելվածի ծրագրավորողի էլ․ հասցեն։"),
           ONBOARDING_EMAIL: z.string().min(1,"Խնդրում ենք ավելացնել էլ․ փոստ ուղարկելու էլ․ հասցեն (այդպես անել, որ այս էլ․ հասցեն Resend-ով աշխատի)։"),
@@ -25,5 +19,5 @@ export const env = createEnv({
      },
      experimental__runtimeEnv: {
           NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL
-     }
+     },
 })

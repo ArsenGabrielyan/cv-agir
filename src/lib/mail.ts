@@ -1,6 +1,6 @@
 import {Resend} from "resend"
 import { absoluteUrl } from "./utils";
-import { env } from "@/env";
+import { env } from "@/lib/env";
 
 const resend = new Resend(env.RESEND_API_KEY);
 const onboardingEmail = env.ONBOARDING_EMAIL

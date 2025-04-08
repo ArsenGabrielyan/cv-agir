@@ -1,6 +1,6 @@
 "use server"
 import crypto from "crypto"
-import { env } from "@/env"
+import { env } from "@/lib/env"
 
 const secretKey = env.AES_SECRET
 const encryptionMethod = env.AES_ENCRYPTION_METHOD
