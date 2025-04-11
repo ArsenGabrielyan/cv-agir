@@ -32,7 +32,7 @@ export const applyAccountSettings = async(values: AccountSettingsType) => {
           const verificationToken = await generateVerificationToken(values.email);
 
           await sendVerificationEmail(
-               values.name ? values.name : user.name as string,
+               values.name ? values.name : user.name || "",
                verificationToken.email,
                verificationToken.token
           )

@@ -1,5 +1,5 @@
 import { SettingsContentProps } from "@/components/settings/settings-tabs";
-import { ResumeFormType } from "@/schemas/types";
+import { CoverLetterFormType, ResumeFormType } from "@/schemas/types";
 import { Prisma, UserPlan } from "@prisma/client";
 import { LucideProps } from "lucide-react";
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
@@ -45,12 +45,23 @@ export interface IQuestionFAQ{
 export interface INavbarLink{
      id: number,
      name: string,
-     href: string
+     href: string,
+     isPremium?: boolean
 }
-export interface ISidebarLink extends INavbarLink{
-     Icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>,
-     dropdown?: INavbarLink[]
+interface ISidebarLinkBase {
+     id: number;
+     name: string;
+     Icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
 }
+interface ISidebarSimpleLink extends ISidebarLinkBase {
+     href: string;
+     dropdown?: never;
+}
+interface ISidebarDropdownLink extends ISidebarLinkBase {
+     href?: never;
+     dropdown: INavbarLink[];
+}
+export type ISidebarLink = ISidebarSimpleLink | ISidebarDropdownLink;
 
 // Other Types
 export interface IAdminAPISearchParams<T>{
@@ -69,6 +80,18 @@ export interface UseDimensionsReturnType{
      width: number,
      height: number
 }
+export interface IEditorStep<Props>{
+     title: string,
+     component: React.ComponentType<Props>,
+     key: string
+}
+export interface EditorFormFooterProps{
+     currStep: string,
+     setCurrStep: (step: string) => void
+     showSmPreview: boolean,
+     setShowSmPreview: (show: boolean) => void,
+     onPrint: () => void
+}
 
 // Resume Related
 export interface ResumeArrayFieldProps<TSchema extends FieldValues>{
@@ -80,6 +103,10 @@ export interface ResumeArrayFieldProps<TSchema extends FieldValues>{
 export interface ResumeFormProps{
      resumeData: ResumeFormType,
      setResumeData: React.Dispatch<React.SetStateAction<ResumeFormType>>
+}
+export interface CoverLetterFormProps{
+     coverLetterData: CoverLetterFormType,
+     setCoverLetterData: React.Dispatch<React.SetStateAction<CoverLetterFormType>>
 }
 export interface IResumeDynamicFields{
      courses: {
@@ -127,7 +154,6 @@ export interface IResumeDynamicFields{
 export const resumeDataInclude = {
      template: true
 } satisfies Prisma.ResumeInclude
-
 export type ResumeServerData = Prisma.ResumeGetPayload<{
      include: typeof resumeDataInclude
 }>

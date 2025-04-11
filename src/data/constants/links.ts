@@ -11,7 +11,8 @@ export const NAVBAR_LINKS: INavbarLink[] = [
 export const SIDEBAR_LINKS: ISidebarLink[] = [
      {id: 1, name: "Վահանակ", href: "/dashboard", Icon: LayoutDashboard},
      {id: 2, name: "Շաբլոններ", href: "/templates", Icon: LayoutTemplate},
-     {id: 3, name: "Աջակցություն", href: "/faq", Icon: CircleHelp, dropdown: [
+     {id: 3, name: "Աջակցություն", Icon: CircleHelp, dropdown: [
+          { id: 1, name: 'Հարց ու պատասխան', href: '/faq',},
           { id: 2, name: "Հետադարձ կապ", href: "/contact", },
           { id: 3, name: "Մեր մասին", href: "/about",},
      ]},

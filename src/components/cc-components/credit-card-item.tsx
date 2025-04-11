@@ -1,5 +1,5 @@
 import { decryptData } from "@/actions/encryption";
-import { getCreditCardBrandName, mapToCreditCardValues } from "@/data/helpers/other";
+import { getCreditCardBrandName, mapToCreditCardValues } from "@/data/helpers";
 import { CreditCard } from "@prisma/client";
 import { formatDate } from "date-fns";
 import CreditCardIcon from "@/components/cc-components/credit-card-icon";
@@ -18,6 +18,8 @@ interface CreditCardItemProps{
      index: number,
      deleteDisabled: boolean
 }
+
+// TODO: Add a Bank Provider to credit card input
 
 export default function CreditCardItem({card, index, deleteDisabled}: CreditCardItemProps){
      const [safeCardInfo, setSafeCardInfo] = useState({

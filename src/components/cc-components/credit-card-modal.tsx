@@ -16,8 +16,7 @@ import { useSession } from "next-auth/react";
 export default function CreditCardModal(){
      const {update} = useSession();
      const [isPending, startTransition] = useTransition();
-     const {open,setOpen,cardToEdit,index} = useCreditCardModal();
-     console.log(JSON.stringify(cardToEdit), index, open)
+     const {open,setOpen,cardToEdit,index} = useCreditCardModal()
      const isEditing = cardToEdit && index!==-1;
      const form = useForm<CreditCardType>({
           resolver: zodResolver(CreditCardSchema),
@@ -63,7 +62,6 @@ export default function CreditCardModal(){
           formValues.city === originalValues.city
      );
      const isSame = !!isEditing && !!cardToEdit && areValuesSame(form.watch(), cardToEdit);
-     console.log(isSame)
      return (
           <Dialog open={open} onOpenChange={setOpen}>
                <DialogContent>

@@ -1,5 +1,5 @@
 import { getResumeTemplateById } from "@/data/db/resumes";
-import { getIsAdmin } from "@/data/helpers/auth";
+import { getIsAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 

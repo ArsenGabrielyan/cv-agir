@@ -1,8 +1,8 @@
 import { getIsSubscriptionExpired } from "@/actions/subscription-system"
 import PageLayout from "@/components/layout/page-layout"
 import SettingsContent from "@/components/settings/settings-tabs"
+import { getSubscriptionsByUserId } from "@/data/db/subscription"
 import { currentUser } from "@/lib/auth"
-import { db } from "@/lib/db"
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
 
@@ -16,11 +16,7 @@ export default async function SettingsPage(){
           redirect("/auth/login")
      }
      const [subscriptions, isExpired] = await Promise.all([
-          db.subscription.findMany({
-               where: {
-                    userId: user.id
-               }
-          }),
+          getSubscriptionsByUserId(user.id),
           getIsSubscriptionExpired(user.id)
      ])
      return (

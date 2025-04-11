@@ -18,5 +18,5 @@ export const deleteResume = async (id: string) => {
           await del(resume.profileImg)
      }
      await db.resume.delete({where: { id }})
-     revalidatePath("/dashboard")
+     revalidatePath("/dashboard?show=resume")
 }

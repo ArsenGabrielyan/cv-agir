@@ -13,3 +13,14 @@ export const currentUser = async (): Promise<CurrentUserReturnType | undefined> 
      }
      return undefined
 }
+
+const adminIds = [
+     "67b47e586ab583428524d25d"
+]
+export const getIsAdmin = async()=>{
+     const user = await currentUser();
+     if(!user || !user.id){
+          return false;
+     }
+     return adminIds.indexOf(user.id) !== -1;
+}

@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 export const metadata: Metadata = {
   title: {
     template: "%s | CV-ագիր բետա",
-    absolute: "CV-ագիր (բետա) - Ստեղծիր CV արագ"
+    absolute: "CV-ագիր - Ստեղծիր CV արագ"
   },
   description: "CV-ագիրը ռեզյումե գեներացնելու հավելված է։",
   authors: {

@@ -3,7 +3,6 @@ import ThemeSettings from "@/components/themes/theme-changer";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useTheme } from "next-themes";
 import Logo from "./logo";
 
 interface FooterProps{
@@ -11,7 +10,6 @@ interface FooterProps{
 }
 export default function Footer({isLandingPage=false}: FooterProps){
      const year = new Date().getFullYear();
-     const {theme} = useTheme()
      const getGridClass = (count: number) => {
           return cn(
                "grid gap-3 w-full min-[400px]:w-auto",
@@ -27,7 +25,7 @@ export default function Footer({isLandingPage=false}: FooterProps){
                     <>
                          <div className="flex justify-between items-start gap-6 flex-col md:flex-row pb-6">
                               <div className="flex flex-col space-y-3 w-full min-[450px]:w-[400px]">
-                                   <Logo mode="image" width={200} height={400} theme={theme}/>
+                                   <Logo width={200} height={65}/>
                                    <p>CV-ագիր — հայերեն ռեզյումե գեներատոր, որը թույլ է տալիս ստեղծել, խմբագրել և ներբեռնել ռեզյումեներ անվճար։</p>
                               </div>
                               <div className={getGridClass(2)}>
@@ -55,7 +53,7 @@ export default function Footer({isLandingPage=false}: FooterProps){
                     </>
                ) : (
                     <>
-                         <Logo mode="image" width={200} height={400} theme={theme}/>
+                         <Logo width={200} height={65}/>
                          <p>&copy; {year} Արսեն Գաբրիելյան։ Բոլոր իրավունքները պաշտպանված են։</p>
                     </>
                )}

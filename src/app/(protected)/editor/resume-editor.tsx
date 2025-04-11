@@ -4,15 +4,15 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { useRouter, useSearchParams } from "next/navigation"
 import { steps } from "./steps"
 import Breadcrumbs from "./breadcrumbs"
-import FormFooter from "./form-footer"
+import ResumeFormFooter from "./resume-form-footer"
 import { Loader2 } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { ResumeFormType } from "@/schemas/types"
 import ResumePreviewSection from "./resume-preview-section"
 import { cn } from "@/lib/utils"
 import useUnsavedChangesWarning from "@/hooks/use-unsaved-changes"
-import useResumeAutoSave from "@/hooks/auto-save/use-resume-auto-save"
-import { mapToResumeValues } from "@/data/helpers/other"
+import { useResumeAutoSave } from "@/hooks/use-auto-save"
+import { mapToResumeValues } from "@/data/helpers"
 import { absoluteUrl } from "@/lib/utils";
 import QRCode from "qrcode";
 import { useReactToPrint } from "react-to-print"
@@ -103,12 +103,12 @@ export default function ResumeEditor({resumeToEdit,template,resumeId}: ResumeEdi
                          />
                     </div>
                </main>
-               <FormFooter
+               <ResumeFormFooter
                     onPrint={printResume}
                     currStep={currStep}
                     setCurrStep={setStep}
-                    setShowSmResumePreview={setShowSmResumePreview}
-                    showSmResumePreview={showSmResumePreview}
+                    setShowSmPreview={setShowSmResumePreview}
+                    showSmPreview={showSmResumePreview}
                />
           </div>
      )

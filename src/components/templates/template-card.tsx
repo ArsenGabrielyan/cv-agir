@@ -31,7 +31,7 @@ export default function TemplateCard({data, subscriptionLevel}: TemplateCardProp
                          {data.name}
                     </h2>
                     <p className="text-sm text-muted-foreground">{data.description}</p>
-                    <ResumeTemplateButton isPremium={data.isPremium! && !canUseTemplates} templateId={data.id}/>
+                    <ResumeTemplateButton isPremium={data.isPremium as boolean && !canUseTemplates} templateId={data.id}/>
                </div>
           </div>
      )

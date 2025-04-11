@@ -1,5 +1,5 @@
 import AdminPageWrapper from "@/components/admin-components/admin-wrapper";
-import { getIsAdmin } from "@/data/helpers/auth";
+import { getIsAdmin } from "@/lib/auth";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 

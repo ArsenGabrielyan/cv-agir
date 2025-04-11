@@ -14,7 +14,7 @@ export async function encryptData<T extends string>(data: T){
      if (!data) return "";
      const iv = crypto.randomBytes(16);
      const cipher = crypto.createCipheriv(
-          encryptionMethod as string,
+          encryptionMethod,
           Buffer.from(key),
           iv
      );

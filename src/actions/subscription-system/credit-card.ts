@@ -1,5 +1,5 @@
 "use server"
-import { parseExpiryDate } from "@/data/helpers/other";
+import { parseExpiryDate } from "@/data/helpers";
 import { currentUser, CurrentUserReturnType } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { decryptData, encryptData } from "@/actions/encryption";

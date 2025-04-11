@@ -1,14 +1,14 @@
 import { Box, Theme, useMediaQuery } from "@mui/material";
-import Image from "next/image";
 import React from "react";
 import { AppBar, Layout, TitlePortal } from "react-admin";
+import Logo from "../layout/logo";
 
 const AdminAppBar = () => {
      const isLargeEnough = useMediaQuery<Theme>(theme=>theme.breakpoints.up("md"));
      return (
           <AppBar color="secondary">
                <TitlePortal/>
-               {isLargeEnough && <Image src="/logo-white.svg" alt="logo" width={200} height={40}/>}
+               {isLargeEnough && <Logo width={200} height={40} isAdmin isDark/>}
                {isLargeEnough && <Box component="span" sx={{flex: 1}}/>}
           </AppBar>
      )

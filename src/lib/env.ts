@@ -13,11 +13,18 @@ export const env = createEnv({
           ONBOARDING_EMAIL: z.string().min(1,"Խնդրում ենք ավելացնել էլ․ փոստ ուղարկելու էլ․ հասցեն (այդպես անել, որ այս էլ․ հասցեն Resend-ով աշխատի)։"),
           AES_SECRET: z.string().min(1,"Գաղտնագրման բանալին (secret key) պարտադիր է։"),
           AES_ENCRYPTION_METHOD: z.string().min(1,"Գաղտնագրման ալգորիթմը (մեթոդը) պարտադիր է"),
+          GITHUB_ID: z.string().min(1,"GitHub-ի client ID-ն (secret key) պարտադիր է։"),
+          GITHUB_SECRET: z.string().min(1,"GitHub-ի client secret key-ը պարտադիր է։"),
+          GOOGLE_ID: z.string().min(1,"Google-ի client ID-ն պարտադիր է։"),
+          GOOGLE_SECRET: z.string().min(1,"Google-ի client secret key-ը պարտադիր է։"),
+          FACEBOOK_ID: z.string().min(1,"Facebook-ի client ID-ն պարտադիր է։"),
+          FACEBOOK_SECRET: z.string().min(1,"Facebook-ի client secret key-ը պարտադիր է։"),
      },
      client: {
           NEXT_PUBLIC_APP_URL: z.string().min(1,"Հիմնական հավելվածի URL-ը պարտադիր է։").url("Հիմնական հավելվածի URL-ը պետք է լինի վավերական URL։")
      },
      experimental__runtimeEnv: {
-          NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL
+          NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
      },
+     emptyStringAsUndefined: true,
 })

@@ -10,7 +10,7 @@ import {
      optionalString,
 } from "./resume"
 import {BorderStyles} from "@prisma/client"
-import { isValidCard } from "@/data/helpers/other"
+import { isValidCard } from "@/data/helpers"
 
 function optionalArray<T>(arr: z.ZodType<T>){
      return z.optional(z.array(arr))
@@ -80,7 +80,7 @@ export const ResumeOptionalDetailsSchema = z.object({
      references: optionalArray(ResumeReferenceSchema),
 })
 
-export const ResumeStyleSchema = z.object({
+export const DocStyleSchema = z.object({
      colorHex: optionalString,
      borderStyle: z.custom<BorderStyles>().optional()
 })
@@ -89,7 +89,7 @@ export const ResumeFormSchema = z.object({
      ...ResumeInfoSchema.shape,
      ...ResumeDetailsSchema.shape,
      ...ResumeOptionalDetailsSchema.shape,
-     ...ResumeStyleSchema.shape
+     ...DocStyleSchema.shape
 })
 
 export const CreditCardSchema = z.object({
@@ -103,4 +103,40 @@ export const CreditCardSchema = z.object({
 export const CheckoutFormSchema = z.object({
      email: z.string().email("Մուտքագրեք վավերական էլ․ փոստ"),
      ...CreditCardSchema.shape
+})
+
+export const CoverLetterInfoSchema = z.object({
+     title: optionalString,
+     description: optionalString,
+     fname: optionalString,
+     lname: optionalString,
+     jobTitle: optionalString,
+     phone: optionalString,
+     address: optionalString,
+     email: optionalEmailString,
+     profileImg: z.custom<File | undefined>()
+     .refine(
+       (file) =>
+         !file || (file instanceof File && file.type.startsWith("image/")),
+       "Պետք է լինի նկար",
+     )
+     .refine(
+       (file) => !file || file.size <= 1024 * 1024 * 4,
+       "Նկարը պետք է լինի ավելի քիչ քան 4ՄԲ",
+     ),
+})
+
+export const CoverLetterDetailsSchema = z.object({
+     recipientName: optionalString,
+     recipientTitle: optionalString,
+     companyName: optionalString,
+     companyAddress: optionalString,
+     letterContent: optionalString,
+     letterDate: z.optional(z.date())
+})
+
+export const CoverLetterFormSchema = z.object({
+     ...CoverLetterInfoSchema.shape,
+     ...CoverLetterDetailsSchema.shape,
+     ...DocStyleSchema.shape
 })

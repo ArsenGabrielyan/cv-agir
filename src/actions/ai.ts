@@ -1,8 +1,8 @@
 "use server"
 
-import { GenerateDescriptionSchema, GenerateSummarySchema } from "@/schemas/ai"
-import { GenerateDescriptionInput, GenerateSummaryInput, WorkExperienceType } from "@/schemas/types"
-import {getLanguageLevel} from "@/data/helpers/other"
+import { GenerateDescriptionSchema, GenerateLetterBodySchema, GenerateSummarySchema } from "@/schemas/ai"
+import { GenerateDescriptionInput, GenerateLetterBodyInput, GenerateSummaryInput, WorkExperienceType } from "@/schemas/types"
+import {getLanguageLevel} from "@/data/helpers"
 import gemini from "@/lib/gemini"
 import { AI_MODEL, GEN_CONFIG } from "@/data/constants/other"
 import { currentUser } from "@/lib/auth"
@@ -139,4 +139,56 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
      } satisfies WorkExperienceType
 
      return responseObj
+}
+
+export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => {
+     const user = await currentUser();
+     if(!user || !user.id){
+          throw new Error("Այս օգտատերը նույնականացված չէ։")
+     }
+     const subscriptionLevel = await getSubscriptionLevel(user.id);
+     const {canUseAITools} = getAvailableFeatures(subscriptionLevel)
+
+     if(!canUseAITools){
+          throw new Error("Այս հմտությունը օգտագործելու համար անցեք պրեմիում տարբերակի։")
+     }
+
+     const validatedFields = GenerateLetterBodySchema.safeParse(input);
+     if(!validatedFields.success){
+          throw new Error("Բոլոր դաշտերը վալիդացրած չեն")
+     }
+     const {jobTitle, fname, lname, recipientName, recipientTitle} = validatedFields.data
+
+     const sysMsg = `You're a job cover letter generator AI. Your task is to write a professional cover letter given the user's provided data and recipient's data. Only return the cover letter in markdown and make 3-4 paragraphs explaining why this user is perfect candidate for a specific job. Keep it concise, professional, avoid headings, and return the data in Armenian language.`;
+
+     const userMessage = `
+     Խնդրում ենք գեներացնել պրոֆեսիոնալ ուղեկցող նամակ նշված տվյալներից՝
+
+     Աշխատողի անուն ազգանուն՝ ${fname || "N/A"} ${lname || "N/A"}
+     Մասնագիտություն՝ ${jobTitle || "N/A"}
+     
+     Գործատուի անուն ազգանուն՝ ${recipientName || "N/A"}
+     Գործատուի մասնագիտություն՝ ${recipientTitle || "N/A"}
+
+     բայց սկսիր "Հարգելի պարոն <ազգանուն> նախադասությունից" և վերջացրու "Հարգանքով՝ <աշխատողի անուն ազգանուն>"-ով
+     `;
+
+     const model = gemini.getGenerativeModel({
+          model: AI_MODEL,
+          systemInstruction: sysMsg
+     });
+
+     const chatSession = model.startChat({
+          generationConfig: GEN_CONFIG(),
+          history: []
+     })
+     const result = await chatSession.sendMessage(userMessage);
+
+     const aiResponse = result.response.text()
+
+     if(!aiResponse){
+          throw new Error("Չհաջողվեց գեներացնել պատասխանը Արհեստական Բանականության կողմից")
+     }
+
+     return aiResponse
 }

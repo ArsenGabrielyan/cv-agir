@@ -92,6 +92,7 @@ model User {
   accounts              Account[]
   sessions              Session[]
   resumes               Resume[]
+  coverLetters          CoverLetter[]
   jobTitle              String?
   phone                 String?
   address               String?
@@ -239,12 +240,41 @@ model Resume {
   updatedAt DateTime @updatedAt
 }
 
+model CoverLetter {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+
+  fname      String?
+  lname      String?
+  jobTitle   String?
+  phone      String?
+  address    String?
+  profileImg String?
+  email      String?
+
+  recipientName  String?
+  recipientTitle String?
+  companyName    String?
+  companyAddress String?
+  letterContent  String?
+
+  colorHex    String?
+  borderStyle BorderStyles?
+
+  userId String? @db.ObjectId
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Subscription {
-  id          String             @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String             @unique @db.ObjectId
-  plan        UserPlan
-  period      SubscriptionPeriod
-  price       Float
+  id     String             @id @default(auto()) @map("_id") @db.ObjectId
+  userId String             @unique @db.ObjectId
+  plan   UserPlan
+  period SubscriptionPeriod
+  price  Float
 
   startDate DateTime @default(now())
   endDate   DateTime

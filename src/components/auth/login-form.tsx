@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form"
-import { useSearchParams } from "next/navigation";
+import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import {zodResolver} from "@hookform/resolvers/zod"
 import { LoginSchema } from "@/schemas";
 import { CardWrapper } from "./card-wrapper";
@@ -19,10 +19,17 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form/form-error";
 import { FormSuccess } from "@/components/form/form-success";
 import { login } from "@/actions/auth/login";
-import { getOAuthNotLinkedError } from "@/data/helpers/auth";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { LoginType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
+
+function getOAuthNotLinkedError(searchParams: ReadonlyURLSearchParams){
+     const error = searchParams.get("error");
+     if(error){
+          return error.includes("OAuthAccountNotLinked") ? "Այս էլ․ փոստով արդեն կա հաշիվ, բայց այլ մուտքի մեթոդով։" : ""
+     }
+     return ""
+}
 
 export default function LoginForm(){
      const searchParams = useSearchParams();

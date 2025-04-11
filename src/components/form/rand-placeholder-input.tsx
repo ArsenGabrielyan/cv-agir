@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { PlaceholdersName } from "@/data/types"
-import { getRandomPlaceholder } from "@/data/helpers/other"
+import { getRandomPlaceholder } from "@/data/helpers"
 
 type RandomPlaceholderInputProps = React.ComponentProps<"input"> & {
   placeholderKey: PlaceholdersName
@@ -14,6 +14,7 @@ const RandomPlaceholderInput = React.forwardRef<HTMLInputElement, RandomPlacehol
     React.useEffect(()=>{
       setPlaceholder(getRandomPlaceholder(placeholderKey))
     },[placeholderKey])
+    
     return (
       <input
         type={type}

@@ -1,20 +1,19 @@
 "use client"
 import Link from "next/link";
-import Image from "next/image";
+import LogoImage from "../logo-image";
+import { cn } from "@/lib/utils";
 
 interface LogoProps{
-     mode: "navbar" | "image",
      width: number,
      height: number,
      href?: string,
-     theme?: string
+     isAdmin?: boolean,
+     isDark?: boolean
 }
-export default function Logo({href="/",mode,theme,width,height}: LogoProps){
-     return mode==="navbar" ? (
-          <Link href={href} className="inline-block bg-[url(/logo.svg)] dark:bg-[url(/logo-white.svg)] hover:bg-[url(/logo-colorful.svg)] bg-no-repeat bg-center bg-contain transition-all" aria-label="Գլխավոր էջ" style={{width: `${width}px`, height: `${height}px`}}>&nbsp;</Link>
-     ) : (
+export default function Logo({href="/",width,height,isAdmin, isDark}: LogoProps){
+     return (
           <Link href={href} aria-label="Գլխավոր էջ">
-               <Image src={theme && theme==="light" ? "/logo-colorful.svg" : "/logo-white.svg"} alt="logo" width={width} height={height}/>
+               <LogoImage width={width} height={height} className={cn("hover:stroke-primary hover:fill-primary",!isAdmin ? "fill-foreground stroke-foreground" : isDark ? "fill-white stroke-white" : "fill-black stroke-black")}/>
           </Link>
      )
 }

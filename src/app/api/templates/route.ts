@@ -1,4 +1,4 @@
-import { getIsAdmin } from "@/data/helpers/auth"
+import { getIsAdmin } from "@/lib/auth"
 import { IAdminAPISearchParams } from "@/data/types";
 import { db } from "@/lib/db";
 import { ResumeTemplate } from "@prisma/client";

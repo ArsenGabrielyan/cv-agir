@@ -6,9 +6,7 @@ import { ThemeProviderProps } from "next-themes"
 
 import React, { createContext, useContext, useEffect, useState } from "react"
 
-const ThemeContext = createContext<ThemeColorStateParams>(
-     {} as ThemeColorStateParams
-)
+const ThemeContext = createContext<ThemeColorStateParams>({} as ThemeColorStateParams)
 
 export default function ThemeDataProvider({children}: ThemeProviderProps){
      const [themeColor, setThemeColor] = useState<ThemeColors>(getSavedThemeColor())

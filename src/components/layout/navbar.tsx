@@ -29,25 +29,34 @@ interface NavbarProps{
 }
 interface AuthButtonProps{
      responsive?: boolean,
-     className?: string
+     className?: string,
+     showUserButtonOnly?: boolean
 }
-function AuthButton({responsive=false,className}:AuthButtonProps){
+function AuthButton({responsive=false,className,showUserButtonOnly=false}:AuthButtonProps){
      const user = useCurrentUser()
-     return <div className={cn(responsive ? "hidden xl:flex" : "flex","justify-center items-center gap-3",className)}>
-          {!user ? (
-               <LoginButton mode="modal" asChild>
-                    <Button>Մուտք</Button>
-               </LoginButton>
-          ) : (
-               <UserButton/>
-          )}
-     </div>
+     return !showUserButtonOnly ? (
+          <div className={cn(responsive ? "hidden xl:flex" : "flex","justify-center items-center gap-3",className)}>
+               {!user ? (
+                    <LoginButton mode="modal" asChild>
+                         <Button>Մուտք</Button>
+                    </LoginButton>
+               ) : !responsive ? (
+                    <Button asChild>
+                         <Link href="/dashboard">Վահանակ</Link>
+                    </Button>
+               ) : (
+                    <UserButton/>
+               )}
+          </div>
+     ) : (
+          <UserButton/>
+     )
 }
 export default function Navbar({isLandingPage=false}: NavbarProps){
      const [open, setIsOpen] = useState(false)
      return (
           <header className="p-5 border-primary border-b bg-background sticky top-0 z-20 left-0 w-full flex justify-between items-center h-[80px]">
-               <Logo width={160} height={32} mode="navbar"/>
+               <Logo width={160} height={45}/>
                {isLandingPage ? (
                     <>
                          <NavigationMenu className="hidden xl:flex">
@@ -65,7 +74,7 @@ export default function Navbar({isLandingPage=false}: NavbarProps){
                               <SheetTrigger asChild>
                                    <Button className="flex xl:hidden" variant="outline" size="icon"><Menu/></Button>
                               </SheetTrigger>
-                              <SheetContent className="flex flex-col items-center justify-center">
+                              <SheetContent className="flex flex-col items-center justify-center z-50">
                                    <SheetHeader>
                                         <SheetTitle>CV-ագիր</SheetTitle>
                                    </SheetHeader>
@@ -80,7 +89,7 @@ export default function Navbar({isLandingPage=false}: NavbarProps){
                          <AuthButton responsive/>
                     </>
                ) : (
-                    <AuthButton/>
+                    <AuthButton showUserButtonOnly/>
                )}
           </header>
      )

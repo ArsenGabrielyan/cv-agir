@@ -1,7 +1,7 @@
 "use server"
 import { getCurrentSubscription, getSubscriptionById } from "@/data/db/subscription";
 import { getUserById } from "@/data/db/user";
-import { parseExpiryDate } from "@/data/helpers/other";
+import { parseExpiryDate } from "@/data/helpers";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { CheckoutFormSchema } from "@/schemas"
@@ -9,6 +9,7 @@ import { CheckoutFormType } from "@/schemas/types"
 import { SubscriptionPeriod, UserPlan } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { upsertCard } from "./credit-card";
+import {cache} from "react"
 
 export const proceedToCheckout = async(values: CheckoutFormType, period: SubscriptionPeriod, price: number, plan: UserPlan) => {
      const user = await currentUser();
@@ -77,7 +78,7 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
      return {error: "Քարտի ժամկետը պարտադիր է"}
 }
 
-export const getSubscriptionLevel = async(userId: string): Promise<UserPlan> => {
+export const getSubscriptionLevel = cache(async(userId: string): Promise<UserPlan> => {
      const user = await getUserById(userId);
      if(!user || !user.id){
           throw new Error("Այս օգտագործողը նույնականացված չէ։")
@@ -91,7 +92,7 @@ export const getSubscriptionLevel = async(userId: string): Promise<UserPlan> => 
      }
      const expired = new Date(subscription.endDate) < new Date();
      return expired ? "free" : user.currentPlan
-}
+})
 
 export const getIsSubscriptionExpired = async(userId: string) => {
      const user = await getUserById(userId);

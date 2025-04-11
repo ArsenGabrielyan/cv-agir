@@ -13,7 +13,7 @@ const settingsPages: ISettingsPage[] = [
 ];
 
 export interface SettingsContentProps{
-     subscriptions?: Subscription[]
+     subscriptions: Subscription[] | null
      isExpired?: boolean
 }
 export default function SettingsContent(props: SettingsContentProps){

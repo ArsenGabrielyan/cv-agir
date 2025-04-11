@@ -12,13 +12,14 @@ import {
      AvatarImage,
      AvatarFallback
 } from "@/components/ui/avatar"
-import { useCurrentUser } from "@/hooks/use-current-user"
+import { useCurrentSubscriptionLevel, useCurrentUser } from "@/hooks/use-current-user"
 import { LogoutButton } from "./logout-button"
 import { User, LogOut, Settings, FileUser, FileText, LayoutDashboard, } from "lucide-react"
 import Link from "next/link"
 
 export const UserButton = () => {
      const user = useCurrentUser();
+     const subscriptionLevel = useCurrentSubscriptionLevel(user && user?.subscriptionEndDate ? new Date(user?.subscriptionEndDate) < new Date() : true);
      return (
           <DropdownMenu modal={false}>
                <DropdownMenuTrigger>
@@ -48,11 +49,13 @@ export const UserButton = () => {
                               <FileUser/> Ռեզյումեներ
                          </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="cursor-pointer">
-                         <Link href="/dashboard?show=cover-letter">
-                              <FileText/> Ուղեկցող նամակներ
-                         </Link>
-                    </DropdownMenuItem>
+                    {subscriptionLevel==="premium" && (
+                         <DropdownMenuItem asChild className="cursor-pointer">
+                              <Link href="/dashboard?show=cover-letter">
+                                   <FileText/> Ուղեկցող նամակներ
+                              </Link>
+                         </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem asChild className="cursor-pointer">
                          <Link href="/settings">
                               <Settings/> Կարգավորումներ

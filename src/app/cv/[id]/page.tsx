@@ -1,7 +1,7 @@
 import PageLayout from "@/components/layout/page-layout";
-import ResumeInfo from "@/components/resumes/resume-info";
+import ResumeInfo from "@/components/dashboard/resumes/resume-info";
 import { getResumeById } from "@/data/db/resumes";
-import { isObjectId } from "@/data/helpers/other";
+import { isObjectId } from "@/data/helpers";
 import { notFound } from "next/navigation";
 
 export default async function CVPage({

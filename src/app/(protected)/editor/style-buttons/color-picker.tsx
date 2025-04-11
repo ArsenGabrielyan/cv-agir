@@ -24,7 +24,7 @@ export default function ColorPicker({color,onChange}: ColorPickerProps){
                     <Button
                          size="icon"
                          variant="outline"
-                         title="Փոխել ռեզյումեի գույնը"
+                         title="Փոխել գույնը"
                          onClick={()=>{
                               if(!canUseCustomization){
                                    premiumModal.setOpen(true)
