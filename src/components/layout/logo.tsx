@@ -1,4 +1,3 @@
-"use client"
 import Link from "next/link";
 import LogoImage from "../logo-image";
 import { cn } from "@/lib/utils";

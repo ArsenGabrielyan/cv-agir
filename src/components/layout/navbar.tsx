@@ -63,9 +63,9 @@ export default function Navbar({isLandingPage=false}: NavbarProps){
                               <NavigationMenuList>
                                    {NAVBAR_LINKS.map(({id,name,href})=>(
                                         <NavigationMenuItem key={id}>
-                                             <Link href={href} legacyBehavior passHref>
-                                                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>{name}</NavigationMenuLink>
-                                             </Link>
+                                             <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                                                  <Link href={href}>{name}</Link>
+                                             </NavigationMenuLink>
                                         </NavigationMenuItem>
                                    ))}
                               </NavigationMenuList>

@@ -1,9 +1,11 @@
 import {Resend} from "resend"
 import { absoluteUrl } from "./utils";
 import { env } from "@/lib/env";
+import VerificationTemplate from "../emails/verification";
+import { render } from "@react-email/render";
 
 const resend = new Resend(env.RESEND_API_KEY);
-const onboardingEmail = env.ONBOARDING_EMAIL
+const onboardingEmail = `CV-ագիր <${env.ONBOARDING_EMAIL}>`
 
 export const sendMessage = async (
      name: string,
@@ -12,7 +14,7 @@ export const sendMessage = async (
      subject: string,
      message: string
 ) => {
-     await resend.emails.send({
+     const {error} = await resend.emails.send({
           from: onboardingEmail,
           to: env.DEV_EMAIL,
           subject,
@@ -28,6 +30,9 @@ export const sendMessage = async (
                <p style="margin-top: 20px; color: #666; font-size: 12px;">Այս հաղորդագրությունն ուղարկվել է Ձեր կայքի միջոցով:</p>
           `
      })
+     if(error){
+          console.error(error)
+     }
 }
 
 export const sendVerificationEmail = async(
@@ -37,22 +42,16 @@ export const sendVerificationEmail = async(
 ) => {
      const confirmLink = absoluteUrl(`/auth/new-verification?token=${token}`);
      const firstName = name.split(" ")[0];
-     const currYear = new Date().getFullYear();
-     await resend.emails.send({
+     const html = render(VerificationTemplate({firstName,confirmLink}))
+     const {error} = await resend.emails.send({
           from: onboardingEmail,
           to: email,
           subject: "Հաստատեք Ձեր էլ․ հասցեն",
-          html: `
-               <h1 style="color: #002a4f">Հաստատեք Ձեր էլ․ հասցեն</h1>
-               <p>Բարև ${firstName},</p>
-               <p>Շնորհակալություն մեր հարթակում գրանցվելու համար։ Ձեր հաշիվը ակտիվացնելու համար, խնդրում ենք հաստատել Ձեր էլ․ փոստի հասցեն՝ սեղմելով ներքևի կոճակը։</p>
-               <p>🔗 <a href="${confirmLink}">Հաստատել էլ․ փոստը</a></p>
-               <p>Կամ պատճենեք այս հղումը և տեղադրեք Ձեր վեբ դիտարկիչում։</p>
-               <p>🔗 <a href="${confirmLink}">${confirmLink}</a></p>
-               <p style="color: #666; font-size: 14px;">Եթե Դուք չեք գրանցվել մեր կայքում, ապա կարող եք անտեսել այս նամակը։</p>
-               <p style="color: #666; font-size: 14px;">© ${currYear} CV-ագիր</p>
-          `
+          html: await html
      })
+     if(error){
+          console.error(error)
+     }
 }
 
 export const sendPasswordResetEmail = async (
