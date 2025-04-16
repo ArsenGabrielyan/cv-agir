@@ -4,7 +4,12 @@ import CheckoutForm from "@/components/settings/premium/checkoutForm";
 import { PRICING_DATA } from "@/data/constants/landing-page";
 import { currentUser } from "@/lib/auth";
 import { UserPlan } from "@prisma/client";
+import { Metadata } from "next";
 import { redirect } from "next/navigation"
+
+export const metadata: Metadata = {
+     title: "Բաժանորդագրվեք պրեմիում տարբերակին"
+}
 
 export default async function CheckoutPage({
      searchParams

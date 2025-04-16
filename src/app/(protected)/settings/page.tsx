@@ -1,7 +1,6 @@
-import { getIsSubscriptionExpired } from "@/actions/subscription-system"
 import PageLayout from "@/components/layout/page-layout"
 import SettingsContent from "@/components/settings/settings-tabs"
-import { getSubscriptionsByUserId } from "@/data/db/subscription"
+import { getSubscriptionsByUserId, getIsSubscriptionExpired } from "@/data/db/subscription"
 import { currentUser } from "@/lib/auth"
 import { Metadata } from "next"
 import { redirect } from "next/navigation"

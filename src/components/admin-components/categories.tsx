@@ -4,7 +4,6 @@ import {useMediaQuery} from "@mui/material"
 export const CategoryShow = () => (
      <Show>
           <SimpleShowLayout>
-               <TextField source="id" label="#"/>
                <TextField source="name" label="Կատեգորիայի անուն"/>
                <DateField source="createdAt" label="Ստեղծվել է"/>
                <DateField source="updatedAt" label="Թարմացվել է"/>
@@ -27,7 +26,6 @@ export const CategoriesList = () => {
                     />
                ) : (
                     <Datagrid>
-                         <TextField source="id" label="#"/>
                          <TextField source="name" label="Կատեգորիայի Անուն"/>
                          <EditButton/>
                          <DeleteButton/>

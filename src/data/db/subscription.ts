@@ -1,4 +1,5 @@
 import { db } from "@/lib/db"
+import { getUserById } from "./user"
 
 export const getSubscriptionById = async(id: string) => {
      try{
@@ -34,4 +35,13 @@ export const getCurrentSubscription = async(userId: string,subscriptionId: strin
      } catch{
           return null
      }
+}
+
+export const getIsSubscriptionExpired = async(userId: string) => {
+     const user = await getUserById(userId);
+     if(!user || !user.id){
+          throw new Error("Այս օգտագործողը նույնականացված չէ։")
+     }
+     const subscription = user.subscriptionId ? await getCurrentSubscription(user.id,user.subscriptionId) : null
+     return !!subscription && new Date(subscription.endDate) < new Date()
 }

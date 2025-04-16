@@ -82,7 +82,6 @@ export const TemplatesList = () => {
                     <Datagrid
                          expand={<TemplatesPanel/>}
                     >
-                         <TextField source="id" label="#"/>
                          <TextField source="name" label="Անուն"/>
                          <TextField source="description" label="Նկարագրություն"/>
                          <ReferenceField source="categoryId" reference="categories" label="Կատեգորիա"/>
@@ -134,7 +133,6 @@ export const TemplatesEdit = () => (
 export const TemplateShow = () => (
      <Show>
           <SimpleShowLayout>
-          <TextField source="id" label="#"/>
                <TextField source="name" label="Անուն"/>
                <TextField source="description" label="Նկարագրություն"/>
                <ReferenceField source="categoryId" reference="categories" label="Կատեգորիա"/>

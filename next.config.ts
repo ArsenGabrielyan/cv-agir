@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: "4mb"
-    }
+    },
   },
   webpack: (config) => {
     config.resolve.alias = {
@@ -48,6 +48,12 @@ const nextConfig: NextConfig = {
       handlebars: "handlebars/dist/cjs/handlebars",
     };
     return config;
+  },
+  turbopack: {
+    resolveAlias: {
+      "handlebars/runtime": "handlebars/dist/cjs/handlebars.runtime",
+      handlebars: "handlebars/dist/cjs/handlebars",
+    }
   }
 };
 

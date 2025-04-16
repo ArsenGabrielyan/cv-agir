@@ -94,15 +94,6 @@ export const getSubscriptionLevel = cache(async(userId: string): Promise<UserPla
      return expired ? "free" : user.currentPlan
 })
 
-export const getIsSubscriptionExpired = async(userId: string) => {
-     const user = await getUserById(userId);
-     if(!user || !user.id){
-          throw new Error("Այս օգտագործողը նույնականացված չէ։")
-     }
-     const subscription = user.subscriptionId ? await getCurrentSubscription(user.id,user.subscriptionId) : null
-     return !!subscription && new Date(subscription.endDate) < new Date()
-}
-
 export const cancelSubscription = async(userId: string) => {
      const user = await getUserById(userId);
      if(!user){

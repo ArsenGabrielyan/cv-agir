@@ -3,6 +3,11 @@ import { currentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSubscriptionLevel } from "@/actions/subscription-system";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+     title: "Դուք անցել եք պրեմիում տարբերակին։"
+}
 
 export default async function Page(){
      const user = await currentUser();
