@@ -1,5 +1,5 @@
 import { CoverLetter, CreditCard, Resume } from "@prisma/client";
-import { CREDIT_CARD_BRANDS, PLACEHOLDERS } from "./constants/other"
+import { BANKS, CREDIT_CARD_BRANDS, PLACEHOLDERS } from "./constants/other"
 import { CoverLetterFormType, CreditCardType, ResumeFormType } from "@/schemas/types";
 import { PlaceholdersName } from "./types";
 import Handlebars from "handlebars"
@@ -196,4 +196,11 @@ export const getCreditCardBrandName = (card: string) => {
      if(unionPay.test(card)) return "Union Pay";
      if(arca.test(card)) return "ArCa";
      return "Unknown Card"
+}
+export const getBankName = (card: string) => {
+     const mentionedBank = BANKS.find(val=>card.includes(val.startNumber));
+     return {
+          name: mentionedBank?.name || "",
+          title: mentionedBank?.title || ""
+     }
 }

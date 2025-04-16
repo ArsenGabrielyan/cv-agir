@@ -89,3 +89,11 @@ export const CREDIT_CARD_BRANDS = {
      unionPay: /^(62[0-9]{14,17})$/,
      arca: /^9[0-9]{15}$/,
 }
+export const BANKS = [
+     {name: "aeb", startNumber: "0512102", title: "Հայէկոնոմբանկ"},
+     {name: "idbank", startNumber: "3182900", title: "IDBank"},
+     {name: "evocabank", startNumber: "0512202", title: "Evocabank"},
+     {name: "inecobank", startNumber: "5788900", title: "Inecobank"},
+     {name: "ameriabank", startNumber: "0830500", title: "Ameriabank"},
+     {name: "ardshinbank", startNumber: "4543000", title: "Ardshinbank"},
+]

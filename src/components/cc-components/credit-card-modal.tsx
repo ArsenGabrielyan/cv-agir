@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import useCreditCardModal from "@/hooks/use-credit-card-modal";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import CreditCardInput from "../form/credit-card-input";
 import { useEffect, useTransition } from "react";
@@ -12,6 +12,7 @@ import LoadingButton from "../buttons/loading-button";
 import { addCard, editCard } from "@/actions/subscription-system/credit-card";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import { getBankName } from "@/data/helpers";
 
 export default function CreditCardModal(){
      const {update} = useSession();
@@ -62,6 +63,7 @@ export default function CreditCardModal(){
           formValues.city === originalValues.city
      );
      const isSame = !!isEditing && !!cardToEdit && areValuesSame(form.watch(), cardToEdit);
+     const currBank = getBankName(form.watch("cardNumber"));
      return (
           <Dialog open={open} onOpenChange={setOpen}>
                <DialogContent>
@@ -76,12 +78,15 @@ export default function CreditCardModal(){
                                    render={({field})=>(
                                         <FormItem>
                                              <FormLabel>Վարկային քարտի համար</FormLabel>
-                                                  <FormControl>
-                                                       <CreditCardInput
-                                                            {...field}
-                                                            disabled={isPending}
-                                                       />
-                                                  </FormControl>
+                                             <FormControl>
+                                                  <CreditCardInput
+                                                       {...field}
+                                                       disabled={isPending}
+                                                  />
+                                             </FormControl>
+                                             {currBank && (
+                                                  <FormDescription>Բանկ՝ {currBank.title}</FormDescription>
+                                             )}
                                              <FormMessage/>
                                         </FormItem>
                                    )}

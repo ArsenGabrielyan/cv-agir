@@ -3,7 +3,7 @@ import { CheckoutFormSchema } from "@/schemas";
 import { CheckoutFormType } from "@/schemas/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useState, useTransition } from "react";
 import { FormError } from "@/components/form/form-error";
@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import LoadingButton from "@/components/buttons/loading-button";
 import { SubscriptionPeriod, UserPlan } from "@prisma/client";
 import CreditCardInput from "../../form/credit-card-input";
+import { getBankName } from "@/data/helpers";
 
 interface CheckoutFormProps{
      period: SubscriptionPeriod,
@@ -52,6 +53,7 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                .catch(()=>setError("Վայ, մի բան սխալ տեղի ունեցավ"))
           })
      }
+     const currBank = getBankName(form.watch("cardNumber"));
      return (
           <Form {...form}>
                <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
@@ -79,12 +81,15 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                          render={({field})=>(
                               <FormItem>
                                    <FormLabel>Վարկային քարտի համար</FormLabel>
-                                        <FormControl>
-                                             <CreditCardInput
-                                                  {...field}
-                                                  disabled={isPending}
-                                             />
-                                        </FormControl>
+                                   <FormControl>
+                                        <CreditCardInput
+                                             {...field}
+                                             disabled={isPending}
+                                        />
+                                   </FormControl>
+                                   {currBank && (
+                                        <FormDescription>Բանկ՝ {currBank.title}</FormDescription>
+                                   )}
                                    <FormMessage/>
                               </FormItem>
                          )}

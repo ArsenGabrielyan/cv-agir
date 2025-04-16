@@ -1,5 +1,5 @@
 import { decryptData } from "@/actions/encryption";
-import { getCreditCardBrandName, mapToCreditCardValues } from "@/data/helpers";
+import { getBankName, getCreditCardBrandName, mapToCreditCardValues } from "@/data/helpers";
 import { CreditCard } from "@prisma/client";
 import { formatDate } from "date-fns";
 import CreditCardIcon from "@/components/cc-components/credit-card-icon";
@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { deleteCard } from "@/actions/subscription-system/credit-card";
 import useCreditCardModal from "@/hooks/use-credit-card-modal";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 interface CreditCardItemProps{
      card: CreditCard,
@@ -19,23 +20,27 @@ interface CreditCardItemProps{
      deleteDisabled: boolean
 }
 
-// TODO: Add a Bank Provider to credit card input
-
 export default function CreditCardItem({card, index, deleteDisabled}: CreditCardItemProps){
      const [safeCardInfo, setSafeCardInfo] = useState({
           cardNumber: "",
-          brand: ""
+          brand: "",
+          bank: {
+               name: "",
+               title: ""
+          }
      })
      const [showDeleteDialog, setShowDeleteDialog] = useState(false);
      const creditCardModal = useCreditCardModal();
      useEffect(()=>{
           const getCardNumber = async()=>{
                const cardNum = await decryptData(card.cardNumber);
-               const brand = getCreditCardBrandName(cardNum)
+               const brand = getCreditCardBrandName(cardNum);
+               const bank = getBankName(cardNum);
                setSafeCardInfo(prev=>({
                     ...prev,
                     cardNumber: cardNum.slice(-4),
-                    brand
+                    brand,
+                    bank
                }))
           }
           getCardNumber();
@@ -62,6 +67,11 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
                          <p className="text-xl font-semibold">{safeCardInfo.brand}</p>
                          <p className="text-muted-foreground">•••• {safeCardInfo.cardNumber}</p>
                     </div>
+                    {(safeCardInfo.bank.name!=="" && safeCardInfo.bank.title!=="") && (
+                         <div className="flex items-center justify-center gap-4">
+                              <Image src={`/banks/${safeCardInfo.bank.name}.png`} alt="bank" width={40} height={40} className="invert dark:invert-0" title={safeCardInfo.bank.title}/>    
+                         </div>
+                    )}
                     <div className="flex items-center gap-4">
                          <p>Վավեր է մինչև {formatDate(card.expiryDate,"MM/yyyy")}</p>
                          <DropdownMenu modal={false}>

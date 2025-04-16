@@ -1,8 +1,6 @@
 import CreditCardIcon from "../cc-components/credit-card-icon";
 import { Input } from "../ui/input";
 
-// TODO: Add a Bank Provider to credit card input
-
 export default function CreditCardInput({value, ...props}: React.ComponentProps<"input">){
      return (
           <div className="flex items-center gap-2">
