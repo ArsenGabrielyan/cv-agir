@@ -12,7 +12,7 @@ import { proceedToCheckout } from "@/actions/subscription-system";
 import { useRouter } from "next/navigation";
 import LoadingButton from "@/components/buttons/loading-button";
 import { SubscriptionPeriod, UserPlan } from "@prisma/client";
-import CreditCardInput from "../../form/credit-card-input";
+import CreditCardInput from "@/components/form/credit-card-input";
 import { getBankName } from "@/data/helpers";
 
 interface CheckoutFormProps{
@@ -87,7 +87,7 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                                              disabled={isPending}
                                         />
                                    </FormControl>
-                                   {currBank && (
+                                   {currBank.title!=="" && (
                                         <FormDescription>Բանկ՝ {currBank.title}</FormDescription>
                                    )}
                                    <FormMessage/>

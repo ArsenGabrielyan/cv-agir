@@ -1,5 +1,5 @@
-import CreditCardIcon from "../cc-components/credit-card-icon";
-import { Input } from "../ui/input";
+import CreditCardIcon from "../settings/premium/cc-components/credit-card-icon";
+import { Input } from "@/components/ui/input";
 
 export default function CreditCardInput({value, ...props}: React.ComponentProps<"input">){
      return (

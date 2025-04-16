@@ -9,7 +9,7 @@ const Arca: React.FC<React.SVGProps<SVGElement>> = (props) => (
      y="0"
      version="1.1"
      viewBox="0 0 206.315 131.967"
-     className={cn("fill-foreground",props.className)}
+     className={props.className?.includes("fill-primary") ? props.className : cn("fill-foreground",props.className)}
   >
     <g transform="translate(-.3 -.012)">
       <path

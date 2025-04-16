@@ -9,7 +9,7 @@ import {
      SidebarMenuSubButton
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "../../ui/collapsible";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
 import usePremiumModal from "@/hooks/use-premium-modal";
 import { cn } from "@/lib/utils";

@@ -22,6 +22,7 @@ import { login } from "@/actions/auth/login";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { LoginType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
+import {REGEXP_ONLY_DIGITS} from "input-otp"
 
 function getOAuthNotLinkedError(searchParams: ReadonlyURLSearchParams){
      const error = searchParams.get("error");
@@ -80,7 +81,7 @@ export default function LoginForm(){
                          className="space-y-6"
                     >
                          <div className="space-y-4">
-                              {!showTwoFactor ? (
+                              {!showTwoFactor && (
                                    <>
                                         <FormField
                                              control={form.control}
@@ -122,7 +123,8 @@ export default function LoginForm(){
                                              )}
                                         />
                                    </>
-                              ) : (
+                              )}
+                              {showTwoFactor && (
                                    <FormField
                                         control={form.control}
                                         name="code"
@@ -130,8 +132,13 @@ export default function LoginForm(){
                                              <FormItem>
                                                   <FormLabel>Վավերացման կոդ</FormLabel>
                                                   <FormControl>
-                                                       <InputOTP maxLength={6} {...field} disabled={isPending}>
-                                                            <InputOTPGroup>
+                                                       <InputOTP
+                                                            maxLength={6}
+                                                            {...field}
+                                                            disabled={isPending}
+                                                            pattern={REGEXP_ONLY_DIGITS}
+                                                       >
+                                                            <InputOTPGroup className="max-w-md mx-auto">
                                                                  <InputOTPSlot index={0}/>
                                                                  <InputOTPSlot index={1}/>
                                                                  <InputOTPSlot index={2}/>

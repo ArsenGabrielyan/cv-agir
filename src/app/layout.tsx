@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | CV-ագիր բետա",
+    template: "%s | CV-ագիր",
     absolute: "CV-ագիր - Ստեղծիր CV արագ"
   },
   description: "CV-ագիրը ռեզյումե գեներացնելու հավելված է։",

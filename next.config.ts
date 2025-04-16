@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import nextBundleAnalyzer from "@next/bundle-analyzer"
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@t3-oss/env-nextjs', '@t3-oss/env-core'],
@@ -39,7 +40,19 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "4mb"
     }
+  },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "handlebars/runtime": "handlebars/dist/cjs/handlebars.runtime",
+      handlebars: "handlebars/dist/cjs/handlebars",
+    };
+    return config;
   }
 };
 
-export default nextConfig;
+const withBundleAnalyzer = nextBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true"
+})
+
+export default withBundleAnalyzer(nextConfig);

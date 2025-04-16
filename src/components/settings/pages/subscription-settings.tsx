@@ -22,8 +22,8 @@ import { toast } from "sonner";
 import DeleteConfirmationDialog from "@/components/delete-confirmation-dialog";
 import { Badge } from "@/components/ui/badge";
 import { useIsMobile } from "@/hooks/use-mobile";
-import CreditCardItem from "../../cc-components/credit-card-item";
-import CreditCardModal from "@/components/cc-components/credit-card-modal";
+import CreditCardItem from "../premium/cc-components/credit-card-item";
+import CreditCardModal from "@/components/settings/premium/cc-components/credit-card-modal";
 import { UpdateSession, useSession } from "next-auth/react";
 
 export default function SubscriptionSettings({subscriptions, isExpired}: SettingsContentProps){
@@ -75,7 +75,7 @@ export default function SubscriptionSettings({subscriptions, isExpired}: Setting
                {(isNotEmpty && currentSubsciption) && (
                     <>
                          {(user.creditCards && user.creditCards.length!==0) && (
-                              <SettingsCard title="Վճարման մեթոդ">
+                              <SettingsCard title="Վճարման մեթոդ" className={cn(isMobile && "space-y-8")}>
                                    {user.creditCards.map((card,i)=>(
                                         <CreditCardItem key={i} card={card} index={i} deleteDisabled={user.creditCards.length===1}/>
                                    ))}
