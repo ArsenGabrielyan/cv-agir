@@ -1,6 +1,6 @@
 import { ResumeInfoType } from "@/schemas/types"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import {ResumeInfoSchema} from "@/schemas"
 import {
      Form,
@@ -14,11 +14,12 @@ import {
 import EditorFormCardWrapper from "../../wrappers/card-wrapper"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { useEffect, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input"
 import { ResumeFormProps } from "@/data/types"
 import { Button } from "@/components/ui/button"
 import GenerateSummaryButton from "../ai-buttons/generate-summary"
+import debounce from "lodash.debounce"
 
 export default function ResumeInfoForm({resumeData, setResumeData}: ResumeFormProps){
      const form = useForm<ResumeInfoType>({
@@ -36,14 +37,18 @@ export default function ResumeInfoForm({resumeData, setResumeData}: ResumeFormPr
                hobbies: resumeData.hobbies || "",
           }
      })
+     const debouncedUpdate = useMemo(()=>debounce(async(values: ResumeInfoType)=>{
+          if(await form.trigger()){
+               setResumeData(prev=>({...prev, ...values}))
+          }
+     },100),[form,setResumeData])
+     const allValues = useWatch({control: form.control})
      useEffect(()=>{
-          const {unsubscribe} = form.watch(async(values)=>{
-               const isValid = await form.trigger()
-               if(!isValid) return;
-               setResumeData({...resumeData, ...values})
-          })
-          return () => unsubscribe()
-     },[form, resumeData, setResumeData])
+          debouncedUpdate(allValues)
+          return () => {
+               debouncedUpdate.cancel();
+          }
+     },[allValues, debouncedUpdate])
 
      const imgInputRef = useRef<HTMLInputElement>(null);
      const isDisabled = !resumeData.jobTitle && !resumeData.experience?.length && !resumeData.education?.length || !resumeData.skills?.length || !resumeData.languages?.length

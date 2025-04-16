@@ -1,11 +1,15 @@
-import ResumePreview from "@/components/dashboard/resumes/resume-preview";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ResumeFormType } from "@/schemas/types";
 import { ResumeTemplate } from "@prisma/client";
 import ColorPicker from "./style-buttons/color-picker";
 import BorderStyleButton from "./style-buttons/border-style-button";
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
+import DocPreviewLoader from "@/components/loaders/doc-preview";
 
+const ResumePreview = dynamic(()=>import("@/components/dashboard/resumes/resume-preview"),{
+     loading: () => <DocPreviewLoader/>
+})
 interface ResumePreviewSectionProps{
      resumeData: ResumeFormType,
      setResumeData: React.Dispatch<React.SetStateAction<ResumeFormType>>,

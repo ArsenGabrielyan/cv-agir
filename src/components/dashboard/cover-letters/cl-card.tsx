@@ -8,15 +8,19 @@ import { useRef, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import Link from "next/link";
-import CoverLetterPreview from "./cl-preview";
+import dynamic from "next/dynamic";
 import { mapToLetterValues } from "@/data/helpers";
 import { formatDate } from "date-fns";
 import { hy } from "date-fns/locale";
 import { useReactToPrint } from "react-to-print";
+import DocPreviewLoader from "@/components/loaders/doc-preview";
 
 interface CoverLetterCardProps{
      data: CoverLetter
 }
+const CoverLetterPreview = dynamic(()=>import("@/components/dashboard/cover-letters/cl-preview"),{
+     loading: () => <DocPreviewLoader/>
+})
 export default function CoverLetterCard({data}: CoverLetterCardProps){
      const {updatedAt, createdAt, title, description, id} = data;
      const wasUpdated = updatedAt!==createdAt;
@@ -29,7 +33,7 @@ export default function CoverLetterCard({data}: CoverLetterCardProps){
           <div className="relative group rounded-lg bg-card text-card-foreground border shadow">
                <div className="space-y-2">
                     <Link
-                         href={`/editor?coverLetterId=${id}`}
+                         href={`/editor/cover-letter?coverLetterId=${id}`}
                          className="relative inline-block w-full"
                     >
                          <CoverLetterPreview

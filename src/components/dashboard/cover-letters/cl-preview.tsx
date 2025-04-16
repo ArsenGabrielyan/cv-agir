@@ -1,7 +1,7 @@
 import useDimensions from "@/hooks/use-dimensions";
 import { cn } from "@/lib/utils";
 import { CoverLetterFormType } from "@/schemas/types"
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { BodySection, HeaderSection } from "./cl-sections";
 
 interface CoverLetterPreviewProps{
@@ -16,14 +16,19 @@ export default function CoverLetterPreview({
 }: CoverLetterPreviewProps){
      const containerRef = useRef<HTMLDivElement>(null);
      const {width} = useDimensions(containerRef)
-     const [photoSrc, setPhotoSrc] = useState(coverLetterData.profileImg instanceof File ? "" : coverLetterData.profileImg)
+
+     const photoSrc = useMemo(()=>{
+          if(coverLetterData.profileImg instanceof File){
+               return URL.createObjectURL(coverLetterData.profileImg)
+          }
+          return coverLetterData.profileImg || ""
+     },[coverLetterData.profileImg])
 
      useEffect(()=>{
-          const objectUrl = coverLetterData.profileImg instanceof File ? URL.createObjectURL(coverLetterData.profileImg) : "";
-          if(objectUrl) setPhotoSrc(objectUrl)
-          if(coverLetterData.profileImg === null) setPhotoSrc("");
-          return () => URL.revokeObjectURL(objectUrl);
-     },[coverLetterData.profileImg])
+          return () => {
+               if(coverLetterData.profileImg instanceof File) URL.revokeObjectURL(photoSrc)
+          }
+     },[photoSrc,coverLetterData.profileImg])
 
      return (
           <div className={cn("bg-white text-black h-full w-full aspect-[210/297]",className)} ref={containerRef}>

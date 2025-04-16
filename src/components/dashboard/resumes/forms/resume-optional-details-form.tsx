@@ -1,10 +1,10 @@
 import { ResumeFormProps } from "@/data/types"
 import EditorFormCardWrapper from "../../wrappers/card-wrapper"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { ResumeOptionalDetailsType } from "@/schemas/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ResumeOptionalDetailsSchema } from "@/schemas"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import {Form} from "@/components/ui/form"
 import { useResumeDynamicField } from "@/hooks/use-resume-dynamic-field"
 import { Button } from "@/components/ui/button"
@@ -14,6 +14,7 @@ import ReferenceField from "../dynamic-fields/reference-field"
 import { closestCenter, DndContext } from "@dnd-kit/core"
 import {restrictToVerticalAxis} from "@dnd-kit/modifiers"
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
+import debounce from "lodash.debounce"
 
 export default function ResumeOptionalDetailsForm({resumeData, setResumeData}: ResumeFormProps){
      const form = useForm<ResumeOptionalDetailsType>({
@@ -24,19 +25,23 @@ export default function ResumeOptionalDetailsForm({resumeData, setResumeData}: R
                references: resumeData.references || []
           }
      })
+     const debouncedUpdate = useMemo(()=>debounce(async (values: ResumeOptionalDetailsType) => {
+          if (await form.trigger()) {
+               setResumeData((prev) => ({
+                    ...prev,
+                    links: values.links || [],
+                    courses: values.courses || [],
+                    references: values.references || [],
+               }));
+          }
+     },100),[form, setResumeData]);
+     const allValues = useWatch({control: form.control})
      useEffect(()=>{
-          const {unsubscribe} = form.watch(async(values)=>{
-               const isValid = await form.trigger()
-               if(!isValid) return;
-               setResumeData({
-                    ...resumeData,
-                    links: values.links?.filter(link=>link!==undefined),
-                    courses: values?.courses?.filter(course=>course!==undefined),
-                    references: values?.references?.filter(ref=>ref!==undefined)
-               })
-          })
-          return () => unsubscribe()
-     },[form, resumeData, setResumeData])
+          debouncedUpdate(allValues)
+          return () => {
+               debouncedUpdate.cancel();
+          }
+     },[allValues, debouncedUpdate])
 
      const linksField = useResumeDynamicField(form,"links");
      const coursesField = useResumeDynamicField(form,"courses");

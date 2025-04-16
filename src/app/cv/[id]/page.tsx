@@ -4,7 +4,7 @@ import { isObjectId } from "@/data/helpers";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import CVInfoLoader from "@/components/loaders/cv-info";
-import { Suspense, cache } from "react";
+import { cache } from "react";
 import dynamic from "next/dynamic";
 
 const getResumeData = cache(async(id: string) => {
@@ -26,7 +26,9 @@ export const generateMetadata = async({params}: CVPageProps): Promise<Metadata> 
      }
 }
 
-const ResumeInfo = dynamic(()=>import("@/components/dashboard/resumes/resume-info"))
+const ResumeInfo = dynamic(()=>import("@/components/dashboard/resumes/resume-info"),{
+     loading: CVInfoLoader
+})
 
 interface CVPageProps{
      params: Promise<{id: string}>
@@ -37,9 +39,7 @@ export default async function CVPage({params}: CVPageProps){
      return (
           <PageLayout landingFooter>
                <div className="flex justify-center items-center flex-col">
-                    <Suspense fallback={<CVInfoLoader/>}>
-                         <ResumeInfo data={resume}/>
-                    </Suspense>
+                    <ResumeInfo data={resume}/>
                </div>
           </PageLayout>
      )

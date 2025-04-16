@@ -1,9 +1,10 @@
-import CoverLetterPreview from "@/components/dashboard/cover-letters/cl-preview";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CoverLetterFormType } from "@/schemas/types";
 import ColorPicker from "../style-buttons/color-picker";
 import BorderStyleButton from "../style-buttons/border-style-button";
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
+import DocPreviewLoader from "@/components/loaders/doc-preview";
 
 interface CoverLetterPreviewSectionProps{
      coverLetterData: CoverLetterFormType,
@@ -11,6 +12,9 @@ interface CoverLetterPreviewSectionProps{
      className?: string,
      contentRef?: React.Ref<HTMLDivElement>
 }
+const CoverLetterPreview = dynamic(()=>import("@/components/dashboard/cover-letters/cl-preview"),{
+     loading: () => <DocPreviewLoader/>
+})
 export default function CoverLetterPreviewSection({
      coverLetterData,
      setCoverLetterData,

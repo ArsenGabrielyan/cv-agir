@@ -4,13 +4,16 @@ import { currentUser } from "@/lib/auth";
 import { getAvailableFeatures } from "@/lib/permission";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import CoverLetterEditor from "./cl-editor";
 import { getCoverLetterById } from "@/data/db/cover-letters";
+import dynamic from "next/dynamic";
+import DocEditorLoader from "@/components/loaders/doc-editor";
 
 export const metadata: Metadata = {
      title: "Գրել ուղեկցող նամակ"
 }
-
+const CoverLetterEditor = dynamic(()=>import("./cl-editor"),{
+     loading: DocEditorLoader
+})
 export default async function CoverLetterEditorPage({
      searchParams
 }: {

@@ -4,7 +4,7 @@ import useDimensions from "@/hooks/use-dimensions";
 import { cn } from "@/lib/utils";
 import { ResumeFormType } from "@/schemas/types";
 import { ResumeTemplate } from "@prisma/client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import DOMPurify from "isomorphic-dompurify"
 import {CoursesSection, EducationSection, HeaderSection, HobbiesSection, LanguagesSection, LinksSection, ReferencesSection, SkillsSection, SummarySection, WorkExperienceSection} from "./resume-sections";
 import { format } from "date-fns";
@@ -28,43 +28,50 @@ export default function ResumePreview({
      disableLinks=false
 }: ResumePreviewProps){
      const containerRef = useRef<HTMLDivElement>(null);
-     const {width} = useDimensions(containerRef)
-     const [photoSrc, setPhotoSrc] = useState(resumeData.profileImg instanceof File ? "" : resumeData.profileImg)
-     const [compiledHTML, setCompiledHTML] = useState<string>("");
+     const {width} = useDimensions(containerRef);
 
-     useEffect(()=>{
-          const objectUrl = resumeData.profileImg instanceof File ? URL.createObjectURL(resumeData.profileImg) : "";
-          if(objectUrl) setPhotoSrc(objectUrl)
-          if(resumeData.profileImg === null) setPhotoSrc("");
-          return () => URL.revokeObjectURL(objectUrl);
+     const photoSrc = useMemo(()=>{
+          if(resumeData.profileImg instanceof File){
+               return URL.createObjectURL(resumeData.profileImg)
+          }
+          return resumeData.profileImg || ""
      },[resumeData.profileImg])
 
      useEffect(()=>{
-          if(template && template.htmlTemplate){
-               const context: ResumeFormType = {
-                    ...resumeData,
-                    qrImg,
-                    id: resumeData.id || template.id,
-                    profileImg: photoSrc,
-                    experience: resumeData.experience?.map(val => ({
-                         ...val,
-                         startDate: !val.startDate ? "" : format(val.startDate,"MM/yyyy"),
-                         endDate: !val.endDate ? "Այսօր" : format(val.endDate,"MM/yyyy")
-                    })),
-                    education: resumeData.education?.map(val=>({
-                         ...val,
-                         startDate: !val.startDate ? "" : format(val.startDate,"MM/yyyy"),
-                         endDate: !val.endDate ? "Այսօր" : format(val.endDate,"MM/yyyy")
-                    })),
-                    courses: resumeData.courses?.map(val=>({
-                         ...val,
-                         startDate: !val.startDate ? "" : format(val.startDate,"MM/yyyy"),
-                         endDate: !val.endDate ? "Այսօր" : format(val.endDate,"MM/yyyy")
-                    }))
-               };
-               setCompiledHTML(compileHTML(template.htmlTemplate,context))
+          return () => {
+               if(resumeData.profileImg instanceof File) URL.revokeObjectURL(photoSrc)
           }
-     },[template, qrImg, resumeData, photoSrc])
+     },[photoSrc,resumeData.profileImg])
+
+     const rawHTML = useMemo(()=>{
+          if(!template || !template.htmlTemplate) return ""
+          return compileHTML(template.htmlTemplate, {
+               ...resumeData,
+               qrImg,
+               id: resumeData.id || template.id,
+               profileImg: photoSrc,
+               experience: resumeData.experience?.map(val => ({
+                    ...val,
+                    startDate: !val.startDate ? "" : format(val.startDate, "MM/yyyy"),
+                    endDate: !val.endDate ? "Այսօր" : format(val.endDate, "MM/yyyy")
+               })),
+               education: resumeData.education?.map(val => ({
+                    ...val,
+                    startDate: !val.startDate ? "" : format(val.startDate, "MM/yyyy"),
+                    endDate: !val.endDate ? "Այսօր" : format(val.endDate, "MM/yyyy")
+               })),
+               courses: resumeData.courses?.map(val => ({
+                    ...val,
+                    startDate: !val.startDate ? "" : format(val.startDate, "MM/yyyy"),
+                    endDate: !val.endDate ? "Այսօր" : format(val.endDate, "MM/yyyy")
+               }))
+          })
+     },[template, resumeData, qrImg, photoSrc])
+
+     const sanitizedHTML = useMemo(()=>DOMPurify.sanitize(rawHTML,{
+          ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|blob):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
+     }),[rawHTML])
+
      return (
           <div className={cn("bg-white text-black h-full w-full aspect-[210/297]",className)} ref={containerRef}>
                <div className={!template ? cn("space-y-6 p-6", !width && "invisible") : cn("h-full", !width && "invisible")} style={{zoom: (1/794) * width}} ref={contentRef} id="resumePreviewContent">
@@ -90,9 +97,7 @@ export default function ResumePreview({
                     ) : (
                          <>
                               <style>{template.cssStyle?.replaceAll("cv-template",`cv-template-${resumeData.id || template.id}`)}</style>
-                              <div id="resume-body" className="h-full break-inside-avoid" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(compiledHTML,{
-                                   ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|blob):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
-                              })}}/>
+                              <div id="resume-body" className="h-full break-inside-avoid" dangerouslySetInnerHTML={{__html: sanitizedHTML}}/>
                          </>
                     )}
                </div>

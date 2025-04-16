@@ -1,17 +1,20 @@
 import PageLayout from "@/components/layout/page-layout";
 import { Metadata } from "next";
-import ResumeEditor from "./resume-editor";
 import { ResumeTemplate } from "@prisma/client";
 import { currentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getSubscriptionLevel } from "@/actions/subscription-system";
 import { getAvailableFeatures } from "@/lib/permission";
 import { getCurrentResumeByUserId, getResumeTemplateById } from "@/data/db/resumes";
+import dynamic from "next/dynamic";
+import DocEditorLoader from "@/components/loaders/doc-editor";
 
 export const metadata: Metadata = {
      title: "Ձևավորել Ձեր ռեզյումեն"
 }
-
+const ResumeEditor = dynamic(()=>import("./resume-editor"),{
+     loading: DocEditorLoader
+})
 export default async function ResumeEditorPage({
      searchParams
 }: {

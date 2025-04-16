@@ -1,10 +1,10 @@
 import { ResumeFormProps } from "@/data/types"
 import EditorFormCardWrapper from "../../wrappers/card-wrapper"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { ResumeDetailsType } from "@/schemas/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ResumeDetailsSchema } from "@/schemas"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import {Form} from "@/components/ui/form"
 import { useResumeDynamicField } from "@/hooks/use-resume-dynamic-field"
 import { Button } from "@/components/ui/button"
@@ -15,6 +15,7 @@ import LanguageField from "../dynamic-fields/language-field"
 import { closestCenter, DndContext } from "@dnd-kit/core"
 import {restrictToVerticalAxis} from "@dnd-kit/modifiers"
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
+import debounce from "lodash.debounce"
 
 export default function ResumeDetailsForm({resumeData, setResumeData}: ResumeFormProps){
      const form = useForm<ResumeDetailsType>({
@@ -26,20 +27,24 @@ export default function ResumeDetailsForm({resumeData, setResumeData}: ResumeFor
                languages: resumeData.languages || []
           }
      })
+     const debouncedUpdate = useMemo(()=>debounce(async (values: ResumeDetailsType) => {
+          if (await form.trigger()) {
+               setResumeData((prev) => ({
+                    ...prev,
+                    experience: values.experience || [],
+                    education: values.education || [],
+                    skills: values.skills || [],
+                    languages: values.languages || [],
+               }));
+          }
+     },100),[form, setResumeData]);
+     const allValues = useWatch({control: form.control})
      useEffect(()=>{
-          const {unsubscribe} = form.watch(async(values)=>{
-               const isValid = await form.trigger()
-               if(!isValid) return;
-               setResumeData({
-                    ...resumeData,
-                    experience: values.experience?.filter(exp=>exp!==undefined),
-                    education: values.education?.filter(edu=>edu!==undefined),
-                    skills: values.skills?.filter(skill=>skill!==undefined),
-                    languages: values.languages?.filter(lang=>lang!==undefined),
-               })
-          })
-          return () => unsubscribe()
-     },[form, resumeData, setResumeData])
+          debouncedUpdate(allValues)
+          return () => {
+               debouncedUpdate.cancel();
+          }
+     },[allValues, debouncedUpdate])
 
      const experienceField = useResumeDynamicField(form,"experience");
      const educationField = useResumeDynamicField(form,"education");

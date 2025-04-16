@@ -6,7 +6,7 @@ import { steps } from "./steps"
 import Breadcrumbs from "./breadcrumbs"
 import ResumeFormFooter from "./resume-form-footer"
 import { Loader2 } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { ResumeFormType } from "@/schemas/types"
 import ResumePreviewSection from "./resume-preview-section"
 import { cn } from "@/lib/utils"
@@ -35,11 +35,12 @@ export default function ResumeEditor({resumeToEdit,template,resumeId}: ResumeEdi
           contentRef,
           documentTitle: resumeToEdit ? resumeToEdit.title : "Անանուն Ռեզյումե",
      })
-     const setStep = (key: string) => {
+     const setStep = useCallback((key: string) => {
           const newSearchParams = new URLSearchParams(searchParams);
           newSearchParams.set("step",key);
-          router.push(`?${newSearchParams.toString()}`)
-     }
+          router.push(`?${newSearchParams.toString()}`, { scroll: false })
+     },[searchParams,router])
+
      const FormComponent = steps.find(
           step=>step.key===currStep
      )?.component

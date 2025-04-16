@@ -4,7 +4,7 @@ import CoverLetterFormFooter from "./cl-form-footer";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CoverLetterPreviewSection from "./cl-preview-section";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { CoverLetterFormType } from "@/schemas/types";
 import { useSearchParams, useRouter } from "next/navigation";
 import { steps } from "./steps";
@@ -30,11 +30,11 @@ export default function CoverLetterEditor({letterToEdit}: CoverLetterEditorProps
           contentRef,
           documentTitle: "Անանուն նամակ",
      })
-     const setStep = (key: string) => {
+     const setStep = useCallback((key: string) => {
           const newSearchParams = new URLSearchParams(searchParams);
           newSearchParams.set("step",key);
           router.push(`?${newSearchParams.toString()}`)
-     }
+     },[searchParams,router])
      const FormComponent = steps.find(
           step=>step.key===currStep
      )?.component

@@ -1,5 +1,4 @@
 "use client"
-import ResumePreview from "@/components/dashboard/resumes/resume-preview"
 import { mapToResumeValues } from "@/data/helpers"
 import { ResumeServerData } from "@/data/types"
 import { formatDate } from "date-fns"
@@ -15,10 +14,15 @@ import { toast } from "sonner"
 import { deleteResume } from "@/actions/resume/delete-resume"
 import {useReactToPrint} from "react-to-print"
 import DeleteConfirmationDialog from "../../delete-confirmation-dialog"
+import dynamic from "next/dynamic"
+import DocPreviewLoader from "@/components/loaders/doc-preview"
 
 interface ResumeCardProps{
      data: ResumeServerData
 }
+const ResumePreview = dynamic(()=>import("@/components/dashboard/resumes/resume-preview"),{
+     loading: () => <DocPreviewLoader/>
+})
 export default function ResumeCard({data}: ResumeCardProps){
      const {updatedAt, createdAt, title, description, id, template} = data;
      const [qrImg, setQrImg] = useState("/qr-placeholder.png");

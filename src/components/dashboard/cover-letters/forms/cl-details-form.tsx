@@ -2,7 +2,7 @@ import { CoverLetterFormProps } from "@/data/types";
 import { CoverLetterDetailsType } from "@/schemas/types";
 import { CoverLetterDetailsSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import {
      Form,
      FormField,
@@ -15,8 +15,9 @@ import {
 import EditorFormCardWrapper from "../../wrappers/card-wrapper"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import GenerateLetterBodyButton from "../ai-generate-body";
+import debounce from "lodash.debounce";
 
 export default function CoverLetterDetailsForm({coverLetterData, setCoverLetterData}: CoverLetterFormProps){
      const form = useForm<CoverLetterDetailsType>({
@@ -29,14 +30,18 @@ export default function CoverLetterDetailsForm({coverLetterData, setCoverLetterD
                letterContent: coverLetterData.letterContent || "",
           }
      })
+     const debouncedUpdate = useMemo(()=>debounce(async(values: CoverLetterDetailsType)=>{
+          if(await form.trigger()){
+               setCoverLetterData(prev=>({...prev, ...values}))
+          }
+     },100),[form, setCoverLetterData])
+     const allValues = useWatch({control: form.control})
      useEffect(()=>{
-          const {unsubscribe} = form.watch(async(values)=>{
-               const isValid = await form.trigger()
-               if(!isValid) return;
-               setCoverLetterData({...coverLetterData, ...values})
-          })
-          return () => unsubscribe()
-     },[form, coverLetterData, setCoverLetterData])
+          debouncedUpdate(allValues)
+          return () => {
+               debouncedUpdate.cancel();
+          }
+     },[allValues, debouncedUpdate])
      return (
           <Form {...form}>
                <form className="space-y-4">

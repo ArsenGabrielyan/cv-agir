@@ -12,7 +12,7 @@ interface DynamicFieldWrapperProps{
      remove: (index: number) => void,
      id: string
 }
-export default function DynamicFieldWrapper({
+export default React.memo(function DynamicFieldWrapper({
      title,
      index,
      children,
@@ -48,4 +48,4 @@ export default function DynamicFieldWrapper({
                <Button variant="destructive" type="button" onClick={()=>remove(index)}>Հեռացնել</Button>
           </div>
      )
-}
+})
