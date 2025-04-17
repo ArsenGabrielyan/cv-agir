@@ -105,12 +105,28 @@ body {
 }
 
 @media print{
-  #resumePreviewContent, #coverLetterPreviewContent{
+  body * {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  #resumePreviewContent,
+  #coverLetterPreviewContent,
+  #resumePreviewContent *:not(style),
+  #coverLetterPreviewContent *:not(style) {
+    display: block !important;
+    visibility: visible !important;
+  }
+  #resumePreviewContent,
+  #coverLetterPreviewContent {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
     zoom: 1 !important;
   }
-}
-
-@page {
-  size: A4;
-  margin: 0.6cm;
+  @page {
+    size: A4;
+    margin: 0.6cm;
+  }
 }
