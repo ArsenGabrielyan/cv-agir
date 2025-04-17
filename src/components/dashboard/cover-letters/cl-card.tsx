@@ -12,8 +12,8 @@ import dynamic from "next/dynamic";
 import { mapToLetterValues } from "@/data/helpers";
 import { formatDate } from "date-fns";
 import { hy } from "date-fns/locale";
-import { useReactToPrint } from "react-to-print";
 import DocPreviewLoader from "@/components/loaders/doc-preview";
+import usePrint from "@/hooks/use-print";
 
 interface CoverLetterCardProps{
      data: CoverLetter
@@ -25,7 +25,7 @@ export default function CoverLetterCard({data}: CoverLetterCardProps){
      const {updatedAt, createdAt, title, description, id} = data;
      const wasUpdated = updatedAt!==createdAt;
      const contentRef = useRef<HTMLDivElement>(null);
-     const handlePrintCoverLetter = useReactToPrint({
+     const handlePrintCoverLetter = usePrint({
           contentRef,
           documentTitle: title || "Անանուն Ուղեկցող Նամակ",
      })

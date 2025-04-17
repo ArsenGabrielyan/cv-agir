@@ -8,13 +8,13 @@ import { useCallback, useRef, useState } from "react";
 import { CoverLetterFormType } from "@/schemas/types";
 import { useSearchParams, useRouter } from "next/navigation";
 import { steps } from "./steps";
-import { useReactToPrint } from "react-to-print";
 import Breadcrumbs from "./breadcrumbs";
 import { useCoverLetterAutoSave } from "@/hooks/use-auto-save";
 import useUnsavedChangesWarning from "@/hooks/use-unsaved-changes";
 import { CoverLetter } from "@prisma/client";
 import { mapToLetterValues } from "@/data/helpers";
 import { ExtendedUser } from "@/next-auth";
+import usePrint from "@/hooks/use-print";
 
 interface CoverLetterEditorProps {
      letterToEdit: CoverLetter | null;
@@ -28,7 +28,7 @@ export default function CoverLetterEditor({letterToEdit,userData}: CoverLetterEd
      const {isSaving, hasUnsavedChanges} = useCoverLetterAutoSave(coverLetterData)
      const contentRef = useRef<HTMLDivElement>(null);
      const currStep = searchParams.get("step") || steps[0].key;
-     const printCoverLetter = useReactToPrint({
+     const printCoverLetter = usePrint({
           contentRef,
           documentTitle: "Անանուն նամակ",
      })

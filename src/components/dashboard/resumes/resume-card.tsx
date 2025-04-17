@@ -12,10 +12,10 @@ import { Button } from "@/components/ui/button"
 import { MoreVertical, Printer, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 import { deleteResume } from "@/actions/resume/delete-resume"
-import {useReactToPrint} from "react-to-print"
 import DeleteConfirmationDialog from "../../delete-confirmation-dialog"
 import dynamic from "next/dynamic"
 import DocPreviewLoader from "@/components/loaders/doc-preview"
+import usePrint from "@/hooks/use-print"
 
 interface ResumeCardProps{
      data: ResumeServerData
@@ -28,7 +28,7 @@ export default function ResumeCard({data}: ResumeCardProps){
      const [qrImg, setQrImg] = useState("/qr-placeholder.png");
      const wasUpdated = updatedAt!==createdAt;
      const contentRef = useRef<HTMLDivElement>(null);
-     const handlePrintResume = useReactToPrint({
+     const handlePrintResume = usePrint({
           contentRef,
           documentTitle: title || "Անանուն Ռեզյումե",
      })

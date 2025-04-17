@@ -15,7 +15,7 @@ import { useResumeAutoSave } from "@/hooks/use-auto-save"
 import { mapToResumeValues } from "@/data/helpers"
 import { absoluteUrl } from "@/lib/utils";
 import QRCode from "qrcode";
-import { useReactToPrint } from "react-to-print"
+import usePrint from "@/hooks/use-print"
 import { ExtendedUser } from "@/next-auth"
 
 interface ResumeEditorProps {
@@ -33,7 +33,7 @@ export default function ResumeEditor({resumeToEdit,template,resumeId,userData}: 
      const [qrImg, setQrImg] = useState("/qr-placeholder.png");
      const currStep = searchParams.get("step") || steps[0].key;
      const contentRef = useRef<HTMLDivElement>(null);
-     const printResume = useReactToPrint({
+     const printResume = usePrint({
           contentRef,
           documentTitle: resumeToEdit ? resumeToEdit.title : "Անանուն Ռեզյումե",
      })
