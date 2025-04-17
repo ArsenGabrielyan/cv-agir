@@ -37,7 +37,7 @@ export default function ResumeDetailsForm({resumeData, setResumeData}: ResumeFor
                     languages: values.languages || [],
                }));
           }
-     },100),[form, setResumeData]);
+     },200),[form, setResumeData]);
      const allValues = useWatch({control: form.control})
      useEffect(()=>{
           debouncedUpdate(allValues)

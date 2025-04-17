@@ -16,13 +16,15 @@ import { mapToResumeValues } from "@/data/helpers"
 import { absoluteUrl } from "@/lib/utils";
 import QRCode from "qrcode";
 import { useReactToPrint } from "react-to-print"
+import { ExtendedUser } from "@/next-auth"
 
 interface ResumeEditorProps {
      resumeToEdit: Resume | null;
      template: ResumeTemplate | null;
-     resumeId?: string
+     resumeId?: string,
+     userData: Omit<ExtendedUser,"currentPlan">
 }
-export default function ResumeEditor({resumeToEdit,template,resumeId}: ResumeEditorProps){
+export default function ResumeEditor({resumeToEdit,template,resumeId,userData}: ResumeEditorProps){
      const searchParams = useSearchParams();
      const router = useRouter();
      const [resumeData, setResumeData] = useState<ResumeFormType>(resumeToEdit ? mapToResumeValues(resumeToEdit) : {});
@@ -67,8 +69,8 @@ export default function ResumeEditor({resumeToEdit,template,resumeId}: ResumeEdi
      return (
           <div className="flex grow flex-col">
                <header className="border-b px-3 py-5 flex flex-col items-center justify-center gap-y-4">
-                    <div className="space-y-1.5 text-center">
-                         <h1 className="text-lg md:text-xl lg:text-2xl font-semibold flex justify-between items-start">
+                    <div className="space-y-2 text-center">
+                         <h1 className="text-lg md:text-xl lg:text-2xl font-semibold flex flex-col md:flex-row justify-center md:justify-between items-center md:items-start gap-2">
                               Պատրաստել Ձեր ռեզյումեն
                               {isSaving && (
                                    <span className="text-base font-normal flex items-center gap-2 text-muted-foreground">
@@ -88,6 +90,7 @@ export default function ResumeEditor({resumeToEdit,template,resumeId}: ResumeEdi
                                         <FormComponent
                                              resumeData={resumeData}
                                              setResumeData={setResumeData}
+                                             userData={userData}
                                         />
                                    )}
                               </div>

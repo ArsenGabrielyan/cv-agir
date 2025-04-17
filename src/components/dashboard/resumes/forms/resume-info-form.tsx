@@ -21,27 +21,35 @@ import { Button } from "@/components/ui/button"
 import GenerateSummaryButton from "../ai-buttons/generate-summary"
 import debounce from "lodash.debounce"
 
-export default function ResumeInfoForm({resumeData, setResumeData}: ResumeFormProps){
+export default function ResumeInfoForm({resumeData, setResumeData,userData}: ResumeFormProps){
      const form = useForm<ResumeInfoType>({
           resolver: zodResolver(ResumeInfoSchema),
           defaultValues: {
                title: resumeData.title || "",
                description: resumeData.description || "",
-               fname: resumeData.fname || "",
-               lname: resumeData.lname || "",
-               jobTitle: resumeData.jobTitle || "",
-               phone: resumeData.phone || "",
-               address: resumeData.address || "",
-               email: resumeData.email || "",
-               summary: resumeData.summary ||"",
-               hobbies: resumeData.hobbies || "",
+               fname: resumeData.fname || (userData.name ? userData.name.split(" ")[0] : "") || "",
+               lname: resumeData.lname || (userData.name ? userData.name.split(" ")[1] : "") || "",
+               jobTitle: resumeData.jobTitle || userData.jobTitle || "",
+               phone: resumeData.phone || userData?.phone || "",
+               address: resumeData.address || userData.address || "",
+               email: resumeData.email || userData.email || "",
+               summary: resumeData.summary || userData.summary || "",
+               hobbies: resumeData.hobbies || userData.hobbies || "",
+               profileImg: resumeData.profileImg instanceof File ? resumeData.profileImg : undefined,
           }
      })
      const debouncedUpdate = useMemo(()=>debounce(async(values: ResumeInfoType)=>{
           if(await form.trigger()){
-               setResumeData(prev=>({...prev, ...values}))
+               setResumeData(prev=>{
+                    const {profileImg: newImg, ...rest} = values
+                    return ({
+                         ...prev,
+                         ...rest,
+                         profileImg: !newImg ? prev.profileImg : newImg, 
+                    })
+               })
           }
-     },100),[form,setResumeData])
+     },200),[form,setResumeData])
      const allValues = useWatch({control: form.control})
      useEffect(()=>{
           debouncedUpdate(allValues)
@@ -117,10 +125,15 @@ export default function ResumeInfoForm({resumeData, setResumeData}: ResumeFormPr
                                                   variant="secondary"
                                                   onClick={()=>{
                                                        fieldValues.onChange(null)
+                                                       setResumeData(prev=>({
+                                                            ...prev,
+                                                            profileImg: null
+                                                       }))
                                                        if(imgInputRef.current) {
                                                             imgInputRef.current.value = ""
                                                        }
                                                   }}
+                                                  disabled={!resumeData.profileImg}
                                              >Հեռացնել</Button>
                                         </div>
                                         <FormMessage/>

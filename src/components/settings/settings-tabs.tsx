@@ -1,15 +1,14 @@
 "use client"
 import { ISettingsPage } from "@/data/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {AccountSettings, Customization, ResumeSettings, SubscriptionSettings} from "./pages"
+import {AccountSettings, Customization, SubscriptionSettings} from "./pages"
 import { useSearchParams, useRouter } from "next/navigation";
 import { Subscription } from "@prisma/client";
 
 const settingsPages: ISettingsPage[] = [
      { id: 1, name: "Հաշիվ", tabName: "account", SettingsContent: AccountSettings},
      { id: 2, name: "Հավելված", tabName: "customization", SettingsContent: Customization},
-     { id: 3, name: "Ռեզյումեի կարգավորումներ", tabName: "resume", SettingsContent: ResumeSettings},
-     { id: 4, name: "Բաժանորդագրություն", tabName: "subscription", SettingsContent: SubscriptionSettings},
+     { id: 3, name: "Բաժանորդագրություն", tabName: "subscription", SettingsContent: SubscriptionSettings},
 ];
 
 export interface SettingsContentProps{

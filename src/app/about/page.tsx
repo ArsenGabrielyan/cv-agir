@@ -1,4 +1,5 @@
 import PageLayout from "@/components/layout/page-layout";
+import { MAX_FREE_RESUMES } from "@/data/constants/other";
 import { CheckCircle } from "lucide-react";
 import { Metadata } from "next";
 
@@ -22,7 +23,7 @@ export default function AboutPage(){
                <section className="bg-card py-16 px-6 sm:px-12 md:px-24 lg:px-40 text-center">
                     <h2 className="text-3xl font-bold mb-6">Ինչու՞ ընտրել CV-ագիր-ը։</h2>
                     <ul className="space-y-4 text-lg text-card-foreground text-left max-w-3xl mx-auto">
-                         <li className="flex gap-x-2"><CheckCircle className="text-primary"/><p><strong>Անվճար տարբերակ</strong>՝ ստեղծեք մինչև 3 ռեզյումե առանց որևէ վճարի։</p></li>
+                         <li className="flex gap-x-2"><CheckCircle className="text-primary"/><p><strong>Անվճար տարբերակ</strong>՝ ստեղծեք մինչև {MAX_FREE_RESUMES} ռեզյումե առանց որևէ վճարի։</p></li>
                          <li className="flex gap-x-2"><CheckCircle className="text-primary"/><p><strong>Պրոֆեսիոնալ շաբլոններ</strong>՝ ընտրեք տարբեր դիզայններից։</p></li>
                          <li className="flex gap-x-2"><CheckCircle className="text-primary"/><p><strong>AI առաջարկներ</strong>՝ ստացեք օպտիմալացված հմտություններ և տեքստեր։</p></li>
                          <li className="flex gap-x-2"><CheckCircle className="text-primary"/><p><strong>PDF ներբեռնում և տպում</strong>՝ Ձեր ռեզյումեն պատրաստ է ցանկացած աշխատանքի դիմումի համար։</p></li>

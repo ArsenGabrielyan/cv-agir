@@ -11,7 +11,7 @@ export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: strin
      const searchParams = useSearchParams();
      const router = useRouter();
      
-     const debouncedData = useDebounce(resumeData,1500);
+     const debouncedData = useDebounce(resumeData,1200);
 
      const [resumeId, setResumeId] = useState(resumeData.id)
      const [lastSaved, setLastSaved] = useState(structuredClone(resumeData))
@@ -71,7 +71,7 @@ export function useCoverLetterAutoSave(coverLetterData: CoverLetterFormType){
      const searchParams = useSearchParams();
      const router = useRouter();
      
-     const debouncedData = useDebounce(coverLetterData,1500);
+     const debouncedData = useDebounce(coverLetterData,1200);
 
      const [lastSaved, setLastSaved] = useState(structuredClone(coverLetterData))
      const [isSaving, setIsSaving] = useState(false);

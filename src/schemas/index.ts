@@ -55,16 +55,16 @@ export const ResumeInfoSchema = z.object({
      email: optionalEmailString,
      summary: optionalString,
      hobbies: optionalString,
-     profileImg: z.custom<File | undefined>()
-     .refine(
-       (file) =>
-         !file || (file instanceof File && file.type.startsWith("image/")),
-       "Պետք է լինի նկար",
-     )
-     .refine(
-       (file) => !file || file.size <= 1024 * 1024 * 4,
-       "Նկարը պետք է լինի ավելի քիչ քան 4ՄԲ",
-     ),
+     profileImg: z
+     .instanceof(File, { message: "Պետք է լինի նկար" })
+     .refine((file) => !file || file.type.startsWith("image/"), {
+       message: "Ֆայլի տեսակը պետք է լինի նկարի (.png, .jpg և այլն)",
+     })
+     .refine((file) => !file || file.size <= 4 * 1024 * 1024, {
+       message: "Նկարը պետք է լինի մինչև 4 ՄԲ",
+     })
+     .nullable()
+     .optional(),
 })
 
 export const ResumeDetailsSchema = z.object({

@@ -20,25 +20,33 @@ import { CoverLetterFormProps } from "@/data/types"
 import { Button } from "@/components/ui/button"
 import debounce from "lodash.debounce"
 
-export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData}: CoverLetterFormProps){
+export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData,userData}: CoverLetterFormProps){
      const form = useForm<CoverLetterInfoType>({
           resolver: zodResolver(CoverLetterInfoSchema),
           defaultValues: {
                title: coverLetterData.title || "",
                description: coverLetterData.description || "",
-               fname: coverLetterData.fname || "",
-               lname: coverLetterData.lname || "",
-               jobTitle: coverLetterData.jobTitle || "",
-               phone: coverLetterData.phone || "",
-               address: coverLetterData.address || "",
-               email: coverLetterData.email || ""
+               fname: coverLetterData.fname || (userData.name ? userData.name.split(" ")[0] : "") || "",
+               lname: coverLetterData.lname || (userData.name ? userData.name.split(" ")[1] : "") || "",
+               jobTitle: coverLetterData.jobTitle || userData.jobTitle || "",
+               phone: coverLetterData.phone || userData?.phone || "",
+               address: coverLetterData.address || userData.address || "",
+               email: coverLetterData.email || userData.email || "",
+               profileImg: coverLetterData.profileImg instanceof File ? coverLetterData.profileImg : undefined,
           }
      })
      const debouncedUpdate = useMemo(()=>debounce(async(values: CoverLetterInfoType)=>{
           if(await form.trigger()){
-               setCoverLetterData(prev=>({...prev, ...values}))
+               setCoverLetterData(prev=>{
+                    const {profileImg: newImg, ...rest} = values
+                    return ({
+                         ...prev,
+                         ...rest,
+                         profileImg: !newImg ? prev.profileImg : newImg, 
+                    })
+               })
           }
-     },100),[form, setCoverLetterData])
+     },200),[form, setCoverLetterData])
      const allValues = useWatch({control: form.control})
      useEffect(()=>{
           debouncedUpdate(allValues)
@@ -113,10 +121,15 @@ export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData
                                                   variant="secondary"
                                                   onClick={()=>{
                                                        fieldValues.onChange(null)
+                                                       setCoverLetterData(prev=>({
+                                                            ...prev,
+                                                            profileImg: null
+                                                       }))
                                                        if(imgInputRef.current) {
                                                             imgInputRef.current.value = ""
                                                        }
                                                   }}
+                                                  disabled={!coverLetterData.profileImg}
                                              >Հեռացնել</Button>
                                         </div>
                                         <FormMessage/>

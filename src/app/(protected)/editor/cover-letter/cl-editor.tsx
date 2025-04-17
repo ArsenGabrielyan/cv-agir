@@ -14,11 +14,13 @@ import { useCoverLetterAutoSave } from "@/hooks/use-auto-save";
 import useUnsavedChangesWarning from "@/hooks/use-unsaved-changes";
 import { CoverLetter } from "@prisma/client";
 import { mapToLetterValues } from "@/data/helpers";
+import { ExtendedUser } from "@/next-auth";
 
 interface CoverLetterEditorProps {
      letterToEdit: CoverLetter | null;
+     userData: Omit<ExtendedUser,"currentPlan">
 }
-export default function CoverLetterEditor({letterToEdit}: CoverLetterEditorProps){
+export default function CoverLetterEditor({letterToEdit,userData}: CoverLetterEditorProps){
      const searchParams = useSearchParams();
      const router = useRouter();
      const [coverLetterData, setCoverLetterData] = useState<CoverLetterFormType>(letterToEdit ? mapToLetterValues(letterToEdit) : {});
@@ -42,8 +44,8 @@ export default function CoverLetterEditor({letterToEdit}: CoverLetterEditorProps
      return (
           <div className="flex grow flex-col">
                <header className="border-b px-3 py-5 flex flex-col items-center justify-center gap-y-4">
-                    <div className="space-y-1.5 text-center">
-                         <h1 className="text-lg md:text-xl lg:text-2xl font-semibold flex justify-between items-start">
+                    <div className="space-y-2 text-center">
+                         <h1 className="text-lg md:text-xl lg:text-2xl font-semibold flex flex-col md:flex-row justify-center md:justify-between items-center md:items-start gap-2">
                               Գրել ուղեկցող նամակ
                               {isSaving && (
                                    <span className="text-base font-normal flex items-center gap-2 text-muted-foreground">
@@ -63,6 +65,7 @@ export default function CoverLetterEditor({letterToEdit}: CoverLetterEditorProps
                                         <FormComponent
                                              coverLetterData={coverLetterData}
                                              setCoverLetterData={setCoverLetterData}
+                                             userData={userData}
                                         />
                                    )}
                               </div>

@@ -22,6 +22,8 @@ import { Switch } from "@/components/ui/switch";
 import { AccountSettingsType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
 import SettingsCard from "../settings-card";
+import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function AccountSettings(){
      const user = useCurrentUser();
@@ -34,6 +36,11 @@ export default function AccountSettings(){
           name: user?.name || undefined,
           email: user?.email || undefined,
           isTwoFactorEnabled: user?.isTwoFactorEnabled || undefined,
+          jobTitle: user?.jobTitle || undefined,
+          phone: user?.phone || undefined,
+          address: user?.address || undefined,
+          summary: user?.summary || undefined,
+          hobbies: user?.hobbies || undefined,
           password: undefined,
           newPassword: undefined
      }
@@ -107,6 +114,93 @@ export default function AccountSettings(){
                                    )}
                               />
                          )}
+                    </SettingsCard>
+                    <SettingsCard title="Փաստաթղթի արժեքներ" description="Այս կարգավորումները կիրառվում են ինչպես ռեզյումեի, այնպես էլ ուղեկցող նամակի տվյալների վրա։">
+                         <FormField
+                              control={form.control}
+                              name="jobTitle"
+                              render={({field})=>(
+                                   <FormItem>
+                                        <FormLabel>Մասնագիտություն</FormLabel>
+                                        <FormControl>
+                                             <RandomPlaceholderInput
+                                                  {...field}
+                                                  disabled={isPending}
+                                                  placeholderKey="jobName"
+                                             />
+                                        </FormControl>
+                                        <FormMessage/>
+                                   </FormItem>
+                              )}
+                         />
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <FormField
+                                   control={form.control}
+                                   name="phone"
+                                   render={({field})=>(
+                                        <FormItem>
+                                             <FormLabel>Հեռախոսահամար</FormLabel>
+                                             <FormControl>
+                                                  <Input
+                                                       {...field}
+                                                       placeholder="(012) 34-56-78"
+                                                       disabled={isPending}
+                                                  />
+                                             </FormControl>
+                                             <FormMessage/>
+                                        </FormItem>
+                                   )}
+                              />
+                              <FormField
+                                   control={form.control}
+                                   name="address"
+                                   render={({field})=>(
+                                        <FormItem>
+                                             <FormLabel>Բնակության հասցե</FormLabel>
+                                             <FormControl>
+                                                  <Input
+                                                       {...field}
+                                                       placeholder="12 Փողոցի անուն, Քաղաք, Երկիր"
+                                                       disabled={isPending}
+                                                  />
+                                             </FormControl>
+                                             <FormMessage/>
+                                        </FormItem>
+                                   )}
+                              />
+                         </div>
+                         <FormField
+                              control={form.control}
+                              name="summary"
+                              render={({field})=>(
+                                   <FormItem>
+                                        <FormLabel>Նկարագրություն</FormLabel>
+                                        <FormControl>
+                                             <Textarea
+                                                  {...field}
+                                                  placeholder="Նկարագրեք Ձեր մասին կարճ տեղեկություն"
+                                             />
+                                        </FormControl>
+                                        <FormMessage/>
+                                   </FormItem>
+                              )}
+                         />
+                         <FormField
+                              control={form.control}
+                              name="hobbies"
+                              render={({field})=>(
+                                   <FormItem>
+                                        <FormLabel>Հոբբիներ</FormLabel>
+                                        <FormControl>
+                                             <Textarea
+                                                  {...field}
+                                                  placeholder="Նկարագրեք Ձեր սիրած հոբբիները այստեղ"
+                                             />
+                                        </FormControl>
+                                        <FormMessage/>
+                                   </FormItem>
+                              )}
+                         />
                     </SettingsCard>
                     {!user?.isOauth && (
                          <SettingsCard title="Գաղտնաբառ և նույնականացում">

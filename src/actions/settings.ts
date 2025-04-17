@@ -5,7 +5,7 @@ import { getUserByEmail, getUserById } from "@/data/db/user";
 import { currentUser } from "@/lib/auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
-import { AccountSettingsType, ResumeSettingsType } from "@/schemas/types";
+import { AccountSettingsType } from "@/schemas/types";
 
 export const applyAccountSettings = async(values: AccountSettingsType) => {
      const user = await currentUser();
@@ -61,27 +61,6 @@ export const applyAccountSettings = async(values: AccountSettingsType) => {
 
           values.password = hashedPassword;
           values.newPassword = undefined
-     }
-
-     await db.user.update({
-          where: {
-               id: dbUser.id
-          },
-          data: {
-               ...values
-          }
-     })
-     return {success: "Կարգավորումները թարմացված են"}
-}
-
-export const applyResumeDefaultsSettings = async(values: ResumeSettingsType) => {
-     const user = await currentUser();
-     if(!user || !user.id){
-          return {error: "Մուտք գործեք հաշվին"}
-     }
-     const dbUser = await getUserById(user.id);
-     if(!dbUser){
-          return {error: "Մուտք գործեք հաշվին"}
      }
 
      await db.user.update({

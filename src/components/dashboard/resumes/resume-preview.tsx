@@ -4,7 +4,7 @@ import useDimensions from "@/hooks/use-dimensions";
 import { cn } from "@/lib/utils";
 import { ResumeFormType } from "@/schemas/types";
 import { ResumeTemplate } from "@prisma/client";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import DOMPurify from "isomorphic-dompurify"
 import {CoursesSection, EducationSection, HeaderSection, HobbiesSection, LanguagesSection, LinksSection, ReferencesSection, SkillsSection, SummarySection, WorkExperienceSection} from "./resume-sections";
 import { format } from "date-fns";
@@ -29,19 +29,16 @@ export default function ResumePreview({
 }: ResumePreviewProps){
      const containerRef = useRef<HTMLDivElement>(null);
      const {width} = useDimensions(containerRef);
-
-     const photoSrc = useMemo(()=>{
-          if(resumeData.profileImg instanceof File){
-               return URL.createObjectURL(resumeData.profileImg)
+     const [photoSrc, setPhotoSrc] = useState(resumeData.profileImg instanceof File ? "" : resumeData.profileImg)
+     
+     useEffect(() => {
+          if (resumeData.profileImg instanceof File) {
+               const objectUrl = URL.createObjectURL(resumeData.profileImg);
+               setPhotoSrc(objectUrl);
+               return () => URL.revokeObjectURL(objectUrl);
           }
-          return resumeData.profileImg || ""
-     },[resumeData.profileImg])
-
-     useEffect(()=>{
-          return () => {
-               if(resumeData.profileImg instanceof File) URL.revokeObjectURL(photoSrc)
-          }
-     },[photoSrc,resumeData.profileImg])
+          setPhotoSrc(resumeData.profileImg || "");
+     }, [resumeData.profileImg]);
 
      const rawHTML = useMemo(()=>{
           if(!template || !template.htmlTemplate) return ""

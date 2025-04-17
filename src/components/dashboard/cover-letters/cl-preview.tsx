@@ -1,7 +1,7 @@
 import useDimensions from "@/hooks/use-dimensions";
 import { cn } from "@/lib/utils";
 import { CoverLetterFormType } from "@/schemas/types"
-import { useRef, useEffect, useMemo } from "react";
+import { useRef } from "react";
 import { BodySection, HeaderSection } from "./cl-sections";
 
 interface CoverLetterPreviewProps{
@@ -16,24 +16,10 @@ export default function CoverLetterPreview({
 }: CoverLetterPreviewProps){
      const containerRef = useRef<HTMLDivElement>(null);
      const {width} = useDimensions(containerRef)
-
-     const photoSrc = useMemo(()=>{
-          if(coverLetterData.profileImg instanceof File){
-               return URL.createObjectURL(coverLetterData.profileImg)
-          }
-          return coverLetterData.profileImg || ""
-     },[coverLetterData.profileImg])
-
-     useEffect(()=>{
-          return () => {
-               if(coverLetterData.profileImg instanceof File) URL.revokeObjectURL(photoSrc)
-          }
-     },[photoSrc,coverLetterData.profileImg])
-
      return (
           <div className={cn("bg-white text-black h-full w-full aspect-[210/297]",className)} ref={containerRef}>
                <div className={cn("space-y-6 p-6", !width && "invisible")} style={{zoom: (1/794) * width}} ref={contentRef} id="coverLetterPreviewContent">
-                    <HeaderSection coverLetterData={coverLetterData} photoSrc={photoSrc}/>
+                    <HeaderSection coverLetterData={coverLetterData}/>
                     <BodySection coverLetterData={coverLetterData}/>
                </div>
           </div>

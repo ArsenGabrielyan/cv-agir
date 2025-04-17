@@ -33,7 +33,7 @@ export default async function CoverLetterEditorPage({
      const letter = coverLetterId ? await getCoverLetterById(coverLetterId) : null
      return (
           <PageLayout editorPage>
-               <CoverLetterEditor letterToEdit={letter}/>
+               <CoverLetterEditor letterToEdit={letter} userData={user}/>
           </PageLayout>
      )
 }

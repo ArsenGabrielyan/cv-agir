@@ -34,7 +34,7 @@ export default function ResumeOptionalDetailsForm({resumeData, setResumeData}: R
                     references: values.references || [],
                }));
           }
-     },100),[form, setResumeData]);
+     },200),[form, setResumeData]);
      const allValues = useWatch({control: form.control})
      useEffect(()=>{
           debouncedUpdate(allValues)

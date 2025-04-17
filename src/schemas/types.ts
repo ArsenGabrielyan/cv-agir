@@ -1,11 +1,10 @@
 import * as z from "zod"
-import { AccountSettingsSchema, ResumeSettingsSchema } from "./settings"
+import { AccountSettingsSchema } from "./settings"
 import { CheckoutFormSchema, ContactSchema, CoverLetterFormSchema, CreditCardSchema, LoginSchema, NewPasswordSchema, RegisterSchema, ResetSchema, ResumeDetailsSchema, ResumeFormSchema, ResumeInfoSchema, ResumeOptionalDetailsSchema, DocStyleSchema, CoverLetterInfoSchema, CoverLetterDetailsSchema } from "."
 import { GenerateDescriptionSchema, GenerateLetterBodySchema, GenerateSummarySchema } from "./ai"
 
 // Settings
 export type AccountSettingsType = z.infer<typeof AccountSettingsSchema>
-export type ResumeSettingsType = z.infer<typeof ResumeSettingsSchema>
 
 // Contact Page and Auth
 export type ContactFormType = z.infer<typeof ContactSchema>

@@ -4,14 +4,22 @@ import { getBorderRadius } from "@/data/helpers"
 import PreviewSectionWrapper from "../wrappers/section-wrapper"
 import { formatDate } from "date-fns"
 import Markdown from "markdown-to-jsx"
+import { useEffect, useState } from "react"
 
 interface CoverLetterSectionProps{
-     photoSrc?: string | null,
      coverLetterData: CoverLetterFormType
 }
-export function HeaderSection({photoSrc, coverLetterData}: CoverLetterSectionProps){
-     const {fname, lname, jobTitle, address, phone, email, letterDate, colorHex, borderStyle} = coverLetterData;
+export function HeaderSection({coverLetterData}: CoverLetterSectionProps){
+     const {fname, lname, jobTitle, address, phone, email, letterDate, colorHex, borderStyle,profileImg} = coverLetterData;
      const otherInfo = letterDate ? [phone,email,formatDate(letterDate || "","dd-MM-yyyy")] : [phone,email]
+     const [photoSrc, setPhotoSrc] = useState(profileImg instanceof File ? "" : profileImg)
+
+     useEffect(()=>{
+          const objectUrl = profileImg instanceof File ? URL.createObjectURL(profileImg) : "";
+          if(objectUrl) setPhotoSrc(objectUrl)
+          if(profileImg === null) setPhotoSrc("");
+          return () => URL.revokeObjectURL(objectUrl);
+     },[profileImg])
      return (
           <div className="flex justify-between items-center gap-4">
                <div className="flex items-center gap-6">

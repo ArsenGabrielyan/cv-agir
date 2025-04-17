@@ -1,4 +1,5 @@
 import { SettingsContentProps } from "@/components/settings/settings-tabs";
+import { ExtendedUser } from "@/next-auth";
 import { CoverLetterFormType, ResumeFormType } from "@/schemas/types";
 import { Prisma, UserPlan } from "@prisma/client";
 import { LucideProps } from "lucide-react";
@@ -102,11 +103,13 @@ export interface ResumeArrayFieldProps<TSchema extends FieldValues>{
 }
 export interface ResumeFormProps{
      resumeData: ResumeFormType,
-     setResumeData: React.Dispatch<React.SetStateAction<ResumeFormType>>
+     setResumeData: React.Dispatch<React.SetStateAction<ResumeFormType>>,
+     userData: Omit<ExtendedUser,"currentPlan">
 }
 export interface CoverLetterFormProps{
      coverLetterData: CoverLetterFormType,
-     setCoverLetterData: React.Dispatch<React.SetStateAction<CoverLetterFormType>>
+     setCoverLetterData: React.Dispatch<React.SetStateAction<CoverLetterFormType>>,
+     userData: Omit<ExtendedUser,"currentPlan">
 }
 export interface IResumeDynamicFields{
      courses: {

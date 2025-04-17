@@ -34,7 +34,7 @@ export default function CoverLetterDetailsForm({coverLetterData, setCoverLetterD
           if(await form.trigger()){
                setCoverLetterData(prev=>({...prev, ...values}))
           }
-     },100),[form, setCoverLetterData])
+     },200),[form, setCoverLetterData])
      const allValues = useWatch({control: form.control})
      useEffect(()=>{
           debouncedUpdate(allValues)
