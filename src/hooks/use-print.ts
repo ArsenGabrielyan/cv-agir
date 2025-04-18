@@ -13,10 +13,13 @@ export default function usePrint({contentRef,documentTitle,...options}: Omit<Use
      })
      const isMobile = useIsMobile();
      const handlePrint = () => {
-          if (!contentRef?.current) return;
+          const el = contentRef?.current;
+          if (!el) return;
           if(isMobile){
+               el.scrollIntoView({ behavior: "auto", block: "start" });
                printJS({
-                    printable: contentRef.current,
+                    printable: el,
+                    documentTitle,
                     type: "html",
                     scanStyles: false,
                     css: [
@@ -26,12 +29,20 @@ export default function usePrint({contentRef,documentTitle,...options}: Omit<Use
                     #resumePreviewContent,
                     #coverLetterPreviewContent {
                          zoom: 1 !important;
-                         -webkit-print-color-adjust: exact;
-                         print-color-adjust: exact;
+                         -webkit-print-color-adjust: exact; !important;
+                         print-color-adjust: exact; !important;
+                         transform: none !important;
+                         visibility: visible !important;
+                         display: block !important;
+                         position: absolute !important;
+                         width: 210mm !important;
+                         height: 297mm !important;
+                         top: 0 !important;
+                         left: 0 !important;
                     }
                     @page {
                          size: a4 portrait;
-                         margin: 0;
+                         margin: 0.6cm;
                     }
                     `
                })
