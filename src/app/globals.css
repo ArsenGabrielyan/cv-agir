@@ -108,6 +108,8 @@ body {
   #resumePreviewContent,
   #coverLetterPreviewContent {
     zoom: 1 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
   @page {
     size: a4 portrait;
