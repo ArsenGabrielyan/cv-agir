@@ -4,7 +4,7 @@ import printJS from "print-js";
 import { absoluteUrl } from "@/lib/utils";
 
 export default function usePrint({contentRef,documentTitle,...options}: Omit<UseReactToPrintOptions,"contentRef"> & {
-     contentRef?: React.RefObject<HTMLDivElement>
+     contentRef?: React.RefObject<HTMLDivElement | null>
 }) {
      const printDesktop = useReactToPrint({
           contentRef,
