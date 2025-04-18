@@ -1,6 +1,6 @@
 "use client"
 import { CheckoutFormSchema } from "@/schemas";
-import { CheckoutFormType } from "@/schemas/types";
+import { CheckoutFormType } from "@/data/types/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -11,7 +11,7 @@ import { FormSuccess } from "@/components/form/form-success";
 import { proceedToCheckout } from "@/actions/subscription-system";
 import { useRouter } from "next/navigation";
 import LoadingButton from "@/components/buttons/loading-button";
-import { SubscriptionPeriod, UserPlan } from "@prisma/client";
+import { SubscriptionPeriod, UserPlan } from "@db/client";
 import CreditCardInput from "@/components/form/credit-card-input";
 import { getBankName } from "@/data/helpers";
 

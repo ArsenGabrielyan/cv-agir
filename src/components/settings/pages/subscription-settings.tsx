@@ -12,7 +12,7 @@ import {
 import { formatDate } from "date-fns";
 import { hy } from "date-fns/locale"
 import { cn } from "@/lib/utils";
-import { Subscription } from "@prisma/client";
+import { Subscription } from "@db/client";
 import PremiumButton from "@/components/buttons/premium-button";
 import { Button } from "@/components/ui/button";
 import { useState, useTransition } from "react";
@@ -58,18 +58,17 @@ export default function SubscriptionSettings({subscriptions, isExpired}: Setting
                     {currentSubsciption && subscriptionLevel==="premium" ? (
                          <>
                               <p className="text-2xl md:text-3xl lg:text-4xl font-semibold">${currentSubsciption.price} / {currentSubsciption.period==="monthly" ? "ամիս" : "տարի"}</p>
-                              <p className="text-muted-foreground text-sm">Ձեր բաժանորդագրությունը կթարմացվի {formatDate(currentSubsciption.endDate,"MMM d, yyyy, HH:mm",{
-                                   locale: hy
-                              })}</p>
+                              <p className="text-muted-foreground text-sm">Ձեր բաժանորդագրությունը կթարմացվի {formatDate(currentSubsciption.endDate,"MMM d, yyyy, HH:mm",{locale: hy})}</p>
                               <div className="flex items-center flex-wrap gap-2">
-                                   {isExpired && (
-                                        <LoadingButton size={isMobile ? "sm" : "default"} loading={isPending} onClick={handleRenewSub}>Թարմացնել բաժանորդագրությունը</LoadingButton>
-                                   )}
                                    <Button size={isMobile ? "sm" : "default"} variant="outline" onClick={()=>setShowCancelDialog(true)}>Չեղարկել բաժանորդագրությունը</Button>
                               </div>
                          </>
                     ) : (
-                         <PremiumButton className="w-fit"/>
+                         isExpired ? (
+                              <LoadingButton size={isMobile ? "sm" : "default"} loading={isPending} onClick={handleRenewSub}>Թարմացնել բաժանորդագրությունը</LoadingButton>
+                         ) : (
+                              <PremiumButton className="w-fit"/>
+                         )
                     )}
                </SettingsCard>
                {(isNotEmpty && currentSubsciption) && (
@@ -122,7 +121,6 @@ interface CancelSubDialogProps{
 }
 function CancelSubDialog({userId,open,onOpenChange,updateSession}: CancelSubDialogProps){
      const [isPending, startTransition] = useTransition();
-
      const handleCancel = () => {
           startTransition(()=>{
                cancelSubscription(userId)
@@ -138,7 +136,6 @@ function CancelSubDialog({userId,open,onOpenChange,updateSession}: CancelSubDial
                .catch(()=>toast.error("Վայ, ինչ-որ բան սխալ գնաց։ Խնդրում ենք նորից փորձել"))
           })
      }
-
      return (
           <DeleteConfirmationDialog
                open={open}

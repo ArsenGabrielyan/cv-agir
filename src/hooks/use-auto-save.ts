@@ -1,4 +1,4 @@
-import { CoverLetterFormType, ResumeFormType } from "@/schemas/types";
+import { CoverLetterFormType, ResumeFormType } from "@/data/types/schema";
 import useDebounce from "./use-debounce";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";

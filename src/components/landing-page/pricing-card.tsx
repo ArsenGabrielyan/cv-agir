@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { IPricing } from "@/data/types";
 import { useMemo } from "react";
 import Link from "next/link";
-import { UserPlan } from "@prisma/client";
+import { UserPlan } from "@db/client";
 
 interface PricingCardProps{
      data: IPricing,

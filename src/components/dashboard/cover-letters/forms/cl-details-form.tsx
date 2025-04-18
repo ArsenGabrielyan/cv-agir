@@ -1,5 +1,5 @@
 import { CoverLetterFormProps } from "@/data/types";
-import { CoverLetterDetailsType } from "@/schemas/types";
+import { CoverLetterDetailsType } from "@/data/types/schema";
 import { CoverLetterDetailsSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useWatch } from "react-hook-form"

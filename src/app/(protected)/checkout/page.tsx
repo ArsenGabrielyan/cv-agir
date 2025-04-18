@@ -3,7 +3,7 @@ import Logo from "@/components/layout/logo";
 import CheckoutForm from "@/components/settings/premium/checkoutForm";
 import { PRICING_DATA } from "@/data/constants/landing-page";
 import { currentUser } from "@/lib/auth";
-import { UserPlan } from "@prisma/client";
+import { UserPlan } from "@db/client";
 import { Metadata } from "next";
 import { redirect } from "next/navigation"
 
@@ -11,9 +11,7 @@ export const metadata: Metadata = {
      title: "Բաժանորդագրվեք պրեմիում տարբերակին"
 }
 
-export default async function CheckoutPage({
-     searchParams
-}: {
+export default async function CheckoutPage({searchParams}: {
      searchParams: Promise<{plan: UserPlan, planType: "yearly" | "monthly"}>
 }){
      const user = await currentUser();

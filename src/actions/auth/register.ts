@@ -5,7 +5,7 @@ import { db } from "@/lib/db"
 import { getUserByEmail } from "@/data/db/user"
 import { generateVerificationToken } from "@/lib/tokens"
 import { sendVerificationEmail } from "@/lib/mail"
-import { RegisterFormType } from "@/schemas/types"
+import { RegisterFormType } from "@/data/types/schema"
 
 export const register = async (values: RegisterFormType) => {
      const validatedFields = RegisterSchema.safeParse(values);

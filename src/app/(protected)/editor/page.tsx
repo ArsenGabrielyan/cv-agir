@@ -1,6 +1,6 @@
 import PageLayout from "@/components/layout/page-layout";
 import { Metadata } from "next";
-import { ResumeTemplate } from "@prisma/client";
+import { ResumeTemplate } from "@db/client";
 import { currentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getSubscriptionLevel } from "@/actions/subscription-system";
@@ -15,9 +15,7 @@ export const metadata: Metadata = {
 const ResumeEditor = dynamic(()=>import("./resume-editor"),{
      loading: DocEditorLoader
 })
-export default async function ResumeEditorPage({
-     searchParams
-}: {
+export default async function ResumeEditorPage({searchParams}: {
      searchParams: Promise<{ resumeId?: string, templateId?: string }>
 }){
      const {templateId, resumeId} = await searchParams;

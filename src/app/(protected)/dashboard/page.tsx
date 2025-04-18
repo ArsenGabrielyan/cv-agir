@@ -13,9 +13,7 @@ export const metadata: Metadata = {
      title: "Վահանակ"
 }
 
-export default async function DashboardPage({
-     searchParams
-}: {
+export default async function DashboardPage({searchParams}: {
      searchParams: Promise<{show: string}>
 }){
      const user = await currentUser();

@@ -4,8 +4,8 @@ import { currentUser, CurrentUserReturnType } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { decryptData, encryptData } from "@/actions/encryption";
 import { CreditCardSchema } from "@/schemas"
-import { CreditCardType } from "@/schemas/types"
-import { CreditCard } from "@prisma/client";
+import { CreditCardType } from "@/data/types/schema"
+import { CreditCard } from "@db/client";
 
 export const upsertCard = async(values: CreditCardType, user: CurrentUserReturnType, expiryDate: Date) => {
      const creditCards: CreditCard[] = user.creditCards || [];

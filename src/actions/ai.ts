@@ -1,7 +1,7 @@
 "use server"
 
 import { GenerateDescriptionSchema, GenerateLetterBodySchema, GenerateSummarySchema } from "@/schemas/ai"
-import { GenerateDescriptionInput, GenerateLetterBodyInput, GenerateSummaryInput, WorkExperienceType } from "@/schemas/types"
+import { GenerateDescriptionInput, GenerateLetterBodyInput, GenerateSummaryInput, WorkExperienceType } from "@/data/types/schema"
 import {getLanguageLevel} from "@/data/helpers"
 import gemini from "@/lib/gemini"
 import { AI_MODEL, GEN_CONFIG } from "@/data/constants/other"

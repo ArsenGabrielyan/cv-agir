@@ -19,7 +19,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { FormSuccess } from "@/components/form/form-success";
 import { FormError } from "@/components/form/form-error";
 import { Switch } from "@/components/ui/switch";
-import { AccountSettingsType } from "@/schemas/types";
+import { AccountSettingsType } from "@/data/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
 import SettingsCard from "../settings-card";
 import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input";

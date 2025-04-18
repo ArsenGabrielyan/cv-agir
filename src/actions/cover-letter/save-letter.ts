@@ -2,7 +2,7 @@
 import { currentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { CoverLetterFormSchema } from "@/schemas"
-import { CoverLetterFormType } from "@/schemas/types"
+import { CoverLetterFormType } from "@/data/types/schema"
 import {del, put} from "@vercel/blob"
 import path from "path"
 import { getSubscriptionLevel } from "../subscription-system"

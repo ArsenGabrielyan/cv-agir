@@ -9,7 +9,7 @@ import { AuthError } from "next-auth";
 import { getTwoFactorTokenByEmail } from "@/data/db/two-factor-token";
 import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmation";
 import { db } from "@/lib/db";
-import { LoginType } from "@/schemas/types";
+import { LoginType } from "@/data/types/schema";
 
 const authErrorMessages: Record<string, string> = {
      CredentialsSignin: "Սխալ էլ․ փոստ կամ գաղտնաբառ։",

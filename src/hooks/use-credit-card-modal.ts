@@ -1,4 +1,4 @@
-import { CreditCardType } from "@/schemas/types"
+import { CreditCardType } from "@/data/types/schema"
 import {create} from "zustand"
 
 interface CreditCardModalState{

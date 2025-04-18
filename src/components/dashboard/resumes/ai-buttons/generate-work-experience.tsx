@@ -8,7 +8,7 @@ import { useSubscriptionLevel } from "@/context/subscription-level-provider";
 import usePremiumModal from "@/hooks/use-premium-modal";
 import { getAvailableFeatures } from "@/lib/permission";
 import { GenerateDescriptionSchema } from "@/schemas/ai";
-import { GenerateDescriptionInput, WorkExperienceType } from "@/schemas/types";
+import { GenerateDescriptionInput, WorkExperienceType } from "@/data/types/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Sparkles } from "lucide-react";
 import { useState } from "react";

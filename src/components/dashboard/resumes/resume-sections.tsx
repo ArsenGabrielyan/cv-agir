@@ -1,7 +1,6 @@
-import { ResumeFormType } from "@/schemas/types"
+import { ResumeFormType } from "@/data/types/schema"
 import Image from "next/image"
 import {format} from "date-fns"
-import Markdown from "markdown-to-jsx"
 import { Badge } from "@/components/ui/badge"
 import { getBorderRadius, getLanguageLevel } from "@/data/helpers"
 import { Button } from "@/components/ui/button"
@@ -9,6 +8,7 @@ import Link from "next/link"
 import PreviewSectionWrapper from "../wrappers/section-wrapper"
 import QRCode from "react-qr-code"
 import { absoluteUrl } from "@/lib/utils"
+import dynamic from "next/dynamic"
 
 interface ResumeSectionProps{
      photoSrc?: string | null,
@@ -16,6 +16,9 @@ interface ResumeSectionProps{
      resumeId?: string,
      disableLinks?: boolean
 }
+const Markdown = dynamic(()=>import("markdown-to-jsx"),{
+     ssr: false
+})
 export function HeaderSection({photoSrc, resumeData, resumeId}: ResumeSectionProps){
      const {fname, lname, jobTitle, address, phone, email, colorHex, borderStyle} = resumeData;
      return (

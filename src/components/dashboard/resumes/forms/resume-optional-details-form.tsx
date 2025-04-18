@@ -1,7 +1,7 @@
 import { ResumeFormProps } from "@/data/types"
 import EditorFormCardWrapper from "../../wrappers/card-wrapper"
 import { useForm, useWatch } from "react-hook-form"
-import { ResumeOptionalDetailsType } from "@/schemas/types"
+import { ResumeOptionalDetailsType } from "@/data/types/schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ResumeOptionalDetailsSchema } from "@/schemas"
 import { useEffect, useMemo } from "react"

@@ -1,6 +1,6 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ResumeFormType } from "@/schemas/types";
-import { ResumeTemplate } from "@prisma/client";
+import { ResumeFormType } from "@/data/types/schema";
+import { ResumeTemplate } from "@db/client";
 import ColorPicker from "./style-buttons/color-picker";
 import BorderStyleButton from "./style-buttons/border-style-button";
 import { cn } from "@/lib/utils";

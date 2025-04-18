@@ -1,4 +1,4 @@
-import { ResumeInfoType } from "@/schemas/types"
+import { ResumeInfoType } from "@/data/types/schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useWatch } from "react-hook-form"
 import {ResumeInfoSchema} from "@/schemas"

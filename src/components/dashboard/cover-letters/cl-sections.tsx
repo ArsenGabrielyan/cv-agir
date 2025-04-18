@@ -1,14 +1,17 @@
-import { CoverLetterFormType } from "@/schemas/types"
+import { CoverLetterFormType } from "@/data/types/schema"
 import Image from "next/image"
 import { getBorderRadius } from "@/data/helpers"
 import PreviewSectionWrapper from "../wrappers/section-wrapper"
 import { formatDate } from "date-fns"
-import Markdown from "markdown-to-jsx"
 import { useEffect, useState } from "react"
+import dynamic from "next/dynamic"
 
 interface CoverLetterSectionProps{
      coverLetterData: CoverLetterFormType
 }
+const Markdown = dynamic(()=>import("markdown-to-jsx"),{
+     ssr: false
+})
 export function HeaderSection({coverLetterData}: CoverLetterSectionProps){
      const {fname, lname, jobTitle, address, phone, email, letterDate, colorHex, borderStyle,profileImg} = coverLetterData;
      const otherInfo = letterDate ? [phone,email,formatDate(letterDate || "","dd-MM-yyyy")] : [phone,email]
@@ -63,7 +66,7 @@ export function BodySection({coverLetterData}: CoverLetterSectionProps){
                     </div>
                </div>
                {letterContent && (
-                    <div className="prose text-sm">
+                    <div className="prose text-[15px]">
                          <Markdown>{letterContent}</Markdown>
                     </div>
                )}

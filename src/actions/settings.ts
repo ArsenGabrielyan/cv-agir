@@ -5,7 +5,7 @@ import { getUserByEmail, getUserById } from "@/data/db/user";
 import { currentUser } from "@/lib/auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
-import { AccountSettingsType } from "@/schemas/types";
+import { AccountSettingsType } from "@/data/types/schema";
 
 export const applyAccountSettings = async(values: AccountSettingsType) => {
      const user = await currentUser();

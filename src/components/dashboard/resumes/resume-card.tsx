@@ -59,7 +59,7 @@ export default function ResumeCard({data}: ResumeCardProps){
                               resumeId={id}
                               disableLinks
                          />
-                         <span className="inline-block absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
+                         <span className="inline-block absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-background to-transparent" />
                     </Link>
                     <div className="p-4 space-y-1 text-center">
                          <p className="line-clamp-1 font-semibold">{title || "Անանուն Ռեզյումե"}</p>

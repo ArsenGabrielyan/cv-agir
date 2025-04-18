@@ -5,8 +5,8 @@ export default function DocEditorLoader(){
      return (
           <div className="flex grow flex-col">
                <header className="px-3 py-5 flex flex-col items-center justify-center gap-y-4">
-                    <div className="w-full max-w-3xl space-y-1.5">
-                         <div className="flex justify-between items-center gap-3">
+                    <div className="w-full max-w-3xl space-y-2">
+                         <div className="flex flex-col md:flex-row justify-center md:justify-between items-center md:items-start gap-3">
                               <Skeleton className="w-1/2 h-5 lg:h-6"/>
                               <Skeleton className="w-1/2 h-5 lg:h-6"/>
                          </div>

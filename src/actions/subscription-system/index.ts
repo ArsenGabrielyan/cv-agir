@@ -5,8 +5,8 @@ import { parseExpiryDate } from "@/data/helpers";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { CheckoutFormSchema } from "@/schemas"
-import { CheckoutFormType } from "@/schemas/types"
-import { SubscriptionPeriod, UserPlan } from "@prisma/client";
+import { CheckoutFormType } from "@/data/types/schema"
+import { SubscriptionPeriod, UserPlan } from "@db/client";
 import { revalidatePath } from "next/cache";
 import { upsertCard } from "./credit-card";
 import {cache} from "react"

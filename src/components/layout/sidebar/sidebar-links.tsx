@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/sidebar";
 import { SIDEBAR_LINKS } from "@/data/constants/links";
 import SidebarItem from "./sidebar-item";
-import { UserPlan } from "@prisma/client";
+import { UserPlan } from "@db/client";
 import { getAvailableFeatures } from "@/lib/permission";
 
 interface SidebarLinksProps{

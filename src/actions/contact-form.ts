@@ -1,7 +1,7 @@
 "use server"
 import { sendMessage } from "@/lib/mail";
 import { ContactSchema } from "@/schemas"
-import { ContactFormType } from "@/schemas/types";
+import { ContactFormType } from "@/data/types/schema";
 
 export const submitContactForm = async (values: ContactFormType) => {
      const validatedFields = ContactSchema.safeParse(values);

@@ -1,5 +1,5 @@
 import { CreditCardSchema } from "@/schemas";
-import { CreditCardType } from "@/schemas/types";
+import { CreditCardType } from "@/data/types/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";

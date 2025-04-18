@@ -27,11 +27,7 @@ export const viewport: Viewport = {
   themeColor: "#002a4f"
 }
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
   const session = await auth()
   return (
     <SessionProvider session={session}>

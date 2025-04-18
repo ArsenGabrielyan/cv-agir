@@ -14,9 +14,7 @@ export const metadata: Metadata = {
 const CoverLetterEditor = dynamic(()=>import("./cl-editor"),{
      loading: DocEditorLoader
 })
-export default async function CoverLetterEditorPage({
-     searchParams
-}: {
+export default async function CoverLetterEditorPage({searchParams}: {
      searchParams: Promise<{ coverLetterId?: string}>
 }){
      const {coverLetterId} = await searchParams

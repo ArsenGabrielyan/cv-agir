@@ -1,4 +1,4 @@
-import { UserPlan } from "@prisma/client"
+import { UserPlan } from "@db/client"
 import { IResumeDynamicFields, PlaceholdersName } from "../types"
 
 /**

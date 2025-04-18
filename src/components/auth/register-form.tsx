@@ -17,7 +17,7 @@ import { FormError } from "@/components/form/form-error";
 import { FormSuccess } from "@/components/form/form-success";
 import { register } from "@/actions/auth/register";
 import { PasswordStrengthInput } from "@/components/form/password-input";
-import { RegisterFormType } from "@/schemas/types";
+import { RegisterFormType } from "@/data/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
 
 export default function RegisterForm(){

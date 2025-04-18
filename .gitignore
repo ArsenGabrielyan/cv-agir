@@ -9,7 +9,6 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-/public/print.css
 
 # testing
 /coverage
@@ -20,6 +19,8 @@
 
 # production
 /build
+/public/print.css
+/prisma/generated
 
 # misc
 .DS_Store

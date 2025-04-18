@@ -1,6 +1,6 @@
 "use client"
 
-import { UserPlan } from "@prisma/client"
+import { UserPlan } from "@db/client"
 import { createContext, ReactNode, useContext } from "react"
 
 const SubscriptionLevelContext = createContext<UserPlan | undefined>(undefined)

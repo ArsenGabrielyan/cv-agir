@@ -1,7 +1,7 @@
 import * as z from "zod"
-import { AccountSettingsSchema } from "./settings"
-import { CheckoutFormSchema, ContactSchema, CoverLetterFormSchema, CreditCardSchema, LoginSchema, NewPasswordSchema, RegisterSchema, ResetSchema, ResumeDetailsSchema, ResumeFormSchema, ResumeInfoSchema, ResumeOptionalDetailsSchema, DocStyleSchema, CoverLetterInfoSchema, CoverLetterDetailsSchema } from "."
-import { GenerateDescriptionSchema, GenerateLetterBodySchema, GenerateSummarySchema } from "./ai"
+import { AccountSettingsSchema } from "@/schemas/settings"
+import { CheckoutFormSchema, ContactSchema, CoverLetterFormSchema, CreditCardSchema, LoginSchema, NewPasswordSchema, RegisterSchema, ResetSchema, ResumeDetailsSchema, ResumeFormSchema, ResumeInfoSchema, ResumeOptionalDetailsSchema, DocStyleSchema, CoverLetterInfoSchema, CoverLetterDetailsSchema } from "@/schemas"
+import { GenerateDescriptionSchema, GenerateLetterBodySchema, GenerateSummarySchema } from "@/schemas/ai"
 
 // Settings
 export type AccountSettingsType = z.infer<typeof AccountSettingsSchema>

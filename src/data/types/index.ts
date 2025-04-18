@@ -1,7 +1,7 @@
 import { SettingsContentProps } from "@/components/settings/settings-tabs";
 import { ExtendedUser } from "@/next-auth";
-import { CoverLetterFormType, ResumeFormType } from "@/schemas/types";
-import { Prisma, UserPlan } from "@prisma/client";
+import { CoverLetterFormType, ResumeFormType } from "@/data/types/schema";
+import { Prisma, UserPlan } from "@db/client";
 import { LucideProps } from "lucide-react";
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
@@ -76,6 +76,8 @@ export type ISettingsPage = {
      tabName: string;
      SettingsContent: React.ComponentType<SettingsContentProps>
 }
+
+// Editor Related Types
 export type PlaceholdersName = "jobName" | "degrees"
 export interface UseDimensionsReturnType{
      width: number,

@@ -3,7 +3,7 @@ import { ResetSchema } from "@/schemas"
 import { getUserByEmail } from "@/data/db/user"
 import { sendPasswordResetEmail } from "@/lib/mail"
 import { generatePasswordResetToken } from "@/lib/tokens"
-import { ResetPassType } from "@/schemas/types"
+import { ResetPassType } from "@/data/types/schema"
 
 export const reset = async (values: ResetPassType) => {
      const validatedFields = ResetSchema.safeParse(values);

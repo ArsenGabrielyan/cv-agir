@@ -1,17 +1,20 @@
 "use client"
-import { Resume } from "@prisma/client"
+import { Resume } from "@db/client"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Mail, MapPin, Phone, } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { getLanguageLevel } from "@/data/helpers"
-import Markdown from "markdown-to-jsx"
 import {format} from "date-fns"
+import dynamic from "next/dynamic"
 
 interface ResumeInfoProps{
      data: Resume
 }
+const Markdown = dynamic(()=>import("markdown-to-jsx"),{
+     ssr: false
+})
 export default function ResumeInfo({data}: ResumeInfoProps){
      const {fname, lname, jobTitle, phone, address, profileImg, email, summary, hobbies, links, experience, education, courses, references, skills, languages} = data
      const isEmpty = Object.values({fname, lname, jobTitle, phone, address, profileImg, email, summary, hobbies, links, experience, education, courses, references, skills, languages}).every((val) => Array.isArray(val) ? !(val && val.length!==0) : !val);
@@ -81,7 +84,6 @@ export default function ResumeInfo({data}: ResumeInfoProps){
                                                        </Markdown>
                                                   </div>
                                              )}
-                                             
                                         </div>
                                    ))}
                               </div>

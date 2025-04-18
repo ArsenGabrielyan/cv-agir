@@ -1,10 +1,10 @@
-import { CoverLetter, CreditCard, Resume } from "@prisma/client";
+import { CoverLetter, CreditCard, Resume } from "@db/client";
 import { BANKS, CREDIT_CARD_BRANDS, PLACEHOLDERS } from "./constants/other"
-import { CoverLetterFormType, CreditCardType, ResumeFormType } from "@/schemas/types";
+import { CoverLetterFormType, CreditCardType, ResumeFormType } from "@/data/types/schema";
 import { PlaceholdersName } from "./types";
 import Handlebars from "handlebars"
 import { marked } from "marked"
-import {BorderStyles} from "@prisma/client"
+import {BorderStyles} from "@db/client"
 import { formatDate } from "date-fns";
 
 export const getRandomPlaceholder = (placeholderKey: PlaceholdersName) => {

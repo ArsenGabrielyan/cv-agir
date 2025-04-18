@@ -1,5 +1,5 @@
 import { useMediaQuery, Chip } from "@mui/material";
-import { ResumeTemplate } from "@prisma/client"
+import { ResumeTemplate } from "@db/client"
 import { List, Datagrid, TextField, Create, SimpleForm, Edit, TextInput, required, ReferenceField, ReferenceInput, AutocompleteInput, FunctionField, useRecordContext, Show, SimpleShowLayout, TextFieldProps, DateField, EditButton, DeleteButton, SimpleList, SearchInput, BooleanField, BooleanInput } from "react-admin"
 import StarIcon from "@mui/icons-material/Star"
 
