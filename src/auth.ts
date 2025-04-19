@@ -1,12 +1,12 @@
 import NextAuth from "next-auth"
 import authConfig from "@/auth.config"
-import {PrismaAdapter} from "@auth/prisma-adapter"
 import { db } from "@/lib/db"
 import { getUserById } from "@/data/db/user"
 import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmation"
 import { getAccountByUserId } from "@/data/db/account"
-import { CreditCard, UserPlan, PrismaClient } from "@db"
+import { CreditCard, UserPlan } from "@db"
 import { getSubscriptionById } from "@/data/db/subscription"
+import { CustomPrismaAdapter } from "@/lib/auth/prisma-adapter"
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -107,7 +107,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return token
     }
   },
-  adapter: PrismaAdapter(db as PrismaClient),
+  adapter: CustomPrismaAdapter(db),
   session: {
     strategy: "jwt",
     maxAge: 3*24*60*60,

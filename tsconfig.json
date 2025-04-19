@@ -21,7 +21,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@db": ["./prisma/generated/client"]
+      "@db": ["./prisma/generated/client"],
+      "@db/*": ["./prisma/generated/client/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/env.ts"],

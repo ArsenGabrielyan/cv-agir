@@ -93,6 +93,7 @@ model User {
   accounts              Account[]
   sessions              Session[]
   resumes               Resume[]
+  Authenticator Authenticator[]
   coverLetters          CoverLetter[]
   jobTitle              String?
   phone                 String?
@@ -180,6 +181,21 @@ model TwoFactorConfirmation {
   updatedAt DateTime @updatedAt
 
   @@unique([userId])
+}
+
+model Authenticator {
+  credentialID         String  @id @map("_id")
+  userId               String  @db.ObjectId
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@unique([userId, credentialID])
 }
 
 model ResumeTemplateCategory {

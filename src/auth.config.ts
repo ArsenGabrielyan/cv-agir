@@ -6,7 +6,7 @@ import Facebook from "next-auth/providers/facebook"
 import { LoginSchema } from "@/schemas"
 import { getUserByEmail } from "@/data/db/user"
 import bcrypt from "bcryptjs"
-import { env } from "./lib/env"
+import { env } from "@/lib/env"
 
 export default { 
      providers: [
