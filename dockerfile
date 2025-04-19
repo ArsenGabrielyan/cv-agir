@@ -7,12 +7,12 @@ WORKDIR /app
 # Copy only essential configs and manifest first
 COPY package*.json ./
 COPY tailwind.config.ts ./
-COPY postcss.config.js ./
+COPY postcss.config.mjs ./
 COPY tsconfig.json ./
 COPY patches ./patches
 
 # Install dependencies early
-RUN npm install
+RUN npm install --ignore-scripts
 
 # Copy remaining necessary folders and files
 COPY prisma ./prisma
