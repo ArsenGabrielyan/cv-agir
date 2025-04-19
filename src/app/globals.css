@@ -124,3 +124,14 @@ body {
     margin: 0.6cm;
   }
 }
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
