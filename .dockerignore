@@ -1,0 +1,15 @@
+# build cache
+.next
+node_modules
+*.log
+
+# environment files
+.env
+.env.local
+
+# prisma
+prisma/generated
+
+# misc
+.DS_Store
+*.swp

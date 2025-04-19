@@ -1,5 +1,5 @@
 {
-  "name": "resume-generator",
+  "name": "cv-agir",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,7 +10,8 @@
     "email": "dotenv -e .env -- email dev --port 4000 --dir src/emails",
     "analyze": "dotenv -v ANALYZE=true -- npm run build",
     "gen-print-css": "tailwindcss -i ./src/app/globals.css -o ./public/print.css --minify",
-    "postinstall": "prisma generate && npm run gen-print-css"
+    "postinstall": "prisma generate && npm run gen-print-css",
+    "docker:build": "docker build -t cv-agir ."
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.8.0",
@@ -94,10 +95,14 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
     "handlebars-loader": "^1.7.3",
+    "patch-package": "^8.0.0",
     "postcss": "^8",
     "prisma": "^6.6.0",
     "react-email": "4.0.7",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
