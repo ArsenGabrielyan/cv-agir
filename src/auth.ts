@@ -7,7 +7,6 @@ import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmat
 import { getAccountByUserId } from "@/data/db/account"
 import { CreditCard, UserPlan } from "@db/client"
 import { getSubscriptionById } from "@/data/db/subscription"
-import { PrismaClient as AdapterClient } from "@prisma/client"
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -108,7 +107,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return token
     }
   },
-  adapter: PrismaAdapter(db as AdapterClient),
+  adapter: PrismaAdapter(db),
   session: {
     strategy: "jwt",
     maxAge: 3*24*60*60,

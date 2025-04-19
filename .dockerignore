@@ -3,10 +3,6 @@
 node_modules
 *.log
 
-# environment files
-.env
-.env.local
-
 # prisma
 prisma/generated
 

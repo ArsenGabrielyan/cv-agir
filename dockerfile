@@ -9,13 +9,10 @@ COPY tsconfig.json ./
 
 RUN npm install --ignore-scripts
 
-COPY prisma ./prisma
-COPY public ./public
-COPY src ./src
-COPY src/app/globals.css ./src/app/globals.css
-
+COPY . .
 ENV PRISMA_SCHEMA_PATH=./prisma/schema.prisma
 
 RUN npx prisma generate && npm run gen-print-css
 RUN npm run build
+
 CMD ["npx", "next", "start"]
