@@ -1,5 +1,5 @@
 "use client"
-import { Resume, ResumeTemplate } from "@db/client"
+import { Resume, ResumeTemplate } from "@db/"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useRouter, useSearchParams } from "next/navigation"
 import { steps } from "./steps"

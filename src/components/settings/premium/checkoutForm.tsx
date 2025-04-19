@@ -11,7 +11,7 @@ import { FormSuccess } from "@/components/form/form-success";
 import { proceedToCheckout } from "@/actions/subscription-system";
 import { useRouter } from "next/navigation";
 import LoadingButton from "@/components/buttons/loading-button";
-import { SubscriptionPeriod, UserPlan } from "@db/client";
+import { SubscriptionPeriod, UserPlan } from "@db/";
 import CreditCardInput from "@/components/form/credit-card-input";
 import { getBankName } from "@/data/helpers";
 

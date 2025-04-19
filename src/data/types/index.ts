@@ -1,7 +1,7 @@
 import { SettingsContentProps } from "@/components/settings/settings-tabs";
 import { ExtendedUser } from "@/next-auth";
 import { CoverLetterFormType, ResumeFormType } from "@/data/types/schema";
-import { Prisma, UserPlan } from "@db/client";
+import { Prisma, UserPlan } from "@db/";
 import { LucideProps } from "lucide-react";
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Circle, Square, Squircle } from "lucide-react"
-import {BorderStyles} from "@db/client"
+import {BorderStyles} from "@db/"
 import { useSubscriptionLevel } from "@/context/subscription-level-provider";
 import usePremiumModal from "@/hooks/use-premium-modal";
 import { getAvailableFeatures } from "@/lib/permission";

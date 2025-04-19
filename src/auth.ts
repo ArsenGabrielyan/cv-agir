@@ -5,9 +5,8 @@ import { db } from "@/lib/db"
 import { getUserById } from "@/data/db/user"
 import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmation"
 import { getAccountByUserId } from "@/data/db/account"
-import { CreditCard, UserPlan } from "@db/client"
+import { CreditCard, UserPlan, PrismaClient } from "@db/"
 import { getSubscriptionById } from "@/data/db/subscription"
-import {PrismaClient as AdapterClient} from "@db/client"
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -108,7 +107,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return token
     }
   },
-  adapter: PrismaAdapter(db as AdapterClient),
+  adapter: PrismaAdapter(db as PrismaClient),
   session: {
     strategy: "jwt",
     maxAge: 3*24*60*60,

@@ -1,10 +1,10 @@
-import { CoverLetter, CreditCard, Resume } from "@db/client";
+import { CoverLetter, CreditCard, Resume } from "@db/";
 import { BANKS, CREDIT_CARD_BRANDS, PLACEHOLDERS } from "./constants/other"
 import { CoverLetterFormType, CreditCardType, ResumeFormType } from "@/data/types/schema";
 import { PlaceholdersName } from "./types";
 import Handlebars from "handlebars"
 import { marked } from "marked"
-import {BorderStyles} from "@db/client"
+import {BorderStyles} from "@db/"
 import { formatDate } from "date-fns";
 
 export const getRandomPlaceholder = (placeholderKey: PlaceholdersName) => {

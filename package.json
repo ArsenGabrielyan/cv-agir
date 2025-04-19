@@ -12,7 +12,7 @@
     "gen-print-css": "tailwindcss -i ./src/app/globals.css -o ./public/print.css --minify",
     "postinstall": "prisma generate && npm run gen-print-css",
     "docker:build": "docker build -t cv-agir .",
-    "docker:start": "docker run -p 3000:3000 -v ${PWD}:/app cv-agir"
+    "docker:start": "docker run -p 3000:3000 cv-agir"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.8.0",

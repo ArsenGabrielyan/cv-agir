@@ -1,5 +1,5 @@
 "use client"
-import { CoverLetter } from "@db/client"
+import { CoverLetter } from "@db/"
 import { CreateCoverLetterButton } from "../create-buttons"
 import CoverLetterCard from "../cover-letters/cl-card"
 

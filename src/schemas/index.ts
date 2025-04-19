@@ -9,7 +9,7 @@ import {
      optionalEmailString,
      optionalString,
 } from "./resume"
-import {BorderStyles} from "@db/client"
+import {BorderStyles} from "@db/"
 import { isValidCard } from "@/data/helpers"
 
 function optionalArray<T>(arr: z.ZodType<T>){

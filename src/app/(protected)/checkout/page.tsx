@@ -3,7 +3,7 @@ import Logo from "@/components/layout/logo";
 import CheckoutForm from "@/components/settings/premium/checkoutForm";
 import { PRICING_DATA } from "@/data/constants/landing-page";
 import { currentUser } from "@/lib/auth";
-import { UserPlan } from "@db/client";
+import { UserPlan } from "@db/";
 import { Metadata } from "next";
 import { redirect } from "next/navigation"
 

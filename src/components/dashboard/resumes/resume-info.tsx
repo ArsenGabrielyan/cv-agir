@@ -1,5 +1,5 @@
 "use client"
-import { Resume } from "@db/client"
+import { Resume } from "@db/"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Mail, MapPin, Phone, } from "lucide-react"
 import { Button } from "@/components/ui/button"

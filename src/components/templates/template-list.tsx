@@ -1,5 +1,5 @@
 "use client"
-import { ResumeTemplate, UserPlan } from "@db/client";
+import { ResumeTemplate, UserPlan } from "@db/";
 import TemplateCard from "./template-card";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";

@@ -1,4 +1,4 @@
-import { UserPlan } from "@db/client";
+import { UserPlan } from "@db/";
 import { useSession } from "next-auth/react";
 
 export const useCurrentUser = () => {

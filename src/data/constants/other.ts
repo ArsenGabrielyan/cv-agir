@@ -1,4 +1,4 @@
-import { UserPlan } from "@db/client"
+import { UserPlan } from "@db/"
 import { IResumeDynamicFields, PlaceholdersName } from "../types"
 
 /**

@@ -1,7 +1,7 @@
 import { getIsAdmin } from "@/lib/auth"
 import { IAdminAPISearchParams } from "@/data/types";
 import { db } from "@/lib/db";
-import { ResumeTemplate } from "@db/client";
+import { ResumeTemplate } from "@db/";
 import { NextResponse, NextRequest } from "next/server";
 
 export const GET = async (req: NextRequest) => {

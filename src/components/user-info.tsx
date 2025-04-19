@@ -4,7 +4,7 @@ import { Edit, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { UserPlan } from "@db/client";
+import { UserPlan } from "@db/";
 
 interface UserInfoProps{
      user?: Omit<ExtendedUser,"currentPlan">,
