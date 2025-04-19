@@ -1,7 +1,7 @@
 import { getIsAdmin } from "@/lib/auth"
 import { IAdminAPISearchParams } from "@/data/types";
 import { db } from "@/lib/db";
-import { ResumeTemplateCategory } from "@db/";
+import { ResumeTemplateCategory } from "@db";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest) => {

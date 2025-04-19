@@ -5,7 +5,7 @@ import { db } from "@/lib/db"
 import { getUserById } from "@/data/db/user"
 import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmation"
 import { getAccountByUserId } from "@/data/db/account"
-import { CreditCard, UserPlan, PrismaClient } from "@db/"
+import { CreditCard, UserPlan, PrismaClient } from "@db"
 import { getSubscriptionById } from "@/data/db/subscription"
 
 export const { auth, handlers, signIn, signOut } = NextAuth({

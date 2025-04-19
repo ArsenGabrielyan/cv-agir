@@ -1,6 +1,6 @@
 import PageLayout from "@/components/layout/page-layout";
 import { Metadata } from "next";
-import { ResumeTemplate } from "@db/";
+import { ResumeTemplate } from "@db";
 import { currentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getSubscriptionLevel } from "@/actions/subscription-system";

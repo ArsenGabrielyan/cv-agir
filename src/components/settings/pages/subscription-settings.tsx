@@ -12,7 +12,7 @@ import {
 import { formatDate } from "date-fns";
 import { hy } from "date-fns/locale"
 import { cn } from "@/lib/utils";
-import { Subscription } from "@db/";
+import { Subscription } from "@db";
 import PremiumButton from "@/components/buttons/premium-button";
 import { Button } from "@/components/ui/button";
 import { useState, useTransition } from "react";

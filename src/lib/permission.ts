@@ -1,5 +1,5 @@
 import { MAX_RESUME_MAP } from "@/data/constants/other";
-import { UserPlan } from "@db/";
+import { UserPlan } from "@db";
 
 export const getAvailableFeatures = (level: UserPlan) => {
      const isValidPlan = level in MAX_RESUME_MAP;

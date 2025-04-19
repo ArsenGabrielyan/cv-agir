@@ -3,7 +3,7 @@ import { compileHTML } from "@/data/helpers";
 import useDimensions from "@/hooks/use-dimensions";
 import { cn } from "@/lib/utils";
 import { ResumeFormType } from "@/data/types/schema";
-import { ResumeTemplate } from "@db/";
+import { ResumeTemplate } from "@db";
 import { useEffect, useMemo, useRef, useState } from "react";
 import DOMPurify from "isomorphic-dompurify"
 import {CoursesSection, EducationSection, HeaderSection, HobbiesSection, LanguagesSection, LinksSection, ReferencesSection, SkillsSection, SummarySection, WorkExperienceSection} from "./resume-sections";

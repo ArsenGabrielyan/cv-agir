@@ -1,4 +1,4 @@
-import { CreditCard, UserPlan } from "@db/"
+import { CreditCard, UserPlan } from "@db"
 import type {DefaultSession} from "next-auth"
 
 export type ExtendedUser = DefaultSession["user"] & {

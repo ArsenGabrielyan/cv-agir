@@ -3,7 +3,7 @@ import { ISettingsPage } from "@/data/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {AccountSettings, Customization, SubscriptionSettings} from "./pages"
 import { useSearchParams, useRouter } from "next/navigation";
-import { Subscription } from "@db/";
+import { Subscription } from "@db";
 
 const settingsPages: ISettingsPage[] = [
      { id: 1, name: "Հաշիվ", tabName: "account", SettingsContent: AccountSettings},

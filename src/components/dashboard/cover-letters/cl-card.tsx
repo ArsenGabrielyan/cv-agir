@@ -1,7 +1,7 @@
 "use client"
 import { deleteCoverLetter } from "@/actions/cover-letter/delete-letter";
 import DeleteConfirmationDialog from "@/components/delete-confirmation-dialog";
-import { CoverLetter } from "@db/"
+import { CoverLetter } from "@db"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { MoreVertical, Trash2, Printer } from "lucide-react";
 import { useRef, useState, useTransition } from "react";

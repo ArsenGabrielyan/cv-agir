@@ -11,7 +11,7 @@ import { steps } from "./steps";
 import Breadcrumbs from "./breadcrumbs";
 import { useCoverLetterAutoSave } from "@/hooks/use-auto-save";
 import useUnsavedChangesWarning from "@/hooks/use-unsaved-changes";
-import { CoverLetter } from "@db/";
+import { CoverLetter } from "@db";
 import { mapToLetterValues } from "@/data/helpers";
 import { ExtendedUser } from "@/next-auth";
 import usePrint from "@/hooks/use-print";

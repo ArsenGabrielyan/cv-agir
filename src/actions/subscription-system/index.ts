@@ -6,7 +6,7 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { CheckoutFormSchema } from "@/schemas"
 import { CheckoutFormType } from "@/data/types/schema"
-import { SubscriptionPeriod, UserPlan } from "@db/";
+import { SubscriptionPeriod, UserPlan } from "@db";
 import { revalidatePath } from "next/cache";
 import { upsertCard } from "./credit-card";
 import {cache} from "react"

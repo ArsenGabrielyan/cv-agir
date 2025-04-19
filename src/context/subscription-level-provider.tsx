@@ -1,6 +1,6 @@
 "use client"
 
-import { UserPlan } from "@db/"
+import { UserPlan } from "@db"
 import { createContext, ReactNode, useContext } from "react"
 
 const SubscriptionLevelContext = createContext<UserPlan | undefined>(undefined)

@@ -1,6 +1,6 @@
 import { decryptData } from "@/actions/encryption";
 import { getBankName, getCreditCardBrandName, mapToCreditCardValues } from "@/data/helpers";
-import { CreditCard } from "@db/";
+import { CreditCard } from "@db";
 import { formatDate } from "date-fns";
 import CreditCardIcon from "@/components/settings/premium/cc-components/credit-card-icon";
 import { useEffect, useState, useTransition } from "react"
