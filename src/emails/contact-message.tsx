@@ -37,7 +37,7 @@ export default function MessageTemplate({name,email,phone,subject,message}: Mess
                          {message}
                     </Markdown>
                </div>
-               <Text className="mt-6 text-sm text-gray-500 italic">
+               <Text className="mt-6 text-sm text-slate-500 italic">
                     Այս հաղորդագրությունն ուղարկվել է CV-ագիր կայքի միջոցով։
                </Text>
           </EmailTemplate>

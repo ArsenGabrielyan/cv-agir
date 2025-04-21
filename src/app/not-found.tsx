@@ -10,7 +10,7 @@ export default function NotFound(){
                          <h1 className="text-3xl sm:text-4xl md:text-5xl space-y-5">Վայ, էջը չի գտնվել</h1>
                          <h2 className="text-7xl sm:text-8xl md:text-9xl space-y-5 text-primary">404</h2>
                     </div>
-                    <p className="text-sm md:text-xl font-light text-zinc-700 dark:text-zinc-400">Ձեր փնտրած էջը չի գտնվել: Այն կարող է ջնջվել, տեղափոխվել, վերանվանվել կամ ընդհանրապես գոյություն չունենա:</p>
+                    <p className="text-sm md:text-xl font-light text-muted-foreground">Ձեր փնտրած էջը չի գտնվել: Այն կարող է ջնջվել, տեղափոխվել, վերանվանվել կամ ընդհանրապես գոյություն չունենա:</p>
                     <Link href="/" className={buttonVariants({variant: "default"})}>Վերադառնալ Գլխավոր էջ</Link>
                     <div className="w-full h-40"></div>
                </section>
