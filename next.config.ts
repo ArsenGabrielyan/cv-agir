@@ -1,29 +1,36 @@
 import type { NextConfig } from "next";
-import nextBundleAnalyzer from "@next/bundle-analyzer"
 
 const nextConfig: NextConfig = {
-  output: "standalone",
   transpilePackages: ['@t3-oss/env-nextjs', '@t3-oss/env-core'],
   async headers() {
       return [
         {
           source: "/api/(.*)",
           headers: [
+            { key: "Access-Control-Allow-Origin", value: "*" },
+            { key: "Access-Control-Allow-Methods", value: "GET, POST, PUT, DELETE, OPTIONS" },
+            { key: "Access-Control-Allow-Headers", value: "Content-Type, Authorization" },
+            { key: "Content-Range", value: "bytes : 0-9/*" },
+          ],
+        },
+        {
+          source: "/(.*)",
+          headers: [
+            { key: "X-Content-Type-Options", value: "nosniff" },
+            { key: "X-Frame-Options", value: "DENY" },
+            { key: "X-XSS-Protection", value: "1; mode=block" },
+            { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
             {
-              key: "Access-Control-Allow-Origin",
-              value: "*"
-            },
-            {
-              key: "Access-Control-Allow-Methods",
-              value: "GET, POST, PUT, DELETE, OPTIONS"
-            },
-            {
-              key: "Access-Control-Allow-Header",
-              value: "Content-Type, Authorization"
-            },
-            {
-              key: "Content-Range",
-              value: "bytes : 0-9/*"
+              key: "Content-Security-Policy",
+              value: [
+                "default-src 'self'",
+                "script-src 'self' 'unsafe-inline'",
+                "style-src 'self' 'unsafe-inline'",
+                "img-src * blob: data:",
+                "font-src 'self' data:",
+                "object-src 'none'",
+                "frame-ancestors 'none'",
+              ].join("; "),
             },
           ],
         },
@@ -42,24 +49,6 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "4mb"
     },
   },
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "handlebars/runtime": "handlebars/dist/cjs/handlebars.runtime",
-      handlebars: "handlebars/dist/cjs/handlebars",
-    };
-    return config;
-  },
-  turbopack: {
-    resolveAlias: {
-      "handlebars/runtime": "handlebars/dist/cjs/handlebars.runtime",
-      handlebars: "handlebars/dist/cjs/handlebars",
-    }
-  }
 };
 
-const withBundleAnalyzer = nextBundleAnalyzer({
-  enabled: process.env.ANALYZE === "true"
-})
-
-export default withBundleAnalyzer(nextConfig);
+export default nextConfig;

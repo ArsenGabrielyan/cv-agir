@@ -19,7 +19,7 @@ export default function ResumeInfo({data}: ResumeInfoProps){
      const {fname, lname, jobTitle, phone, address, profileImg, email, summary, hobbies, links, experience, education, courses, references, skills, languages} = data
      const isEmpty = Object.values({fname, lname, jobTitle, phone, address, profileImg, email, summary, hobbies, links, experience, education, courses, references, skills, languages}).every((val) => Array.isArray(val) ? !(val && val.length!==0) : !val);
      return !isEmpty ? (
-          <div className="max-w-screen-xl w-full p-5 space-y-6">
+          <div className="max-w-(--breakpoint-xl) w-full p-5 space-y-6">
                <div className="bg-card text-card-foreground border shadow p-4 rounded-xl flex flex-col items-center justify-center gap-3">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-3 w-full">
                          {(fname || lname || jobTitle) && (

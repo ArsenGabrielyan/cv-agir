@@ -41,7 +41,7 @@ export default function CoverLetterCard({data}: CoverLetterCardProps){
                               contentRef={contentRef}
                               className="shadow-sm group-hover:shadow-lg transition-shadow"
                          />
-                         <span className="inline-block absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-background to-transparent" />
+                         <span className="inline-block absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-background to-transparent" />
                     </Link>
                     <div className="p-4 space-y-1 text-center">
                          <p className="line-clamp-1 font-semibold">{title || "Անանուն Ուղեկցող նամակ"}</p>

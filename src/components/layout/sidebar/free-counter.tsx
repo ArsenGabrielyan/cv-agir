@@ -13,7 +13,7 @@ export default function FreeCounter({resumeCount}: FreeCounterProps){
           setMounted(true);
      },[])
      return !mounted ? null : (
-          <div className="bg-card text-card-foreground border shadow rounded-xl p-5 flex flex-col items-center justify-center gap-4">
+          <div className="bg-card text-card-foreground border shadow-sm rounded-xl p-5 flex flex-col items-center justify-center gap-4">
                <p>{resumeCount} / {MAX_FREE_RESUMES} Անվճար ռեզյումեներ</p>
                <Progress className="h-3" value={(resumeCount/MAX_FREE_RESUMES)*100} />
                <PremiumButton/>

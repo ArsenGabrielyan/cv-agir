@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 export default function CVInfoLoader(){
      const isMobile = useIsMobile();
      return (
-          <div className="max-w-screen-xl w-full p-5 space-y-6">
+          <div className="max-w-(--breakpoint-xl) w-full p-5 space-y-6">
                <Skeleton className={cn("w-full",!isMobile ? "h-52" : "h-80")}/>
                <div className="space-y-6 text-center md:text-left">
                     <section className="space-y-3">

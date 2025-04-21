@@ -1,5 +1,5 @@
 import { INavbarLink, ISidebarLink } from "../types";
-import { CircleHelp, LayoutDashboard, LayoutTemplate, Settings, } from "lucide-react";
+import { CircleHelp, LayoutDashboard, LayoutTemplate, Settings, User } from "lucide-react";
 
 export const NAVBAR_LINKS: INavbarLink[] = [
      {id: 1, name: "Գլխավոր էջ", href: "/#hero"},
@@ -10,11 +10,12 @@ export const NAVBAR_LINKS: INavbarLink[] = [
 ]
 export const SIDEBAR_LINKS: ISidebarLink[] = [
      {id: 1, name: "Վահանակ", href: "/dashboard", Icon: LayoutDashboard},
-     {id: 2, name: "Շաբլոններ", href: "/templates", Icon: LayoutTemplate},
-     {id: 3, name: "Աջակցություն", Icon: CircleHelp, dropdown: [
+     {id: 2, name: "Իմ պրոֆիլը", href: "/profile", Icon: User},
+     {id: 3, name: "Շաբլոններ", href: "/templates", Icon: LayoutTemplate},
+     {id: 4, name: "Աջակցություն", Icon: CircleHelp, dropdown: [
           { id: 1, name: 'Հարց ու պատասխան', href: '/faq',},
           { id: 2, name: "Հետադարձ կապ", href: "/contact", },
           { id: 3, name: "Մեր մասին", href: "/about",},
      ]},
-     {id: 4, name: "Կարգավորումներ", href: "/settings", Icon: Settings},
+     {id: 5, name: "Կարգավորումներ", href: "/settings", Icon: Settings}
 ]

@@ -1,5 +1,5 @@
 "use client"
-import { compileHTML } from "@/data/helpers";
+import { compileHTML } from "@/actions/resume/template";
 import useDimensions from "@/hooks/use-dimensions";
 import { cn } from "@/lib/utils";
 import { ResumeFormType } from "@/data/types/schema";
@@ -30,6 +30,7 @@ export default function ResumePreview({
      const containerRef = useRef<HTMLDivElement>(null);
      const {width} = useDimensions(containerRef);
      const [photoSrc, setPhotoSrc] = useState(resumeData.profileImg instanceof File ? "" : resumeData.profileImg)
+     const [rawHTML, setRawHTML] = useState("");
      
      useEffect(() => {
           if (resumeData.profileImg instanceof File) {
@@ -40,29 +41,35 @@ export default function ResumePreview({
           setPhotoSrc(resumeData.profileImg || "");
      }, [resumeData.profileImg]);
 
-     const rawHTML = useMemo(()=>{
-          if(!template || !template.htmlTemplate) return ""
-          return compileHTML(template.htmlTemplate, {
-               ...resumeData,
-               qrImg,
-               id: resumeData.id || template.id,
-               profileImg: photoSrc,
-               experience: resumeData.experience?.map(val => ({
-                    ...val,
-                    startDate: !val.startDate ? "" : format(val.startDate, "MM/yyyy"),
-                    endDate: !val.endDate ? "Այսօր" : format(val.endDate, "MM/yyyy")
-               })),
-               education: resumeData.education?.map(val => ({
-                    ...val,
-                    startDate: !val.startDate ? "" : format(val.startDate, "MM/yyyy"),
-                    endDate: !val.endDate ? "Այսօր" : format(val.endDate, "MM/yyyy")
-               })),
-               courses: resumeData.courses?.map(val => ({
-                    ...val,
-                    startDate: !val.startDate ? "" : format(val.startDate, "MM/yyyy"),
-                    endDate: !val.endDate ? "Այսօր" : format(val.endDate, "MM/yyyy")
-               }))
-          })
+     useEffect(()=>{
+          const compile = async() => {
+               if(!template || !template.htmlTemplate) return;
+               const compiled = await compileHTML(template.htmlTemplate, {
+                    ...resumeData,
+                    qrImg,
+                    id: resumeData.id || template.id,
+                    profileImg: photoSrc,
+                    experience: resumeData.experience?.map(val => ({
+                         ...val,
+                         startDate: !val.startDate ? "" : format(val.startDate, "MM/yyyy"),
+                         endDate: !val.endDate ? "Այսօր" : format(val.endDate, "MM/yyyy")
+                    })),
+                    education: resumeData.education?.map(val => ({
+                         ...val,
+                         startDate: !val.startDate ? "" : format(val.startDate, "MM/yyyy"),
+                         endDate: !val.endDate ? "Այսօր" : format(val.endDate, "MM/yyyy")
+                    })),
+                    courses: resumeData.courses?.map(val => ({
+                         ...val,
+                         startDate: !val.startDate ? "" : format(val.startDate, "MM/yyyy"),
+                         endDate: !val.endDate ? "Այսօր" : format(val.endDate, "MM/yyyy")
+                    }))
+               })
+               setRawHTML(compiled)
+          }
+          if(template){
+               compile()
+          }
      },[template, resumeData, qrImg, photoSrc])
 
      const sanitizedHTML = useMemo(()=>DOMPurify.sanitize(rawHTML,{
@@ -70,7 +77,7 @@ export default function ResumePreview({
      }),[rawHTML])
 
      return (
-          <div className={cn("bg-white text-black h-full w-full aspect-[210/297]",className)} ref={containerRef}>
+          <div className={cn("bg-white text-black h-full w-full aspect-210/297",className)} ref={containerRef}>
                <div className={!template ? cn("space-y-6 p-6", !width && "invisible") : cn("h-full", !width && "invisible")} style={{zoom: (1/794) * width}} ref={contentRef} id="resumePreviewContent">
                     {!template ? (
                          <>

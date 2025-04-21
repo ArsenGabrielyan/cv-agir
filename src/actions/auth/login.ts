@@ -9,9 +9,10 @@ import { AuthError } from "next-auth";
 import { getTwoFactorTokenByEmail } from "@/data/db/two-factor-token";
 import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmation";
 import { db } from "@/lib/db";
+import bcrypt from "bcryptjs";
 import { LoginType } from "@/data/types/schema";
 
-const authErrorMessages: Record<string, string> = {
+const authErrorMessages: Record<AuthError["name"], string> = {
      CredentialsSignin: "Սխալ էլ․ փոստ կամ գաղտնաբառ։",
      AccessDenied: "Դուք չեք կարող մուտք գործել։",
      Configuration: "Սխալ կոնֆիգուրացիա։",
@@ -39,6 +40,8 @@ export const login = async (
      const {email,password, code} = validatedFields.data;
      const existingUser = await getUserByEmail(email);
 
+     const isSamePass = await bcrypt.compare(password,existingUser?.password || "");
+
      if(!existingUser || !existingUser.email || !existingUser.password || !existingUser.name){
           return {error: "Այս էլ․ հասցեն գրանցված չէ"}
      }
@@ -54,7 +57,7 @@ export const login = async (
           return {success: "Հաստատեք Ձեր Էլ․ Հասցեն"}
      }
 
-     if(existingUser.isTwoFactorEnabled && existingUser.email){
+     if(existingUser.isTwoFactorEnabled && existingUser.email && isSamePass){
           if(code){
                const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
                if(!twoFactorToken || twoFactorToken.token!==code){
@@ -106,7 +109,7 @@ export const login = async (
           })
      } catch(error: unknown){
           if (error instanceof AuthError){
-               return {error: authErrorMessages[error.type] || authErrorMessages.Default}
+               return {error: authErrorMessages[error.name] || authErrorMessages.Default}
           }
           throw error
      }

@@ -17,7 +17,7 @@ export default function CoverLetterPreview({
      const containerRef = useRef<HTMLDivElement>(null);
      const {width} = useDimensions(containerRef)
      return (
-          <div className={cn("bg-white text-black h-full w-full aspect-[210/297]",className)} ref={containerRef}>
+          <div className={cn("bg-white text-black h-full w-full aspect-210/297",className)} ref={containerRef}>
                <div className={cn("space-y-6 p-6", !width && "invisible")} style={{zoom: (1/794) * width}} ref={contentRef} id="coverLetterPreviewContent">
                     <HeaderSection coverLetterData={coverLetterData}/>
                     <BodySection coverLetterData={coverLetterData}/>

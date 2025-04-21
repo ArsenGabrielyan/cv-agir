@@ -39,7 +39,7 @@ export default React.memo(function DynamicFieldWrapper({
                <div className="flex justify-between gap-2 items-center">
                     <span className="font-semibold">{title} #{index+1}</span>
                     <GripHorizontal
-                         className="size-5 cursor-grab text-muted-foreground focus:outline-none"
+                         className="size-5 cursor-grab text-muted-foreground focus:outline-hidden"
                          {...attributes}
                          {...listeners}
                     />

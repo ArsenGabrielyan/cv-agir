@@ -2,8 +2,6 @@ import { CoverLetter, CreditCard, Resume } from "@db";
 import { BANKS, CREDIT_CARD_BRANDS, PLACEHOLDERS } from "./constants/other"
 import { CoverLetterFormType, CreditCardType, ResumeFormType } from "@/data/types/schema";
 import { PlaceholdersName } from "./types";
-import Handlebars from "handlebars"
-import { marked } from "marked"
 import {BorderStyles} from "@db"
 import { formatDate } from "date-fns";
 
@@ -105,35 +103,6 @@ export function getLanguageLevel(level: number){
      if(level>=70 && level <= 90) return "Խոսակցական"
      if(level>=40 && level <= 70) return "Սկսնակ"
      return "Նվազագույն"
-}
-
-export function compileHTML(html: string, data: ResumeFormType){
-     Handlebars.registerHelper({
-          eq: (v1, v2) => v1 === v2,
-          ne: (v1, v2) => v1 !== v2,
-          lt: (v1, v2) => v1 < v2,
-          gt: (v1, v2) => v1 > v2,
-          lte: (v1, v2) => v1 <= v2,
-          gte: (v1, v2) => v1 >= v2,
-          and(...args) {
-               return Array.prototype.every.call(args, Boolean);
-          },
-          or(...args) {
-               return Array.prototype.slice.call(args, 0, -1).some(Boolean);
-          },
-          getProficiency(value){
-               const level = +value;
-               return getLanguageLevel(level);
-          },
-          mdToHtml(content){
-               const markdown = marked(content,{
-                    async: false
-               })
-               return new Handlebars.SafeString(markdown)
-          }
-     })
-     const htmlTemplate = Handlebars.compile<ResumeFormType>(html);
-     return htmlTemplate(data)
 }
 
 export function getBorderRadius(borderStyle: BorderStyles,type: "default" | "badge" = "default"){

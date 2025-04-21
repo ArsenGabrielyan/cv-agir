@@ -1,8 +1,9 @@
-FROM node:22-slim
+FROM node:lts
 
 WORKDIR /app
 
 COPY package*.json ./
+RUN npm config set registry https://registry.npmjs.org
 RUN npm install --ignore-scripts
 
 COPY . .

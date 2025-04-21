@@ -26,7 +26,7 @@ export default async function CheckoutPage({searchParams}: {
      }
      const planPrice = planType==="yearly" ? selectedPlan.price*12 : selectedPlan.price;
      return (
-          <div className="flex justify-center items-center min-h-dvh p-3 primary-main-bg">
+          <div className="flex justify-center items-center min-h-dvh p-3 bg-gradient-to-br from-primary via-accent to-background">
                <div className="bg-card text-card-foreground p-4 shadow border rounded-xl space-y-3 max-w-4xl">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                          <div className="space-y-4">
