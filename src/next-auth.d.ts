@@ -1,4 +1,4 @@
-import { CreditCard, UserPlan } from "@db"
+import { CreditCard, CVPageSettings, UserPlan } from "@db"
 import type {DefaultSession} from "next-auth"
 
 export type ExtendedUser = DefaultSession["user"] & {
@@ -12,7 +12,8 @@ export type ExtendedUser = DefaultSession["user"] & {
   currentPlan?: UserPlan,
   subscriptionId?: string,
   subscriptionEndDate?: Date,
-  creditCards: CreditCard[]
+  creditCards: CreditCard[],
+  cvPageSettings: CVPageSettings
 }
 
 declare module "next-auth"{

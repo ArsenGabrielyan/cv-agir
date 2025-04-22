@@ -42,7 +42,11 @@ export default function AccountSettings(){
           summary: user?.summary || undefined,
           hobbies: user?.hobbies || undefined,
           password: undefined,
-          newPassword: undefined
+          newPassword: undefined,
+          showEmail: user?.cvPageSettings.showEmail || undefined,
+          showPhone: user?.cvPageSettings.showPhone || undefined,
+          showAddress: user?.cvPageSettings.showAddress || undefined,
+          showLinks: user?.cvPageSettings.showLinks || undefined
      }
 
      const form = useForm<AccountSettingsType>({
@@ -198,6 +202,84 @@ export default function AccountSettings(){
                                              />
                                         </FormControl>
                                         <FormMessage/>
+                                   </FormItem>
+                              )}
+                         />
+                    </SettingsCard>
+                    <SettingsCard title="Գաղտնիություն">
+                         <FormField
+                              control={form.control}
+                              name="showEmail"
+                              render={({field})=>(
+                                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                        <div className="space-y-0.5">
+                                             <FormLabel>Ցույց տալ էլ․ հասցեն</FormLabel>
+                                             <FormDescription>Ցուցադրել Ձեր էլ․ հասցեն Ձեր անձնական ռեզյումեի էջում</FormDescription>
+                                        </div>
+                                        <FormControl>
+                                             <Switch
+                                                  disabled={isPending}
+                                                  checked={field.value}
+                                                  onCheckedChange={field.onChange}
+                                             />
+                                        </FormControl>
+                                   </FormItem>
+                              )}
+                         />
+                         <FormField
+                              control={form.control}
+                              name="showAddress"
+                              render={({field})=>(
+                                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                        <div className="space-y-0.5">
+                                             <FormLabel>Ցույց տալ բնակության հասցեն</FormLabel>
+                                             <FormDescription>Ցուցադրել Ձեր բնակության հասցեն Ձեր անձնական ռեզյումեի էջում</FormDescription>
+                                        </div>
+                                        <FormControl>
+                                             <Switch
+                                                  disabled={isPending}
+                                                  checked={field.value}
+                                                  onCheckedChange={field.onChange}
+                                             />
+                                        </FormControl>
+                                   </FormItem>
+                              )}
+                         />
+                         <FormField
+                              control={form.control}
+                              name="showPhone"
+                              render={({field})=>(
+                                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                        <div className="space-y-0.5">
+                                             <FormLabel>Ցույց տալ հեռախոսահամարը</FormLabel>
+                                             <FormDescription>Ցուցադրել Ձեր հեռախոսահամարը Ձեր անձնական ռեզյումեի էջում</FormDescription>
+                                        </div>
+                                        <FormControl>
+                                             <Switch
+                                                  disabled={isPending}
+                                                  checked={field.value}
+                                                  onCheckedChange={field.onChange}
+                                             />
+                                        </FormControl>
+                                   </FormItem>
+                              )}
+                         />
+                         <FormField
+                              control={form.control}
+                              name="showLinks"
+                              render={({field})=>(
+                                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                        <div className="space-y-0.5">
+                                             <FormLabel>Ցույց տալ բոլոր վեբ հղումները</FormLabel>
+                                             <FormDescription>Ցուցադրել Ձեր բոլոր վեբ հղումները Ձեր անձնական ռեզյումեի էջում</FormDescription>
+                                        </div>
+                                        <FormControl>
+                                             <Switch
+                                                  disabled={isPending}
+                                                  checked={field.value}
+                                                  onCheckedChange={field.onChange}
+                                             />
+                                        </FormControl>
                                    </FormItem>
                               )}
                          />

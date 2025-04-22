@@ -1,10 +1,9 @@
 import * as z from "zod"
-export const optionalString = z.optional(z.string().trim()).or(z.literal(""))
-export const optionalEmailString = z.optional(z.string().email("Մուտքագրեք վավերական էլ․ փոստ").trim()).or(z.literal(""))
+import { optionalString, optionalEmailString, optionalDescString } from "./fields"
 
 export const ResumeLinkSchema = z.object({
      name: optionalString,
-     url: optionalString
+     url: z.optional(z.string().url("Մուտքագրեք վավերական վեբ հղում").startsWith("https://","Այս վեբ հղումը ապահով չէ։").trim()).or(z.literal(""))
 })
 
 export const WorkExperienceSchema = z.object({
@@ -13,7 +12,7 @@ export const WorkExperienceSchema = z.object({
      startDate: optionalString,
      endDate: optionalString,
      city: optionalString,
-     jobInfo: optionalString,
+     jobInfo: optionalDescString,
 })
 .refine(data=>{
      if(data.startDate && data.endDate){

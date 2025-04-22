@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { FormSuccess } from "./form-success";
 import { ContactFormType } from "@/data/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
+import { getCaptchaToken } from "@/lib/captcha";
 
 export default function ContactForm(){
      const [isPending, startTransition] = useTransition();
@@ -35,18 +36,23 @@ export default function ContactForm(){
      });
      const handleSubmit = (values: ContactFormType) => {
           setError("");
-          startTransition(()=>{
-               submitContactForm(values)
-               .then((data)=>{
+          setSuccess("");
+          startTransition(async()=>{
+               try{
+                    const token = await getCaptchaToken();
+                    const data = await submitContactForm(token,values)
                     setError(data.error);
-                    setSuccess(data.success)
-               })
+                    setSuccess(data.success);
+               } catch (error) {
+                    console.error(error)
+                    setError("Ինչ-որ բան սխալ գնաց։")
+               }
           })
      }
      return (
           <Form {...form}>
                <form onSubmit={form.handleSubmit(handleSubmit)}>
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                          <FormField
                               control={form.control}
                               name="name"
@@ -64,7 +70,7 @@ export default function ContactForm(){
                                    </FormItem>
                               )}
                          />
-                         <div className="grid grid-cols-1 gap-x-5 md:grid-cols-2">
+                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                               <FormField
                                    control={form.control}
                                    name="email"

@@ -4,7 +4,7 @@ import { db } from "@/lib/db"
 import { getUserById } from "@/data/db/user"
 import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmation"
 import { getAccountByUserId } from "@/data/db/account"
-import { CreditCard, UserPlan } from "@db"
+import { CreditCard, CVPageSettings, UserPlan } from "@db"
 import { getSubscriptionById } from "@/data/db/subscription"
 import { CustomPrismaAdapter } from "@/lib/auth/prisma-adapter"
 
@@ -69,6 +69,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.currentPlan = token.currentPlan as UserPlan
         session.user.subscriptionId = token.subscriptionId as string
         session.user.creditCards = token.creditCards as CreditCard[]
+        session.user.cvPageSettings = token.cvPageSettings as CVPageSettings
       }
 
       if(token.subscriptionEndDate && session.user){
@@ -99,6 +100,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       token.currentPlan = existingUser.currentPlan
       token.subscriptionId = existingUser.subscriptionId
       token.creditCards = existingUser.creditCards
+      token.cvPageSettings = existingUser.cvPageSettings
 
       if(existingSubscription){
         token.subscriptionEndDate = existingSubscription.endDate

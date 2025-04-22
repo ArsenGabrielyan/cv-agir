@@ -64,7 +64,7 @@ export const UserButton = () => {
                     <DropdownMenuSeparator/>
                     <LogoutButton>
                          <DropdownMenuItem className="cursor-pointer text-destructive">
-                              <LogOut className="h-4 w-4 mr-2"/>
+                              <LogOut className="h-4 w-4 mr-2 text-destructive"/>
                               Դուրս գալ
                          </DropdownMenuItem>
                     </LogoutButton>

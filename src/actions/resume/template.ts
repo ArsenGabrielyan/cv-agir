@@ -3,6 +3,7 @@ import { getLanguageLevel } from "@/data/helpers";
 import { ResumeFormType } from "@/data/types/schema";
 import Handlebars from "handlebars"
 import { marked } from "marked"
+import DOMPurify from "isomorphic-dompurify"
 
 export async function compileHTML(html: string, data: ResumeFormType){
      Handlebars.registerHelper({
@@ -26,9 +27,11 @@ export async function compileHTML(html: string, data: ResumeFormType){
                const markdown = marked(content,{
                     async: false
                })
-               return new Handlebars.SafeString(markdown)
+               return new Handlebars.SafeString(DOMPurify.sanitize(markdown,{
+                    ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|blob):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
+               }))
           }
      })
-     const htmlTemplate = Handlebars.compile<ResumeFormType>(html);
+     const htmlTemplate = Handlebars.compile<ResumeFormType>(html,{ noEscape: true });
      return htmlTemplate(data)
 }

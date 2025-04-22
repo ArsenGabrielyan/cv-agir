@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import CVInfoLoader from "@/components/loaders/cv-info";
 import { cache } from "react";
 import dynamic from "next/dynamic";
+import { getUserById } from "@/data/db/user";
 
 const getResumeData = cache(async(id: string) => {
      if(!isObjectId(id)){
@@ -36,10 +37,16 @@ interface CVPageProps{
 export default async function CVPage({params}: CVPageProps){
      const {id} = await params
      const resume = await getResumeData(id);
+     const user = resume.userId ? await getUserById(resume.userId) : null
+     if(!user) notFound();
      return (
           <PageLayout landingFooter>
                <div className="flex justify-center items-center flex-col">
-                    <ResumeInfo data={resume}/>
+                    <ResumeInfo data={resume} settings={user.cvPageSettings || {
+                         showEmail: true,
+                         showAddress: true,
+                         showPhone: true
+                    }}/>
                </div>
           </PageLayout>
      )

@@ -5,15 +5,6 @@ const nextConfig: NextConfig = {
   async headers() {
       return [
         {
-          source: "/api/(.*)",
-          headers: [
-            { key: "Access-Control-Allow-Origin", value: "*" },
-            { key: "Access-Control-Allow-Methods", value: "GET, POST, PUT, DELETE, OPTIONS" },
-            { key: "Access-Control-Allow-Headers", value: "Content-Type, Authorization" },
-            { key: "Content-Range", value: "bytes : 0-9/*" },
-          ],
-        },
-        {
           source: "/(.*)",
           headers: [
             { key: "X-Content-Type-Options", value: "nosniff" },
@@ -24,14 +15,25 @@ const nextConfig: NextConfig = {
               key: "Content-Security-Policy",
               value: [
                 "default-src 'self'",
-                "script-src 'self' 'unsafe-inline'",
+                "script-src 'self' https://www.google.com https://www.gstatic.com 'unsafe-inline' ",
                 "style-src 'self' 'unsafe-inline'",
                 "img-src * blob: data:",
                 "font-src 'self' data:",
                 "object-src 'none'",
                 "frame-ancestors 'none'",
+                "connect-src 'self' https://www.google.com",
+                "frame-src https://www.google.com"
               ].join("; "),
             },
+          ],
+        },
+        { // This is for my admin page
+          source: "/api/(.*)",
+          headers: [
+            { key: "Access-Control-Allow-Origin", value: "*" },
+            { key: "Access-Control-Allow-Methods", value: "GET, POST, PUT, DELETE, OPTIONS" },
+            { key: "Access-Control-Allow-Headers", value: "Content-Type, Authorization" },
+            { key: "Content-Range", value: "bytes : 0-9/*" },
           ],
         },
       ]

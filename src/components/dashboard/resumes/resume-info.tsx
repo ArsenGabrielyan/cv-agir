@@ -1,5 +1,5 @@
 "use client"
-import { Resume } from "@db"
+import { CVPageSettings, Resume } from "@db"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Mail, MapPin, Phone, } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -10,13 +10,18 @@ import {format} from "date-fns"
 import dynamic from "next/dynamic"
 
 interface ResumeInfoProps{
-     data: Resume
+     data: Resume,
+     settings: Partial<CVPageSettings>
 }
 const Markdown = dynamic(()=>import("markdown-to-jsx"),{
      ssr: false
 })
-export default function ResumeInfo({data}: ResumeInfoProps){
-     const {fname, lname, jobTitle, phone, address, profileImg, email, summary, hobbies, links, experience, education, courses, references, skills, languages} = data
+export default function ResumeInfo({data, settings}: ResumeInfoProps){
+     const {fname, lname, jobTitle, profileImg, summary, hobbies, experience, education, courses, references, skills, languages} = data;
+     const address = (settings?.showAddress ?? true) ? data.address : null;
+     const phone = (settings?.showPhone ?? true) ? data.phone : null;
+     const email = (settings?.showEmail ?? true) ? data.email : null;
+     const links = (settings?.showLinks ?? true) ? data.links : []
      const isEmpty = Object.values({fname, lname, jobTitle, phone, address, profileImg, email, summary, hobbies, links, experience, education, courses, references, skills, languages}).every((val) => Array.isArray(val) ? !(val && val.length!==0) : !val);
      return !isEmpty ? (
           <div className="max-w-(--breakpoint-xl) w-full p-5 space-y-6">
@@ -39,9 +44,15 @@ export default function ResumeInfo({data}: ResumeInfoProps){
                          )}
                          {(address || phone || email) && (
                               <ul className="flex flex-col items-start justify-start gap-3 w-full md:w-fit flex-wrap">
-                                   <li className="flex gap-3 items-center justify-center md:justify-start w-full text-sm md:text-base"><Phone className="size-4 md:size-6"/> {phone}</li>
-                                   <li className="flex gap-3 items-center justify-center md:justify-start w-full text-sm md:text-base"><MapPin className="size-4 md:size-6"/> {address}</li>
-                                   <li className="flex gap-3 items-center justify-center md:justify-start w-full text-sm md:text-base"><Mail className="size-4 md:size-6"/> {email}</li>
+                                   {phone && (
+                                        <li className="flex gap-3 items-center justify-center md:justify-start w-full text-sm md:text-base"><Phone className="size-4 md:size-6"/> {phone}</li>
+                                   )}
+                                   {address && (
+                                        <li className="flex gap-3 items-center justify-center md:justify-start w-full text-sm md:text-base"><MapPin className="size-4 md:size-6"/> {address}</li>
+                                   )}
+                                   {email && (
+                                        <li className="flex gap-3 items-center justify-center md:justify-start w-full text-sm md:text-base"><Mail className="size-4 md:size-6"/> {email}</li>
+                                   )}
                               </ul>
                          )}
                     </div>

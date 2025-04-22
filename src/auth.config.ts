@@ -7,6 +7,7 @@ import { LoginSchema } from "@/schemas"
 import { getUserByEmail } from "@/data/db/user"
 import bcrypt from "bcryptjs"
 import { env } from "@/lib/env"
+import { clearLimiter, incrementLimiter } from "./lib/limiter"
 
 export default { 
      providers: [
@@ -16,12 +17,19 @@ export default {
 
                     if(validatedFields.success){
                          const {email, password} = validatedFields.data;
+                         const limiterKey = `login:${email}`;
                          const user = await getUserByEmail(email);
                          if(!user || !user.password) return null;
 
                          const passwordsMatch = await bcrypt.compare(password,user.password);
 
-                         if(passwordsMatch) return user;
+                         if(passwordsMatch) {
+                              clearLimiter(limiterKey)
+                              return user;
+                         } else {
+                              incrementLimiter(limiterKey,60_000)
+                              return null
+                         }
                     }
 
                     return null

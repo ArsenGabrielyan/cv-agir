@@ -3,24 +3,19 @@ import crypto from "crypto"
 import { env } from "@/lib/env"
 
 const secretKey = env.AES_SECRET
-const encryptionMethod = env.AES_ENCRYPTION_METHOD
 
-const key = crypto.createHash("sha512").update(secretKey).digest("hex").substring(0,32);
+const key = crypto.createHash("sha256").update(secretKey).digest()
 
 export async function encryptData<T extends string>(data: T){
-     if (typeof data !== "string") {
-          throw new Error("Գաղտնագրելու տվյալները պետք է լինի վավերական տեքստ։");
-     }
+     if (typeof data !== "string") throw new Error("Գաղտնագրելու տվյալները պետք է լինի վավերական տեքստ։");
      if (!data) return "";
-     const iv = crypto.randomBytes(16);
-     const cipher = crypto.createCipheriv(
-          encryptionMethod,
-          Buffer.from(key),
-          iv
-     );
-     let encrypted = cipher.update(data,"utf8");
-     encrypted = Buffer.concat([encrypted,cipher.final()]);
-     return `${iv.toString("hex")}:${encrypted.toString("hex")}`;
+     const iv = crypto.randomBytes(12);
+     const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
+
+     const encrypted = Buffer.concat([cipher.update(data, "utf8"), cipher.final()]);
+     const authTag = cipher.getAuthTag();
+
+     return `${iv.toString("hex")}:${authTag.toString("hex")}:${encrypted.toString("hex")}`;
 }
 
 export async function decryptData<T extends string>(data: T){
@@ -28,22 +23,16 @@ export async function decryptData<T extends string>(data: T){
           throw new Error("Գաղտնագրելու տվյալները պետք է լինի վավերական տեքստ։");
      }
      if (!data) return "";
-     
-     const textParts = data.split(":");
-     const ivPart = textParts.shift();
-     if (!ivPart) {
-          throw new Error("Գաղտնագրելու ինչ-որ մաս բացակայում է։");
-     }
-     
-     const iv = Buffer.from(ivPart, "hex");
-     const encryptedText = textParts.join(":");
-     if (!encryptedText) {
-          throw new Error("Այսպիսի գաղտնագրված տվյալ գոյություն չունի։");
-     }
-     
-     const encryptedBuffer = Buffer.from(encryptedText, "hex");
-     const decipher = crypto.createDecipheriv(encryptionMethod, Buffer.from(key), iv);
-     let decrypted = decipher.update(encryptedBuffer);
-     decrypted = Buffer.concat([decrypted, decipher.final()]);
+     const [ivHex, authTagHex, encryptedHex] = data.split(":");
+     if (!ivHex || !authTagHex || !encryptedHex) throw new Error("Գաղտնագրելու ինչ-որ մաս բացակայում է։");
+
+     const iv = Buffer.from(ivHex, "hex");
+     const authTag = Buffer.from(authTagHex, "hex");
+     const encryptedText = Buffer.from(encryptedHex, "hex");
+
+     const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
+     decipher.setAuthTag(authTag);
+
+     const decrypted = Buffer.concat([decipher.update(encryptedText), decipher.final()]);
      return decrypted.toString("utf8");
 }

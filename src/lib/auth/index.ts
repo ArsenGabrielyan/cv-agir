@@ -19,8 +19,6 @@ const adminIds = [
 ]
 export const getIsAdmin = async()=>{
      const user = await currentUser();
-     if(!user || !user.id){
-          return false;
-     }
-     return adminIds.indexOf(user.id) !== -1;
+     if(!user || !user.id) return false;
+     return adminIds.includes(user.id);
 }

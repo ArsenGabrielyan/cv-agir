@@ -3,6 +3,7 @@ import Logo from "@/components/layout/logo";
 import CheckoutForm from "@/components/settings/premium/checkoutForm";
 import { PRICING_DATA } from "@/data/constants/landing-page";
 import { currentUser } from "@/lib/auth";
+import { CheckoutPageSearchSchema } from "@/schemas";
 import { UserPlan } from "@db";
 import { Metadata } from "next";
 import { redirect } from "next/navigation"
@@ -14,11 +15,15 @@ export const metadata: Metadata = {
 export default async function CheckoutPage({searchParams}: {
      searchParams: Promise<{plan: UserPlan, planType: "yearly" | "monthly"}>
 }){
+     const validatedFields = CheckoutPageSearchSchema.safeParse(await searchParams);
+     if(!validatedFields.success){
+          redirect("/dashboard")
+     }
+     const {plan, planType} = validatedFields.data
      const user = await currentUser();
      if(!user || !user.id){
           redirect("/auth/login")
      }
-     const {plan, planType} = await searchParams;
      const selectedPlan = PRICING_DATA.find(val=>val.planName===plan);
      const subscriptionLevel = await getSubscriptionLevel(user.id);
      if(!selectedPlan || subscriptionLevel==="premium"){

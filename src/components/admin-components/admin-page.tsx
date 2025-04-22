@@ -14,7 +14,7 @@ const translations: Record<string,TranslationMessages> = {am}
 const dataProvider = simpleRestProvider("/api")
 const i18nProvider = polyglotI18nProvider(locale=>translations[locale],"am");
 
-// TODO: Add Moderation Page and Moderate Users, Resumes, Cover Letters
+// TODO: Add Moderation Page and Moderate Users, Resumes, Cover Letters and Add audit log page, which only fetches the GET request
 
 export default function App(){
      return (

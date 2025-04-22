@@ -11,6 +11,7 @@ import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmat
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { LoginType } from "@/data/types/schema";
+import { checkLimiter } from "@/lib/limiter";
 
 const authErrorMessages: Record<AuthError["name"], string> = {
      CredentialsSignin: "Սխալ էլ․ փոստ կամ գաղտնաբառ։",
@@ -38,8 +39,13 @@ export const login = async (
      }
 
      const {email,password, code} = validatedFields.data;
-     const existingUser = await getUserByEmail(email);
+     const limiterKey = `login:${email}`;
 
+     if(checkLimiter(limiterKey,5)) {
+          return {error: "Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ"}
+     }
+
+     const existingUser = await getUserByEmail(email);
      const isSamePass = await bcrypt.compare(password,existingUser?.password || "");
 
      if(!existingUser || !existingUser.email || !existingUser.password || !existingUser.name){

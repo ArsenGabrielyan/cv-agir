@@ -1,16 +1,21 @@
 import * as z from "zod"
+import { emailField, jobTitleField, passwordField } from "./fields";
 
 export const AccountSettingsSchema = z.object({
-     name: z.optional(z.string()),
-     email: z.optional(z.string().email("Մուտքագրեք վավերական էլ․ փոստ")),
-     jobTitle: z.optional(z.string()),
-     phone: z.optional(z.string()),
-     address: z.optional(z.string()),
-     summary: z.optional(z.string()),
-     hobbies: z.optional(z.string()),
-     password: z.optional(z.string().min(8,"Գաղտնաբառը պետք է ունենա առնվազն 8 նիշ")),
-     newPassword: z.optional(z.string().min(8,"Գաղտնաբառը պետք է ունենա առնվազն 8 նիշ")),
-     isTwoFactorEnabled: z.optional(z.boolean())
+     name: z.optional(z.string().trim()),
+     email: z.optional(emailField.trim().transform(email => email.toLowerCase())),
+     jobTitle: z.optional(jobTitleField.trim()),
+     phone: z.optional(z.string().trim()),
+     address: z.optional(z.string().trim()),
+     summary: z.optional(z.string().trim()),
+     hobbies: z.optional(z.string().trim()),
+     password: z.optional(passwordField.trim()),
+     newPassword: z.optional(passwordField.trim()),
+     isTwoFactorEnabled: z.optional(z.boolean()),
+     showEmail: z.optional(z.boolean()),
+     showAddress: z.optional(z.boolean()),
+     showPhone: z.optional(z.boolean()),
+     showLinks: z.optional(z.boolean())
 })
 .refine(data=>{
      if(data.password && !data.newPassword){

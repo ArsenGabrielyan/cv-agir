@@ -81,6 +81,13 @@ enum SubscriptionPeriod {
   monthly
 }
 
+type CVPageSettings{
+  showEmail Boolean @default(true)
+  showAddress Boolean @default(true)
+  showPhone Boolean @default(true)
+  showLinks Boolean @default(true)
+}
+
 model User {
   id                    String                 @id @default(auto()) @map("_id") @db.ObjectId
   name                  String?
@@ -101,6 +108,7 @@ model User {
   summary               String?
   hobbies               String?
   currentPlan           UserPlan               @default(free)
+  cvPageSettings CVPageSettings?
 
   subscriptionId String?       @db.ObjectId
   subscription   Subscription?

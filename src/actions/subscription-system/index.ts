@@ -112,7 +112,9 @@ export const cancelSubscription = async(userId: string) => {
           where: {id: user.id},
           data: {
                currentPlan: "free",
-               subscriptionId: undefined
+               subscriptionId: {
+                    unset: true
+               }
           }
      })
      revalidatePath("/settings?tab=subscription")

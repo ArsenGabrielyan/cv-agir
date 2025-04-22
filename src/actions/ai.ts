@@ -8,6 +8,8 @@ import { AI_MODEL, GEN_CONFIG } from "@/data/constants/other"
 import { currentUser } from "@/lib/auth"
 import { getSubscriptionLevel } from "./subscription-system"
 import { getAvailableFeatures } from "@/lib/permission"
+import DOMPurify from "isomorphic-dompurify"
+import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter"
 
 export const generateSummary = async(input: GenerateSummaryInput) => {
      const user = await currentUser();
@@ -25,6 +27,11 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
      if(!validatedFields.success){
           throw new Error("Բոլոր դաշտերը վալիդացրած չեն")
      }
+     const limiterKey = `ai:${user.id || await getIpAddress()}`;
+     if(checkLimiter(limiterKey,10)){
+          throw new Error("Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ")
+     }
+
      const {jobTitle, education, experience, skills, languages} = validatedFields.data
 
      const sysMsg = `You're a job resume generator AI. Your task is to write a professional introduction summary for a resume given the user's provided data. Only return the summary and don't include any other info in the response. Keep it concise, professional, and return the data in Armenian language. Maximum 70 words and Short.`;
@@ -71,10 +78,14 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
      const aiResponse = result.response.text()
 
      if(!aiResponse){
+          incrementLimiter(limiterKey,60_000)
           throw new Error("Չհաջողվեց գեներացնել պատասխանը Արհեստական Բանականության կողմից")
      }
-
-     return aiResponse
+     clearLimiter(limiterKey)
+     return DOMPurify.sanitize(aiResponse,{
+          ALLOWED_TAGS: ["b", "i", "strong", "p", "ul", "li", "br"],
+          ALLOWED_ATTR: [],
+     })
 }
 
 export const generateWorkExperience = async(input: GenerateDescriptionInput) => {
@@ -93,6 +104,11 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
      if(!validatedFields.success){
           throw new Error("Աշխատանքային փորձի նկարագրությունը վալիդացված չէ")
      }
+     const limiterKey = `ai:${user.id || await getIpAddress()}`;
+     if(checkLimiter(limiterKey,10)){
+          throw new Error("Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ")
+     }
+
      const {description} = validatedFields.data;
 
      const sysMsg = `
@@ -125,15 +141,19 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
      const aiResponse = result.response.text()
 
      if(!aiResponse){
+          incrementLimiter(limiterKey,60_000)
           throw new Error("Չհաջողվեց գեներացնել պատասխանը Արհեստական Բանականության կողմից")
      }
-
+     clearLimiter(limiterKey)
      const parsed = JSON.parse(aiResponse)[0];
 
      const responseObj = {
           job: parsed["Job Title"],
           company: parsed["Company Name"],
-          jobInfo: parsed["Description"],
+          jobInfo: DOMPurify.sanitize(parsed["Description"],{
+               ALLOWED_TAGS: ["b", "i", "strong", "p", "ul", "li", "br"],
+               ALLOWED_ATTR: [],
+          }),
           startDate: parsed["Start Date"],
           endDate: parsed["End Date"],
      } satisfies WorkExperienceType
@@ -157,6 +177,11 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
      if(!validatedFields.success){
           throw new Error("Բոլոր դաշտերը վալիդացրած չեն")
      }
+     const limiterKey = `ai:${user.id || await getIpAddress()}`;
+     if(checkLimiter(limiterKey,10)){
+          throw new Error("Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ")
+     }
+
      const {jobTitle, fname, lname, recipientName, recipientTitle} = validatedFields.data
 
      const sysMsg = `You're a job cover letter generator AI. Your task is to write a professional cover letter given the user's provided data and recipient's data. Only return the cover letter in markdown and make 3-4 paragraphs explaining why this user is perfect candidate for a specific job. Keep it concise, professional, avoid headings, and return the data in Armenian language.`;
@@ -187,8 +212,12 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
      const aiResponse = result.response.text()
 
      if(!aiResponse){
+          incrementLimiter(limiterKey,60_000)
           throw new Error("Չհաջողվեց գեներացնել պատասխանը Արհեստական Բանականության կողմից")
      }
-
-     return aiResponse
+     clearLimiter(limiterKey)
+     return DOMPurify.sanitize(aiResponse,{
+          ALLOWED_TAGS: ["b", "i", "strong", "p", "ul", "li", "br"],
+          ALLOWED_ATTR: [],
+     })
 }

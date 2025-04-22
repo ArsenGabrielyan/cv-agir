@@ -162,3 +162,19 @@ export const resumeDataInclude = {
 export type ResumeServerData = Prisma.ResumeGetPayload<{
      include: typeof resumeDataInclude
 }>
+
+// Rate limiting and Security
+interface ITrackerType{
+     count: number,
+     expiresAt: number
+}
+export type TrackerType = Record<string,ITrackerType>
+
+export interface ICaptchaResult{
+     success: boolean,
+     score: number,
+     action: string,
+     challenge_ts: string,
+     hostname: string,
+     "error-codes"?: string[]
+}

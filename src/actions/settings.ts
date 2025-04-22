@@ -1,11 +1,11 @@
 "use server";
 import bcrypt from "bcryptjs"
-import { db } from "@/lib/db";
-import { getUserByEmail, getUserById } from "@/data/db/user";
+import { getUserByEmail, getUserById, updateUser } from "@/data/db/user";
 import { currentUser } from "@/lib/auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
 import { AccountSettingsType } from "@/data/types/schema";
+import { checkLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter";
 
 export const applyAccountSettings = async(values: AccountSettingsType) => {
      const user = await currentUser();
@@ -24,9 +24,16 @@ export const applyAccountSettings = async(values: AccountSettingsType) => {
           values.isTwoFactorEnabled = undefined;
      }
 
+     const limiterKey = `settings:${user.id || await getIpAddress()}`;
+     if(checkLimiter(limiterKey,5)){
+          return {error: "Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ"}
+     }
+
      if(values.email && values.email!==user.email){
           const existingUser = await getUserByEmail(values.email);
+          console.log(values.email,existingUser)
           if(existingUser && existingUser.id!==user.id){
+               incrementLimiter(limiterKey,60_000)
                return {error: "Էլ․ հասցեն արդեն օգտագործված է"}
           }
           const verificationToken = await generateVerificationToken(values.email);
@@ -36,25 +43,19 @@ export const applyAccountSettings = async(values: AccountSettingsType) => {
                verificationToken.email,
                verificationToken.token
           )
-
-          values.email = verificationToken.email;
-          await db.user.update({
-               where: {
-                    id: user.id
-               },
-               data: {
-                    ...values
-               }
-          })
-          return {success: "Հաստատեք Ձեր էլ․ հասցեն"}
+          return await updateUser(user.id,{
+               ...values,
+               email: verificationToken.email
+          },limiterKey,"Հաստատման հղումը ուղարկվել է նոր էլ․ հասցեին։");
      }
 
      if(values.password && values.newPassword && dbUser.password){
-          const passwordsMatch = bcrypt.compare(
+          const passwordsMatch = await bcrypt.compare(
                values.password,
                dbUser.password
           )
           if(!passwordsMatch){
+               incrementLimiter(limiterKey,60_000)
                return {error: "Գաղտնաբառը սխալ է"}
           }
           const hashedPassword = await bcrypt.hash(values.newPassword,10);
@@ -62,14 +63,5 @@ export const applyAccountSettings = async(values: AccountSettingsType) => {
           values.password = hashedPassword;
           values.newPassword = undefined
      }
-
-     await db.user.update({
-          where: {
-               id: dbUser.id
-          },
-          data: {
-               ...values
-          }
-     })
-     return {success: "Կարգավորումները թարմացված են"}
+     return await updateUser(user.id,values,limiterKey);
 }
