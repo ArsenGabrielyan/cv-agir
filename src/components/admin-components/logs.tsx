@@ -24,7 +24,7 @@ export const AuditLogsList = () => (
                primaryText={(record: AuditLogServerData)=>{
                     const data = formatAuditLogData(record);
                     return (
-                         <>{data.isError ? <Error color="error" style={{marginRight: "5px"}}/> : ""}{data.primaryText}</>
+                         <>{data.isError && <Error color="error" style={{marginRight: "5px"}}/>}{data.primaryText}</>
                     )
                }}
                secondaryText={(record: AuditLogServerData)=>formatAuditLogData(record).secondaryText}
