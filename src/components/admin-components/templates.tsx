@@ -1,5 +1,5 @@
 import { useMediaQuery } from "@mui/material";
-import { List, Datagrid, TextField, Create, SimpleForm, Edit, TextInput, required, ReferenceField, ReferenceInput, AutocompleteInput, FunctionField, Show, DateField, EditButton, DeleteButton, SimpleList, SearchInput, BooleanField, BooleanInput, TabbedShowLayout } from "react-admin"
+import { List, Datagrid, TextField, Create, SimpleForm, Edit, TextInput, required, ReferenceField, ReferenceInput, AutocompleteInput, FunctionField, Show, DateField, EditButton, DeleteButton, SimpleList, SearchInput, BooleanField, BooleanInput, TabbedShowLayout, InfiniteList } from "react-admin"
 import StarIcon from "@mui/icons-material/Star"
 import { QuickFilter, CodeField, ImageUrlField, TemplatesPanel } from ".";
 
@@ -13,30 +13,28 @@ const templateFilters = [
 
 export const TemplatesList = () => {
      const isSmall = useMediaQuery(theme=>theme.breakpoints.down("md"));
-     return (
+     return isSmall ? (
+          <InfiniteList filters={templateFilters}>
+               <SimpleList
+                    primaryText={record=>record.name}
+                    secondaryText={record=>record.description}
+                    tertiaryText={record=>new Date(record.createdAt).toLocaleDateString()}
+                    leftIcon={record=>record.isPremium ? <StarIcon/> : null}
+               />
+          </InfiniteList>
+     ) : (
           <List filters={templateFilters}>
-               {isSmall ? (
-                    <SimpleList
-                         primaryText={record=>record.name}
-                         secondaryText={record=>record.description}
-                         tertiaryText={record=>new Date(record.createdAt).toLocaleDateString()}
-                         leftIcon={record=>record.isPremium ? <StarIcon/> : null}
-                    />
-               ) : (
-                    <Datagrid
-                         expand={<TemplatesPanel/>}
-                    >
-                         <TextField source="name" label="Անուն"/>
-                         <TextField source="description" label="Նկարագրություն"/>
-                         <ReferenceField source="categoryId" reference="categories" label="Կատեգորիա"/>
-                         <ImageUrlField source="imageName" label="Նկարի անուն"/>
-                         <BooleanField source="isPremium" label="Պրեմիում շաբլոն"/>
-                         <FunctionField label="HTML կոդ" render={(record)=>`${record.htmlTemplate.substring(0,50)}...`}/>
-                         <FunctionField label="CSS կոդ" render={(record)=>`${record.cssStyle.substring(0,50)}...`}/>
-                         <EditButton/>
-                         <DeleteButton/>
-                    </Datagrid>
-               )}
+               <Datagrid expand={<TemplatesPanel/>}>
+                    <TextField source="name" label="Անուն"/>
+                    <TextField source="description" label="Նկարագրություն"/>
+                    <ReferenceField source="categoryId" reference="categories" label="Կատեգորիա"/>
+                    <ImageUrlField source="imageName" label="Նկարի անուն"/>
+                    <BooleanField source="isPremium" label="Պրեմիում շաբլոն"/>
+                    <FunctionField label="HTML կոդ" render={(record)=>`${record.htmlTemplate.substring(0,50)}...`}/>
+                    <FunctionField label="CSS կոդ" render={(record)=>`${record.cssStyle.substring(0,50)}...`}/>
+                    <EditButton/>
+                    <DeleteButton/>
+               </Datagrid>
           </List>
      )
 }

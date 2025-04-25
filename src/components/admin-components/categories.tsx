@@ -1,4 +1,4 @@
-import { Create, Datagrid, DateField, DeleteButton, Edit, EditButton, List, required, SearchInput, Show, SimpleForm, SimpleList, SimpleShowLayout, TextField, TextInput } from "react-admin";
+import { Create, Datagrid, DateField, DeleteButton, Edit, EditButton, InfiniteList, List, required, SearchInput, Show, SimpleForm, SimpleList, SimpleShowLayout, TextField, TextInput } from "react-admin";
 import {useMediaQuery} from "@mui/material"
 
 export const CategoryShow = () => (
@@ -18,20 +18,20 @@ const categoriesFilter = [
 
 export const CategoriesList = () => {
      const isSmall = useMediaQuery(theme=>theme.breakpoints.down("sm"));
-     return (
+     return isSmall ? (
+          <InfiniteList filters={categoriesFilter}>
+               <SimpleList
+                    primaryText={record=>record.name}
+                    tertiaryText={record=>new Date(record.createdAt).toLocaleDateString()}
+               />
+          </InfiniteList>
+     ) : (
           <List filters={categoriesFilter}>
-               {isSmall ? (
-                    <SimpleList
-                         primaryText={record=>record.name}
-                         tertiaryText={record=>new Date(record.createdAt).toLocaleDateString()}
-                    />
-               ) : (
-                    <Datagrid>
-                         <TextField source="name" label="Կատեգորիայի Անուն"/>
-                         <EditButton/>
-                         <DeleteButton/>
-                    </Datagrid>
-               )}
+               <Datagrid>
+                    <TextField source="name" label="Կատեգորիայի Անուն"/>
+                    <EditButton/>
+                    <DeleteButton/>
+               </Datagrid>
           </List>
      )
 }

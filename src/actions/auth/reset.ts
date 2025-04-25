@@ -17,7 +17,6 @@ export const reset = async (values: ResetPassType) => {
                action: "VALIDATION_ERROR",
                metadata: {
                     fields: validatedFields.error.issues.map(issue => issue.path[0]),
-                    reason: ERROR_MESSAGES.auth.invalidEmail
                }
           })
           return {error: ERROR_MESSAGES.auth.invalidEmail}

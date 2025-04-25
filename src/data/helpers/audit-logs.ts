@@ -1,6 +1,6 @@
 import { AuditAction, Prisma } from "@db";
 import { AuditLogServerData, AuditMetadata } from "../types";
-import { SEARCH_KEYWORDS } from "../constants";
+import { AUDIT_QUICK_FILTERS, SEARCH_KEYWORDS } from "../constants";
 
 export function maskEmail(email: string): string {
      const [local, domain] = email.split("@");
@@ -366,6 +366,7 @@ export function formatAuditLogData(record: AuditLogServerData){
      }
      return {
           primaryText,
-          secondaryText
+          secondaryText,
+          isError: AUDIT_QUICK_FILTERS.errors.includes(action)
      }
 }
