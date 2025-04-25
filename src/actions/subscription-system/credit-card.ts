@@ -1,11 +1,14 @@
 "use server"
-import { parseExpiryDate } from "@/data/helpers";
+import { parseExpiryDate } from "@/data/helpers/credit-cards";
 import { currentUser, CurrentUserReturnType } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { decryptData, encryptData } from "@/actions/encryption";
 import { CreditCardSchema } from "@/schemas"
 import { CreditCardType } from "@/data/types/schema"
 import { CreditCard } from "@db";
+import { ERROR_MESSAGES } from "@/data/constants";
+import { logAction } from "@/data/db/logs";
+import { getIpAddress } from "@/lib/limiter";
 
 export const upsertCard = async(values: CreditCardType, user: CurrentUserReturnType, expiryDate: Date) => {
      const creditCards: CreditCard[] = user.creditCards || [];
@@ -39,21 +42,50 @@ export const upsertCard = async(values: CreditCardType, user: CurrentUserReturnT
 }
 
 export const addCard = async(values: CreditCardType) => {
+     const currIp = await getIpAddress();
      const validatedFields = CreditCardSchema.safeParse(values);
      if(!validatedFields.success){
-          return {error: "Բոլոր դաշտերը վալիդ չեն"}
+          await logAction({
+               action: "VALIDATION_ERROR",
+               metadata: {
+                    fields: validatedFields.error.issues.map(val=>val.path[0]),
+               }
+          })
+          return {error: ERROR_MESSAGES.validationError}
      }
-     const {expiryDate} = validatedFields.data
+     const {expiryDate, cardNumber} = validatedFields.data
      const user = await currentUser();
      if(!user || !user.id){
-          return {error: "Այս օգտատերը նույնականացված չէ։"}
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip: currIp,
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.unauthorized}
      }
      const expires = parseExpiryDate(expiryDate);
      if(expires.error){
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: expires.error
+               }
+          })
           return {error: expires.error}
      }
      if(expires.date){
           const creditCards = await upsertCard(values,user,expires.date);
+          await logAction({
+               userId: user.id,
+               action: "CREDIT_CARD_ADDED",
+               metadata: {
+                    ip: currIp,
+                    last4: cardNumber.slice(-4)
+               }
+          })
           await db.user.update({
                where: {
                     id: user.id
@@ -67,17 +99,38 @@ export const addCard = async(values: CreditCardType) => {
 }
 
 export const editCard = async (values: CreditCardType, index: number) => {
+     const currIp = await getIpAddress();
      const validatedFields = CreditCardSchema.safeParse(values);
      if(!validatedFields.success){
-          return {error: "Բոլոր դաշտերը վալիդ չեն"}
+          await logAction({
+               action: "VALIDATION_ERROR",
+               metadata: {
+                    fields: validatedFields.error.issues.map(val=>val.path[0]),
+               }
+          })
+          return {error: ERROR_MESSAGES.validationError}
      }
      const {cardName,cardNumber,city,cvv,expiryDate} = validatedFields.data
      const user = await currentUser();
      if(!user || !user.id){
-          return {error: "Այս օգտատերը նույնականացված չէ։"}
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip: currIp,
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.unauthorized}
      }
      const expires = parseExpiryDate(expiryDate);
      if(expires.error){
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: expires.error
+               }
+          })
           return {error: expires.error}
      }
      if(expires.date){
@@ -89,6 +142,14 @@ export const editCard = async (values: CreditCardType, index: number) => {
                fullName: cardName,
                city
           }
+          await logAction({
+               userId: user.id,
+               action: "CREDIT_CARD_UPDATED",
+               metadata: {
+                    ip: currIp,
+                    last4: cardNumber.slice(-4)
+               }
+          })
           await db.user.update({
                where: {
                     id: user.id
@@ -103,8 +164,15 @@ export const editCard = async (values: CreditCardType, index: number) => {
 
 export const deleteCard = async(index: number) => {
      const user = await currentUser();
+     const currIp = await getIpAddress();
      if(!user || !user.id){
-          return {error: "Այս օգտատերը նույնականացված չէ։"}
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip: currIp,
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.unauthorized}
      }
      const creditCard = await db.user.findUnique({
           where: {
@@ -115,7 +183,15 @@ export const deleteCard = async(index: number) => {
           }
      })
      if(!creditCard || !creditCard.creditCards[index]){
-          return {error: "Այսպիսի քարտ գոյություն չունի։"}
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.subscription.noCreditCard
+               }
+          })
+          return {error: ERROR_MESSAGES.subscription.noCreditCard}
      }
      const creditCards = creditCard.creditCards.filter((_,i)=>i!==index);
      await db.user.update({
@@ -124,6 +200,13 @@ export const deleteCard = async(index: number) => {
           },
           data: {
                creditCards
+          }
+     })
+     await logAction({
+          userId: user.id,
+          action: "CREDIT_CARD_DELETED",
+          metadata: {
+               ip: currIp
           }
      })
      return {success: true}

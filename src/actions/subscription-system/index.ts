@@ -1,7 +1,7 @@
 "use server"
 import { getCurrentSubscription, getSubscriptionById } from "@/data/db/subscription";
 import { getUserById } from "@/data/db/user";
-import { parseExpiryDate } from "@/data/helpers";
+import { parseExpiryDate } from "@/data/helpers/credit-cards";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { CheckoutFormSchema } from "@/schemas"
@@ -10,15 +10,31 @@ import { SubscriptionPeriod, UserPlan } from "@db";
 import { revalidatePath } from "next/cache";
 import { upsertCard } from "./credit-card";
 import {cache} from "react"
+import { ERROR_MESSAGES } from "@/data/constants";
+import { getIpAddress } from "@/lib/limiter";
+import { logAction } from "@/data/db/logs";
 
 export const proceedToCheckout = async(values: CheckoutFormType, period: SubscriptionPeriod, price: number, plan: UserPlan) => {
+     const currIp = await getIpAddress();
      const user = await currentUser();
      if(!user || !user.id){
-          return {error: "Այս օգտատերը նույնականացված չէ"}
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip: currIp,
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.unauthorized}
      }
      const validatedFields = CheckoutFormSchema.safeParse(values);
      if(!validatedFields.success){
-          return {error: "Բոլոր դաշտերը վավերական չեն"}
+          await logAction({
+               action: "VALIDATION_ERROR",
+               metadata: {
+                    fields: validatedFields.error.issues.map(val=>val.path[0]),
+               }
+          })
+          return {error: ERROR_MESSAGES.validationError}
      }
      const {email, cardNumber, expiryDate, cvv, cardName, city} = validatedFields.data;
      const existingUser = await db.user.findFirst({
@@ -28,10 +44,25 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
           }
      });
      if(!existingUser){
-          return {error: 'Այս օգտատերը գրանցված չէ'}
+          await logAction({
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.auth.noUserFound
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.noUserFound}
      }
      const expires = parseExpiryDate(expiryDate);
      if(expires.error){
+          await logAction({
+               userId: existingUser.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: expires.error
+               }
+          })
           return {error: expires.error}
      }
      if(expires.date){
@@ -73,18 +104,46 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
                     creditCards
                }
           })
+          await logAction({
+               userId: existingUser.id,
+               action: "PLAN_UPGRADED",
+               metadata: { ip: currIp }
+          })
           return {success: 'Խնդրում ենք սպասել․․․'}
      }
-     return {error: "Քարտի ժամկետը պարտադիր է"}
+     await logAction({
+          userId: existingUser.id,
+          action: "ACTION_ERROR",
+          metadata: {
+               ip: currIp,
+               reason: ERROR_MESSAGES.subscription.expiredCreditCard
+          }
+     })
+     return {error: ERROR_MESSAGES.subscription.expiredCreditCard}
 }
 
 export const getSubscriptionLevel = cache(async(userId: string): Promise<UserPlan> => {
      const user = await getUserById(userId);
+     const currIp = await getIpAddress();
      if(!user || !user.id){
-          throw new Error("Այս օգտագործողը նույնականացված չէ։")
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip: currIp,
+               }
+          })
+          throw new Error(ERROR_MESSAGES.auth.unauthorized)
      }
      if(!user.currentPlan){
-          throw new Error("Այսպիսի տարբերակ գոյություն չունի։")
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.subscription.invalidPlan
+               }
+          })
+          throw new Error(ERROR_MESSAGES.subscription.invalidPlan)
      }
      const subscription = user.subscriptionId ? await getCurrentSubscription(user.id,user.subscriptionId) : null
      if(!subscription){
@@ -96,12 +155,27 @@ export const getSubscriptionLevel = cache(async(userId: string): Promise<UserPla
 
 export const cancelSubscription = async(userId: string) => {
      const user = await getUserById(userId);
+     const currIp = await getIpAddress();
      if(!user){
-          return {error: "Այս օգտագործողը նույնականացված չէ։"}
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip: currIp,
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.unauthorized}
      }
      const subscription = user.subscriptionId ? await getSubscriptionById(user.subscriptionId) : null
      if(!subscription){
-          return {error: "Այս օգտագործողը բաժանորդագրված չէ։"}
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.auth.notSubscribed
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.notSubscribed}
      }
      await db.subscription.deleteMany({
           where: {
@@ -117,18 +191,38 @@ export const cancelSubscription = async(userId: string) => {
                }
           }
      })
+     await logAction({
+          userId: user.id,
+          action: "PLAN_CANCELLED",
+          metadata: { ip: currIp }
+     })
      revalidatePath("/settings?tab=subscription")
      return {success: true}
 }
 
 export const renewSubscription = async(userId: string) => {
      const user = await getUserById(userId);
+     const currIp = await getIpAddress();
      if(!user || !user.id){
-          return {error: "Այս օգտագործողը նույնականացված չէ։"}
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip: currIp
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.unauthorized}
      }
      const subscription = user.subscriptionId ? await getSubscriptionById(user.subscriptionId) : null
      if(!subscription){
-          return {error: "Այս օգտագործողը բաժանորդագրված չէ։"}
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.auth.notSubscribed
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.notSubscribed}
      }
      const endDate = new Date();
      if(subscription.period==="monthly"){
@@ -154,6 +248,11 @@ export const renewSubscription = async(userId: string) => {
                currentPlan: "premium",
                subscriptionId: currSubscription.id
           }
+     })
+     await logAction({
+          userId: user.id,
+          action: "PLAN_RENEWED",
+          metadata: { ip: currIp }
      })
      revalidatePath("/settings?tab=subscription")
      return {success: true}

@@ -1,15 +1,40 @@
 import { getResumeTemplateCategoryById } from "@/data/db/resumes";
-import { getIsAdmin } from "@/lib/auth";
+import { currentUser, getIsAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { logAction } from "@/data/db/logs";
+import { ERROR_MESSAGES } from "@/data/constants";
+import { getIpAddress } from "@/lib/limiter";
+import { ResumeTemplateCategory } from "@db";
 
 export const GET = async(
-     _: Request,
+     req: Request,
      {params}: {params: Promise<{categoryId: string}>}
 ) => {
      const isAdmin = await getIsAdmin();
+     const ip = await getIpAddress();
+     const user = await currentUser();
+     if(!user || !user.id){
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip,
+                    route: req.url
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
+     }
      if(!isAdmin){
-          return new NextResponse("Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",{ status: 401 })
+          await logAction({
+               userId: user.id,
+               action: "NO_ADMIN_ACCESS",
+               metadata: {
+                    ip,
+                    route: req.url,
+                    method: req.method,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
      }
      const {categoryId} = await params
      const data = await getResumeTemplateCategoryById(categoryId)
@@ -21,11 +46,32 @@ export const PUT = async(
      {params}: {params: Promise<{categoryId: string}>}
 ) => {
      const isAdmin = await getIsAdmin();
+     const ip = await getIpAddress();
+     const user = await currentUser();
+     if(!user || !user.id){
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip,
+                    route: req.url
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
+     }
      if(!isAdmin){
-          return new NextResponse("Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",{ status: 401 })
+          await logAction({
+               userId: user.id,
+               action: "NO_ADMIN_ACCESS",
+               metadata: {
+                    ip,
+                    route: req.url,
+                    method: req.method,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
      }
      const {categoryId} = await params
-     const {name} = await req.json()
+     const {name}: ResumeTemplateCategory = await req.json()
      const data = await db.resumeTemplateCategory.update({
           where: {
                id: categoryId
@@ -34,26 +80,65 @@ export const PUT = async(
                name
           }
      });
+     await logAction({
+          userId: user.id,
+          action: "CATEGORY_UPDATED",
+          metadata: { ip, categoryId }
+     })
      return NextResponse.json(data)
 }
 
 export const DELETE = async(
-     _: Request,
+     req: Request,
      {params}: {params: Promise<{categoryId: string}>}
 ) => {
      const isAdmin = await getIsAdmin();
+     const ip = await getIpAddress();
+     const user = await currentUser();
+     if(!user || !user.id){
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip,
+                    route: req.url
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
+     }
      if(!isAdmin){
-          return new NextResponse("Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",{ status: 401 })
+          await logAction({
+               userId: user.id,
+               action: "NO_ADMIN_ACCESS",
+               metadata: {
+                    ip,
+                    route: req.url,
+                    method: req.method,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
      }
      const {categoryId} = await params;
      const currCategory = await getResumeTemplateCategoryById(categoryId);
      if(!currCategory){
-          return new NextResponse("Այս կատեգորիան գոյություն չունի",{ status: 400 })
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip,
+                    reason: ERROR_MESSAGES.content.noCategory,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.content.noCategory,{ status: 404 })
      }
      const data = await db.resumeTemplateCategory.delete({
           where: {
                id: categoryId
           }
+     })
+     await logAction({
+          userId: user.id,
+          action: "CATEGORY_DELETED",
+          metadata: { ip, categoryId }
      })
      return NextResponse.json(data)
 }

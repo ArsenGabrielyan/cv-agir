@@ -1,15 +1,7 @@
-import { CoverLetter, CreditCard, Resume } from "@db";
-import { BANKS, CREDIT_CARD_BRANDS, PLACEHOLDERS } from "./constants/other"
+import { CoverLetter, CreditCard, Resume, Account, User, VerificationToken as PrismaVerificationToken  } from "@db";
 import { CoverLetterFormType, CreditCardType, ResumeFormType } from "@/data/types/schema";
-import { PlaceholdersName } from "./types";
-import {BorderStyles} from "@db"
 import { formatDate } from "date-fns";
-
-export const getRandomPlaceholder = (placeholderKey: PlaceholdersName) => {
-     const placeholders = PLACEHOLDERS[placeholderKey];
-     const randomIndex = Math.floor(Math.random()*placeholders.length);
-     return placeholders[randomIndex];
-}
+import type { AdapterAccount, AdapterAccountType, AdapterUser, VerificationToken } from "next-auth/adapters"
 
 export const mapToResumeValues = (data: Resume): ResumeFormType => ({
      id: data.id || undefined,
@@ -98,78 +90,29 @@ export const mapToCreditCardValues = (data: CreditCard): CreditCardType => ({
      city: data.city
 })
 
-export function getLanguageLevel(level: number){
-     if(level>=90 && level <= 100) return "Հմուտ"
-     if(level>=70 && level <= 90) return "Խոսակցական"
-     if(level>=40 && level <= 70) return "Սկսնակ"
-     return "Նվազագույն"
-}
+export const mapToAdapterUser = (user: User, id?: string): AdapterUser => ({
+     id: !id ? user.id : id,
+     name: user.name,
+     email: user.email ?? "",
+     emailVerified: user.emailVerified,
+     image: user.image,
+})
 
-export function getBorderRadius(borderStyle: BorderStyles,type: "default" | "badge" = "default"){
-     if(borderStyle===BorderStyles.square) return "0px"
-     if(borderStyle===BorderStyles.circle) return "9999px"
-     return type==="default" ? "10%" : "8px"
-}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const mapToAdapterAccount = ({createdAt, updatedAt,...account}: Account): AdapterAccount => ({
+     ...account,
+     type: account.type as AdapterAccountType,
+     expires_at: account.expires_at ?? undefined,
+     access_token: account.access_token ?? undefined,
+     id_token: account.id_token ?? undefined,
+     refresh_token: account.refresh_token ?? undefined,
+     token_type: (account.token_type?.toLowerCase() ?? undefined) as Lowercase<string> | undefined,
+     scope: account.scope || undefined,
+     session_state: account.session_state || undefined,
+})
 
-export function fileReplacer(_: unknown, value: unknown){
-     return value instanceof File ? {
-          name: value.name,
-          size: value.size,
-          type: value.type,
-          lastModified: value.lastModified,
-     } : value
-}
-
-export const isObjectId = (id: string) => /^[0-9a-fA-F]{24}$/.test(id)
-
-export const isValidCard = (card: string) => {
-     let s = 0, isSecond = false
-     for(let i=card.length-1;i>=0;i--){
-          let digit = + card[i];
-          if(isSecond){
-               digit*=2;
-               if(digit>9) digit-=9;
-          }
-          s+=digit;
-          isSecond = !isSecond;
-     }
-     return s%10===0;
-}
-
-export const parseExpiryDate = (date: string) : {
-     error?: string,
-     date?: Date
-} => {
-     const parts = date.split("/").map(val=>+val)
-     if(parts.length!==2){
-          return {error: "Ժամկետի ֆորմատը սխալ է։ Պետք է լինի MM/YY ֆորմատով"}
-     }
-     const [month, year] = parts;
-     if (isNaN(month) || isNaN(year) || month < 1 || month > 12) {
-          throw new Error('Տարեթիվը և ամիսը վավեր չեն');
-     }
-     const fullYear = year <= 50 ? 2000 + year : 1900 + year;
-
-     return { date: new Date(fullYear,month,0) }
-}
-
-export const getCreditCardBrandName = (card: string) => {
-     const {visa, mastercard, amex, mir, discover, diners, jcb, unionPay, arca} = CREDIT_CARD_BRANDS;
-     if(visa.test(card)) return "Visa";
-     if(mastercard.test(card)) return "Mastercard";
-     if(amex.test(card)) return "American Express";
-     if(mir.test(card)) return "Mir";
-     if(discover.test(card)) return "Discover";
-     if(diners.test(card)) return "Diners Club";
-     if(jcb.test(card)) return "JCB"
-     if(unionPay.test(card)) return "Union Pay";
-     if(arca.test(card)) return "ArCa";
-     return "Unknown Card"
-}
-export const getBankName = (card: string) => {
-     const mentionedBank = BANKS.find(val=>card.includes(val.startNumber));
-     return {
-          name: mentionedBank?.name || "",
-          title: mentionedBank?.title || ""
-     }
-}
+export const mapToVerificationToken = (token: PrismaVerificationToken): VerificationToken => ({
+     identifier: token.email,
+     expires: token.expires,
+     token: token.token,
+})  

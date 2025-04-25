@@ -89,7 +89,7 @@ export default function EducationField({form,index,remove,id}: ResumeArrayFieldP
                                         <Input
                                              {...field}
                                              type="date"
-                                             value={field.value?.slice(0,10)}
+                                             value={typeof field.value === 'string' ? field.value.slice(0, 10) : ''}
                                         />
                                    </FormControl>
                                    <FormMessage/>
@@ -106,7 +106,7 @@ export default function EducationField({form,index,remove,id}: ResumeArrayFieldP
                                         <Input
                                              {...field}
                                              type="date"
-                                             value={field.value?.slice(0,10)}
+                                             value={typeof field.value === 'string' ? field.value.slice(0, 10) : ''}
                                         />
                                    </FormControl>
                                    <FormMessage/>

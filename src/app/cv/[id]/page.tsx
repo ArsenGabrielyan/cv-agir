@@ -7,6 +7,8 @@ import CVInfoLoader from "@/components/loaders/cv-info";
 import { cache } from "react";
 import dynamic from "next/dynamic";
 import { getUserById } from "@/data/db/user";
+import { logAction } from "@/data/db/logs";
+import { getIpAddress } from "@/lib/limiter";
 
 const getResumeData = cache(async(id: string) => {
      if(!isObjectId(id)){
@@ -38,14 +40,23 @@ export default async function CVPage({params}: CVPageProps){
      const {id} = await params
      const resume = await getResumeData(id);
      const user = resume.userId ? await getUserById(resume.userId) : null
-     if(!user) notFound();
+     if(!user || !user.id) notFound();
+     await logAction({
+          userId: user.id,
+          action: "CV_PAGE_VIEWED",
+          metadata: {
+               resumeId: resume.id,
+               viewerIp: await getIpAddress()
+          }
+     })
      return (
           <PageLayout landingFooter>
                <div className="flex justify-center items-center flex-col">
                     <ResumeInfo data={resume} settings={user.cvPageSettings || {
                          showEmail: true,
                          showAddress: true,
-                         showPhone: true
+                         showPhone: true,
+                         showLinks: true
                     }}/>
                </div>
           </PageLayout>

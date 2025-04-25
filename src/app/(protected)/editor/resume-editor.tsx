@@ -12,7 +12,7 @@ import ResumePreviewSection from "./resume-preview-section"
 import { cn } from "@/lib/utils"
 import useUnsavedChangesWarning from "@/hooks/use-unsaved-changes"
 import { useResumeAutoSave } from "@/hooks/use-auto-save"
-import { mapToResumeValues } from "@/data/helpers"
+import { mapToResumeValues } from "@/data/helpers/maps"
 import { absoluteUrl } from "@/lib/utils";
 import QRCode from "qrcode";
 import usePrint from "@/hooks/use-print"

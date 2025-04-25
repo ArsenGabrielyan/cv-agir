@@ -51,7 +51,7 @@ export default function ResumeCourseField({form,index,remove,id}: ResumeArrayFie
                                         <Input
                                              {...field}
                                              type="date"
-                                             value={field.value?.slice(0,10)}
+                                             value={typeof field.value === 'string' ? field.value.slice(0, 10) : ''}
                                         />
                                    </FormControl>
                                    <FormMessage/>
@@ -68,7 +68,7 @@ export default function ResumeCourseField({form,index,remove,id}: ResumeArrayFie
                                         <Input
                                              {...field}
                                              type="date"
-                                             value={field.value?.slice(0,10)}
+                                             value={typeof field.value === 'string' ? field.value.slice(0, 10) : ''}
                                         />
                                    </FormControl>
                                    <FormMessage/>

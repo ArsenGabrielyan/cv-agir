@@ -4,40 +4,82 @@ import { ContactSchema } from "@/schemas"
 import { ContactFormType } from "@/data/types/schema";
 import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter";
 import { verifyCaptchaToken } from "@/lib/captcha";
+import { ERROR_MESSAGES } from "@/data/constants";
+import { logAction } from "@/data/db/logs";
 
 export const submitContactForm = async (token: string,values: ContactFormType) => {
+     const ip = await getIpAddress();
      if(!token){
-          return {error: "Token-ը չի գտնվել։"}
+          await logAction({
+               action: "CONTACT_FORM_SUBMISSION_ERROR",
+               metadata: {
+                    ip,
+                    reason: ERROR_MESSAGES.contactForm.noCaptchaToken
+               }
+          })
+          return {error: ERROR_MESSAGES.contactForm.noCaptchaToken}
      }
 
      const validatedFields = ContactSchema.safeParse(values);
 
      if(!validatedFields.success){
-          return {error: "Բոլոր դաշտերը վալիդացված չեն"}
+          await logAction({
+               action: "VALIDATION_ERROR",
+               metadata: {
+                    fields: validatedFields.error.issues.map(val=>val.path[0]),
+               }
+          })
+          return {error: ERROR_MESSAGES.validationError}
      }
 
      const {name,email,phone,subject,message} = validatedFields.data;
-
-     const ip = await getIpAddress();
      const limiterKey = `contact:${ip}`;
-
      const verificationResult = await verifyCaptchaToken(token);
 
      if(!verificationResult || !verificationResult.success || verificationResult.score < 0.5) {
           incrementLimiter(limiterKey,60_000)
-          return {error: "Կասկածելի ակտիվություն։ Captcha-ի ստուգումը չստացվեց։"}
+          await logAction({
+               action: "INVALID_CAPTCHA",
+               metadata: {
+                    ip,
+                    score: verificationResult?.score || 0,
+                    reasons: verificationResult?.["error-codes"],
+               }
+          })
+          return {error: ERROR_MESSAGES.contactForm.failedCaptcha}
      }
 
      if(checkLimiter(limiterKey,3)){
-          return {error: "Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ"}
+          await logAction({
+               action: "RATE_LIMIT_EXCEEDED",
+               metadata: {
+                    ip,
+                    route: limiterKey
+               }
+          })
+          return {error: ERROR_MESSAGES.rateLimitError}
      }
 
      try{
           await sendMessage(name,email,phone,subject,message);
+          await logAction({
+               action: "CONTACT_FORM_SUBMITTED",
+               metadata: {
+                    ip,
+                    messageLength: message.length
+               }
+          })
           clearLimiter(limiterKey)
           return {success: "Հաղորդագրությունը ուղարկված է!"}
      } catch {
+          await logAction({
+               action: "CONTACT_FORM_SUBMISSION_ERROR",
+               metadata: {
+                    ip,
+                    reason: ERROR_MESSAGES.unknownError
+               }
+          })
           incrementLimiter(limiterKey,60_000)
-          return {error: "Ինչ-որ բան սխալ գնաց։"}
+          return {error: ERROR_MESSAGES.unknownError}
      }
 }

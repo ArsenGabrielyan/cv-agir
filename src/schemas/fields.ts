@@ -14,7 +14,7 @@ export const fileField = z.instanceof(File, { message: "Պետք է լինի ն�
 .refine((file) => !file || file.size > 0, "Ֆայլը դատարկ է")
 .refine((file) => !file || file.size <= 4 * 1024 * 1024, "Նկարը պետք է լինի մինչև 4 ՄԲ")
 .nullable().optional()
-export const optionalString = z.optional(z.string().trim().max(300,"Այս տեքստը շատ երկար է")).or(z.literal(""))
+export const optionalString = z.optional(z.string().trim().max(1500,"Այս տեքստը շատ երկար է")).or(z.literal(""))
 export const optionalEmailString = z.optional(emailField.trim().transform(email => email.toLowerCase())).or(z.literal(""))
 export const optionalJobTitleString = z.optional(jobTitleField.trim()).or(z.literal(""))
 export const optionalDescString = z.optional(zDescField().trim()).or(z.literal(""))

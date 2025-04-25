@@ -1,13 +1,37 @@
-import { getIsAdmin } from "@/lib/auth"
+import { getIsAdmin, currentUser } from "@/lib/auth"
 import { IAdminAPISearchParams } from "@/data/types";
 import { db } from "@/lib/db";
 import { ResumeTemplate } from "@db";
 import { NextResponse, NextRequest } from "next/server";
+import { ERROR_MESSAGES } from "@/data/constants";
+import { logAction } from "@/data/db/logs";
+import { getIpAddress } from "@/lib/limiter";
 
 export const GET = async (req: NextRequest) => {
      const isAdmin = await getIsAdmin();
+     const ip = await getIpAddress();
+     const user = await currentUser();
+     if(!user || !user.id){
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip,
+                    route: req.url,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
+     }
      if(!isAdmin){
-          return new NextResponse("Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",{ status: 401 })
+          await logAction({
+               userId: user.id,
+               action: "NO_ADMIN_ACCESS",
+               metadata: {
+                    ip,
+                    route: req.url,
+                    method: req.method,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
      }
      const searchParams = req.nextUrl.searchParams;
      const params = Object.fromEntries(searchParams.entries().map(([k,v])=>[k,JSON.parse(v)])) as IAdminAPISearchParams<ResumeTemplate>
@@ -16,7 +40,7 @@ export const GET = async (req: NextRequest) => {
      const data = await db.resumeTemplate.findMany({
           where: {
                name: {
-                    contains: filter.name || "",
+                    contains: filter.name ?? "",
                     mode: 'insensitive'
                },
                isPremium: filter.isPremium,
@@ -29,10 +53,31 @@ export const GET = async (req: NextRequest) => {
 
 export const POST = async(req: Request) => {
      const isAdmin = await getIsAdmin();
-     if(!isAdmin){
-          return new NextResponse("Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",{ status: 401 })
+     const ip = await getIpAddress();
+     const user = await currentUser();
+     if(!user || !user.id){
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip,
+                    route: req.url,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
      }
-     const {name, description, imageName, htmlTemplate, cssStyle, categoryId, isPremium} = await req.json();
+     if(!isAdmin){
+          await logAction({
+               userId: user.id,
+               action: "NO_ADMIN_ACCESS",
+               metadata: {
+                    ip,
+                    route: req.url,
+                    method: req.method,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
+     }
+     const {name, description, imageName, htmlTemplate, cssStyle, categoryId, isPremium}: ResumeTemplate = await req.json();
      const data = await db.resumeTemplate.create({
           data: {
                name,
@@ -43,6 +88,11 @@ export const POST = async(req: Request) => {
                categoryId,
                isPremium
           }
+     })
+     await logAction({
+          userId: user.id,
+          action: "TEMPLATE_CREATED",
+          metadata: {ip, templateId: data.id}
      })
      return NextResponse.json(data)
 }

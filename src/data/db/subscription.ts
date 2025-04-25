@@ -1,5 +1,8 @@
 import { db } from "@/lib/db"
 import { getUserById } from "./user"
+import { ERROR_MESSAGES } from "../constants"
+import { logAction } from "./logs"
+import { getIpAddress } from "@/lib/limiter"
 
 export const getSubscriptionById = async(id: string) => {
      try{
@@ -40,7 +43,11 @@ export const getCurrentSubscription = async(userId: string,subscriptionId: strin
 export const getIsSubscriptionExpired = async(userId: string) => {
      const user = await getUserById(userId);
      if(!user || !user.id){
-          throw new Error("Այս օգտագործողը նույնականացված չէ։")
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: { ip: await getIpAddress() }
+          })
+          throw new Error(ERROR_MESSAGES.auth.unauthorized)
      }
      const subscription = user.subscriptionId ? await getCurrentSubscription(user.id,user.subscriptionId) : null
      return !!subscription && new Date(subscription.endDate) < new Date()

@@ -25,6 +25,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import CreditCardItem from "../premium/cc-components/credit-card-item";
 import CreditCardModal from "@/components/settings/premium/cc-components/credit-card-modal";
 import { UpdateSession, useSession } from "next-auth/react";
+import { ERROR_MESSAGES } from "@/data/constants";
 
 export default function SubscriptionSettings({subscriptions, isExpired}: SettingsContentProps){
      const {update} = useSession()
@@ -48,7 +49,7 @@ export default function SubscriptionSettings({subscriptions, isExpired}: Setting
                          update();
                     }
                })
-               .catch(()=>toast.error("Վայ, ինչ-որ բան սխալ գնաց։ Խնդրում ենք նորից փորձել"))
+               .catch(()=>toast.error(ERROR_MESSAGES.unknownError))
           })
      }
      return (user && user.id) ? (
@@ -133,7 +134,7 @@ function CancelSubDialog({userId,open,onOpenChange,updateSession}: CancelSubDial
                          onOpenChange(false);
                     }
                })
-               .catch(()=>toast.error("Վայ, ինչ-որ բան սխալ գնաց։ Խնդրում ենք նորից փորձել"))
+               .catch(()=>toast.error(ERROR_MESSAGES.unknownError))
           })
      }
      return (

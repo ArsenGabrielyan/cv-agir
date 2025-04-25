@@ -9,12 +9,12 @@ import { AdminLayout } from "./admin-layout";
 import DescriptionIcon from "@mui/icons-material/Description"
 import CategoryIcon from "@mui/icons-material/Category"
 import AdminHomePage from "./admin-homepage";
+import FactCheckIcon from "@mui/icons-material/FactCheck"
+import { AuditLogsList } from "./logs";
 
 const translations: Record<string,TranslationMessages> = {am}
 const dataProvider = simpleRestProvider("/api")
 const i18nProvider = polyglotI18nProvider(locale=>translations[locale],"am");
-
-// TODO: Add Moderation Page and Moderate Users, Resumes, Cover Letters and Add audit log page, which only fetches the GET request
 
 export default function App(){
      return (
@@ -43,6 +43,12 @@ export default function App(){
                     show={TemplateShow}
                     icon={DescriptionIcon}
                     options={{label: "Շաբլոններ"}}
+               />
+               <Resource
+                    name="logs"
+                    list={AuditLogsList}
+                    icon={FactCheckIcon}
+                    options={{label: "Ակտիվություն"}}
                />
           </Admin>
      )

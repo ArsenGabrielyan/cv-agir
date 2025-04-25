@@ -12,7 +12,8 @@ import LoadingButton from "@/components/buttons/loading-button";
 import { addCard, editCard } from "@/actions/subscription-system/credit-card";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
-import { getBankName } from "@/data/helpers";
+import { getBankName } from "@/data/helpers/credit-cards";
+import { ERROR_MESSAGES } from "@/data/constants";
 
 export default function CreditCardModal(){
      const {update} = useSession();
@@ -41,7 +42,7 @@ export default function CreditCardModal(){
                          form.reset();
                          setOpen(false);
                     }
-               }).catch(()=>toast.error("Վայ, մի բան սխալ տեղի ունեցավ"))
+               }).catch(()=>toast.error(ERROR_MESSAGES.unknownError))
           })
      }
      useEffect(()=>{

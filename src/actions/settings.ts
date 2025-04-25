@@ -6,15 +6,29 @@ import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
 import { AccountSettingsType } from "@/data/types/schema";
 import { checkLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter";
+import {ERROR_MESSAGES} from "@/data/constants"
+import { logAction } from "@/data/db/logs";
 
-export const applyAccountSettings = async(values: AccountSettingsType) => {
+export const applyAccountSettings = async(values: AccountSettingsType): Promise<{
+     error?: string,
+     success?: string
+}> => {
      const user = await currentUser();
+     const ip = await getIpAddress();
      if(!user || !user.id){
-          return {error: "Մուտք գործեք հաշվին"}
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: { ip }
+          })
+          return {error: ERROR_MESSAGES.auth.unauthorized}
      }
      const dbUser = await getUserById(user.id);
      if(!dbUser){
-          return {error: "Մուտք գործեք հաշվին"}
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: { ip }
+          })
+          return {error: ERROR_MESSAGES.auth.unauthorized}
      }
 
      if(user.isOauth){
@@ -26,15 +40,30 @@ export const applyAccountSettings = async(values: AccountSettingsType) => {
 
      const limiterKey = `settings:${user.id || await getIpAddress()}`;
      if(checkLimiter(limiterKey,5)){
-          return {error: "Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ"}
+          await logAction({
+               userId: user.id,
+               action: "RATE_LIMIT_EXCEEDED",
+               metadata: {
+                    ip,
+                    route: limiterKey
+               }
+          })
+          return {error: ERROR_MESSAGES.rateLimitError}
      }
 
      if(values.email && values.email!==user.email){
           const existingUser = await getUserByEmail(values.email);
-          console.log(values.email,existingUser)
           if(existingUser && existingUser.id!==user.id){
                incrementLimiter(limiterKey,60_000)
-               return {error: "Էլ․ հասցեն արդեն օգտագործված է"}
+               await logAction({
+                    userId: user.id,
+                    action: "ACTION_ERROR",
+                    metadata: {
+                         ip,
+                         reason: ERROR_MESSAGES.auth.takenEmail
+                    }
+               })
+               return {error: ERROR_MESSAGES.auth.takenEmail}
           }
           const verificationToken = await generateVerificationToken(values.email);
 
@@ -43,6 +72,14 @@ export const applyAccountSettings = async(values: AccountSettingsType) => {
                verificationToken.email,
                verificationToken.token
           )
+          await logAction({
+               userId: user.id,
+               action: "EMAIL_CHANGE_REQUEST",
+               metadata: {
+                    ip,
+                    newEmail: verificationToken.email
+               }
+          })
           return await updateUser(user.id,{
                ...values,
                email: verificationToken.email
@@ -56,12 +93,57 @@ export const applyAccountSettings = async(values: AccountSettingsType) => {
           )
           if(!passwordsMatch){
                incrementLimiter(limiterKey,60_000)
-               return {error: "Գաղտնաբառը սխալ է"}
+               await logAction({
+                    userId: user.id,
+                    action: "ACTION_ERROR",
+                    metadata: {
+                         ip,
+                         reason: ERROR_MESSAGES.auth.wrongPassword
+                    }
+               })
+               return {error: ERROR_MESSAGES.auth.wrongPassword}
           }
           const hashedPassword = await bcrypt.hash(values.newPassword,10);
 
           values.password = hashedPassword;
           values.newPassword = undefined
      }
+     if(user.isTwoFactorEnabled!==values.isTwoFactorEnabled){
+          await logAction({
+               userId: user.id,
+               action: 'TWO_FACTOR_UPDATED',
+               metadata: {
+                    ip,
+                    enabled: values.isTwoFactorEnabled || user.isTwoFactorEnabled
+               }
+          })
+     }
+     const userFields: (keyof AccountSettingsType)[] = ["name","email","jobTitle","phone","address","summary","hobbies","password","newPassword","isTwoFactorEnabled"];
+     const settingsFields: (keyof AccountSettingsType)[] = ["showEmail","showAddress","showPhone","showLinks"];
+     const changedFields: (keyof AccountSettingsType)[] = [];
+
+     for (const key of userFields) {
+          if (key === "password" || key === "newPassword") continue;
+          if (JSON.stringify(values[key]) !== JSON.stringify(dbUser[key as keyof typeof dbUser])) {
+               changedFields.push(key);
+          }
+     }
+
+     for (const key of settingsFields) {
+          if (
+               JSON.stringify(values[key]) !==
+               JSON.stringify(dbUser.cvPageSettings?.[key as keyof typeof dbUser.cvPageSettings])
+          ) {
+               changedFields.push(key);
+          }
+     }
+     await logAction({
+          userId: user.id,
+          action: "ACCOUNT_UPDATED",
+          metadata: {
+               ip,
+               changedFields,
+          }
+     })
      return await updateUser(user.id,values,limiterKey);
 }

@@ -1,5 +1,5 @@
 import PageLayout from "@/components/layout/page-layout";
-import { MAX_FREE_RESUMES } from "@/data/constants/other";
+import { MAX_FREE_RESUMES } from "@/data/constants";
 import { CheckCircle } from "lucide-react";
 import { Metadata } from "next";
 

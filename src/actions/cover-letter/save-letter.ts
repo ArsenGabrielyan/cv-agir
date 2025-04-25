@@ -8,33 +8,65 @@ import path from "path"
 import { getSubscriptionLevel } from "../subscription-system"
 import { getAvailableFeatures } from "@/lib/permission"
 import { getCurrentCoverLetterByUserId } from "@/data/db/cover-letters"
+import { getIpAddress } from "@/lib/limiter"
+import { logAction } from "@/data/db/logs"
+import {ERROR_MESSAGES} from "@/data/constants"
 
 export const saveCoverLetter = async(values: CoverLetterFormType) => {
      const {id} = values
+     const currIp = await getIpAddress();
 
      const validatedFields = CoverLetterFormSchema.safeParse(values);
      if(!validatedFields.success){
-          throw new Error("Բոլոր դաշտերը վալիդացրած չէն")
+          await logAction({
+               action: "VALIDATION_ERROR",
+               metadata: {
+                    fields: validatedFields.error.issues.map(val=>val.path[0]),
+               }
+          })
+          throw new Error(ERROR_MESSAGES.validationError)
      }
      const {profileImg, letterDate, ...coverLetterValues} = validatedFields.data
 
      const user = await currentUser();
 
      if(!user || !user.id){
-          throw new Error("Օգտագործողը նույնականացված չէ")
+          await logAction({
+               action: 'UNAUTHORIZED',
+               metadata: {
+                    ip: currIp,
+               }
+          })
+          throw new Error(ERROR_MESSAGES.auth.unauthorized)
      }
 
      const subscriptionLevel = await getSubscriptionLevel(user.id);
      const {canCreateCoverLetters, canUseCustomization} = getAvailableFeatures(subscriptionLevel);
 
      if(!id && !canCreateCoverLetters){
-          throw new Error("Անվճար բաժանորդագրության համար ուղեկցող նամակի հետ աշխատելը արգելնված է")
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.subscription.noAccessToCoverLetter
+               }
+          })
+          throw new Error(ERROR_MESSAGES.subscription.noAccessToCoverLetter)
      }
 
      const existingCoverLetter = id ? await getCurrentCoverLetterByUserId(user.id,id) : null;
 
-     if(id && !existingCoverLetter ){
-          throw new Error("Ուղեկցոց նամակը չի գտնվել")
+     if(id && !existingCoverLetter){
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.content.noCoverLetter
+               }
+          })
+          throw new Error(ERROR_MESSAGES.content.noCoverLetter)
      }
 
      const hasCustomizations = (coverLetterValues.borderStyle && coverLetterValues.borderStyle!==existingCoverLetter?.borderStyle) || (coverLetterValues.colorHex && coverLetterValues.colorHex !== existingCoverLetter?.colorHex);
@@ -42,7 +74,15 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
      if(hasCustomizations && !canUseCustomization){
           coverLetterValues.colorHex = undefined
           coverLetterValues.borderStyle = undefined
-          throw new Error("Ամբողջական դիզայնի ձևափոխությունը այս բաժանորդագրությունում արգելված է")
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.subscription.noCustomization
+               }
+          })
+          throw new Error(ERROR_MESSAGES.subscription.noCustomization)
      }
 
      let newImgUrl: string | undefined | null = undefined;
@@ -54,7 +94,6 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
           const blob = await put(`cl-photos/${path.extname(profileImg.name)}`,profileImg,{
                access: "public"
           });
-
           newImgUrl = blob.url
      } else if(profileImg===null){
           if(existingCoverLetter?.profileImg){
@@ -64,6 +103,14 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
      }
 
      if(id){
+          await logAction({
+               userId: user.id,
+               action: "COVER_LETTER_UPDATED",
+               metadata: {
+                    ip: currIp,
+                    coverLetterId: id
+               }
+          })
           return db.coverLetter.update({
                where: {id},
                data: {
@@ -74,7 +121,7 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
                }
           })
      } else {
-          return db.coverLetter.create({
+          const newCoverLetter = await db.coverLetter.create({
                data: {
                     ...coverLetterValues,
                     profileImg: newImgUrl,
@@ -84,5 +131,11 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
                     updatedAt: new Date()
                }
           })
+          await logAction({
+               userId: user.id,
+               action: "COVER_LETTER_CREATED",
+               metadata: { ip: currIp, coverLetterId: newCoverLetter.id }
+          })
+          return newCoverLetter
      }
 }

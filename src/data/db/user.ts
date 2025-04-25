@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { AccountSettingsType } from "../types/schema";
-import { clearLimiter, incrementLimiter } from "@/lib/limiter";
+import { clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter";
+import { ERROR_MESSAGES } from "../constants";
+import { logAction } from "./logs";
 
 export const getUserByEmail = async (email: string) => {
      try{
@@ -50,7 +52,15 @@ export const updateUser = async(userId: string, values: AccountSettingsType, lim
           })
           return {success: successMsg}
      } catch {
-          incrementLimiter(limiterKey,60_000)
-          return {error: "Չհաջողվեց թարմացնել կարգավորումները"}
+          incrementLimiter(limiterKey,60_000);
+          await logAction({
+               userId,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: await getIpAddress(),
+                    reason: ERROR_MESSAGES.settingsError
+               }
+          })
+          return {error: ERROR_MESSAGES.settingsError}
      }
 }

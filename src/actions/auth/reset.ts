@@ -4,25 +4,50 @@ import { getUserByEmail } from "@/data/db/user"
 import { sendPasswordResetEmail } from "@/lib/mail"
 import { generatePasswordResetToken } from "@/lib/tokens"
 import { ResetPassType } from "@/data/types/schema"
-import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter"
+import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter"
+import { logAction } from "@/data/db/logs"
+import { ERROR_MESSAGES } from "@/data/constants"
 
 export const reset = async (values: ResetPassType) => {
+     const currIp = await getIpAddress();
      const validatedFields = ResetSchema.safeParse(values);
 
      if(!validatedFields.success){
-          return {error: "Էլ․ հասցեն վալիդացված չէ։"}
+          await logAction({
+               action: "VALIDATION_ERROR",
+               metadata: {
+                    fields: validatedFields.error.issues.map(issue => issue.path[0]),
+                    reason: ERROR_MESSAGES.auth.invalidEmail
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.invalidEmail}
      }
      const {email} = validatedFields.data;
      const limiterKey = `reset:${email}`
 
      if(checkLimiter(limiterKey,3)){
-          return {error: "Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ"}
+          await logAction({
+               action: "RATE_LIMIT_EXCEEDED",
+               metadata: {
+                    ip: currIp,
+                    route: limiterKey
+               }
+          })
+          return {error: ERROR_MESSAGES.rateLimitError}
      }
 
      const existingUser = await getUserByEmail(email);
      if(!existingUser || !existingUser.name){
           incrementLimiter(limiterKey, 60 * 60_000);
-          return {error: "Այս էլ․ հասցեն գրանցված չէ։"}
+          await logAction({
+               action: "PASSWORD_CHANGE_ERROR",
+               metadata: {
+                    ip: currIp,
+                    email,
+                    reason: ERROR_MESSAGES.auth.noUserFound
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.noUserFound}
      }
 
      clearLimiter(limiterKey)
@@ -33,6 +58,12 @@ export const reset = async (values: ResetPassType) => {
           passwordResetToken.email,
           passwordResetToken.token
      )
-
+     await logAction({
+          userId: existingUser.id,
+          action: "PASSWORD_CHANGE_REQUEST",
+          metadata: {
+               email: existingUser.email || "Անհայտ էլ․ հասցե"
+          }
+     })
      return {success: "Վերականգման հղումը ուղարկված է։"}
 }

@@ -20,7 +20,7 @@ import {
      ResumeSkillSchema,
 } from "./resume"
 import {BorderStyles, UserPlan} from "@db"
-import { isValidCard } from "@/data/helpers"
+import { isValidCard } from "@/data/helpers/credit-cards"
 
 export const ResetSchema = z.object({
      email: emailField.trim().transform(email => email.toLowerCase()),

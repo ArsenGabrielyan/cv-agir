@@ -8,7 +8,7 @@ export const GenerateSummarySchema = z.object({
 })
 
 export const GenerateDescriptionSchema = z.object({
-     description: z.string().trim().min(1,"Պարտադիր է").min(20,"Մինիմում 20 նիշ").max(200,"200 նիշից ավել է").trim()
+     description: z.string().trim().min(1,"Պարտադիր է").min(20,"Մինիմում 20 նիշ").max(300,"300 նիշից ավել է").trim()
 })
 
 export const GenerateLetterBodySchema = z.object({

@@ -14,6 +14,7 @@ import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { ERROR_MESSAGES } from "@/data/constants";
 
 interface GenerateWorkExpButtonProps{
      onWorkExpGenerated: (exp: WorkExperienceType) => void
@@ -65,7 +66,7 @@ function InputDialog({open,onOpenChange,onWorkExpGenerated}: InputDialogProps){
                onWorkExpGenerated(response);
           } catch (error) {
                console.error(error);
-               toast.error("Ինչ-որ բան սխալ գնաց։ Խնդրում ենք նորից փորձել")
+               toast.error(ERROR_MESSAGES.unknownError)
           }
      }
 

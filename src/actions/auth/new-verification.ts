@@ -1,22 +1,49 @@
 "use server"
+import { ERROR_MESSAGES } from "@/data/constants"
+import { logAction } from "@/data/db/logs"
 import { getUserByEmail } from "@/data/db/user"
 import { getVerificationTokenByToken } from "@/data/db/verification-token"
 import { db } from "@/lib/db"
+import { getIpAddress } from "@/lib/limiter"
 
 export const newVerification = async (token: string) => {
+     const currIp = await getIpAddress()
      const existingToken = await getVerificationTokenByToken(token);
      if(!existingToken){
-          return {error: "Հաստատման token-ը գոյություն չունի կամ սխալ է։"}
+          await logAction({
+               action: "VERIFICATION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.auth.noVerificationToken
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.noVerificationToken}
      }
 
      const hasExpired = new Date(existingToken.expires) < new Date();
      if(hasExpired){
-          return {error: "Հաստատման token-ի ժամկետը անցել է։"}
+          await logAction({
+               action: "VERIFICATION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    email: existingToken.email,
+                    reason: ERROR_MESSAGES.auth.expiredVerificationToken
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.expiredVerificationToken}
      }
 
      const existingUser = await getUserByEmail(existingToken.email);
      if(!existingUser){
-          return {error: "Այս էլ․ հասցեն գրանցված չէ"}
+          await logAction({
+               action: "VERIFICATION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    email: existingToken.email,
+                    reason: ERROR_MESSAGES.auth.noUserFound
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.noUserFound}
      }
 
      await db.user.update({
@@ -33,6 +60,10 @@ export const newVerification = async (token: string) => {
                id: existingToken.id
           }
      })
-
+     await logAction({
+          userId: existingUser.id,
+          action: "EMAIL_VERIFIED",
+          metadata: { email: existingUser.email || "Անհայտ էլ․ հասցե" }
+     })
      return {success: "Ձեր էլ․ փոստը հաջողությամբ հաստատվել է։"}
 }

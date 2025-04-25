@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { saveResume } from "@/actions/resume/save-resume";
 import { fileReplacer } from "@/data/helpers";
 import { saveCoverLetter } from "@/actions/cover-letter/save-letter";
+import { ERROR_MESSAGES } from "@/data/constants";
 
 export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: string){
      const searchParams = useSearchParams();
@@ -45,7 +46,7 @@ export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: strin
                } catch(error){
                     setIsError(true);
                     console.error(error)
-                    toast.error("Չհաջողվեց պահպանել ռեզյումեն",{
+                    toast.error(ERROR_MESSAGES.content.resumeSaveError,{
                          action: {
                               label: "Նորից փորձել",
                               onClick: () => save()
@@ -102,7 +103,7 @@ export function useCoverLetterAutoSave(coverLetterData: CoverLetterFormType){
                } catch(error){
                     setIsError(true);
                     console.error(error)
-                    toast.error("Չհաջողվեց պահպանել նամակը",{
+                    toast.error(ERROR_MESSAGES.content.noCoverLetter,{
                          action: {
                               label: "Նորից փորձել",
                               onClick: () => save()

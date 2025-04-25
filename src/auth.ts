@@ -7,6 +7,9 @@ import { getAccountByUserId } from "@/data/db/account"
 import { CreditCard, CVPageSettings, UserPlan } from "@db"
 import { getSubscriptionById } from "@/data/db/subscription"
 import { CustomPrismaAdapter } from "@/lib/auth/prisma-adapter"
+import { getIpAddress } from "./lib/limiter"
+import { logAction } from "./data/db/logs"
+import { ERROR_MESSAGES } from "./data/constants"
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -14,29 +17,70 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     error: "/auth/error"
   },
   events: {
-    async linkAccount({user}){
+    async linkAccount({user, account}){
       await db.user.update({
         where: {id: user.id},
         data: {
           emailVerified: new Date()
         }
       })
+      await logAction({
+        userId: user.id,
+        action: "OAUTH_SIGNIN",
+        metadata: {
+          email: user.email || "Անհայտ էլ․ հասցե",
+          provider: account.provider
+        }
+      })
     }
   },
   callbacks: {
     async signIn({user, account}){
+      const currIp = await getIpAddress();
       // Allow OAuth Without Email Verification
-      if(account?.provider!=="credentials") return true;
+      if(account?.provider!=="credentials"){
+        await logAction({
+          userId: user.id,
+          action: "LOGIN_SUCCESS",
+          metadata: {
+            email: user.email || "Անհայտ էլ․ հասցե",
+            ip: currIp,
+          }
+        })
+        return true;
+      } 
 
       const existingUser = await getUserById(user.id as string)
 
       // Prevent Sign In Without a Verification
-      if(!existingUser?.emailVerified) return false
+      if(!existingUser?.emailVerified){
+        await logAction({
+          userId: existingUser?.id,
+          action: "LOGIN_ERROR",
+          metadata: {
+            email: user.email || "Անհայտ էլ․ հասցե",
+            ip: currIp,
+            reason: ERROR_MESSAGES.auth.notVerified
+          }
+        })
+        return false
+      }
 
       if(existingUser.isTwoFactorEnabled) {
         const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
 
-        if(!twoFactorConfirmation) return false;
+        if(!twoFactorConfirmation){
+          await logAction({
+            userId: existingUser?.id,
+            action: "FAILED_2FA_ATTEMPT",
+            metadata: {
+              email: user.email || "Անհայտ էլ․ հասցե",
+              ip: currIp,
+              reason: ERROR_MESSAGES.auth.failed2FA
+            }
+          })
+          return false;
+        }
 
         // Delete 2FA Confimration For Next Sign In
         await db.twoFactorConfirmation.delete({
@@ -45,7 +89,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           }
         })
       }
-
+      await logAction({
+        userId: user.id,
+        action: "LOGIN_SUCCESS",
+        metadata: {
+          email: user.email || "Անհայտ էլ․ հասցե",
+          ip: currIp,
+        }
+      })
       return true;
     },
     async session({ token, session }){

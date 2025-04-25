@@ -1,4 +1,4 @@
-import { CREDIT_CARD_BRANDS } from "@/data/constants/other"
+import { CREDIT_CARD_BRANDS } from "@/data/constants"
 import {FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover, FaCcDinersClub, FaCcJcb} from "react-icons/fa6"
 import {BsCreditCard2Front} from "react-icons/bs"
 import {Arca, Mir, UnionPay} from "@/components/settings/premium/cc-components/other-credit-card-icons"

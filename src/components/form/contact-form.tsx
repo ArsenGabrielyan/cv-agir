@@ -19,6 +19,7 @@ import { FormSuccess } from "./form-success";
 import { ContactFormType } from "@/data/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
 import { getCaptchaToken } from "@/lib/captcha";
+import { ERROR_MESSAGES } from "@/data/constants";
 
 export default function ContactForm(){
      const [isPending, startTransition] = useTransition();
@@ -45,7 +46,7 @@ export default function ContactForm(){
                     setSuccess(data.success);
                } catch (error) {
                     console.error(error)
-                    setError("Ինչ-որ բան սխալ գնաց։")
+                    setError(ERROR_MESSAGES.unknownError)
                }
           })
      }

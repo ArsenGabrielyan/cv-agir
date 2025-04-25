@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react"
 import { newVerification } from "@/actions/auth/new-verification"
 import { FormError } from "@/components/form/form-error"
 import { FormSuccess } from "@/components/form/form-success"
+import { ERROR_MESSAGES } from "@/data/constants"
 
 export const NewVerificationForm = () => {
      const [error, setError] = useState<string | undefined>("");
@@ -17,7 +18,7 @@ export const NewVerificationForm = () => {
      const onSubmit = useCallback(()=>{
           if(success || error) return;
           if(!token) {
-               setError("Բացակայում է հաստատման token-ը");
+               setError(ERROR_MESSAGES.auth.missingVerificationToken);
                return;
           }
           newVerification(token)
@@ -25,7 +26,7 @@ export const NewVerificationForm = () => {
                setSuccess(data.success);
                setError(data.error)
           })
-          .catch(()=>setError("Վայ, մի բան սխալ տեղի ունեցավ"))
+          .catch(()=>setError(ERROR_MESSAGES.unknownError))
      },[token, success, error])
 
      useEffect(()=>{

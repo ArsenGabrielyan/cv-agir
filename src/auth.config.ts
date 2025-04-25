@@ -7,19 +7,32 @@ import { LoginSchema } from "@/schemas"
 import { getUserByEmail } from "@/data/db/user"
 import bcrypt from "bcryptjs"
 import { env } from "@/lib/env"
-import { clearLimiter, incrementLimiter } from "./lib/limiter"
+import { clearLimiter, getIpAddress, incrementLimiter } from "./lib/limiter"
+import { logAction } from "@/data/db/logs"
+import { ERROR_MESSAGES } from "./data/constants"
 
 export default { 
      providers: [
           Credentials({
                async authorize(credentials) {
                     const validatedFields = LoginSchema.safeParse(credentials)
+                    const currIp = await getIpAddress()
 
                     if(validatedFields.success){
                          const {email, password} = validatedFields.data;
                          const limiterKey = `login:${email}`;
                          const user = await getUserByEmail(email);
-                         if(!user || !user.password) return null;
+                         if(!user || !user.password){
+                              await logAction({
+                                   action: "LOGIN_ERROR",
+                                   metadata: {
+                                        email,
+                                        ip: currIp,
+                                        reason: ERROR_MESSAGES.auth.noUserFound
+                                   }
+                              })
+                              return null;
+                         }
 
                          const passwordsMatch = await bcrypt.compare(password,user.password);
 

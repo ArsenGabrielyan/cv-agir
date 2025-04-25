@@ -13,7 +13,8 @@ import { useRouter } from "next/navigation";
 import LoadingButton from "@/components/buttons/loading-button";
 import { SubscriptionPeriod, UserPlan } from "@db";
 import CreditCardInput from "@/components/form/credit-card-input";
-import { getBankName } from "@/data/helpers";
+import { getBankName } from "@/data/helpers/credit-cards";
+import { ERROR_MESSAGES } from "@/data/constants";
 
 interface CheckoutFormProps{
      period: SubscriptionPeriod,
@@ -50,7 +51,7 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                          router.push("/billing-success");
                     }
                })
-               .catch(()=>setError("Վայ, մի բան սխալ տեղի ունեցավ"))
+               .catch(()=>setError(ERROR_MESSAGES.unknownError))
           })
      }
      const currBank = getBankName(form.watch("cardNumber"));

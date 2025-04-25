@@ -24,6 +24,7 @@ import LoadingButton from "@/components/buttons/loading-button";
 import SettingsCard from "../settings-card";
 import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input";
 import { Textarea } from "@/components/ui/textarea";
+import { ERROR_MESSAGES } from "@/data/constants";
 
 export default function AccountSettings(){
      const user = useCurrentUser();
@@ -68,7 +69,7 @@ export default function AccountSettings(){
                          setSuccess(data.success)
                     }
                })
-               .catch(()=>setError("Վայ, մի բան սխալ տեղի ունեցավ"))
+               .catch(()=>setError(ERROR_MESSAGES.unknownError))
           })
      }
 

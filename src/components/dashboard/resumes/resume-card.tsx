@@ -1,5 +1,5 @@
 "use client"
-import { mapToResumeValues } from "@/data/helpers"
+import { mapToResumeValues } from "@/data/helpers/maps"
 import { ResumeServerData } from "@/data/types"
 import { formatDate } from "date-fns"
 import { hy } from "date-fns/locale"
@@ -16,6 +16,7 @@ import DeleteConfirmationDialog from "../../delete-confirmation-dialog"
 import dynamic from "next/dynamic"
 import DocPreviewLoader from "@/components/loaders/doc-preview"
 import usePrint from "@/hooks/use-print"
+import { ERROR_MESSAGES } from "@/data/constants"
 
 interface ResumeCardProps{
      data: ResumeServerData
@@ -138,7 +139,7 @@ function DeleteResumeDialog({resumeId,open,onOpenChange}: DeleteResumeDialogProp
                     onOpenChange(false);
                } catch (error) {
                     console.error(error);
-                    toast.error("Վայ, ինչ-որ բան սխալ գնաց։ Խնդրում ենք նորից փորձել")
+                    toast.error(ERROR_MESSAGES.unknownError)
                }
           })
      }

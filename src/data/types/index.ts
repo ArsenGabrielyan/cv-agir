@@ -1,7 +1,7 @@
 import { SettingsContentProps } from "@/components/settings/settings-tabs";
 import { ExtendedUser } from "@/next-auth";
-import { CoverLetterFormType, ResumeFormType } from "@/data/types/schema";
-import { Prisma, UserPlan } from "@db";
+import { AccountSettingsType, CoverLetterFormType, ResumeFormType } from "@/data/types/schema";
+import { AuditAction, Prisma, ResumeTemplate, ResumeTemplateCategory, UserPlan } from "@db";
 import { LucideProps } from "lucide-react";
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
@@ -64,12 +64,24 @@ interface ISidebarDropdownLink extends ISidebarLinkBase {
 }
 export type ISidebarLink = ISidebarSimpleLink | ISidebarDropdownLink;
 
-// Other Types
-export interface IAdminAPISearchParams<T>{
+// Admin filter types
+export type QuickFilterType = "errors" | "auth" | "coverLetter" | "resume" | "subscription" | "ai" | "app" | "template" | "category"
+export type AuditActionKey = `action-${QuickFilterType}`
+export type IAdminAPISearchParams<T> = T extends ResumeTemplate | ResumeTemplateCategory ?{
      filter: T,
      range?: [number, number],
      sort?: [keyof T, "DESC" | "ASC"]
+} : {
+     filter: Record<AuditActionKey,AuditAction[]> & Partial<{
+          q: string,
+          fromDate: Date,
+          toDate: Date,
+     }>
 }
+export type AuditLogSearchType = Record<AuditAction, string>
+export type AuditLogSearchAction = AuditAction | keyof AuditLogSearchType
+
+// Other Types
 export type ISettingsPage = {
      id: number
      name: string;
@@ -178,3 +190,75 @@ export interface ICaptchaResult{
      hostname: string,
      "error-codes"?: string[]
 }
+
+// Audit Logging
+interface ActionIPResult{ ip: string | null }
+type AuthActionResult<T extends "email-optional" | "email-required" = "email-optional"> = T extends "email-optional" ? {email?: string, ip: string | null} : {email: string, ip: string | null}
+type ContentActionResult<T extends "resume" | "cover-letter" | "template" | "category"> = (T extends "resume" ? {resumeId: string} : T extends "cover-letter" ? {coverLetterId: string} : T extends "template" ? {templateId: string} : T extends "category" ? {categoryId: string} : {id: string}) & ActionIPResult
+type CreditCardActionResult<T extends "optional" | "required" = "required"> = T extends "optional" ? {last4?: string} & ActionIPResult : {last4: string} & ActionIPResult
+export interface AuditMetadataMap{
+     [AuditAction.LOGIN_ERROR]: AuthActionResult & {reason: string},
+     [AuditAction.LOGIN_SUCCESS]: AuthActionResult,
+     [AuditAction.PASSWORD_CHANGE_REQUEST]: {email: string}
+     [AuditAction.PASSWORD_CHANGE_ERROR]: AuthActionResult & {reason: string}
+     [AuditAction.PASSWORD_CHANGED]: AuthActionResult<"email-required">,
+     [AuditAction.VERIFICATION_REQUEST]: {email: string},
+     [AuditAction.VERIFICATION_ERROR]: AuthActionResult & {reason: string}
+     [AuditAction.EMAIL_VERIFIED]: {email: string},
+     [AuditAction.USER_REGISTERED]: AuthActionResult<"email-required">,
+     [AuditAction.REGISTRATION_ERROR]: AuthActionResult & {reason: string},
+     [AuditAction.TWO_FACTOR_VERIFIED]: AuthActionResult
+     [AuditAction.LOGOUT]: AuthActionResult
+     [AuditAction.OAUTH_SIGNIN]: {email: string, provider: string}
+     [AuditAction.FAILED_2FA_ATTEMPT]: AuthActionResult<"email-required"> & {reason: string}
+     // Content
+     [AuditAction.COVER_LETTER_CREATED]: ContentActionResult<"cover-letter">,
+     [AuditAction.COVER_LETTER_UPDATED]: ContentActionResult<"cover-letter">,
+     [AuditAction.COVER_LETTER_DELETED]: ContentActionResult<"cover-letter">,
+     [AuditAction.RESUME_CREATED]: ContentActionResult<"resume">,
+     [AuditAction.RESUME_UPDATED]: ContentActionResult<"resume">,
+     [AuditAction.RESUME_DELETED]: ContentActionResult<"resume">,
+     [AuditAction.CV_PAGE_VIEWED]: { resumeId: string; viewerIp: string | null },
+     // Subscription
+     [AuditAction.CREDIT_CARD_ADDED]: CreditCardActionResult,
+     [AuditAction.CREDIT_CARD_UPDATED]: CreditCardActionResult,
+     [AuditAction.CREDIT_CARD_DELETED]: CreditCardActionResult<"optional">,
+     [AuditAction.PLAN_UPGRADED]: ActionIPResult,
+     [AuditAction.PLAN_CANCELLED]: ActionIPResult,
+     [AuditAction.PLAN_RENEWED]: ActionIPResult,
+     // AI
+     [AuditAction.AI_ERROR]: ActionIPResult & {tool: string, input?: string, reason: string},
+     [AuditAction.AI_SUMMARY_GENERATED]: ActionIPResult
+     [AuditAction.AI_EXPERIENCE_GENERATED]: ActionIPResult
+     [AuditAction.AI_COVER_LETTER_GENERATED]: ActionIPResult
+     // Contact Form
+     [AuditAction.CONTACT_FORM_SUBMISSION_ERROR]: ActionIPResult & {reason: string},
+     [AuditAction.CONTACT_FORM_SUBMITTED]: ActionIPResult & { messageLength: number}
+     [AuditAction.INVALID_CAPTCHA]: ActionIPResult & {score: number, reasons?: string[]}
+     // Settings
+     [AuditAction.ACCOUNT_UPDATED]: ActionIPResult & {changedFields: (keyof AccountSettingsType)[]}
+     [AuditAction.TWO_FACTOR_UPDATED]: ActionIPResult & {enabled: boolean};
+     [AuditAction.EMAIL_CHANGE_REQUEST]: ActionIPResult & {newEmail: string}
+     // Admin
+     [AuditAction.TEMPLATE_CREATED]: ContentActionResult<"template">,
+     [AuditAction.TEMPLATE_UPDATED]: ContentActionResult<"template">,
+     [AuditAction.TEMPLATE_DELETED]: ContentActionResult<"template">,
+     [AuditAction.CATEGORY_CREATED]: ContentActionResult<"category">,
+     [AuditAction.CATEGORY_UPDATED]: ContentActionResult<"category">,
+     [AuditAction.CATEGORY_DELETED]: ContentActionResult<"category">,
+     // Forms
+     [AuditAction.VALIDATION_ERROR]: {fields: (string | number)[]},
+     [AuditAction.RATE_LIMIT_EXCEEDED]: ActionIPResult & {route: string}
+     [AuditAction.ACTION_ERROR]: ActionIPResult & {reason: string},
+     [AuditAction.NO_ADMIN_ACCESS]: ActionIPResult & {route?: string, method: string}
+     [AuditAction.UNAUTHORIZED]: ActionIPResult & {route?: string}
+}
+export type AuditMetadata<A extends AuditAction> = A extends keyof AuditMetadataMap ? AuditMetadataMap[A] : undefined
+export const auditLogsInclude = {
+     user: true
+} satisfies Prisma.AuditLogInclude
+export type AuditLogServerData = Prisma.AuditLogGetPayload<{
+     include: {
+          user: boolean | undefined
+     }
+}>

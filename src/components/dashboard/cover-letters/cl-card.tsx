@@ -9,11 +9,12 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { mapToLetterValues } from "@/data/helpers";
+import { mapToLetterValues } from "@/data/helpers/maps";
 import { formatDate } from "date-fns";
 import { hy } from "date-fns/locale";
 import DocPreviewLoader from "@/components/loaders/doc-preview";
 import usePrint from "@/hooks/use-print";
+import { ERROR_MESSAGES } from "@/data/constants";
 
 interface CoverLetterCardProps{
      data: CoverLetter
@@ -121,7 +122,7 @@ function DeleteCoverLetterDialog({coverLetterId,open,onOpenChange}: DeleteCoverL
                     onOpenChange(false);
                } catch (error) {
                     console.error(error);
-                    toast.error("Վայ, ինչ-որ բան սխալ գնաց։ Խնդրում ենք նորից փորձել")
+                    toast.error(ERROR_MESSAGES.unknownError)
                }
           })
      }

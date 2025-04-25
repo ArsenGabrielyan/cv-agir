@@ -1,34 +1,8 @@
-import { Account, User, VerificationToken as PrismaVerificationToken } from "@db"
+import { User } from "@db"
 import { PrismaClientKnownRequestError } from "@db/runtime/library"
-import type { Adapter, AdapterAccount, AdapterAccountType, AdapterSession, AdapterUser, VerificationToken } from "next-auth/adapters"
+import type { Adapter, AdapterSession, AdapterUser } from "next-auth/adapters"
 import { db } from "../db";
-
-const mapToAdapterUser = (user: User, id?: string): AdapterUser => ({
-     id: !id ? user.id : id,
-     name: user.name,
-     email: user.email ?? "",
-     emailVerified: user.emailVerified,
-     image: user.image,
-})
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const mapToAdapterAccount = ({createdAt, updatedAt,...account}: Account): AdapterAccount => ({
-     ...account,
-     type: account.type as AdapterAccountType,
-     expires_at: account.expires_at ?? undefined,
-     access_token: account.access_token ?? undefined,
-     id_token: account.id_token ?? undefined,
-     refresh_token: account.refresh_token ?? undefined,
-     token_type: (account.token_type?.toLowerCase() ?? undefined) as Lowercase<string> | undefined,
-     scope: account.scope || undefined,
-     session_state: account.session_state || undefined,
-})
-
-const mapToVerificationToken = (token: PrismaVerificationToken): VerificationToken => ({
-     identifier: token.email,
-     expires: token.expires,
-     token: token.token,
-})  
+import {mapToAdapterAccount, mapToAdapterUser, mapToVerificationToken} from "@/data/helpers/maps"
 
 export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
      async createUser({id,...data}) {

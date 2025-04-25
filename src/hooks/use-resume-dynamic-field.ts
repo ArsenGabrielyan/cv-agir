@@ -1,4 +1,4 @@
-import { ARR_FIELD_INITIAL_VALUES } from "@/data/constants/other";
+import { ARR_FIELD_INITIAL_VALUES } from "@/data/constants";
 import { IResumeDynamicFields } from "@/data/types";
 import { ArrayPath, FieldArray, FieldValues, useFieldArray, UseFormReturn } from "react-hook-form";
 import {DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors} from "@dnd-kit/core"

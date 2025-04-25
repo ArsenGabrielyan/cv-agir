@@ -65,6 +65,13 @@ type CreditCard {
   city       String
 }
 
+type CVPageSettings{
+  showEmail Boolean @default(true)
+  showAddress Boolean @default(true)
+  showPhone Boolean @default(true)
+  showLinks Boolean @default(true)
+}
+
 enum UserPlan {
   free
   premium
@@ -81,11 +88,70 @@ enum SubscriptionPeriod {
   monthly
 }
 
-type CVPageSettings{
-  showEmail Boolean @default(true)
-  showAddress Boolean @default(true)
-  showPhone Boolean @default(true)
-  showLinks Boolean @default(true)
+enum AuditAction {
+  // Auth
+  LOGIN_ERROR
+  LOGIN_SUCCESS
+  PASSWORD_CHANGE_REQUEST
+  PASSWORD_CHANGE_ERROR
+  PASSWORD_CHANGED
+  VERIFICATION_REQUEST
+  VERIFICATION_ERROR
+  EMAIL_VERIFIED
+  USER_REGISTERED
+  REGISTRATION_ERROR
+  TWO_FACTOR_VERIFIED
+  LOGOUT
+  OAUTH_SIGNIN
+  FAILED_2FA_ATTEMPT
+
+  // Content
+  COVER_LETTER_DELETED
+  COVER_LETTER_CREATED
+  COVER_LETTER_UPDATED
+  RESUME_DELETED
+  RESUME_CREATED
+  RESUME_UPDATED
+  CV_PAGE_VIEWED
+
+  // Subscription
+  CREDIT_CARD_ADDED
+  CREDIT_CARD_UPDATED
+  CREDIT_CARD_DELETED
+  PLAN_UPGRADED
+  PLAN_CANCELLED
+  PLAN_RENEWED
+
+  // AI
+  AI_ERROR
+  AI_SUMMARY_GENERATED
+  AI_EXPERIENCE_GENERATED
+  AI_COVER_LETTER_GENERATED
+
+  // Contact Form
+  CONTACT_FORM_SUBMISSION_ERROR
+  INVALID_CAPTCHA
+  CONTACT_FORM_SUBMITTED
+
+  // Settings
+  ACCOUNT_UPDATED
+  TWO_FACTOR_UPDATED
+  EMAIL_CHANGE_REQUEST
+
+  // Admin
+  TEMPLATE_CREATED
+  TEMPLATE_UPDATED
+  TEMPLATE_DELETED
+  CATEGORY_CREATED
+  CATEGORY_UPDATED
+  CATEGORY_DELETED
+
+  // Forms
+  VALIDATION_ERROR
+  RATE_LIMIT_EXCEEDED
+  ACTION_ERROR
+  UNAUTHORIZED
+  NO_ADMIN_ACCESS
 }
 
 model User {
@@ -109,6 +175,7 @@ model User {
   hobbies               String?
   currentPlan           UserPlan               @default(free)
   cvPageSettings CVPageSettings?
+  logs AuditLog[]
 
   subscriptionId String?       @db.ObjectId
   subscription   Subscription?
@@ -308,4 +375,16 @@ model Subscription {
   updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id])
+}
+
+model AuditLog{
+  id     String             @id @default(auto()) @map("_id") @db.ObjectId
+  userId String?            @db.ObjectId
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action AuditAction
+  metadata Json?
+
+  createdAt DateTime @default(now())
+  @@index([userId])
+  @@index([action])
 }

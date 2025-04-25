@@ -6,23 +6,46 @@ import { getUserByEmail } from "@/data/db/user"
 import bcrypt from "bcryptjs"
 import { NewPasswordType } from "@/data/types/schema"
 import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter"
+import { logAction } from "@/data/db/logs"
+import { ERROR_MESSAGES } from "@/data/constants"
 
 export const newPassword = async(
      values: NewPasswordType,
      token: string | null
 ) => {
+     const currIp = await getIpAddress();
      if(!token){
-          return {error: "Բացակայում է վերականգման token-ը"}
+          await logAction({
+               action: "PASSWORD_CHANGE_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.auth.noPassResetToken
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.noPassResetToken}
      }
 
      const validatedFields = NewPasswordSchema.safeParse(values);
 
      if(!validatedFields.success){
-          return {error: "Բոլոր դաշտերը վալիդացված չեն"}
+          await logAction({
+               action: "VALIDATION_ERROR",
+               metadata: {
+                    fields: validatedFields.error.issues.map(issue => issue.path[0]),
+               }
+          })
+          return {error: ERROR_MESSAGES.validationError}
      }
      const limiterKey = `new-password:${await getIpAddress()}`;
      if(checkLimiter(limiterKey,5)){
-          return {error: "Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ"}
+          await logAction({
+               action: "RATE_LIMIT_EXCEEDED",
+               metadata: {
+                    ip: currIp,
+                    route: limiterKey
+               }
+          })
+          return {error: ERROR_MESSAGES.rateLimitError}
      }
 
      const {password} = validatedFields.data
@@ -30,25 +53,57 @@ export const newPassword = async(
      const existingToken = await getPasswordResetTokenByToken(token);
      if(!existingToken){
           incrementLimiter(limiterKey,60*60_000)
-          return {error: "Վերականգման token-ը գոյություն չունի կամ սխալ է։"}
+          await logAction({
+               action: "PASSWORD_CHANGE_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.auth.wrongPassResetToken
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.wrongPassResetToken}
      }
 
      const hasExpired = new Date(existingToken.expires) < new Date();
      if(hasExpired){
           incrementLimiter(limiterKey,60*60_000)
-          return {error: "Վերականգման token-ի ժամկետը անցել է։"}
+          await logAction({
+               action: "PASSWORD_CHANGE_ERROR",
+               metadata: {
+                    email: existingToken.email,
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.auth.expiredPassResetToken
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.expiredPassResetToken}
      }
 
      const existingUser = await getUserByEmail(existingToken.email);
      if(!existingUser || !existingUser.password){
           incrementLimiter(limiterKey,60*60_000)
-          return {error: "Այս էլ․ հասցեն գրանցված չէ"}
+          await logAction({
+               action: "PASSWORD_CHANGE_ERROR",
+               metadata: {
+                    email: existingToken.email,
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.auth.noUserFound
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.noUserFound}
      }
 
      const isSamePassword = await bcrypt.compare(password,existingUser.password);
      if(isSamePassword){
           incrementLimiter(limiterKey,60*60_000)
-          return {error: "Նոր գաղտնաբառը չի կարող համընկնել հին գաղտնաբառի հետ։"}
+          await logAction({
+               userId: existingUser.id,
+               action: "PASSWORD_CHANGE_ERROR",
+               metadata: {
+                    email: existingToken.email,
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.auth.wrongNewPassword
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.wrongNewPassword}
      }
 
      clearLimiter(limiterKey)
@@ -65,6 +120,15 @@ export const newPassword = async(
      await db.passwordResetToken.delete({
           where: {
                id: existingToken.id
+          }
+     })
+
+     await logAction({
+          userId: existingUser.id,
+          action: "PASSWORD_CHANGED",
+          metadata: {
+               ip: currIp,
+               email: existingUser.email || "Անհայտ էլ․ հասցե"
           }
      })
 

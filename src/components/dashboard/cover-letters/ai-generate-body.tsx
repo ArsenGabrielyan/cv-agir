@@ -7,6 +7,7 @@ import { CoverLetterFormType } from "@/data/types/schema";
 import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ERROR_MESSAGES } from "@/data/constants";
 
 interface GenerateLetterBodyButtonProps{
      coverLetterData: CoverLetterFormType,
@@ -30,7 +31,7 @@ export default function GenerateLetterBodyButton({coverLetterData, onBodyGenerat
                onBodyGenerated(aiResponse);
           } catch (error){
                console.error(error);
-               toast.error("Ինչ-որ բան սխալ գնաց։ Խնդրում ենք նորից փորձել")
+               toast.error(ERROR_MESSAGES.unknownError)
           } finally{
                setLoading(false)
           }

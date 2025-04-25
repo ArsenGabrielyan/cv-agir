@@ -4,32 +4,64 @@ import { GenerateDescriptionSchema, GenerateLetterBodySchema, GenerateSummarySch
 import { GenerateDescriptionInput, GenerateLetterBodyInput, GenerateSummaryInput, WorkExperienceType } from "@/data/types/schema"
 import {getLanguageLevel} from "@/data/helpers"
 import gemini from "@/lib/gemini"
-import { AI_MODEL, GEN_CONFIG } from "@/data/constants/other"
+import { AI_MODEL, ERROR_MESSAGES, GEN_CONFIG } from "@/data/constants"
 import { currentUser } from "@/lib/auth"
 import { getSubscriptionLevel } from "./subscription-system"
 import { getAvailableFeatures } from "@/lib/permission"
 import DOMPurify from "isomorphic-dompurify"
 import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter"
+import { logAction } from "@/data/db/logs"
+import { maskText } from "@/data/helpers/audit-logs"
 
 export const generateSummary = async(input: GenerateSummaryInput) => {
      const user = await currentUser();
+     const currIp = await getIpAddress();
      if(!user || !user.id){
-          throw new Error("Այս օգտատերը նույնականացված չէ։")
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip: currIp,
+               }
+          })
+          throw new Error(ERROR_MESSAGES.auth.unauthorized)
      }
      const subscriptionLevel = await getSubscriptionLevel(user.id);
      const {canUseAITools} = getAvailableFeatures(subscriptionLevel)
 
      if(!canUseAITools){
-          throw new Error("Այս հմտությունը օգտագործելու համար անցեք պրեմիում տարբերակի։")
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.subscription.cantUseFeatures
+               }
+          })
+          throw new Error(ERROR_MESSAGES.subscription.cantUseFeatures)
      }
 
      const validatedFields = GenerateSummarySchema.safeParse(input);
      if(!validatedFields.success){
-          throw new Error("Բոլոր դաշտերը վալիդացրած չեն")
+          await logAction({
+               userId: user.id,
+               action: "VALIDATION_ERROR",
+               metadata: {
+                    fields: validatedFields.error.issues.map(val=>val.path[0]),
+               }
+          })
+          throw new Error(ERROR_MESSAGES.validationError)
      }
      const limiterKey = `ai:${user.id || await getIpAddress()}`;
      if(checkLimiter(limiterKey,10)){
-          throw new Error("Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ")
+          await logAction({
+               userId: user.id,
+               action: "RATE_LIMIT_EXCEEDED",
+               metadata: {
+                    ip: currIp,
+                    route: limiterKey
+               }
+          })
+          throw new Error(ERROR_MESSAGES.rateLimitError)
      }
 
      const {jobTitle, education, experience, skills, languages} = validatedFields.data
@@ -79,9 +111,24 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
 
      if(!aiResponse){
           incrementLimiter(limiterKey,60_000)
-          throw new Error("Չհաջողվեց գեներացնել պատասխանը Արհեստական Բանականության կողմից")
+          await logAction({
+               userId: user.id,
+               action: "AI_ERROR",
+               metadata: {
+                    tool: "Նկարագրության գեներացում",
+                    ip: currIp,
+                    input: maskText(userMessage,50),
+                    reason: ERROR_MESSAGES.ai.answerError
+               }
+          })
+          throw new Error(ERROR_MESSAGES.ai.answerError)
      }
      clearLimiter(limiterKey)
+     await logAction({
+          userId: user.id,
+          action: "AI_SUMMARY_GENERATED",
+          metadata: { ip: currIp }
+     })
      return DOMPurify.sanitize(aiResponse,{
           ALLOWED_TAGS: ["b", "i", "strong", "p", "ul", "li", "br"],
           ALLOWED_ATTR: [],
@@ -90,23 +137,54 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
 
 export const generateWorkExperience = async(input: GenerateDescriptionInput) => {
      const user = await currentUser();
+     const currIp = await getIpAddress();
      if(!user || !user.id){
-          throw new Error("Այս օգտատերը նույնականացված չէ։")
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip: currIp,
+               }
+          })
+          throw new Error(ERROR_MESSAGES.auth.unauthorized)
      }
      const subscriptionLevel = await getSubscriptionLevel(user.id);
      const {canUseAITools} = getAvailableFeatures(subscriptionLevel)
 
      if(!canUseAITools){
-          throw new Error("Այս հմտությունը օգտագործելու համար անցեք պրեմիում տարբերակի։")
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.subscription.cantUseFeatures
+               }
+          })
+          throw new Error(ERROR_MESSAGES.subscription.cantUseFeatures)
      }
 
      const validatedFields = GenerateDescriptionSchema.safeParse(input);
      if(!validatedFields.success){
-          throw new Error("Աշխատանքային փորձի նկարագրությունը վալիդացված չէ")
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.ai.invalidExperienceInput
+               }
+          })
+          throw new Error(ERROR_MESSAGES.ai.invalidExperienceInput)
      }
      const limiterKey = `ai:${user.id || await getIpAddress()}`;
      if(checkLimiter(limiterKey,10)){
-          throw new Error("Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ")
+          await logAction({
+               userId: user.id,
+               action: "RATE_LIMIT_EXCEEDED",
+               metadata: {
+                    ip: currIp,
+                    route: limiterKey
+               }
+          })
+          throw new Error(ERROR_MESSAGES.rateLimitError)
      }
 
      const {description} = validatedFields.data;
@@ -142,7 +220,17 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
 
      if(!aiResponse){
           incrementLimiter(limiterKey,60_000)
-          throw new Error("Չհաջողվեց գեներացնել պատասխանը Արհեստական Բանականության կողմից")
+          await logAction({
+               userId: user.id,
+               action: "AI_ERROR",
+               metadata: {
+                    tool: "Աշխատանքային փորձի գեներացում",
+                    ip: currIp,
+                    input: maskText(userMessage,50),
+                    reason: ERROR_MESSAGES.ai.answerError
+               }
+          })
+          throw new Error(ERROR_MESSAGES.ai.answerError)
      }
      clearLimiter(limiterKey)
      const parsed = JSON.parse(aiResponse)[0];
@@ -157,29 +245,63 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
           startDate: parsed["Start Date"],
           endDate: parsed["End Date"],
      } satisfies WorkExperienceType
-
+     await logAction({
+          userId: user.id,
+          action: "AI_EXPERIENCE_GENERATED",
+          metadata: { ip: currIp }
+     })
      return responseObj
 }
 
 export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => {
      const user = await currentUser();
+     const currIp = await getIpAddress();
      if(!user || !user.id){
-          throw new Error("Այս օգտատերը նույնականացված չէ։")
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip: currIp,
+               }
+          })
+          throw new Error(ERROR_MESSAGES.auth.unauthorized)
      }
      const subscriptionLevel = await getSubscriptionLevel(user.id);
      const {canUseAITools} = getAvailableFeatures(subscriptionLevel)
 
      if(!canUseAITools){
-          throw new Error("Այս հմտությունը օգտագործելու համար անցեք պրեմիում տարբերակի։")
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.subscription.cantUseFeatures
+               }
+          })
+          throw new Error(ERROR_MESSAGES.subscription.cantUseFeatures)
      }
 
      const validatedFields = GenerateLetterBodySchema.safeParse(input);
      if(!validatedFields.success){
-          throw new Error("Բոլոր դաշտերը վալիդացրած չեն")
+          await logAction({
+               userId: user.id,
+               action: "VALIDATION_ERROR",
+               metadata: {
+                    fields: validatedFields.error.issues.map(val=>val.path[0]),
+               }
+          })
+          throw new Error(ERROR_MESSAGES.validationError)
      }
      const limiterKey = `ai:${user.id || await getIpAddress()}`;
      if(checkLimiter(limiterKey,10)){
-          throw new Error("Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ")
+          await logAction({
+               userId: user.id,
+               action: "RATE_LIMIT_EXCEEDED",
+               metadata: {
+                    ip: currIp,
+                    route: limiterKey
+               }
+          })
+          throw new Error(ERROR_MESSAGES.rateLimitError)
      }
 
      const {jobTitle, fname, lname, recipientName, recipientTitle} = validatedFields.data
@@ -213,9 +335,24 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
 
      if(!aiResponse){
           incrementLimiter(limiterKey,60_000)
-          throw new Error("Չհաջողվեց գեներացնել պատասխանը Արհեստական Բանականության կողմից")
+          await logAction({
+               userId: user.id,
+               action: "AI_ERROR",
+               metadata: {
+                    tool: "Ուղեկցող նամակի գեներացում",
+                    input: maskText(userMessage,50),
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.ai.answerError
+               }
+          })
+          throw new Error(ERROR_MESSAGES.ai.answerError)
      }
      clearLimiter(limiterKey)
+     await logAction({
+          userId: user.id,
+          action: "AI_COVER_LETTER_GENERATED",
+          metadata: { ip: currIp }
+     })
      return DOMPurify.sanitize(aiResponse,{
           ALLOWED_TAGS: ["b", "i", "strong", "p", "ul", "li", "br"],
           ALLOWED_ATTR: [],

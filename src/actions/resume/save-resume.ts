@@ -8,20 +8,36 @@ import path from "path"
 import { getSubscriptionLevel } from "../subscription-system"
 import { getAvailableFeatures } from "@/lib/permission"
 import { getCurrentResumeByUserId, getResumeCountByUserId } from "@/data/db/resumes"
+import { getIpAddress } from "@/lib/limiter"
+import { logAction } from "@/data/db/logs"
+import { ERROR_MESSAGES } from "@/data/constants"
 
 export const saveResume = async(values: ResumeFormType,templateId?: string) => {
      const {id} = values
+     const currIp = await getIpAddress();
 
      const validatedFields = ResumeFormSchema.safeParse(values);
      if(!validatedFields.success){
-          throw new Error("Բոլոր դաշտերը վալիդացրած չէն")
+          await logAction({
+               action: "VALIDATION_ERROR",
+               metadata: {
+                    fields: validatedFields.error.issues.map(val=>val.path[0]),
+               }
+          })
+          throw new Error(ERROR_MESSAGES.validationError)
      }
      const {profileImg, experience, education, courses, ...resumeValues} = validatedFields.data
 
      const user = await currentUser();
 
      if(!user || !user.id){
-          throw new Error("Օգտագործողը նույնականացված չէ")
+          await logAction({
+               action: 'UNAUTHORIZED',
+               metadata: {
+                    ip: currIp,
+               }
+          })
+          throw new Error(ERROR_MESSAGES.auth.unauthorized)
      }
 
      const subscriptionLevel = await getSubscriptionLevel(user.id);
@@ -30,14 +46,30 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
      if(!id){
           const resumeCount = await getResumeCountByUserId(user.id);
           if(!canCreateResume(resumeCount)){
-               throw new Error("Անվճար բաժանորդագրության համար առավելագույն ռեզյումեների քանակը սպառվել է")
+               await logAction({
+                    userId: user.id,
+                    action: "ACTION_ERROR",
+                    metadata: {
+                         ip: currIp,
+                         reason: ERROR_MESSAGES.subscription.limitedResumeCount
+                    }
+               })
+               throw new Error(ERROR_MESSAGES.subscription.limitedResumeCount)
           }
      }
 
      const existingResume = id ? await getCurrentResumeByUserId(user.id,id) : null;
 
      if(id && !existingResume){
-          throw new Error("Ռեզյումեն չի գտնվել")
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.content.noResume
+               }
+          })
+          throw new Error(ERROR_MESSAGES.content.noResume)
      }
 
      const hasCustomizations = (resumeValues.borderStyle && resumeValues.borderStyle!==existingResume?.borderStyle) || (resumeValues.colorHex && resumeValues.colorHex !== existingResume?.colorHex);
@@ -45,7 +77,15 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
      if(hasCustomizations && !canUseCustomization){
           resumeValues.colorHex = undefined
           resumeValues.borderStyle = undefined
-          throw new Error("Ամբողջական դիզայնի ձևափոխությունը այս բաժանորդագրությունում արգելված է")
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.subscription.noCustomization
+               }
+          })
+          throw new Error(ERROR_MESSAGES.subscription.noCustomization)
      }
 
      let newImgUrl: string | undefined | null = undefined;
@@ -57,7 +97,6 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
           const blob = await put(`resume-photos/${path.extname(profileImg.name)}`,profileImg,{
                access: "public"
           });
-
           newImgUrl = blob.url
      } else if(profileImg===null){
           if(existingResume?.profileImg){
@@ -67,6 +106,14 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
      }
 
      if(id){
+          await logAction({
+               userId: user.id,
+               action: "RESUME_UPDATED",
+               metadata: {
+                    ip: currIp,
+                    resumeId: id
+               }
+          })
           return db.resume.update({
                where: {id},
                data: {
@@ -92,7 +139,7 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
                }
           })
      } else {
-          return db.resume.create({
+          const newResume = await db.resume.create({
                data: {
                     ...resumeValues,
                     profileImg: newImgUrl,
@@ -117,5 +164,11 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
                     updatedAt: new Date()
                }
           })
+          await logAction({
+               userId: user.id,
+               action: 'RESUME_CREATED',
+               metadata: { ip: currIp, resumeId: newResume.id }
+          })
+          return newResume
      }
 }

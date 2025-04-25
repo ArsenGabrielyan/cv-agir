@@ -1,6 +1,6 @@
 import { IFeature, IPricing, IQuestionFAQ } from "../types";
 import { BrainCog, Edit, Palette, QrCode } from "lucide-react";
-import { MAX_FREE_RESUMES } from "./other";
+import { MAX_FREE_RESUMES } from ".";
 
 export const PRICING_DATA: IPricing[] = [
      {

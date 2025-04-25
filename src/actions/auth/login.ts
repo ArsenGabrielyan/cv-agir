@@ -8,10 +8,12 @@ import { LoginSchema } from "@/schemas"
 import { AuthError } from "next-auth";
 import { getTwoFactorTokenByEmail } from "@/data/db/two-factor-token";
 import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmation";
+import { logAction } from "@/data/db/logs";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { LoginType } from "@/data/types/schema";
-import { checkLimiter } from "@/lib/limiter";
+import { checkLimiter, getIpAddress } from "@/lib/limiter";
+import { ERROR_MESSAGES } from "@/data/constants";
 
 const authErrorMessages: Record<AuthError["name"], string> = {
      CredentialsSignin: "Սխալ էլ․ փոստ կամ գաղտնաբառ։",
@@ -32,24 +34,46 @@ export const login = async (
      values: LoginType,
      callbackUrl?: string | null
 ) => {
+     const currIp = await getIpAddress();
      const validatedFields = LoginSchema.safeParse(values);
 
      if(!validatedFields.success){
-          return {error: "Բոլոր դաշտերը վալիդացված չեն"}
+          await logAction({
+               action: "VALIDATION_ERROR",
+               metadata: {
+                    fields: validatedFields.error.issues.map(issue => issue.path[0]),
+               }
+          })
+          return {error: ERROR_MESSAGES.validationError}
      }
 
      const {email,password, code} = validatedFields.data;
      const limiterKey = `login:${email}`;
 
      if(checkLimiter(limiterKey,5)) {
-          return {error: "Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ"}
+          await logAction({
+               action: "RATE_LIMIT_EXCEEDED",
+               metadata: {
+                    ip: currIp,
+                    route: limiterKey
+               }
+          })
+          return {error: ERROR_MESSAGES.rateLimitError}
      }
 
      const existingUser = await getUserByEmail(email);
      const isSamePass = await bcrypt.compare(password,existingUser?.password || "");
 
      if(!existingUser || !existingUser.email || !existingUser.password || !existingUser.name){
-          return {error: "Այս էլ․ հասցեն գրանցված չէ"}
+          await logAction({
+               action: "LOGIN_ERROR",
+               metadata: {
+                    email,
+                    ip: currIp,
+                    reason: ERROR_MESSAGES.auth.noUserFound
+               }
+          })
+          return {error: ERROR_MESSAGES.auth.noUserFound}
      }
 
      if(!existingUser.emailVerified) {
@@ -59,7 +83,11 @@ export const login = async (
                verificationToken.email,
                verificationToken.token
           )
-
+          await logAction({
+               userId: existingUser.id,
+               action: "VERIFICATION_REQUEST",
+               metadata: { email }
+          })
           return {success: "Հաստատեք Ձեր Էլ․ Հասցեն"}
      }
 
@@ -67,12 +95,30 @@ export const login = async (
           if(code){
                const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
                if(!twoFactorToken || twoFactorToken.token!==code){
-                    return {error: "Վավերացման կոդը սխալ է"}
+                    await logAction({
+                         userId: existingUser.id,
+                         action: "FAILED_2FA_ATTEMPT",
+                         metadata: {
+                              email,
+                              ip: currIp,
+                              reason: ERROR_MESSAGES.auth.wrong2FAcode
+                         }
+                    })
+                    return {error: ERROR_MESSAGES.auth.wrong2FAcode}
                }
 
                const hasExpired = new Date(twoFactorToken.expires) < new Date();
                if(hasExpired){
-                    return {error: "Վավերացման կոդի ժամկետը անցել է։"}
+                    await logAction({
+                         userId: existingUser.id,
+                         action: "FAILED_2FA_ATTEMPT",
+                         metadata: {
+                              email,
+                              ip: currIp,
+                              reason: ERROR_MESSAGES.auth.expired2FAcode
+                         }
+                    })
+                    return {error: ERROR_MESSAGES.auth.expired2FAcode}
                }
 
                await db.twoFactorToken.delete({
@@ -95,6 +141,14 @@ export const login = async (
                          userId: existingUser.id
                     }
                })
+               await logAction({
+                    userId: existingUser.id,
+                    action: "TWO_FACTOR_VERIFIED",
+                    metadata: {
+                         ip: currIp,
+                         email: existingUser.email
+                    }
+               })
           } else {
                const twoFactorToken = await generateTwoFactorToken(existingUser.email);
                await sendTwoFactorEmail(
@@ -102,7 +156,6 @@ export const login = async (
                     twoFactorToken.email,
                     twoFactorToken.token
                )
-     
                return {twoFactor: true}
           }
      }
@@ -115,6 +168,15 @@ export const login = async (
           })
      } catch(error: unknown){
           if (error instanceof AuthError){
+               await logAction({
+                    userId: existingUser.id,
+                    action: "LOGIN_ERROR",
+                    metadata: {
+                         email,
+                         ip: currIp,
+                         reason: authErrorMessages[error.name] || authErrorMessages.Default
+                    }
+               })
                return {error: authErrorMessages[error.name] || authErrorMessages.Default}
           }
           throw error

@@ -23,6 +23,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import { LoginType } from "@/data/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
 import {REGEXP_ONLY_DIGITS} from "input-otp"
+import { ERROR_MESSAGES } from "@/data/constants";
 
 function getOAuthNotLinkedError(searchParams: ReadonlyURLSearchParams){
      const error = searchParams.get("error");
@@ -64,7 +65,7 @@ export default function LoginForm(){
                          setShowTwoFactor(true);
                     }
                })
-               .catch(()=>setError("Վայ, մի բան սխալ տեղի ունեցավ"))
+               .catch(()=>setError(ERROR_MESSAGES.unknownError))
           })
      }
      return (

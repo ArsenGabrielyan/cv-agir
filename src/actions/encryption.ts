@@ -1,13 +1,14 @@
 "use server"
 import crypto from "crypto"
 import { env } from "@/lib/env"
+import {ERROR_MESSAGES} from "@/data/constants"
 
 const secretKey = env.AES_SECRET
 
 const key = crypto.createHash("sha256").update(secretKey).digest()
 
 export async function encryptData<T extends string>(data: T){
-     if (typeof data !== "string") throw new Error("Գաղտնագրելու տվյալները պետք է լինի վավերական տեքստ։");
+     if (typeof data !== "string") throw new Error(ERROR_MESSAGES.encryption.invalidForEncryption);
      if (!data) return "";
      const iv = crypto.randomBytes(12);
      const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
@@ -20,11 +21,11 @@ export async function encryptData<T extends string>(data: T){
 
 export async function decryptData<T extends string>(data: T){
      if (typeof data !== "string") {
-          throw new Error("Գաղտնագրելու տվյալները պետք է լինի վավերական տեքստ։");
+          throw new Error(ERROR_MESSAGES.encryption.invalidForDecryption);
      }
      if (!data) return "";
      const [ivHex, authTagHex, encryptedHex] = data.split(":");
-     if (!ivHex || !authTagHex || !encryptedHex) throw new Error("Գաղտնագրելու ինչ-որ մաս բացակայում է։");
+     if (!ivHex || !authTagHex || !encryptedHex) throw new Error(ERROR_MESSAGES.encryption.missingParts);
 
      const iv = Buffer.from(ivHex, "hex");
      const authTag = Buffer.from(authTagHex, "hex");

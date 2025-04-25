@@ -1,15 +1,40 @@
+import { ERROR_MESSAGES } from "@/data/constants";
 import { getResumeTemplateById } from "@/data/db/resumes";
-import { getIsAdmin } from "@/lib/auth";
+import { currentUser, getIsAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { logAction } from "@/data/db/logs";
+import { getIpAddress } from "@/lib/limiter";
+import { ResumeTemplate } from "@db";
 
 export const GET = async(
-     _: Request,
+     req: Request,
      {params}: {params: Promise<{templateId: string}>}
 ) => {
      const isAdmin = await getIsAdmin();
+     const ip = await getIpAddress();
+     const user = await currentUser();
+     if(!user || !user.id){
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip,
+                    route: req.url,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
+     }
      if(!isAdmin){
-          return new NextResponse("Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",{ status: 401 })
+          await logAction({
+               userId: user.id,
+               action: "NO_ADMIN_ACCESS",
+               metadata: {
+                    ip,
+                    route: req.url,
+                    method: req.method,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
      }
      const {templateId} = await params
      const data = await getResumeTemplateById(templateId);
@@ -21,11 +46,32 @@ export const PUT = async(
      {params}: {params: Promise<{templateId: string}>}
 ) => {
      const isAdmin = await getIsAdmin();
+     const ip = await getIpAddress();
+     const user = await currentUser();
+     if(!user || !user.id){
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip,
+                    route: req.url,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
+     }
      if(!isAdmin){
-          return new NextResponse("Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",{ status: 401 })
+          await logAction({
+               userId: user.id,
+               action: "NO_ADMIN_ACCESS",
+               metadata: {
+                    ip,
+                    route: req.url,
+                    method: req.method,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
      }
      const {templateId} = await params
-     const {name, description, imageName, htmlTemplate, cssStyle, categoryId, isPremium} = await req.json();
+     const {name, description, imageName, htmlTemplate, cssStyle, categoryId, isPremium}: ResumeTemplate = await req.json();
      const data = await db.resumeTemplate.update({
           where: {
                id: templateId
@@ -40,26 +86,65 @@ export const PUT = async(
                isPremium
           }
      });
+     await logAction({
+          userId: user.id,
+          action: 'TEMPLATE_UPDATED',
+          metadata: {ip, templateId}
+     })
      return NextResponse.json(data)
 }
 
 export const DELETE = async(
-     _: Request,
+     req: Request,
      {params}: {params: Promise<{templateId: string}>}
 ) => {
      const isAdmin = await getIsAdmin();
+     const ip = await getIpAddress();
+     const user = await currentUser();
+     if(!user || !user.id){
+          await logAction({
+               action: "UNAUTHORIZED",
+               metadata: {
+                    ip,
+                    route: req.url,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
+     }
      if(!isAdmin){
-          return new NextResponse("Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",{ status: 401 })
+          await logAction({
+               userId: user.id,
+               action: "NO_ADMIN_ACCESS",
+               metadata: {
+                    ip,
+                    route: req.url,
+                    method: req.method,
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
      }
      const {templateId} = await params
      const currTemplate = await getResumeTemplateById(templateId);
      if(!currTemplate){
-          return new NextResponse("Այս շաբլոնը գոյություն չունի",{ status: 400 })
+          await logAction({
+               userId: user.id,
+               action: "ACTION_ERROR",
+               metadata: {
+                    ip,
+                    reason: ERROR_MESSAGES.content.noTemplate
+               }
+          })
+          return new NextResponse(ERROR_MESSAGES.content.noTemplate,{ status: 400 })
      }
      const data = await db.resumeTemplate.delete({
           where: {
                id: templateId
           }
+     })
+     await logAction({
+          userId: user.id,
+          action: 'TEMPLATE_DELETED',
+          metadata: {ip, templateId}
      })
      return NextResponse.json(data)
 }

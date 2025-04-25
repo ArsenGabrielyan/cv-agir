@@ -15,7 +15,7 @@ import {
      SheetTitle,
      SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { NAVBAR_LINKS } from "@/data/constants/links";
 import { useState } from "react";
 import { LoginButton } from "../auth/login-button";
@@ -23,6 +23,7 @@ import Logo from "./logo";
 import { cn } from "@/lib/utils";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { UserButton } from "../auth/user-button";
+import { LogoutButton } from "../auth/logout-button";
 
 interface NavbarProps{
      isLandingPage?: boolean,
@@ -41,9 +42,14 @@ function AuthButton({responsive=false,className,showUserButtonOnly=false}:AuthBu
                          <Button>Մուտք</Button>
                     </LoginButton>
                ) : !responsive ? (
+                    <>
                     <Button asChild>
                          <Link href="/dashboard">Վահանակ</Link>
                     </Button>
+                    <LogoutButton>
+                         <Button variant="outline" size="icon" title="Դուրս գալ"><LogOut/></Button>
+                    </LogoutButton>
+                    </>
                ) : (
                     <UserButton/>
                )}
