@@ -1,6 +1,6 @@
 import { SettingsContentProps } from "@/components/settings/settings-tabs";
 import { ExtendedUser } from "@/next-auth";
-import { AccountSettingsType, CoverLetterFormType, ResumeFormType } from "@/data/types/schema";
+import { SettingsType, CoverLetterFormType, ResumeFormType } from "@/data/types/schema";
 import { AuditAction, Prisma, ResumeTemplate, ResumeTemplateCategory, UserPlan } from "@db";
 import { LucideProps } from "lucide-react";
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
@@ -236,7 +236,7 @@ export interface AuditMetadataMap{
      [AuditAction.CONTACT_FORM_SUBMITTED]: ActionIPResult & { messageLength: number}
      [AuditAction.INVALID_CAPTCHA]: ActionIPResult & {score: number, reasons?: string[]}
      // Settings
-     [AuditAction.ACCOUNT_UPDATED]: ActionIPResult & {changedFields: (keyof AccountSettingsType)[]}
+     [AuditAction.ACCOUNT_UPDATED]: ActionIPResult & {changedFields: (keyof SettingsType)[]}
      [AuditAction.TWO_FACTOR_UPDATED]: ActionIPResult & {enabled: boolean};
      [AuditAction.EMAIL_CHANGE_REQUEST]: ActionIPResult & {newEmail: string}
      // Admin

@@ -1,14 +1,13 @@
 "use client"
 import { ISettingsPage } from "@/data/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {AccountSettings, Customization, SubscriptionSettings} from "./pages"
+import {Settings, SubscriptionSettings} from "./pages"
 import { useSearchParams, useRouter } from "next/navigation";
 import { Subscription } from "@db";
 
 const settingsPages: ISettingsPage[] = [
-     { id: 1, name: "Հաշիվ", tabName: "account", SettingsContent: AccountSettings},
-     { id: 2, name: "Հավելված", tabName: "customization", SettingsContent: Customization},
-     { id: 3, name: "Բաժանորդագրություն", tabName: "subscription", SettingsContent: SubscriptionSettings},
+     { id: 1, name: "Հաշիվ և Հավելված", tabName: "settings", SettingsContent: Settings},
+     { id: 2, name: "Բաժանորդագրություն", tabName: "subscription", SettingsContent: SubscriptionSettings},
 ];
 
 export interface SettingsContentProps{
@@ -17,7 +16,7 @@ export interface SettingsContentProps{
 }
 export default function SettingsContent(props: SettingsContentProps){
      const searchParams = useSearchParams();
-     const tab = searchParams.get("tab") || "account"
+     const tab = searchParams.get("tab") || "settings"
      const router = useRouter()
      const handleTabChange = (value: string) => {
           const newSearchParams = new URLSearchParams(searchParams);

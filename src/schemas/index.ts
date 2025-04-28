@@ -9,7 +9,8 @@ import {
      optionalDescString,
      fileField,
      nameField,
-     zDescField
+     zDescField,
+     jobTitleField
 } from "./fields"
 import {
      ResumeLinkSchema,
@@ -132,4 +133,39 @@ export const CoverLetterFormSchema = z.object({
 export const CheckoutPageSearchSchema = z.object({
      plan: z.enum([UserPlan.free,UserPlan.premium]),
      planType: z.enum(["yearly","monthly"])
+})
+
+export const SettingsSchema = z.object({
+     name: z.optional(z.string().trim()),
+     email: z.optional(emailField.trim().transform(email => email.toLowerCase())),
+     jobTitle: z.optional(jobTitleField.trim()),
+     phone: z.optional(z.string().trim()),
+     address: z.optional(z.string().trim()),
+     summary: z.optional(z.string().trim()),
+     hobbies: z.optional(z.string().trim()),
+     password: z.optional(passwordField.trim()),
+     newPassword: z.optional(passwordField.trim()),
+     isTwoFactorEnabled: z.optional(z.boolean()),
+     showEmail: z.optional(z.boolean()),
+     showAddress: z.optional(z.boolean()),
+     showPhone: z.optional(z.boolean()),
+     showLinks: z.optional(z.boolean())
+})
+.refine(data=>{
+     if(data.password && !data.newPassword){
+          return false
+     }
+     return true;
+},{
+     message: "Պարտադիր է գրել նոր գաղտնաբառ",
+     path: ["newPassword"]
+})
+.refine(data=>{
+     if(data.newPassword && !data.password){
+          return false;
+     }
+     return true
+},{
+     message: "Պարտադիր է գրել գաղտնաբառ",
+     path: ["password"]
 })

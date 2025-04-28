@@ -3,8 +3,8 @@ import {useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition, useState } from "react";
 import { useSession } from "next-auth/react";
-import { AccountSettingsSchema } from "@/schemas/settings";
-import { applyAccountSettings } from "@/actions/settings";
+import { SettingsSchema } from "@/schemas";
+import { applySettings } from "@/actions/settings";
 import {
      Form,
      FormField,
@@ -19,21 +19,23 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { FormSuccess } from "@/components/form/form-success";
 import { FormError } from "@/components/form/form-error";
 import { Switch } from "@/components/ui/switch";
-import { AccountSettingsType } from "@/data/types/schema";
+import { SettingsType } from "@/data/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
 import SettingsCard from "../settings-card";
 import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input";
 import { Textarea } from "@/components/ui/textarea";
 import { ERROR_MESSAGES } from "@/data/constants";
+import { Label } from "@/components/ui/label";
+import ThemeSettings from "@/components/themes/theme-changer";
 
-export default function AccountSettings(){
+export default function Settings(){
      const user = useCurrentUser();
      const {update} = useSession();
      const [isPending, startTransition] = useTransition();
      const [error, setError] = useState<string|undefined>("")
      const [success, setSuccess] = useState<string|undefined>("")
 
-     const defaultSettings: AccountSettingsType = {
+     const defaultSettings: SettingsType = {
           name: user?.name || undefined,
           email: user?.email || undefined,
           isTwoFactorEnabled: user?.isTwoFactorEnabled || undefined,
@@ -50,16 +52,16 @@ export default function AccountSettings(){
           showLinks: user?.cvPageSettings.showLinks || undefined
      }
 
-     const form = useForm<AccountSettingsType>({
-          resolver: zodResolver(AccountSettingsSchema),
+     const form = useForm<SettingsType>({
+          resolver: zodResolver(SettingsSchema),
           defaultValues: defaultSettings
      })
 
-     const onSubmit = (values: AccountSettingsType) => {
+     const onSubmit = (values: SettingsType) => {
           setError("");
           setSuccess("");
           startTransition(()=>{
-               applyAccountSettings(values)
+               applySettings(values)
                .then(data=>{
                     if(data.error){
                          setError(data.error)
@@ -345,6 +347,15 @@ export default function AccountSettings(){
                               />
                          </SettingsCard>
                     )}
+                    <SettingsCard title="Դիզայն">
+                         <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                              <div className="space-y-0.5">
+                                   <Label>Հավելվածի տեսքը</Label>
+                                   <p className="text-[0.8rem] text-muted-foreground">Հավելվածի գույնը և ռեժիմը</p>
+                              </div>
+                              <ThemeSettings/>
+                         </div>
+                    </SettingsCard>
                     <LoadingButton type="submit" disabled={isSameSettings} loading={isPending}>Պահպանել</LoadingButton>
                </form>
           </Form>

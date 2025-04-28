@@ -4,12 +4,12 @@ import { getUserByEmail, getUserById, updateUser } from "@/data/db/user";
 import { currentUser } from "@/lib/auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
-import { AccountSettingsType } from "@/data/types/schema";
+import { SettingsType } from "@/data/types/schema";
 import { checkLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter";
 import {ERROR_MESSAGES} from "@/data/constants"
 import { logAction } from "@/data/db/logs";
 
-export const applyAccountSettings = async(values: AccountSettingsType): Promise<{
+export const applySettings = async(values: SettingsType): Promise<{
      error?: string,
      success?: string
 }> => {
@@ -118,9 +118,9 @@ export const applyAccountSettings = async(values: AccountSettingsType): Promise<
                }
           })
      }
-     const userFields: (keyof AccountSettingsType)[] = ["name","email","jobTitle","phone","address","summary","hobbies","password","newPassword","isTwoFactorEnabled"];
-     const settingsFields: (keyof AccountSettingsType)[] = ["showEmail","showAddress","showPhone","showLinks"];
-     const changedFields: (keyof AccountSettingsType)[] = [];
+     const userFields: (keyof SettingsType)[] = ["name","email","jobTitle","phone","address","summary","hobbies","password","newPassword","isTwoFactorEnabled"];
+     const settingsFields: (keyof SettingsType)[] = ["showEmail","showAddress","showPhone","showLinks"];
+     const changedFields: (keyof SettingsType)[] = [];
 
      for (const key of userFields) {
           if (key === "password" || key === "newPassword") continue;

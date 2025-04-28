@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { AccountSettingsType } from "../types/schema";
+import { SettingsType } from "../types/schema";
 import { clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter";
 import { ERROR_MESSAGES } from "../constants";
 import { logAction } from "./logs";
@@ -26,7 +26,7 @@ export const getUserById = async (id: string) => {
      }
 }
 
-export const updateUser = async(userId: string, values: AccountSettingsType, limiterKey: string, successMsg = "Կարգավորումները թարմացված են") => {
+export const updateUser = async(userId: string, values: SettingsType, limiterKey: string, successMsg = "Կարգավորումները թարմացված են") => {
      try {
           const {showAddress,showEmail,showPhone,showLinks,...rest} = values
           clearLimiter(limiterKey)

@@ -1,3 +1,2 @@
-export {default as AccountSettings} from "./account-settings";
-export {default as Customization} from "./customization";
+export {default as Settings} from "./settings";
 export {default as SubscriptionSettings} from "./subscription-settings"

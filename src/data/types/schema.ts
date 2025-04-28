@@ -1,12 +1,9 @@
 import * as z from "zod"
-import { AccountSettingsSchema } from "@/schemas/settings"
-import { CheckoutFormSchema, ContactSchema, CoverLetterFormSchema, CreditCardSchema, LoginSchema, NewPasswordSchema, RegisterSchema, ResetSchema, ResumeDetailsSchema, ResumeFormSchema, ResumeInfoSchema, ResumeOptionalDetailsSchema, DocStyleSchema, CoverLetterInfoSchema, CoverLetterDetailsSchema } from "@/schemas"
+import { CheckoutFormSchema, ContactSchema, CoverLetterFormSchema, CreditCardSchema, LoginSchema, NewPasswordSchema, RegisterSchema, ResetSchema, ResumeDetailsSchema, ResumeFormSchema, ResumeInfoSchema, ResumeOptionalDetailsSchema, DocStyleSchema, CoverLetterInfoSchema, CoverLetterDetailsSchema, SettingsSchema } from "@/schemas"
 import { GenerateDescriptionSchema, GenerateLetterBodySchema, GenerateSummarySchema } from "@/schemas/ai"
 
-// Settings
-export type AccountSettingsType = z.infer<typeof AccountSettingsSchema>
-
 // Contact Page and Auth
+export type SettingsType = z.infer<typeof SettingsSchema>
 export type ContactFormType = z.infer<typeof ContactSchema>
 export type LoginType = z.infer<typeof LoginSchema>
 export type NewPasswordType = z.infer<typeof NewPasswordSchema>
