@@ -56,6 +56,10 @@ function AuthButton({responsive=false,className,showUserButtonOnly=false}:AuthBu
                     )
                )}
           </div>
+     ) : !user ? (
+          <LoginButton mode="modal" asChild>
+               <Button>Մուտք</Button>
+          </LoginButton>
      ) : (
           <UserButton/>
      )
