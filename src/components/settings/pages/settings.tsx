@@ -300,7 +300,6 @@ export default function Settings(){
                                                   <PasswordInput
                                                        {...field}
                                                        placeholder="********"
-                                                       type="password"
                                                        disabled={isPending}
                                                   />
                                              </FormControl>
@@ -318,7 +317,6 @@ export default function Settings(){
                                                   <PasswordInput
                                                        {...field}
                                                        placeholder="********"
-                                                       type="password"
                                                        disabled={isPending}
                                                   />
                                              </FormControl>
