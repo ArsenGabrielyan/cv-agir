@@ -60,7 +60,7 @@ export const PLACEHOLDERS: Record<PlaceholdersName,string[]> = {
      degrees: DEGREES
 }
 
-export const AI_MODEL = "gemini-2.0-flash-lite"
+export const AI_MODEL = "gemini-1.5-flash-8b"
 
 export const GEN_CONFIG = (type = "text/plain") => ({
      temperature: 1,
