@@ -15,7 +15,7 @@ export const currentUser = async (): Promise<CurrentUserReturnType | undefined> 
 }
 
 const adminIds = [
-     "67b47e586ab583428524d25d"
+     "6811284e5e4734e57b6b29fe"
 ]
 export const getIsAdmin = async()=>{
      const user = await currentUser();
