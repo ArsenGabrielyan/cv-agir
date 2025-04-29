@@ -33,16 +33,13 @@ export default {
                               })
                               return null;
                          }
-
                          const passwordsMatch = await bcrypt.compare(password,user.password);
-
-                         if(passwordsMatch) {
-                              clearLimiter(limiterKey)
-                              return user;
-                         } else {
+                         if(!passwordsMatch){
                               incrementLimiter(limiterKey,60_000)
                               return null
                          }
+                         clearLimiter(limiterKey)
+                         return user;
                     }
 
                     return null

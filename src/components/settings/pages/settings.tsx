@@ -27,6 +27,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ERROR_MESSAGES } from "@/data/constants";
 import { Label } from "@/components/ui/label";
 import ThemeSettings from "@/components/themes/theme-changer";
+import { PasswordInput } from "@/components/form/password-input";
 
 export default function Settings(){
      const user = useCurrentUser();
@@ -296,7 +297,7 @@ export default function Settings(){
                                         <FormItem>
                                              <FormLabel>Գաղտնաբառ</FormLabel>
                                              <FormControl>
-                                                  <Input
+                                                  <PasswordInput
                                                        {...field}
                                                        placeholder="********"
                                                        type="password"
@@ -314,7 +315,7 @@ export default function Settings(){
                                         <FormItem>
                                              <FormLabel>Նոր գաղտնաբառ</FormLabel>
                                              <FormControl>
-                                                  <Input
+                                                  <PasswordInput
                                                        {...field}
                                                        placeholder="********"
                                                        type="password"

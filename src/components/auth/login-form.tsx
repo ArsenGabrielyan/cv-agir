@@ -24,6 +24,7 @@ import { LoginType } from "@/data/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
 import {REGEXP_ONLY_DIGITS} from "input-otp"
 import { ERROR_MESSAGES } from "@/data/constants";
+import { PasswordInput } from "../form/password-input";
 
 function getOAuthNotLinkedError(searchParams: ReadonlyURLSearchParams){
      const error = searchParams.get("error");
@@ -65,7 +66,10 @@ export default function LoginForm(){
                          setShowTwoFactor(true);
                     }
                })
-               .catch(()=>setError(ERROR_MESSAGES.unknownError))
+               .catch((error)=>{
+                    console.error(error)
+                    setError(ERROR_MESSAGES.unknownError)
+               })
           })
      }
      return (
@@ -108,11 +112,10 @@ export default function LoginForm(){
                                                   <FormItem>
                                                        <FormLabel>Գաղտնաբառ</FormLabel>
                                                        <FormControl>
-                                                            <Input
+                                                            <PasswordInput
                                                                  {...field}
                                                                  placeholder="********"
                                                                  disabled={isPending}
-                                                                 type="password"
                                                             />
                                                        </FormControl>
                                                        <Button size="sm" variant="link" asChild className="px-0 font-normal">
