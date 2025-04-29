@@ -41,17 +41,19 @@ function AuthButton({responsive=false,className,showUserButtonOnly=false}:AuthBu
                     <LoginButton mode="modal" asChild>
                          <Button>Մուտք</Button>
                     </LoginButton>
-               ) : !responsive ? (
-                    <>
-                    <Button asChild>
-                         <Link href="/dashboard">Վահանակ</Link>
-                    </Button>
-                    <LogoutButton>
-                         <Button variant="outline" size="icon" title="Դուրս գալ"><LogOut/></Button>
-                    </LogoutButton>
-                    </>
                ) : (
-                    <UserButton/>
+                    !responsive ? (
+                         <>
+                         <Button asChild>
+                              <Link href="/dashboard">Վահանակ</Link>
+                         </Button>
+                         <LogoutButton>
+                              <Button variant="outline" size="icon" title="Դուրս գալ"><LogOut/></Button>
+                         </LogoutButton>
+                         </>
+                    ) : (
+                         <UserButton/>
+                    )
                )}
           </div>
      ) : (
