@@ -1,4 +1,3 @@
-import { User } from "@db"
 import { PrismaClientKnownRequestError } from "@db/runtime/library"
 import type { Adapter, AdapterSession, AdapterUser } from "next-auth/adapters"
 import { db } from "../db";
