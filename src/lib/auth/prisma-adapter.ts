@@ -37,8 +37,7 @@ export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
                },
                include: { user: true },
           })
-          if(!account || !account.user) return null;
-          return mapToAdapterUser(account.user)
+          return account && account.user ? mapToAdapterUser(account.user) : null
      },
      async updateUser({ id, ...data }){
           const user = await p.user.update({
