@@ -90,8 +90,8 @@ export const mapToCreditCardValues = (data: CreditCard): CreditCardType => ({
      city: data.city
 })
 
-export const mapToAdapterUser = (user: User, id?: string): AdapterUser => ({
-     id: !id ? user.id : id,
+export const mapToAdapterUser = (user: User): AdapterUser => ({
+     id: user.id,
      name: user.name,
      email: user.email ?? "",
      emailVerified: user.emailVerified,

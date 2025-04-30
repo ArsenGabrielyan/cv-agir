@@ -2,7 +2,6 @@ import { db } from "@/lib/db"
 import { AuditAction, Prisma } from "@db"
 import { AuditMetadata } from "../types"
 import { maskEmail } from "../helpers/audit-logs"
-import { isObjectId } from "../helpers"
 
 type LogActionOptions<A extends AuditAction> = AuditMetadata<A> extends undefined ? {
      userId?: string
@@ -16,19 +15,9 @@ type LogActionOptions<A extends AuditAction> = AuditMetadata<A> extends undefine
 
 export async function logAction<A extends AuditAction>({userId,action,metadata}: LogActionOptions<A>){
      try{
-          let targetUserId: string | undefined;
-          if (userId && isObjectId(userId)) {
-               targetUserId = userId;
-          } else if (userId) {
-               const user = await db.user.findUnique({
-                    where: { id: userId },
-                    select: { id: true },
-               });
-               targetUserId = user?.id;
-          }
           await db.auditLog.create({
                data: {
-                    ...(targetUserId && { userId: targetUserId }),
+                    userId,
                     action,
                     ...(metadata !== undefined && { metadata: JSON.parse(JSON.stringify({
                          ...metadata,

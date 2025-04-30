@@ -2,18 +2,25 @@ import { PrismaClientKnownRequestError } from "@db/runtime/library"
 import type { Adapter, AdapterSession, AdapterUser } from "next-auth/adapters"
 import { db } from "../db";
 import {mapToAdapterAccount, mapToAdapterUser, mapToVerificationToken} from "@/data/helpers/maps"
+import { User } from "@db";
 
+function stripUndefined<T>(obj: T) {
+     const data = {} as T
+     for (const key in obj) if (obj[key] !== undefined) data[key] = obj[key]
+     return { data }
+}
 export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
-     async createUser({id,...data}) {
-          const user = await p.user.create(stripUndefined(data));
-          return mapToAdapterUser(user,id)
+     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     async createUser({id,...data}){
+          const user = await p.user.create(stripUndefined(data))
+          return mapToAdapterUser(user)
      },
      async getUser(id){
           try{
                const user = await p.user.findUnique({
                     where: {id}
                })
-               return user ? mapToAdapterUser(user,id) : null
+               return user ? mapToAdapterUser(user) : null
           } catch {
                return null
           }
@@ -37,22 +44,22 @@ export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
                },
                include: { user: true },
           })
-          return account && account.user ? mapToAdapterUser(account.user) : null
+          return mapToAdapterUser(account?.user as User) ?? null
      },
      async updateUser({ id, ...data }){
           const user = await p.user.update({
                where: { id },
                ...stripUndefined(data)
           });
-          return mapToAdapterUser(user,id);
+          return mapToAdapterUser(user);
      },
      async deleteUser(id){
           const user = await p.user.delete({ where: { id } });
-          return mapToAdapterUser(user,id);
+          return mapToAdapterUser(user);
      },
      async linkAccount(data) {
-         const account = await p.account.create({data});
-         return mapToAdapterAccount(account)
+          const account = await p.account.create({data});
+          return mapToAdapterAccount(account)
      },
      async unlinkAccount(provider_providerAccountId) {
           const account = await p.account.delete({
@@ -62,8 +69,8 @@ export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
      },
      async getSessionAndUser(sessionToken) {
           const userAndSession = await p.session.findUnique({
-          where: { sessionToken },
-          include: { user: true },
+               where: { sessionToken },
+               include: { user: true },
           })
           if (!userAndSession) return null
           const { user, ...session } = userAndSession
@@ -128,8 +135,3 @@ export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
           })
      },
 })
-function stripUndefined<T>(obj: T) {
-     const data = {} as T
-     for (const key in obj) if (obj[key] !== undefined) data[key] = obj[key]
-     return { data }
-}
