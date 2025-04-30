@@ -43,7 +43,10 @@ export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
                },
                include: { user: true },
           })
-          return mapToAdapterUser(account?.user as User) ?? null
+          if (!account || !account.user) {
+               return null
+          }
+          return mapToAdapterUser(account.user)
      },
      async updateUser({ id, ...data }){
           const user = await p.user.update({
@@ -58,6 +61,7 @@ export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
      },
      async linkAccount(data) {
           const account = await p.account.create({data,include: {user: true}});
+          if (!account.user) return null;
           return mapToAdapterAccount(account)
      },
      async unlinkAccount(provider_providerAccountId) {

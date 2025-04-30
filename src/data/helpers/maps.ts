@@ -91,13 +91,16 @@ export const mapToCreditCardValues = (data: CreditCard): CreditCardType => ({
      city: data.city
 })
 
-export const mapToAdapterUser = (user: User, nextAuthId?: string): AdapterUser => ({
-     id: nextAuthId ?? user.id,
-     name: user.name,
-     email: user.email ?? "",
-     emailVerified: user.emailVerified,
-     image: user.image,
-})
+export const mapToAdapterUser = (user: User, nextAuthId?: string): AdapterUser => {
+     if (!user) throw new Error("mapToAdapterUser got undefined!");
+     return {
+          id: nextAuthId ?? user.id,
+          name: user.name,
+          email: user.email ?? "",
+          emailVerified: user.emailVerified,
+          image: user.image,
+     }
+}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const mapToAdapterAccount = ({createdAt, updatedAt, user, ...account}: AccountServerData): AdapterAccount => ({
