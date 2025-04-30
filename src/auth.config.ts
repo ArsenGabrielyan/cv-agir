@@ -52,6 +52,11 @@ export default {
           Google({
                clientId: env.GOOGLE_ID,
                clientSecret: env.GOOGLE_SECRET,
+               profile: (profile) => ({
+                    ...profile,
+                    id: profile.sub,
+                    image: profile.picture,
+               })
           }),
           Facebook({
                clientId: env.FACEBOOK_ID,
