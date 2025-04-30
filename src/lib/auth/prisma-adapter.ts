@@ -2,7 +2,6 @@ import { PrismaClientKnownRequestError } from "@db/runtime/library"
 import type { Adapter, AdapterSession, AdapterUser } from "next-auth/adapters"
 import { db } from "../db";
 import {mapToAdapterAccount, mapToAdapterUser, mapToVerificationToken} from "@/data/helpers/maps"
-import { User } from "@db";
 
 function stripUndefined<T>(obj: T) {
      const data = {} as T
