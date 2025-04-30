@@ -88,6 +88,11 @@ export type ISettingsPage = {
      tabName: string;
      SettingsContent: React.ComponentType<SettingsContentProps>
 }
+export type AccountServerData = Prisma.AccountGetPayload<{
+     include: {
+          user: true
+     }
+}>
 
 // Editor Related Types
 export type PlaceholdersName = "jobName" | "degrees"

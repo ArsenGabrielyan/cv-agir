@@ -10,10 +10,9 @@ function stripUndefined<T>(obj: T) {
      return { data }
 }
 export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
-     // eslint-disable-next-line @typescript-eslint/no-unused-vars
      async createUser({id,...data}){
           const user = await p.user.create(stripUndefined(data))
-          return mapToAdapterUser(user)
+          return mapToAdapterUser(user,id)
      },
      async getUser(id){
           try{
@@ -58,12 +57,13 @@ export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
           return mapToAdapterUser(user);
      },
      async linkAccount(data) {
-          const account = await p.account.create({data});
+          const account = await p.account.create({data,include: {user: true}});
           return mapToAdapterAccount(account)
      },
      async unlinkAccount(provider_providerAccountId) {
           const account = await p.account.delete({
                where: { provider_providerAccountId },
+               include: {user: true}
           })
           return mapToAdapterAccount(account)
      },
@@ -112,6 +112,7 @@ export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
      async getAccount(providerAccountId, provider) {
           const account = await p.account.findFirst({
                where: { providerAccountId, provider },
+               include: {user: true}
           })
           return account ? mapToAdapterAccount(account) : null
      },

@@ -1,5 +1,6 @@
-import { CoverLetter, CreditCard, Resume, Account, User, VerificationToken as PrismaVerificationToken  } from "@db";
+import { CoverLetter, CreditCard, Resume, User, VerificationToken as PrismaVerificationToken  } from "@db";
 import { CoverLetterFormType, CreditCardType, ResumeFormType } from "@/data/types/schema";
+import { AccountServerData } from "@/data/types"
 import { formatDate } from "date-fns";
 import type { AdapterAccount, AdapterAccountType, AdapterUser, VerificationToken } from "next-auth/adapters"
 
@@ -90,8 +91,8 @@ export const mapToCreditCardValues = (data: CreditCard): CreditCardType => ({
      city: data.city
 })
 
-export const mapToAdapterUser = (user: User): AdapterUser => ({
-     id: user.id,
+export const mapToAdapterUser = (user: User, nextAuthId?: string): AdapterUser => ({
+     id: nextAuthId ?? user.id,
      name: user.name,
      email: user.email ?? "",
      emailVerified: user.emailVerified,
@@ -99,8 +100,9 @@ export const mapToAdapterUser = (user: User): AdapterUser => ({
 })
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const mapToAdapterAccount = ({createdAt, updatedAt,...account}: Account): AdapterAccount => ({
+export const mapToAdapterAccount = ({createdAt, updatedAt, user, ...account}: AccountServerData): AdapterAccount => ({
      ...account,
+     userId: user.id,
      type: account.type as AdapterAccountType,
      expires_at: account.expires_at ?? undefined,
      access_token: account.access_token ?? undefined,
