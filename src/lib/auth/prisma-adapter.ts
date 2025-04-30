@@ -29,12 +29,17 @@ export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
                return null
           }
      },
-     async getUserByAccount(provider_providerAccountId) {
+     async getUserByAccount({provider, providerAccountId}) {
           const account = await p.account.findUnique({
-               where: { provider_providerAccountId },
+               where: { 
+                    provider_providerAccountId: {
+                         provider, providerAccountId
+                    }
+               },
                include: { user: true },
           })
-          return mapToAdapterUser(account?.user as User) ?? null
+          if(!account || !account.user) return null;
+          return mapToAdapterUser(account.user)
      },
      async updateUser({ id, ...data }){
           const user = await p.user.update({
