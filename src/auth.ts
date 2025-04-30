@@ -165,5 +165,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     strategy: "jwt",
     maxAge: 3*24*60*60,
   },
+  debug: process.env.NODE_ENV!=="production",
   ...authConfig,
 })

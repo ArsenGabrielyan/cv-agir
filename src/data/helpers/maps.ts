@@ -91,10 +91,10 @@ export const mapToCreditCardValues = (data: CreditCard): CreditCardType => ({
      city: data.city
 })
 
-export const mapToAdapterUser = (user: User, nextAuthId?: string): AdapterUser => {
+export const mapToAdapterUser = (user: User): AdapterUser => {
      if (!user) throw new Error("mapToAdapterUser got undefined!");
      return {
-          id: nextAuthId ?? user.id,
+          id: user.id,
           name: user.name,
           email: user.email ?? "",
           emailVerified: user.emailVerified,

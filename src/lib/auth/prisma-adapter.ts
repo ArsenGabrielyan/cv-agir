@@ -9,9 +9,10 @@ function stripUndefined<T>(obj: T) {
      return { data }
 }
 export const CustomPrismaAdapter = (p: typeof db): Adapter  => ({
+     // eslint-disable-next-line @typescript-eslint/no-unused-vars
      async createUser({id,...data}){
           const user = await p.user.create(stripUndefined(data))
-          return mapToAdapterUser(user,id)
+          return mapToAdapterUser(user)
      },
      async getUser(id){
           try{
