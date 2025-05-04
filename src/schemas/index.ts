@@ -28,7 +28,7 @@ export const ResetSchema = z.object({
 })
 
 export const NewPasswordSchema = z.object({
-     password: passwordField.trim().transform(email => email.toLowerCase())
+     password: passwordField.trim()
 })
 
 export const LoginSchema = z.object({
