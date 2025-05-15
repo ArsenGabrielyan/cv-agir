@@ -236,14 +236,14 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
      const parsed = JSON.parse(aiResponse)[0];
 
      const responseObj = {
-          job: parsed["Job Title"],
-          company: parsed["Company Name"],
+          job: parsed["Job Title"] || "",
+          company: parsed["Company Name"] || "",
           jobInfo: DOMPurify.sanitize(parsed["Description"],{
                ALLOWED_TAGS: ["b", "i", "strong", "p", "ul", "li", "br"],
                ALLOWED_ATTR: [],
-          }),
-          startDate: parsed["Start Date"],
-          endDate: parsed["End Date"],
+          }) || "",
+          startDate: parsed["Start Date"] || "",
+          endDate: parsed["End Date"] || "",
      } satisfies WorkExperienceType
      await logAction({
           userId: user.id,
