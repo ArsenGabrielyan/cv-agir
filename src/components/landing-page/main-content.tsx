@@ -14,14 +14,14 @@ export default function MainPageContent(){
      const demoImgSize = isMobile ? 270 : 350;
      return (
           <>
-               <section className="flex justify-center items-center text-center flex-col space-y-6 pt-4 sm:pt-32 w-full bg-[url(/bg.svg)]" id="hero">
+               <section className="relative flex justify-center items-center text-center flex-col space-y-6 pt-4 sm:pt-32 px-4 w-full bg-[url(/bg.svg)] min-h-[90dvh] md:min-h-[50vh]" id="hero">
                     <div className="text-4xl sm:text-5xl md:text-6xl space-y-5 font-bold">
                          <h1>Ձեր ռեզյումեն՝ վայրկյանների ընթացքում</h1>
                     </div>
-                    <p className="text-sm md:text-xl font-light text-muted-foreground">Ստեղծեք պրոֆեսիոնալ ռեզյումե արագ և հեշտ, և ներբեռնեք անվճար</p>
+                    <p className="text-sm md:text-lg lg:text-xl font-light text-muted-foreground">Ստեղծեք պրոֆեսիոնալ ռեզյումե արագ և հեշտ, և ներբեռնեք անվճար</p>
                     <Link href={!user ? "/auth/register" : "/dashboard"} className={buttonVariants({variant: "default"})}>Սկսել անվճար</Link>
                     <p className="text-xs md:text-sm font-normal text-muted-foreground">Վարկային քարտ չի պահանջվում։</p>
-                    <div className="w-full bg-linear-to-b from-transparent to-background h-32"></div>
+                    <div className="absolute md:static bottom-0 left-0 w-full bg-linear-to-b from-transparent to-background h-32"></div>
                </section>
                <section className="flex justify-center items-center flex-col space-y-4 w-full px-3" id="how-it-works">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl space-y-5 font-bold">Ինչպե՞ս է աշխատում</h2>
