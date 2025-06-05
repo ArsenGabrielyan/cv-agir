@@ -8,6 +8,7 @@ const LogoImage: React.FC<React.SVGProps<SVGElement>> = ({width=740.292, height=
     version='1.1'
     viewBox='0 0 195.869 68.723'
     className={className}
+    aria-label='CV-ագիր'
   >
     <path
       fill='none'
@@ -25,7 +26,6 @@ const LogoImage: React.FC<React.SVGProps<SVGElement>> = ({width=740.292, height=
     ></path>
     <g
       strokeWidth='0.9'
-      aria-label='CV-ագիր'
       fontFamily='Montserrat arm'
       fontSize='35.991'
       fontWeight='300'

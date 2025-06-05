@@ -1,21 +1,22 @@
 import PageLayout from "@/components/layout/page-layout";
+import LandingHeroLoader from "@/components/loaders/landing-hero-loader";
 import { MAX_FREE_RESUMES } from "@/data/constants";
 import { CheckCircle } from "lucide-react";
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 
 export const metadata: Metadata = {
      title: "Մեր Մասին"
 }
 
+const AboutHero = dynamic(()=>import("@/components/landing-page/landing-hero"),{
+     loading: () => <LandingHeroLoader/>
+})
+
 export default function AboutPage(){
      return (
           <PageLayout landingFooter>
-               <section className="flex justify-center items-center text-center flex-col space-y-6 pt-4 sm:pt-20 w-full bg-[url(/bg.svg)]">
-                    <div className="text-4xl sm:text-5xl md:text-6xl space-y-5 font-bold">
-                         <h1>Մեր Մասին</h1>
-                    </div>
-                    <div className="w-full h-20"></div>
-               </section>
+               <AboutHero heroTitle="Մեր Մասին"/>
                <section className="py-16 px-6 sm:px-12 md:px-24 lg:px-40 text-center">
                     <h2 className="text-3xl font-bold mb-6">CV-ագիր՝ Ձեր ապագան կերտող ռեզյումե գեներատոր</h2>
                     <p className="text-lg leading-relaxed"><strong>CV-ագիր</strong> ռեզյումե գեներատորը ստեղծվել է, որպեսզի ցանկացած մարդ կարողանա <strong>արագ, արդյունավետ և պրոֆեսիոնալ</strong> ռեզյումե պատրաստել։ Մենք հասկանում ենք, թե որքան կարևոր է ճիշտ ներկայացնել Ձեր հմտությունները և փորձը, ուստի մեր պլատֆորմը ստեղծվել է հենց այս նպատակով։</p>

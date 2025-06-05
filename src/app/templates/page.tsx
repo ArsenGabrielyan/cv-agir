@@ -4,10 +4,16 @@ import TemplateList from "@/components/templates/template-list";
 import { Metadata } from "next";
 import { currentUser } from "@/lib/auth";
 import { getSubscriptionLevel } from "@/actions/subscription-system";
+import dynamic from "next/dynamic";
+import LandingHeroLoader from "@/components/loaders/landing-hero-loader";
 
 export const metadata: Metadata = {
      title: "Ռեզյումեի շաբլոններ"
 }
+
+const TemplateHero = dynamic(()=>import("@/components/landing-page/landing-hero"),{
+     loading: () => <LandingHeroLoader loaderType="template"/>
+})
 
 export default async function TemplatesPage(){
      const user = await currentUser();
@@ -15,13 +21,9 @@ export default async function TemplatesPage(){
      const templates = await getResumeTemplates();
      return (
           <PageLayout landingFooter>
-               <section className="flex justify-center items-center text-center flex-col space-y-6 pt-4 sm:pt-20 w-full bg-[url(/bg.svg)]">
-                    <div className="text-4xl sm:text-5xl md:text-6xl space-y-5 font-bold">
-                         <h1>Շաբլոններ</h1>
-                         <p className="text-sm md:text-xl font-light text-muted-foreground">Նայեք բոլոր ռեզյումեների շաբլոնները այստեղ և ճիշտ օգտագործեք աշխատանքի ընդունելու համար։</p>
-                    </div>
-                    <div className="w-full h-20"></div>
-               </section>
+               <TemplateHero heroTitle="Շաբլոններ">
+                    <p className="text-sm md:text-xl font-light text-muted-foreground">Նայեք բոլոր ռեզյումեների շաբլոնները այստեղ և ճիշտ օգտագործեք աշխատանքի ընդունելու համար։</p>
+               </TemplateHero>
                <TemplateList templates={templates} subscriptionLevel={subscriptionLevel}/>
           </PageLayout>
      )

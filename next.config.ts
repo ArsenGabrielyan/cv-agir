@@ -46,6 +46,22 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  compiler: {
+    removeConsole: {
+      exclude: ['error'],
+    },
+  },
+  modularizeImports: {
+    "@mui/icons-material": {
+      transform: "@mui/icons-material/{{member}}",
+      preventFullImport: true
+    },
+    "react-icons": {
+      transform: "react-icons/{{member}}",
+      preventFullImport: true
+    }
+  },
+  compress: true,
   experimental: {
     serverActions: {
       bodySizeLimit: "4mb"

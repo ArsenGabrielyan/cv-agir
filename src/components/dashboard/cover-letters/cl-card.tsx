@@ -76,6 +76,7 @@ function MoreMenu({coverLetterId,onPrintClick}: MoreMenuProps){
                          variant="ghost"
                          size="icon"
                          className="absolute right-0.5 bottom-0.5 opacity-0 transition-opacity group-hover:opacity-100 z-10"
+                         title="Այլ գործողություններ"
                     >
                          <MoreVertical className="size-4"/>
                     </Button>

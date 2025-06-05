@@ -1,23 +1,24 @@
 import ContactForm from "@/components/form/contact-form";
 import PageLayout from "@/components/layout/page-layout";
+import LandingHeroLoader from "@/components/loaders/landing-hero-loader";
 import { Button } from "@/components/ui/button";
 import {Mail, CircleHelp, MapPin} from "lucide-react"
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 
 export const metadata: Metadata = {
      title: "Հետադարձ կապ"
 }
 
+const ContactHero = dynamic(()=>import("@/components/landing-page/landing-hero"),{
+     loading: () => <LandingHeroLoader/>
+})
+
 export default function ContactPage(){
      return (
           <PageLayout landingFooter>
-               <section className="flex justify-center items-center text-center flex-col space-y-6 pt-4 sm:pt-24 w-full bg-[url(/bg.svg)]">
-                    <div className="text-4xl sm:text-5xl md:text-6xl space-y-5 font-bold">
-                         <h1>Հետադարձ կապ</h1>
-                    </div>
-                    <div className="w-full h-24"></div>
-               </section>
+               <ContactHero heroTitle="Հետադարձ կապ"/>
                <section className="py-16 px-6 sm:px-12 md:px-24 lg:px-40">
                     <ContactForm/>
                     <ul className="grid grid-cols-1 lg:grid-cols-3 w-full gap-6 max-w-[1750px] mt-6">

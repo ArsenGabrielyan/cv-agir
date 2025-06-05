@@ -24,7 +24,7 @@ export default function PremiumModal(){
                     <div className="space-y-4">
                          <div className="flex items-center justify-center space-x-3">
                               <p>Ամսական</p>
-                              <Switch id="billing-mode" checked={isYearly} onCheckedChange={setIsYearly}/>
+                              <Switch title="Բաժանորդագրության տեսակ" id="billing-mode" checked={isYearly} onCheckedChange={setIsYearly}/>
                               <p>Տարեկան</p>
                          </div>
                          <p className="text-center text-3xl md:text-4xl xl:text-5xl font-semibold">${cardPrice.toFixed(2)}/{isYearly ? "տարի" : "ամիս"}</p>

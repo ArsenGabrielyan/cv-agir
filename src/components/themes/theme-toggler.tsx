@@ -13,6 +13,7 @@ export function ThemeModeToggle() {
     <Button
       variant="outline"
       size="icon"
+      title="Փոխել ռեժիմը"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
     >
       <Sun
@@ -23,7 +24,7 @@ export function ThemeModeToggle() {
         className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0
           dark:scale-100"
       />
-      <span className="sr-only">Toggle theme</span>
+      <span className="sr-only">Փոխել ռեժիմը</span>
     </Button>
   );
 }

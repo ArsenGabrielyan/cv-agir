@@ -33,7 +33,8 @@ export const authRoutes: string[] = [
  * @type {RegExp[]}
  */
 export const dynamicRoutes: RegExp[] = [
-     /^\/cv\/[^/]+$/
+     /^\/cv\/[^/]+$/,
+     /^\/demos\/[^/]+$/,
 ]
 
 /**

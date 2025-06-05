@@ -48,7 +48,7 @@ export function ThemeColorToggle() {
       onValueChange={(value) => setThemeColor(value as ThemeColors)}
       defaultValue={themeColor}
     >
-      <SelectTrigger className="w-[180px] ring-offset-transparent focus:ring-transparent">
+      <SelectTrigger className="w-[180px] ring-offset-transparent focus:ring-transparent" title="Փոխել հավելվածի գույնը">
         <SelectValue placeholder="Ընտրել Գույն" />
       </SelectTrigger>
       <SelectContent className="border-muted">

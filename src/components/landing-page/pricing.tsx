@@ -25,7 +25,7 @@ export default function Pricing(){
           <>
                <div className="flex items-center justify-center space-x-3">
                     <p>Ամսական</p>
-                    <Switch id="billing-mode" checked={isYearly} onCheckedChange={handleCheckedChange}/>
+                    <Switch title="Բաժանորդագրության տեսակ" id="billing-mode" checked={isYearly} onCheckedChange={handleCheckedChange}/>
                     <p>Տարեկան</p>
                </div>
                <div className={getGridClass()}>

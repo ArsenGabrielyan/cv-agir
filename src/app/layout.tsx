@@ -5,8 +5,8 @@ import ThemeDataProvider from "@/context/theme-data-provider";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/sonner";
-import Script from "next/script";
 import { env } from "@/lib/env";
+import ReCaptcha from "@/components/recaptcha-script";
 
 export const metadata: Metadata = {
   title: {
@@ -44,9 +44,7 @@ export default async function RootLayout({children}: Readonly<{children: React.R
             <ThemeDataProvider>
               <Toaster/>
               {children}
-              <Script
-                src={`https://www.google.com/recaptcha/api.js?render=${env.NEXT_PUBLIC_RECAPTCHA_SITE}`}
-              />
+              <ReCaptcha siteKey={env.NEXT_PUBLIC_RECAPTCHA_SITE}/>
             </ThemeDataProvider>
           </ThemeProvider>
         </body>

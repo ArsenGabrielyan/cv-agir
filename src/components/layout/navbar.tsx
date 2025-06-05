@@ -84,7 +84,7 @@ export default function Navbar({isLandingPage=false}: NavbarProps){
                          </NavigationMenu>
                          <Sheet open={open} onOpenChange={setIsOpen}>
                               <SheetTrigger asChild>
-                                   <Button className="flex xl:hidden" variant="outline" size="icon"><Menu/></Button>
+                                   <Button className="flex xl:hidden" variant="outline" size="icon" title="Մենյու"><Menu/></Button>
                               </SheetTrigger>
                               <SheetContent className="flex flex-col items-center justify-center z-50">
                                    <SheetHeader>
