@@ -34,6 +34,14 @@ export default async function RootLayout({children}: Readonly<{children: React.R
   return (
     <SessionProvider session={session}>
       <html lang="hy" suppressHydrationWarning>
+        <head>
+          <link rel="preload" href="/demos/demo-1.webm" as="video" type="video/webm" fetchPriority="high" />
+          <link rel="preload" href="/demos/demo-1-thumb.webp" as="image" type="image/webp" fetchPriority="high" />
+          <link rel="preload" href="/demos/demo-2.webm" as="video" type="video/webm" fetchPriority="high" />
+          <link rel="preload" href="/demos/demo-2-thumb.webp" as="image" type="image/webp" fetchPriority="high" />
+          <link rel="preload" href="/demos/demo-3.webm" as="video" type="video/webm" fetchPriority="high" />
+          <link rel="preload" href="/demos/demo-3-thumb.webp" as="image" type="image/webp" fetchPriority="high" />
+        </head>
         <body>
           <ThemeProvider
             attribute="class"
