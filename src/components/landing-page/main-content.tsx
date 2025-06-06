@@ -10,7 +10,7 @@ import DemoVideoLoader from "../loaders/video-loader";
 import LandingHeroLoader from "../loaders/landing-hero-loader";
 
 const DemoVideo = dynamic(()=>import("@/components/landing-page/demo-video"),{
-     loading: DemoVideoLoader
+     loading: () => <DemoVideoLoader/>
 })
 const LandingHero = dynamic(()=>import("@/components/landing-page/landing-hero"),{
      ssr: false,
@@ -34,6 +34,7 @@ export default function MainPageContent(){
                                    src="/demos/demo-1.webm"
                                    srcFallback="/demos/demo-1.mp4"
                                    alt="select template"
+                                   thumbnail="/demos/demo-1-thumb.webp"
                                    className="bg-card p-4 shadow-sm border rounded-xl"
                               />
                               <p>1. Ընտրել ռեզյումեի շաբլոն հարմար և պրոֆեսիոնալ ռեզյումե պատրաստելու համար։</p>
@@ -43,6 +44,7 @@ export default function MainPageContent(){
                                    src="/demos/demo-2.webm"
                                    srcFallback="/demos/demo-2.mp4"
                                    alt="fill data"
+                                   thumbnail="/demos/demo-2-thumb.webp"
                                    className="bg-card p-4 shadow-sm border rounded-xl"
                               />
                               <p>2. Լրացնել Ձեր տվյալները Ձեր ռեզյումեի համար։</p>
@@ -52,6 +54,7 @@ export default function MainPageContent(){
                                    src="/demos/demo-3.webm"
                                    srcFallback="/demos/demo-3.mp4"
                                    alt="print (download) resume"
+                                   thumbnail="/demos/demo-3-thumb.webp"
                                    className="bg-card p-4 shadow-sm border rounded-xl"
                               />
                               <p>3. Ներբեռնել ռեզյումեն որպես PDF ֆայլ կամ տպել այն։</p>

@@ -1,6 +1,15 @@
+import { DEFAULT_VIDEO_DIMENSION } from "@/data/constants";
 import { useIsMobile } from "./use-mobile";
 
-export default function useDemoVideoSize() : number {
+export default function useDemoVideoSize() : {
+     width: string,
+     height: string
+} {
      const isMobile = useIsMobile();
-     return isMobile ? 270 : 350;
+     const size = isMobile ? 270 : 350;
+
+     const width = size > 0 ? `${size}px` : `${DEFAULT_VIDEO_DIMENSION}px`;
+     const height = size > 0 ? `${size}px` : `${DEFAULT_VIDEO_DIMENSION}px`;
+
+     return {width, height}
 }

@@ -11,13 +11,17 @@ const ThemeContext = createContext<ThemeColorStateParams>({} as ThemeColorStateP
 export default function ThemeDataProvider({children}: ThemeProviderProps){
      const [themeColor, setThemeColor] = useState<ThemeColors>(getSavedThemeColor())
      const [isMounted, setIsMounted] = useState(false);
-     const {theme} = useTheme();
+     const { resolvedTheme } = useTheme();
 
      useEffect(()=>{
-          localStorage.setItem("themeColor",themeColor)
-          setGlobalColorTheme(theme as "light" | "dark",themeColor);
-          if(!isMounted) setIsMounted(true)
-     },[themeColor,theme,isMounted])
+          if (!isMounted) {
+               setIsMounted(true);
+          }
+          if (isMounted && resolvedTheme) {
+               localStorage.setItem("themeColor", themeColor);
+               setGlobalColorTheme(resolvedTheme as "light" | "dark", themeColor);
+          }
+     },[themeColor, resolvedTheme, isMounted])
 
      if(!isMounted) return null
      return <ThemeContext.Provider value={{themeColor,setThemeColor}}>

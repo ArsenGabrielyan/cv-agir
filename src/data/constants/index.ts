@@ -243,3 +243,5 @@ export const AUDIT_FILTER_LABELS: Record<QuickFilterType, string> = {
      template: "Շաբլոններ",
      category: "Կատեգորիաներ",
 };
+
+export const DEFAULT_VIDEO_DIMENSION = 270;

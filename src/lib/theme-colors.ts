@@ -252,8 +252,8 @@ export default function setGlobalColorTheme(
 export const getSavedThemeColor = (): ThemeColors => {
   try {
     const savedColor = localStorage.getItem("themeColor") as ThemeColors;
-    return themes[savedColor] ? savedColor : "Zinc"; // Ensure it exists in themes
+    return themes[savedColor] ? savedColor : "Blue"; // Ensure it exists in themes
   } catch {
-    return "Zinc";
+    return "Blue";
   }
 };

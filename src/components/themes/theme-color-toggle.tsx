@@ -23,7 +23,7 @@ const availableThemeColors = [
 
 export function ThemeColorToggle() {
   const { themeColor, setThemeColor } = useThemeContext();
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   const createSelectItems = () => {
     return availableThemeColors.map(({ name, light, dark, title }) => (
@@ -34,7 +34,7 @@ export function ThemeColorToggle() {
               "rounded-full",
               "w-[20px]",
               "h-[20px]",
-              theme === "light" ? light : dark,
+              resolvedTheme === "light" ? light : dark,
             )}
           ></div>
           <div className="text-sm">{title}</div>
