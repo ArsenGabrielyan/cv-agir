@@ -1,8 +1,6 @@
 import { Chip } from "@mui/material";
 import { ResumeTemplate } from "@db"
 import { useRecordContext, TextFieldProps } from "react-admin"
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { materialDark as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export function QuickFilter<T>({label,}: {
      label: string;
@@ -34,11 +32,12 @@ export const TemplatesPanel = () => {
 
 export const CodeField = (props: TextFieldProps<ResumeTemplate> & { language: string }) => {
      const record = useRecordContext(props)
+     const code = (record ? record[props.source] as string : "").trim();
      return record ? (
           <div className="w-full rounded-md overflow-hidden shadow">
-               <SyntaxHighlighter style={style} language={props.language} wrapLongLines={true} customStyle={{width: "100%", borderRadius: "0"}}>
-                    {(record[props.source] as string).trim()}
-               </SyntaxHighlighter>
+               <pre className="break-words whitespace-pre-wrap">
+                    {code}
+               </pre>
           </div>
      ) : null
 }

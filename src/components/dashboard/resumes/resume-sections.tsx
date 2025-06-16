@@ -6,9 +6,9 @@ import { getBorderRadius, getLanguageLevel } from "@/data/helpers"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import PreviewSectionWrapper from "../wrappers/section-wrapper"
-import QRCode from "react-qr-code"
 import { absoluteUrl } from "@/lib/utils"
 import dynamic from "next/dynamic"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface ResumeSectionProps{
      photoSrc?: string | null,
@@ -18,6 +18,10 @@ interface ResumeSectionProps{
 }
 const Markdown = dynamic(()=>import("markdown-to-jsx"),{
      ssr: false
+})
+const QRCode = dynamic(()=>import("react-qr-code"),{
+     ssr: false,
+     loading: () => <Skeleton className="w-[100px] h-[100px] aspect-square object-cover max-w-[100px] max-h-[100px]"/>
 })
 export function HeaderSection({photoSrc, resumeData, resumeId}: ResumeSectionProps){
      const {fname, lname, jobTitle, address, phone, email, colorHex, borderStyle} = resumeData;

@@ -1,14 +1,18 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ResumeFormType } from "@/data/types/schema";
 import { ResumeTemplate } from "@db";
-import ColorPicker from "./style-buttons/color-picker";
 import BorderStyleButton from "./style-buttons/border-style-button";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import DocPreviewLoader from "@/components/loaders/doc-preview";
+import ColorPickerLoader from "@/components/loaders/color-picker-loader";
 
 const ResumePreview = dynamic(()=>import("@/components/dashboard/resumes/resume-preview"),{
      loading: () => <DocPreviewLoader/>
+})
+const ColorPicker = dynamic(()=>import("./style-buttons/color-picker"),{
+     ssr: false,
+     loading: () => <ColorPickerLoader/>
 })
 interface ResumePreviewSectionProps{
      resumeData: ResumeFormType,
