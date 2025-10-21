@@ -1,5 +1,5 @@
 "use client"
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/i18n/routing";
 import Script from "next/script";
 
 interface ReCaptchaProps{

@@ -7,15 +7,22 @@ import { Metadata } from "next";
 import { getResumeCountByUserId } from "@/data/db/resumes";
 import DashboardContent from "@/components/dashboard/dashboard-tabs";
 import { getAvailableFeatures } from "@/lib/permission";
-import { redirect } from "next/navigation";
+import { redirect, routing } from "@/i18n/routing";
+import { LocalePageProps } from "@/app/[locale]/layout";
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
      title: "Վահանակ"
 }
 
-export default async function DashboardPage({searchParams}: {
+export default async function DashboardPage({searchParams, params}: LocalePageProps & {
      searchParams: Promise<{show: string}>
 }){
+     const {locale} = await params
+     if (!hasLocale(routing.locales, locale)) {
+          notFound();
+     }
      const user = await currentUser();
      const {show} = await searchParams;
      if(!user || !user.id){
@@ -36,7 +43,11 @@ export default async function DashboardPage({searchParams}: {
      ])
      const {canCreateCoverLetters} = getAvailableFeatures(subscriptionLevel);
      if(show==="cover-letter" && !canCreateCoverLetters){
-          redirect("/pricing");
+          redirect({
+               href: "/pricing",
+               locale
+          });
+          return
      }
      return (
           <PageLayout sidebarMode>

@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { IPricing } from "@/data/types";
 import { useMemo } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { UserPlan } from "@db";
 
 interface PricingCardProps{

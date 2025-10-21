@@ -5,6 +5,7 @@ import { AuditAction, Prisma, ResumeTemplate, ResumeTemplateCategory, UserPlan }
 import { LucideProps } from "lucide-react";
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
+import { LangCodeType } from "@/i18n/types";
 
 // Themes
 export type ThemeColors = "Zinc" | "Rose" | "Blue" | "Green" | "Orange";
@@ -93,6 +94,7 @@ export type AccountServerData = Prisma.AccountGetPayload<{
           user: true
      }
 }>
+export type RouteFN<T> = (lang: LangCodeType) => T
 
 // Editor Related Types
 export type PlaceholdersName = "jobName" | "degrees"

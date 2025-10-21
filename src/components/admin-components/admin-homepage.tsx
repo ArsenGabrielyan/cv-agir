@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useTheme } from "react-admin";
 import { buttonVariants } from "@/components/ui/button";
 import Logo from "../layout/logo";

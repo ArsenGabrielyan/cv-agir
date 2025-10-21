@@ -1,22 +1,36 @@
 import { Button } from "@/components/ui/button";
 import { currentUser } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import Link from "next/link";
+import { Link, redirect, routing } from "@/i18n/routing";
 import { getSubscriptionLevel } from "@/actions/subscription-system";
 import { Metadata } from "next";
+import { LocalePageProps } from "@/app/[locale]/layout";
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
      title: "Դուք անցել եք պրեմիում տարբերակին։"
 }
 
-export default async function Page(){
+export default async function Page({params}: LocalePageProps){
+     const {locale} = await params
+     if (!hasLocale(routing.locales, locale)) {
+         notFound();
+     }
      const user = await currentUser();
      if(!user || !user.id){
-          redirect("/auth/login")
+          redirect({
+               href: "/auth/login",
+               locale
+          });
+          return;
      }
      const subscriptionLevel = await getSubscriptionLevel(user.id);
      if(subscriptionLevel!=="premium"){
-          redirect("/dashboard")
+          redirect({
+               href: "/dashboard",
+               locale
+          })
+          return;
      }
      return (
           <main className="mx-auto max-w-7xl space-y-6 px-3 py-6 text-center">

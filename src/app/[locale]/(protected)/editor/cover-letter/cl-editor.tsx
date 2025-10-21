@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import CoverLetterPreviewSection from "./cl-preview-section";
 import { useCallback, useRef, useState } from "react";
 import { CoverLetterFormType } from "@/data/types/schema";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { steps } from "./steps";
 import Breadcrumbs from "./breadcrumbs";
 import { useCoverLetterAutoSave } from "@/hooks/use-auto-save";
@@ -15,6 +15,7 @@ import { CoverLetter } from "@db";
 import { mapToLetterValues } from "@/data/helpers/maps";
 import { ExtendedUser } from "@/next-auth";
 import usePrint from "@/hooks/use-print";
+import { useRouter } from "@/i18n/routing";
 
 interface CoverLetterEditorProps {
      letterToEdit: CoverLetter | null;

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { getAvailableFeatures } from "@/lib/permission";
 import PremiumButton from "@/components/buttons/premium-button";
 

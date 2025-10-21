@@ -15,7 +15,7 @@ import {
 import { useCurrentSubscriptionLevel, useCurrentUser } from "@/hooks/use-current-user"
 import { LogoutButton } from "./logout-button"
 import { User, LogOut, Settings, FileUser, FileText, LayoutDashboard, } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 
 export const UserButton = () => {
      const user = useCurrentUser();

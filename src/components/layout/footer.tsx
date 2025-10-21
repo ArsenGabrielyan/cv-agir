@@ -1,6 +1,6 @@
 "use client"
 import ThemeSettings from "@/components/themes/theme-changer";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Logo from "./logo";

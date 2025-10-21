@@ -2,8 +2,9 @@
 import { ISettingsPage } from "@/data/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {Settings, SubscriptionSettings} from "./pages"
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Subscription } from "@db";
+import { useRouter } from "@/i18n/routing";
 
 const settingsPages: ISettingsPage[] = [
      { id: 1, name: "Հաշիվ և Հավելված", tabName: "settings", SettingsContent: Settings},

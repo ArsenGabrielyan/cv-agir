@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import "./globals.css";
+import "../globals.css";
 import { ThemeProvider } from "next-themes";
 import ThemeDataProvider from "@/context/theme-data-provider";
 import { SessionProvider } from "next-auth/react";
@@ -7,6 +7,9 @@ import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { env } from "@/lib/env";
 import ReCaptcha from "@/components/recaptcha-script";
+import {hasLocale, NextIntlClientProvider} from 'next-intl';
+import { routing } from "@/i18n/routing";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: {
@@ -29,11 +32,22 @@ export const viewport: Viewport = {
   themeColor: "#002a4f"
 }
 
-export default async function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
+type Props = {
+  children: React.ReactNode;
+  params: Promise<{locale: string}>;
+};
+
+export type LocalePageProps = Omit<Props,"children">
+ 
+export default async function LocaleLayout({children, params}: Props) {
+  const {locale} = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
   const session = await auth()
   return (
     <SessionProvider session={session}>
-      <html lang="hy" suppressHydrationWarning>
+      <html lang={locale} suppressHydrationWarning>
         <head>
           <link rel="preload" href="/demos/demo-1.webm" as="video" type="video/webm" fetchPriority="high" />
           <link rel="preload" href="/demos/demo-1-thumb.webp" as="image" type="image/webp" fetchPriority="high" />
@@ -50,9 +64,11 @@ export default async function RootLayout({children}: Readonly<{children: React.R
             disableTransitionOnChange
           >
             <ThemeDataProvider>
-              <Toaster/>
-              {children}
-              <ReCaptcha siteKey={env.NEXT_PUBLIC_RECAPTCHA_SITE}/>
+              <NextIntlClientProvider>
+                <Toaster/>
+                {children}
+                <ReCaptcha siteKey={env.NEXT_PUBLIC_RECAPTCHA_SITE}/>
+              </NextIntlClientProvider>
             </ThemeDataProvider>
           </ThemeProvider>
         </body>

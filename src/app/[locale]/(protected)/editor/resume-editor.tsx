@@ -1,7 +1,7 @@
 "use client"
 import { Resume, ResumeTemplate } from "@db"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { steps } from "./steps"
 import Breadcrumbs from "./breadcrumbs"
 import ResumeFormFooter from "./resume-form-footer"
@@ -17,6 +17,7 @@ import { absoluteUrl } from "@/lib/utils";
 import QRCode from "qrcode";
 import usePrint from "@/hooks/use-print"
 import { ExtendedUser } from "@/next-auth"
+import { useRouter } from "@/i18n/routing"
 
 interface ResumeEditorProps {
      resumeToEdit: Resume | null;

@@ -1,6 +1,6 @@
 "use client"
 import { ISidebarLink } from "@/data/types";
-import Link from "next/link";
+import { Link, usePathname } from "@/i18n/routing";
 import {
      SidebarMenuItem,
      SidebarMenuButton,
@@ -8,7 +8,6 @@ import {
      SidebarMenuSubItem,
      SidebarMenuSubButton
 } from "@/components/ui/sidebar";
-import { usePathname } from "next/navigation";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
 import usePremiumModal from "@/hooks/use-premium-modal";

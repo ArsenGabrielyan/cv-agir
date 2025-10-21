@@ -1,18 +1,29 @@
 import { getSubscriptionLevel } from "@/actions/subscription-system";
 import PageLayout from "@/components/layout/page-layout";
 import { UserInfo } from "@/components/user-info";
+import { redirect, routing } from "@/i18n/routing";
 import { currentUser } from "@/lib/auth"
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { LocalePageProps } from "@/app/[locale]/layout";
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
      title: "Ձեր պրոֆիլը"
 }
 
-export default async function ProfilePage(){
+export default async function ProfilePage({params}: LocalePageProps){
+     const {locale} = await params
+     if (!hasLocale(routing.locales, locale)) {
+          notFound();
+     }
      const user = await currentUser();
      if(!user || !user.id){
-          redirect("/auth/login")
+          redirect({
+               href: "/auth/login",
+               locale
+          });
+          return;
      }
      const subscriptionLevel = await getSubscriptionLevel(user.id)
      return (

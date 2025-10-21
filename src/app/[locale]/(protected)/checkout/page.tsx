@@ -2,32 +2,51 @@ import { getSubscriptionLevel } from "@/actions/subscription-system";
 import Logo from "@/components/layout/logo";
 import CheckoutForm from "@/components/settings/premium/checkoutForm";
 import { PRICING_DATA } from "@/data/constants/landing-page";
+import { redirect, routing } from "@/i18n/routing";
 import { currentUser } from "@/lib/auth";
 import { CheckoutPageSearchSchema } from "@/schemas";
 import { UserPlan } from "@db";
 import { Metadata } from "next";
-import { redirect } from "next/navigation"
+import { LocalePageProps } from "@/app/[locale]/layout";
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
      title: "Բաժանորդագրվեք պրեմիում տարբերակին"
 }
 
-export default async function CheckoutPage({searchParams}: {
+export default async function CheckoutPage({searchParams, params}: LocalePageProps & {
      searchParams: Promise<{plan: UserPlan, planType: "yearly" | "monthly"}>
 }){
+     const {locale} = await params
+     if (!hasLocale(routing.locales, locale)) {
+          notFound();
+     }
      const validatedFields = CheckoutPageSearchSchema.safeParse(await searchParams);
      if(!validatedFields.success){
-          redirect("/dashboard")
+          redirect({
+               href: "/dashboard",
+               locale
+          })
+          return;
      }
      const {plan, planType} = validatedFields.data
      const user = await currentUser();
      if(!user || !user.id){
-          redirect("/auth/login")
+          redirect({
+               href: "/auth/login",
+               locale
+          })
+          return;
      }
      const selectedPlan = PRICING_DATA.find(val=>val.planName===plan);
      const subscriptionLevel = await getSubscriptionLevel(user.id);
      if(!selectedPlan || subscriptionLevel==="premium"){
-          redirect("/dashboard")
+          redirect({
+               href: "/dashboard",
+               locale
+          });
+          return;
      }
      const planPrice = planType==="yearly" ? selectedPlan.price*12 : selectedPlan.price;
      return (

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import {Mail, CircleHelp, MapPin} from "lucide-react"
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 export const metadata: Metadata = {
      title: "Հետադարձ կապ"

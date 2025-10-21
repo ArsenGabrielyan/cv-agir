@@ -3,10 +3,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getAvailableFeatures } from "@/lib/permission"
 import { ResumeServerData } from "@/data/types"
 import { CoverLetter, UserPlan } from "@db"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import usePremiumModal from "@/hooks/use-premium-modal"
 import dynamic from "next/dynamic"
 import DocPageLoader from "../loaders/doc-page"
+import { useRouter } from "@/i18n/routing"
 
 interface DashboardContentProps{
      resumes: ResumeServerData[],

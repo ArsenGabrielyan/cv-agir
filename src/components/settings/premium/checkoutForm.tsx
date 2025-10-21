@@ -9,7 +9,7 @@ import { useState, useTransition } from "react";
 import { FormError } from "@/components/form/form-error";
 import { FormSuccess } from "@/components/form/form-success";
 import { proceedToCheckout } from "@/actions/subscription-system";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import LoadingButton from "@/components/buttons/loading-button";
 import { SubscriptionPeriod, UserPlan } from "@db";
 import CreditCardInput from "@/components/form/credit-card-input";

@@ -1,6 +1,6 @@
 {
   "name": "cv-agir",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -54,12 +54,14 @@
     "marked": "^15.0.7",
     "next": "^15.3.1",
     "next-auth": "^5.0.0-beta.25",
+    "next-intl": "^4.3.12",
     "next-themes": "^0.4.6",
     "print-js": "^1.6.0",
     "qrcode": "^1.5.4",
     "ra-data-simple-rest": "^5.6.3",
     "react": "^19.0.0",
     "react-admin": "^5.6.3",
+    "react-circle-flags": "^0.0.23",
     "react-color": "^2.19.3",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.0",

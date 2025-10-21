@@ -7,7 +7,7 @@ import { MoreVertical, Trash2, Printer } from "lucide-react";
 import { useRef, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import dynamic from "next/dynamic";
 import { mapToLetterValues } from "@/data/helpers/maps";
 import { formatDate } from "date-fns";

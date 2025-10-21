@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import usePremiumModal from "@/hooks/use-premium-modal";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 export default function PremiumModal(){
      const {price, perks, planName} = PRICING_DATA[1];

@@ -3,10 +3,13 @@ import PageLayout from "@/components/layout/page-layout";
 import { currentUser } from "@/lib/auth";
 import { getAvailableFeatures } from "@/lib/permission";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { getCoverLetterById } from "@/data/db/cover-letters";
 import dynamic from "next/dynamic";
 import DocEditorLoader from "@/components/loaders/doc-editor";
+import { LocalePageProps } from "@/app/[locale]/layout";
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
+import { redirect, routing } from "@/i18n/routing";
 
 export const metadata: Metadata = {
      title: "Գրել ուղեկցող նամակ"
@@ -14,18 +17,30 @@ export const metadata: Metadata = {
 const CoverLetterEditor = dynamic(()=>import("./cl-editor"),{
      loading: DocEditorLoader
 })
-export default async function CoverLetterEditorPage({searchParams}: {
+export default async function CoverLetterEditorPage({searchParams, params}: LocalePageProps & {
      searchParams: Promise<{ coverLetterId?: string}>
 }){
+     const {locale} = await params
+     if (!hasLocale(routing.locales, locale)) {
+          notFound();
+     }
      const {coverLetterId} = await searchParams
      const user = await currentUser();
      if(!user || !user.id){
-          redirect("/auth/login")
+          redirect({
+               href: "/auth/login",
+               locale
+          });
+          return;
      }
      const subscriptionLevel = await getSubscriptionLevel(user.id);
      const {canCreateCoverLetters} = getAvailableFeatures(subscriptionLevel);
      if(!canCreateCoverLetters){
-          redirect("/pricing");
+          redirect({
+               href: "/pricing",
+               locale
+          });
+          return;
      }
 
      const letter = coverLetterId ? await getCoverLetterById(coverLetterId) : null

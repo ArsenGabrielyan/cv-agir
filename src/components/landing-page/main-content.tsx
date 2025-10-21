@@ -1,5 +1,5 @@
 "use client"
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { buttonVariants } from "@/components/ui/button";
 import Pricing from "@/components/landing-page/pricing";
 import Features from "@/components/landing-page/features";
@@ -8,6 +8,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import dynamic from "next/dynamic";
 import DemoVideoLoader from "../loaders/video-loader";
 import LandingHeroLoader from "../loaders/landing-hero-loader";
+import { useTranslations } from "next-intl";
 
 const DemoVideo = dynamic(()=>import("@/components/landing-page/demo-video"),{
      loading: () => <DemoVideoLoader/>
@@ -19,6 +20,7 @@ const LandingHero = dynamic(()=>import("@/components/landing-page/landing-hero")
 
 export default function MainPageContent(){
      const user = useCurrentUser();
+     const t = useTranslations("index");
      return (
           <>
                <LandingHero heroTitle="Ձեր ռեզյումեն՝ վայրկյանների ընթացքում">
@@ -26,6 +28,7 @@ export default function MainPageContent(){
                     <Link href={!user ? "/auth/register" : "/dashboard"} className={buttonVariants({variant: "default"})}>Սկսել անվճար</Link>
                     <p className="text-xs md:text-sm font-normal text-muted-foreground">Վարկային քարտ չի պահանջվում։</p>
                </LandingHero>
+               {t("title")}
                <section className="flex justify-center items-center flex-col space-y-4 w-full px-3" id="how-it-works">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl space-y-5 font-bold">Ինչպե՞ս է աշխատում</h2>
                     <ul className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full max-w-6xl text-center">

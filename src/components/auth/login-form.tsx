@@ -1,5 +1,5 @@
 "use client"
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form"
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";

@@ -1,6 +1,6 @@
 import PageLayout from "@/components/layout/page-layout";
 import { buttonVariants } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 export default function NotFound(){
      return (

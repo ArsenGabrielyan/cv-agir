@@ -1,18 +1,18 @@
-import { Button } from "@/components/ui/button"
-import { FileUser, PenLineIcon, XSquare } from "lucide-react"
-import Link from "next/link"
-import { steps } from "./steps"
-import useEditorSteps from "@/hooks/use-editor-steps"
-import { EditorFormFooterProps, ResumeFormProps } from "@/data/types"
+import { PenLineIcon, FileText, XSquare } from "lucide-react";
+import { Link } from "@/i18n/routing"
+import { Button } from "@/components/ui/button";
+import { CoverLetterFormProps, EditorFormFooterProps } from "@/data/types";
+import useEditorSteps from "@/hooks/use-editor-steps";
+import { steps } from "./steps";
 
-export default function ResumeFormFooter({
+export default function CoverLetterFormFooter({
      currStep,
      setCurrStep,
      showSmPreview,
      setShowSmPreview,
      onPrint
 }: EditorFormFooterProps){
-     const {prevStep, nextStep, lastStep} = useEditorSteps<ResumeFormProps>(steps,currStep);
+     const {prevStep, nextStep, lastStep} = useEditorSteps<CoverLetterFormProps>(steps,currStep);
      return (
           <footer className="w-full border-t px-3 py-5">
                <div className="max-w-7xl mx-auto flex flex-wrap justify-between gap-3 items-center">
@@ -31,7 +31,7 @@ export default function ResumeFormFooter({
                               <Button
                                    onClick={onPrint}
                               >
-                                   Տպել ռեզյումեն
+                                   Տպել նամակը
                               </Button>
                          )}
                     </div>
@@ -40,9 +40,9 @@ export default function ResumeFormFooter({
                          size="icon"
                          onClick={()=>setShowSmPreview(!showSmPreview)}
                          className="md:hidden"
-                         title={showSmPreview ? "Խմբագրել ռեզյումեն" : "Ցույց տալ նախադիտումը"}
+                         title={showSmPreview ? "Խմբագրել նամակը" : "Ցույց տալ նախադիտումը"}
                     >
-                         {showSmPreview ? <PenLineIcon/> : <FileUser/>}
+                         {showSmPreview ? <PenLineIcon/> : <FileText/>}
                     </Button>
                     <Button asChild variant="secondary">
                          <Link href="/dashboard"><XSquare/> Փակել</Link>
