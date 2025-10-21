@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "gen-print-css": "tailwindcss -i ./src/app/globals.css -o ./public/print.css --minify",
     "postinstall": "prisma generate && npm run gen-print-css",
     "docker:build": "docker build -t cv-agir .",
