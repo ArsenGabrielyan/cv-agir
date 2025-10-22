@@ -50,16 +50,18 @@ function AuthButton({responsive=false,className,showUserButtonOnly=false}:AuthBu
                ) : (
                     !responsive ? (
                          <>
-                         <Button asChild>
-                              <Link href="/dashboard">{buttonTxt("dashboard")}</Link>
-                         </Button>
-                         <LogoutButton>
-                              <Button variant="outline" size="icon" title={buttonTxt("sign-out")}><LogOut/></Button>
-                         </LogoutButton>
+                              <Button asChild>
+                                   <Link href="/dashboard">{buttonTxt("dashboard")}</Link>
+                              </Button>
+                              <LanguageSwitcher/>
+                              <LogoutButton>
+                                   <Button variant="outline" size="icon" title={buttonTxt("sign-out")}><LogOut/></Button>
+                              </LogoutButton>
                          </>
                     ) : (
                          <>
-                         <UserButton/>
+                              <UserButton/>
+                              <LanguageSwitcher/>
                          </>
                     )
                )}
