@@ -4,7 +4,7 @@ import { getActionsByFuzzyText } from "@/lib/helpers/audit-logs";
 import { AuditActionKey, AuditLogServerData, auditLogsInclude, IAdminAPISearchParams} from "@/lib/types";
 import { getIsAdmin, currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { getIpAddress } from "@/lib/limiter";
+import { getIpAddress } from "@/actions/ip";
 import { NextResponse, NextRequest } from "next/server";
 
 export const GET = async(req: NextRequest) => {

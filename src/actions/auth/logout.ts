@@ -2,7 +2,7 @@
 import { signOut } from "@/auth"
 import { logAction } from "@/data/logs"
 import { currentUser } from "@/lib/auth"
-import { getIpAddress } from "@/lib/limiter"
+import { getIpAddress } from "@/actions/ip"
 
 export const logout = async() => {
      const user = await currentUser();

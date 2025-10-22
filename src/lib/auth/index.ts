@@ -1,5 +1,5 @@
 import { auth } from "@/auth"
-import { ExtendedUser } from "@/next-auth";
+import { ExtendedUser } from "@/global";
 
 export type CurrentUserReturnType = Omit<ExtendedUser,"currentPlan">
 

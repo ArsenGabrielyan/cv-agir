@@ -5,9 +5,10 @@ import { currentUser } from "@/lib/auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
 import { SettingsType } from "@/lib/types/schema";
-import { checkLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter";
+import { checkLimiter, incrementLimiter } from "@/lib/limiter";
 import {ERROR_MESSAGES} from "@/lib/constants"
 import { logAction } from "@/data/logs";
+import { getIpAddress } from "./ip"
 
 export const applySettings = async(values: SettingsType): Promise<{
      error?: string,

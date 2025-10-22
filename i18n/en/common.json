@@ -26,5 +26,17 @@
      "footer": {
           "resources": "Resources",
           "support": "Support"
+     },
+     "theme": {
+          "label": "Change Theme",
+          "zinc": "Zinc",
+          "rose": "Rose",
+          "blue": "Blue",
+          "green": "Green",
+          "orange": "Orange",
+          "app-color": {
+               "label": "Change the app color",
+               "label-select": "Choose a color"
+          }
      }
 }

@@ -8,7 +8,7 @@ import { cache } from "react";
 import dynamic from "next/dynamic";
 import { getUserById } from "@/data/user";
 import { logAction } from "@/data/logs";
-import { getIpAddress } from "@/lib/limiter";
+import { getIpAddress } from "@/actions/ip";
 
 const getResumeData = cache(async(id: string) => {
      if(!isObjectId(id)){

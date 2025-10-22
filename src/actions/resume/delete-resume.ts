@@ -3,7 +3,7 @@ import { logAction } from "@/data/logs";
 import { getCurrentResumeByUserId } from "@/data/resumes";
 import { currentUser } from "@/lib/auth"
 import { db } from "@/lib/db";
-import { getIpAddress } from "@/lib/limiter";
+import { getIpAddress } from "@/actions/ip";
 import { del } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 import {ERROR_MESSAGES} from "@/lib/constants"

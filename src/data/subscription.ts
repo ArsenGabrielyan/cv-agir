@@ -2,7 +2,7 @@ import { db } from "@/lib/db"
 import { getUserById } from "./user"
 import { ERROR_MESSAGES } from "@/lib/constants"
 import { logAction } from "./logs"
-import { getIpAddress } from "@/lib/limiter"
+import { getIpAddress } from "@/actions/ip"
 
 export const getSubscriptionById = async(id: string) => {
      try{

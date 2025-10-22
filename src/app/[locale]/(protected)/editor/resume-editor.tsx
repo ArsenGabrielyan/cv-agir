@@ -16,7 +16,7 @@ import { mapToResumeValues } from "@/lib/helpers/maps"
 import { absoluteUrl } from "@/lib/utils";
 import QRCode from "qrcode";
 import usePrint from "@/hooks/use-print"
-import { ExtendedUser } from "@/next-auth"
+import { ExtendedUser } from "@/global"
 import { useRouter } from "@/i18n/routing"
 
 interface ResumeEditorProps {

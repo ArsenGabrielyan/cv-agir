@@ -24,3 +24,10 @@ export enum NavLinks{
      Contact = "contact",
      About = "about-us"
 }
+export enum Theme{
+     Zinc = "zinc",
+     Rose = "rose",
+     Blue = "blue",
+     Green = "green",
+     Orange = "orange"
+}

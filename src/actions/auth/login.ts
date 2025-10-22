@@ -12,8 +12,9 @@ import { logAction } from "@/data/logs";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { LoginType } from "@/lib/types/schema";
-import { checkLimiter, getIpAddress } from "@/lib/limiter";
+import { checkLimiter } from "@/lib/limiter";
 import { ERROR_MESSAGES } from "@/lib/constants";
+import { getIpAddress } from "../ip";
 
 const authErrorMessages: Record<AuthError["name"], string> = {
      CredentialsSignin: "Սխալ էլ․ փոստ կամ գաղտնաբառ։",

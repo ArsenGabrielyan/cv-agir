@@ -7,7 +7,7 @@ import { getAccountByUserId } from "@/data/account"
 import { CreditCard, CVPageSettings, UserPlan } from "@db"
 import { getSubscriptionById } from "@/data/subscription"
 import { CustomPrismaAdapter } from "@/lib/auth/prisma-adapter"
-import { getIpAddress } from "./lib/limiter"
+import { getIpAddress } from "@/actions/ip"
 import { logAction } from "./data/logs"
 import { ERROR_MESSAGES } from "./lib/constants"
 

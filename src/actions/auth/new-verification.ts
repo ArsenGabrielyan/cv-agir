@@ -4,7 +4,7 @@ import { logAction } from "@/data/logs"
 import { getUserByEmail } from "@/data/user"
 import { getVerificationTokenByToken } from "@/data/verification-token"
 import { db } from "@/lib/db"
-import { getIpAddress } from "@/lib/limiter"
+import { getIpAddress } from "@/actions/ip"
 
 export const newVerification = async (token: string) => {
      const currIp = await getIpAddress()

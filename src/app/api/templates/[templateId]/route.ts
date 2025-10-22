@@ -4,7 +4,7 @@ import { currentUser, getIsAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { logAction } from "@/data/logs";
-import { getIpAddress } from "@/lib/limiter";
+import { getIpAddress } from "@/actions/ip";
 import { ResumeTemplate } from "@db";
 
 export const GET = async(

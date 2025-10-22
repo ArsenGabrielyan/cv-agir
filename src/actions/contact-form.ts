@@ -2,10 +2,11 @@
 import { sendMessage } from "@/lib/mail";
 import { ContactSchema } from "@/schemas"
 import { ContactFormType } from "@/lib/types/schema";
-import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter";
+import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter";
 import { verifyCaptchaToken } from "@/lib/captcha";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "@/data/logs";
+import { getIpAddress } from "./ip"
 
 export const submitContactForm = async (token: string,values: ContactFormType) => {
      const ip = await getIpAddress();

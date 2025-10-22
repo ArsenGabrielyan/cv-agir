@@ -11,7 +11,7 @@ export const metadata: Metadata = {
      title: "Ռեզյումեի շաբլոններ"
 }
 
-const TemplateHero = dynamic(()=>import("@/components/landing-page/sections/landing-hero"),{
+const TemplateHero = dynamic(()=>import("@/components/section-hero"),{
      loading: () => <LandingHeroLoader loaderType="template"/>
 })
 
@@ -21,7 +21,7 @@ export default async function TemplatesPage(){
      const templates = await getResumeTemplates();
      return (
           <PageLayout landingFooter>
-               <TemplateHero heroTitle="Շաբլոններ">
+               <TemplateHero title="Շաբլոններ">
                     <p className="text-sm md:text-xl font-light text-muted-foreground">Նայեք բոլոր ռեզյումեների շաբլոնները այստեղ և ճիշտ օգտագործեք աշխատանքի ընդունելու համար։</p>
                </TemplateHero>
                <TemplateList templates={templates} subscriptionLevel={subscriptionLevel}/>

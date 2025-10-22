@@ -13,7 +13,7 @@ import { useCoverLetterAutoSave } from "@/hooks/use-auto-save";
 import useUnsavedChangesWarning from "@/hooks/use-unsaved-changes";
 import { CoverLetter } from "@db";
 import { mapToLetterValues } from "@/lib/helpers/maps";
-import { ExtendedUser } from "@/next-auth";
+import { ExtendedUser } from "@/global";
 import usePrint from "@/hooks/use-print";
 import { useRouter } from "@/i18n/routing";
 

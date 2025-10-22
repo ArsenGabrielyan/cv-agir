@@ -8,7 +8,7 @@ import { CreditCardType } from "@/lib/types/schema"
 import { CreditCard } from "@db";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "@/data/logs";
-import { getIpAddress } from "@/lib/limiter";
+import { getIpAddress } from "@/actions/ip";
 
 export const upsertCard = async(values: CreditCardType, user: CurrentUserReturnType, expiryDate: Date) => {
      const creditCards: CreditCard[] = user.creditCards || [];

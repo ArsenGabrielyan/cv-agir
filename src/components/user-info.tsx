@@ -1,4 +1,4 @@
-import { ExtendedUser } from "@/next-auth";
+import { ExtendedUser } from "@/global";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Edit, User } from "lucide-react";
 import { Button } from "@/components/ui/button";

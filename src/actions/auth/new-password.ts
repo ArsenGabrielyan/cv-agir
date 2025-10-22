@@ -5,9 +5,10 @@ import { getPasswordResetTokenByToken } from "@/data/password-reset-token"
 import { getUserByEmail } from "@/data/user"
 import bcrypt from "bcryptjs"
 import { NewPasswordType } from "@/lib/types/schema"
-import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter"
+import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter"
 import { logAction } from "@/data/logs"
 import { ERROR_MESSAGES } from "@/lib/constants"
+import { getIpAddress } from "../ip"
 
 export const newPassword = async(
      values: NewPasswordType,

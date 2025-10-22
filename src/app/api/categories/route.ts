@@ -5,7 +5,7 @@ import { ResumeTemplateCategory } from "@db";
 import { NextRequest, NextResponse } from "next/server";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "@/data/logs";
-import { getIpAddress } from "@/lib/limiter";
+import { getIpAddress } from "@/actions/ip";
 
 export const GET = async (req: NextRequest) => {
      const isAdmin = await getIsAdmin();

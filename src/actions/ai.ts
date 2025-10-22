@@ -9,9 +9,10 @@ import { currentUser } from "@/lib/auth"
 import { getSubscriptionLevel } from "./subscription-system"
 import { getAvailableFeatures } from "@/lib/permission"
 import DOMPurify from "isomorphic-dompurify"
-import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter"
+import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter"
 import { logAction } from "@/data/logs"
 import { maskText } from "@/lib/helpers/audit-logs"
+import { getIpAddress } from "./ip"
 
 export const generateSummary = async(input: GenerateSummaryInput) => {
      const user = await currentUser();

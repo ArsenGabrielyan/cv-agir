@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { logAction } from "@/data/logs";
 import { ERROR_MESSAGES } from "@/lib/constants";
-import { getIpAddress } from "@/lib/limiter";
+import { getIpAddress } from "@/actions/ip";
 import { ResumeTemplateCategory } from "@db";
 
 export const GET = async(

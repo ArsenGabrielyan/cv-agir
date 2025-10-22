@@ -11,7 +11,7 @@ import { revalidatePath } from "next/cache";
 import { upsertCard } from "./credit-card";
 import {cache} from "react"
 import { ERROR_MESSAGES } from "@/lib/constants";
-import { getIpAddress } from "@/lib/limiter";
+import { getIpAddress } from "@/actions/ip";
 import { logAction } from "@/data/logs";
 
 export const proceedToCheckout = async(values: CheckoutFormType, period: SubscriptionPeriod, price: number, plan: UserPlan) => {

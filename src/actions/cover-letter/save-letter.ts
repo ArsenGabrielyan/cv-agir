@@ -8,7 +8,7 @@ import path from "path"
 import { getSubscriptionLevel } from "../subscription-system"
 import { getAvailableFeatures } from "@/lib/permission"
 import { getCurrentCoverLetterByUserId } from "@/data/cover-letters"
-import { getIpAddress } from "@/lib/limiter"
+import { getIpAddress } from "@/actions/ip"
 import { logAction } from "@/data/logs"
 import {ERROR_MESSAGES} from "@/lib/constants"
 

@@ -8,12 +8,15 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import usePremiumModal from "@/hooks/use-premium-modal";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
+import { MAX_FREE_RESUMES } from "@/lib/constants";
 
 export default function PremiumModal(){
      const {price, perks, planName} = PRICING_DATA[1];
      const [isYearly, setIsYearly] = useState(false);
      const cardPrice = useMemo(()=>isYearly ? price * 12 : price,[isYearly, price])
-     const {open, setOpen} = usePremiumModal()
+     const {open, setOpen} = usePremiumModal();
+     const t = useTranslations("pricing")
      return (
           <Dialog open={open} onOpenChange={setOpen}>
                <DialogContent>
@@ -29,8 +32,8 @@ export default function PremiumModal(){
                          </div>
                          <p className="text-center text-3xl md:text-4xl xl:text-5xl font-semibold">${cardPrice.toFixed(2)}/{isYearly ? "տարի" : "ամիս"}</p>
                          <ul className="space-y-3">
-                              {perks.map(perk=>(
-                                   <li key={perk.id} className={cn("flex gap-x-3",!perk.included && "text-muted-foreground")}>{perk.included ? <CheckCircle className="text-primary"/> : <MinusCircle/>} {perk.name}</li>
+                              {perks.map((perk,i)=>(
+                                   <li key={`perk-${i+1}`} className={cn("flex gap-x-3",!perk.included && "text-muted-foreground")}>{perk.included ? <CheckCircle className="text-primary"/> : <MinusCircle/>} {t(perk.name,{count: MAX_FREE_RESUMES})}</li>
                               ))}
                          </ul>
                     </div>

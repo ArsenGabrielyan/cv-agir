@@ -4,9 +4,10 @@ import { getUserByEmail } from "@/data/user"
 import { sendPasswordResetEmail } from "@/lib/mail"
 import { generatePasswordResetToken } from "@/lib/tokens"
 import { ResetPassType } from "@/lib/types/schema"
-import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter"
+import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter"
 import { logAction } from "@/data/logs"
 import { ERROR_MESSAGES } from "@/lib/constants"
+import { getIpAddress } from "../ip"
 
 export const reset = async (values: ResetPassType) => {
      const currIp = await getIpAddress();

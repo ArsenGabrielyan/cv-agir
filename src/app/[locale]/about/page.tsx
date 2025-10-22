@@ -9,14 +9,14 @@ export const metadata: Metadata = {
      title: "Մեր Մասին"
 }
 
-const AboutHero = dynamic(()=>import("@/components/landing-page/sections/landing-hero"),{
+const AboutHero = dynamic(()=>import("@/components/section-hero"),{
      loading: () => <LandingHeroLoader/>
 })
 
 export default function AboutPage(){
      return (
           <PageLayout landingFooter>
-               <AboutHero heroTitle="Մեր Մասին"/>
+               <AboutHero title="Մեր Մասին"/>
                <section className="py-16 px-6 sm:px-12 md:px-24 lg:px-40 text-center">
                     <h2 className="text-3xl font-bold mb-6">CV-ագիր՝ Ձեր ապագան կերտող ռեզյումե գեներատոր</h2>
                     <p className="text-lg leading-relaxed"><strong>CV-ագիր</strong> ռեզյումե գեներատորը ստեղծվել է, որպեսզի ցանկացած մարդ կարողանա <strong>արագ, արդյունավետ և պրոֆեսիոնալ</strong> ռեզյումե պատրաստել։ Մենք հասկանում ենք, թե որքան կարևոր է ճիշտ ներկայացնել Ձեր հմտությունները և փորձը, ուստի մեր պլատֆորմը ստեղծվել է հենց այս նպատակով։</p>

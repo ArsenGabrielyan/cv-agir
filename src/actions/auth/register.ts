@@ -6,9 +6,10 @@ import { getUserByEmail } from "@/data/user"
 import { generateVerificationToken } from "@/lib/tokens"
 import { sendVerificationEmail } from "@/lib/mail"
 import { RegisterFormType } from "@/lib/types/schema"
-import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter"
+import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter"
 import { logAction } from "@/data/logs"
 import { ERROR_MESSAGES } from "@/lib/constants"
+import { getIpAddress } from "../ip"
 
 export const register = async (values: RegisterFormType) => {
      const currIp = await getIpAddress();

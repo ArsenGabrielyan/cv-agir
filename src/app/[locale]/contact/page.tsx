@@ -11,14 +11,14 @@ export const metadata: Metadata = {
      title: "Հետադարձ կապ"
 }
 
-const ContactHero = dynamic(()=>import("@/components/landing-page/sections/landing-hero"),{
+const ContactHero = dynamic(()=>import("@/components/section-hero"),{
      loading: () => <LandingHeroLoader/>
 })
 
 export default function ContactPage(){
      return (
           <PageLayout landingFooter>
-               <ContactHero heroTitle="Հետադարձ կապ"/>
+               <ContactHero title="Հետադարձ կապ"/>
                <section className="py-16 px-6 sm:px-12 md:px-24 lg:px-40">
                     <ContactForm/>
                     <ul className="grid grid-cols-1 lg:grid-cols-3 w-full gap-6 max-w-[1750px] mt-6">
