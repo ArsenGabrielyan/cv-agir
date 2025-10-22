@@ -1,13 +1,13 @@
 import PageLayout from "@/components/layout/page-layout";
-import { getResumeById } from "@/data/db/resumes";
-import { isObjectId } from "@/data/helpers";
+import { getResumeById } from "@/data/resumes";
+import { isObjectId } from "@/lib/helpers";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import CVInfoLoader from "@/components/loaders/cv-info";
 import { cache } from "react";
 import dynamic from "next/dynamic";
-import { getUserById } from "@/data/db/user";
-import { logAction } from "@/data/db/logs";
+import { getUserById } from "@/data/user";
+import { logAction } from "@/data/logs";
 import { getIpAddress } from "@/lib/limiter";
 
 const getResumeData = cache(async(id: string) => {

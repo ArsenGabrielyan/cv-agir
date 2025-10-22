@@ -1,9 +1,9 @@
-import { getResumeTemplateCategoryById } from "@/data/db/resumes";
+import { getResumeTemplateCategoryById } from "@/data/resumes";
 import { currentUser, getIsAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
-import { logAction } from "@/data/db/logs";
-import { ERROR_MESSAGES } from "@/data/constants";
+import { logAction } from "@/data/logs";
+import { ERROR_MESSAGES } from "@/lib/constants";
 import { getIpAddress } from "@/lib/limiter";
 import { ResumeTemplateCategory } from "@db";
 

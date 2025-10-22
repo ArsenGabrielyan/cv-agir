@@ -1,7 +1,7 @@
 "use server"
 import crypto from "crypto"
 import { env } from "@/lib/env"
-import {ERROR_MESSAGES} from "@/data/constants"
+import {ERROR_MESSAGES} from "@/lib/constants"
 
 const secretKey = env.AES_SECRET
 

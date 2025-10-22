@@ -1,10 +1,10 @@
 import { currentUser, getIsAdmin } from "@/lib/auth"
-import { IAdminAPISearchParams } from "@/data/types";
+import { IAdminAPISearchParams } from "@/lib/types";
 import { db } from "@/lib/db";
 import { ResumeTemplateCategory } from "@db";
 import { NextRequest, NextResponse } from "next/server";
-import { ERROR_MESSAGES } from "@/data/constants";
-import { logAction } from "@/data/db/logs";
+import { ERROR_MESSAGES } from "@/lib/constants";
+import { logAction } from "@/data/logs";
 import { getIpAddress } from "@/lib/limiter";
 
 export const GET = async (req: NextRequest) => {

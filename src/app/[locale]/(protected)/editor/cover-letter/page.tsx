@@ -3,7 +3,7 @@ import PageLayout from "@/components/layout/page-layout";
 import { currentUser } from "@/lib/auth";
 import { getAvailableFeatures } from "@/lib/permission";
 import { Metadata } from "next";
-import { getCoverLetterById } from "@/data/db/cover-letters";
+import { getCoverLetterById } from "@/data/cover-letters";
 import dynamic from "next/dynamic";
 import DocEditorLoader from "@/components/loaders/doc-editor";
 import { LocalePageProps } from "@/app/[locale]/layout";

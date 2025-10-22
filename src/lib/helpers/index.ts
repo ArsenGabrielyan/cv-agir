@@ -1,5 +1,5 @@
 import { PLACEHOLDERS } from "../constants"
-import { PlaceholdersName } from "../types";
+import { PlaceholdersName } from "../../lib/types";
 import {BorderStyles} from "@db"
 
 export const getRandomPlaceholder = (placeholderKey: PlaceholdersName) => {

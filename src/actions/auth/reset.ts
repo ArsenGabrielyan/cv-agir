@@ -1,12 +1,12 @@
 "use server"
 import { ResetSchema } from "@/schemas"
-import { getUserByEmail } from "@/data/db/user"
+import { getUserByEmail } from "@/data/user"
 import { sendPasswordResetEmail } from "@/lib/mail"
 import { generatePasswordResetToken } from "@/lib/tokens"
-import { ResetPassType } from "@/data/types/schema"
+import { ResetPassType } from "@/lib/types/schema"
 import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter"
-import { logAction } from "@/data/db/logs"
-import { ERROR_MESSAGES } from "@/data/constants"
+import { logAction } from "@/data/logs"
+import { ERROR_MESSAGES } from "@/lib/constants"
 
 export const reset = async (values: ResetPassType) => {
      const currIp = await getIpAddress();

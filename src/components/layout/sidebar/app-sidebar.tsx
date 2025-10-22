@@ -8,7 +8,7 @@ import Logo from "../logo";
 import SidebarLinks from "./sidebar-links";
 import { currentUser } from "@/lib/auth";
 import FreeCounter from "./free-counter";
-import { getResumeCountByUserId } from "@/data/db/resumes";
+import { getResumeCountByUserId } from "@/data/resumes";
 import { getSubscriptionLevel } from "@/actions/subscription-system";
 
 export default async function AppSidebar(){

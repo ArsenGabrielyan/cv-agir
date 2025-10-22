@@ -1,6 +1,6 @@
 "use client"
-import { mapToResumeValues } from "@/data/helpers/maps"
-import { ResumeServerData } from "@/data/types"
+import { mapToResumeValues } from "@/lib/helpers/maps"
+import { ResumeServerData } from "@/lib/types"
 import { formatDate } from "date-fns"
 import { hy } from "date-fns/locale"
 import { Link } from "@/i18n/routing"
@@ -16,7 +16,7 @@ import DeleteConfirmationDialog from "../../delete-confirmation-dialog"
 import dynamic from "next/dynamic"
 import DocPreviewLoader from "@/components/loaders/doc-preview"
 import usePrint from "@/hooks/use-print"
-import { ERROR_MESSAGES } from "@/data/constants"
+import { ERROR_MESSAGES } from "@/lib/constants"
 
 interface ResumeCardProps{
      data: ResumeServerData

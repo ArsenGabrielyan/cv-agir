@@ -1,5 +1,5 @@
 "use client"
-import { ISidebarLink } from "@/data/types";
+import { ISidebarLink } from "@/lib/types";
 import { Link, usePathname } from "@/i18n/routing";
 import {
      SidebarMenuItem,

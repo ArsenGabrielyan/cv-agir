@@ -1,6 +1,6 @@
 "use server"
 import { signOut } from "@/auth"
-import { logAction } from "@/data/db/logs"
+import { logAction } from "@/data/logs"
 import { currentUser } from "@/lib/auth"
 import { getIpAddress } from "@/lib/limiter"
 

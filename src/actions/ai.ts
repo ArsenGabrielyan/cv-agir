@@ -1,17 +1,17 @@
 "use server"
 
 import { GenerateDescriptionSchema, GenerateLetterBodySchema, GenerateSummarySchema } from "@/schemas/ai"
-import { GenerateDescriptionInput, GenerateLetterBodyInput, GenerateSummaryInput, WorkExperienceType } from "@/data/types/schema"
-import {getLanguageLevel} from "@/data/helpers"
+import { GenerateDescriptionInput, GenerateLetterBodyInput, GenerateSummaryInput, WorkExperienceType } from "@/lib/types/schema"
+import {getLanguageLevel} from "@/lib/helpers"
 import gemini from "@/lib/gemini"
-import { AI_MODEL, ERROR_MESSAGES, GEN_CONFIG } from "@/data/constants"
+import { AI_MODEL, ERROR_MESSAGES, GEN_CONFIG } from "@/lib/constants"
 import { currentUser } from "@/lib/auth"
 import { getSubscriptionLevel } from "./subscription-system"
 import { getAvailableFeatures } from "@/lib/permission"
 import DOMPurify from "isomorphic-dompurify"
 import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter"
-import { logAction } from "@/data/db/logs"
-import { maskText } from "@/data/helpers/audit-logs"
+import { logAction } from "@/data/logs"
+import { maskText } from "@/lib/helpers/audit-logs"
 
 export const generateSummary = async(input: GenerateSummaryInput) => {
      const user = await currentUser();

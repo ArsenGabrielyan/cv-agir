@@ -1,13 +1,13 @@
 "use server";
 import bcrypt from "bcryptjs"
-import { getUserByEmail, getUserById, updateUser } from "@/data/db/user";
+import { getUserByEmail, getUserById, updateUser } from "@/data/user";
 import { currentUser } from "@/lib/auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
-import { SettingsType } from "@/data/types/schema";
+import { SettingsType } from "@/lib/types/schema";
 import { checkLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter";
-import {ERROR_MESSAGES} from "@/data/constants"
-import { logAction } from "@/data/db/logs";
+import {ERROR_MESSAGES} from "@/lib/constants"
+import { logAction } from "@/data/logs";
 
 export const applySettings = async(values: SettingsType): Promise<{
      error?: string,

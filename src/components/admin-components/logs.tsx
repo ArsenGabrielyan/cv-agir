@@ -1,11 +1,11 @@
-import { formatAuditLogData } from "@/data/helpers/audit-logs"
-import { AuditLogServerData, QuickFilterType } from "@/data/types"
+import { formatAuditLogData } from "@/lib/helpers/audit-logs"
+import { AuditLogServerData, QuickFilterType } from "@/lib/types"
 import { DateInput, InfiniteList, SearchInput, SimpleList } from "react-admin"
 import {formatDistanceToNow} from "date-fns"
 import {hy} from "date-fns/locale"
 import React from "react"
 import { QuickFilter } from "."
-import { AUDIT_FILTER_LABELS, AUDIT_QUICK_FILTERS } from "@/data/constants"
+import { AUDIT_FILTER_LABELS, AUDIT_QUICK_FILTERS } from "@/lib/constants"
 import Error from "@mui/icons-material/Error"
 
 const logFilters = [

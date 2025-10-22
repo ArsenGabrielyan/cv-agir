@@ -16,10 +16,10 @@ import { FormError } from "@/components/form/form-error";
 import { submitContactForm } from "@/actions/contact-form";
 import { Textarea } from "@/components/ui/textarea";
 import { FormSuccess } from "./form-success";
-import { ContactFormType } from "@/data/types/schema";
+import { ContactFormType } from "@/lib/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
 import { getCaptchaToken } from "@/lib/captcha";
-import { ERROR_MESSAGES } from "@/data/constants";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 export default function ContactForm(){
      const [isPending, startTransition] = useTransition();

@@ -1,7 +1,7 @@
 import { getSubscriptionLevel } from "@/actions/subscription-system";
 import Logo from "@/components/layout/logo";
 import CheckoutForm from "@/components/settings/premium/checkoutForm";
-import { PRICING_DATA } from "@/data/constants/landing-page";
+import { PRICING_DATA } from "@/lib/constants/landing-page";
 import { redirect, routing } from "@/i18n/routing";
 import { currentUser } from "@/lib/auth";
 import { CheckoutPageSearchSchema } from "@/schemas";

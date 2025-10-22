@@ -1,12 +1,12 @@
-import { CoverLetterFormType, ResumeFormType } from "@/data/types/schema";
+import { CoverLetterFormType, ResumeFormType } from "@/lib/types/schema";
 import useDebounce from "./use-debounce";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { saveResume } from "@/actions/resume/save-resume";
-import { fileReplacer } from "@/data/helpers";
+import { fileReplacer } from "@/lib/helpers";
 import { saveCoverLetter } from "@/actions/cover-letter/save-letter";
-import { ERROR_MESSAGES } from "@/data/constants";
+import { ERROR_MESSAGES } from "@/lib/constants";
 import { useRouter } from "@/i18n/routing";
 
 export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: string){

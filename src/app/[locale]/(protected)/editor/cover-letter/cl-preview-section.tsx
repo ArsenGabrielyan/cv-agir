@@ -1,5 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CoverLetterFormType } from "@/data/types/schema";
+import { CoverLetterFormType } from "@/lib/types/schema";
 import ColorPicker from "../style-buttons/color-picker";
 import BorderStyleButton from "../style-buttons/border-style-button";
 import { cn } from "@/lib/utils";

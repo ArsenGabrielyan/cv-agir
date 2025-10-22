@@ -2,15 +2,15 @@
 import { currentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { CoverLetterFormSchema } from "@/schemas"
-import { CoverLetterFormType } from "@/data/types/schema"
+import { CoverLetterFormType } from "@/lib/types/schema"
 import {del, put} from "@vercel/blob"
 import path from "path"
 import { getSubscriptionLevel } from "../subscription-system"
 import { getAvailableFeatures } from "@/lib/permission"
-import { getCurrentCoverLetterByUserId } from "@/data/db/cover-letters"
+import { getCurrentCoverLetterByUserId } from "@/data/cover-letters"
 import { getIpAddress } from "@/lib/limiter"
-import { logAction } from "@/data/db/logs"
-import {ERROR_MESSAGES} from "@/data/constants"
+import { logAction } from "@/data/logs"
+import {ERROR_MESSAGES} from "@/lib/constants"
 
 export const saveCoverLetter = async(values: CoverLetterFormType) => {
      const {id} = values

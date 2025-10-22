@@ -1,5 +1,5 @@
 import { AuditAction, UserPlan } from "@db"
-import { AuditLogSearchType, IResumeDynamicFields, PlaceholdersName, QuickFilterType } from "../types"
+import { AuditLogSearchType, IResumeDynamicFields, PlaceholdersName, QuickFilterType } from "../../lib/types"
 
 /**
  * Մասնագիտությունների ցուցակ
@@ -245,3 +245,4 @@ export const AUDIT_FILTER_LABELS: Record<QuickFilterType, string> = {
 };
 
 export const DEFAULT_VIDEO_DIMENSION = 270;
+export const STEPS = [ "step1", "step2", "step3" ] as const

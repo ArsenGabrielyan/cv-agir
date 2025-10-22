@@ -16,7 +16,7 @@ import {
      SheetTrigger,
 } from "@/components/ui/sheet";
 import { LogOut, Menu } from "lucide-react";
-import { NAVBAR_LINKS } from "@/data/constants/links";
+import { NAVBAR_LINKS } from "@/lib/constants/links";
 import { useState } from "react";
 import { LoginButton } from "../auth/login-button";
 import Logo from "./logo";
@@ -24,6 +24,8 @@ import { cn } from "@/lib/utils";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { UserButton } from "../auth/user-button";
 import { LogoutButton } from "../auth/logout-button";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "../lang-switcher";
 
 interface NavbarProps{
      isLandingPage?: boolean,
@@ -34,31 +36,37 @@ interface AuthButtonProps{
      showUserButtonOnly?: boolean
 }
 function AuthButton({responsive=false,className,showUserButtonOnly=false}:AuthButtonProps){
+     const buttonTxt = useTranslations("buttons");
      const user = useCurrentUser()
      return !showUserButtonOnly ? (
           <div className={cn(responsive ? "hidden xl:flex" : "flex","justify-center items-center gap-3",className)}>
                {!user ? (
-                    <LoginButton mode="modal" asChild>
-                         <Button>Մուտք</Button>
-                    </LoginButton>
+                    <>
+                         <LoginButton mode="modal" asChild>
+                              <Button>{buttonTxt("sign-in")}</Button>
+                         </LoginButton>
+                         <LanguageSwitcher/>
+                    </>
                ) : (
                     !responsive ? (
                          <>
                          <Button asChild>
-                              <Link href="/dashboard">Վահանակ</Link>
+                              <Link href="/dashboard">{buttonTxt("dashboard")}</Link>
                          </Button>
                          <LogoutButton>
-                              <Button variant="outline" size="icon" title="Դուրս գալ"><LogOut/></Button>
+                              <Button variant="outline" size="icon" title={buttonTxt("sign-out")}><LogOut/></Button>
                          </LogoutButton>
                          </>
                     ) : (
+                         <>
                          <UserButton/>
+                         </>
                     )
                )}
           </div>
      ) : !user ? (
           <LoginButton mode="modal" asChild>
-               <Button>Մուտք</Button>
+               <Button>{buttonTxt("sign-in")}</Button>
           </LoginButton>
      ) : (
           <UserButton/>
@@ -66,6 +74,8 @@ function AuthButton({responsive=false,className,showUserButtonOnly=false}:AuthBu
 }
 export default function Navbar({isLandingPage=false}: NavbarProps){
      const [open, setIsOpen] = useState(false)
+     const t = useTranslations("index");
+     const navLinks = useTranslations("nav-links")
      return (
           <header className="p-5 border-primary border-b bg-background sticky top-0 z-20 left-0 w-full flex justify-between items-center h-[80px]">
                <Logo width={160} height={45}/>
@@ -76,7 +86,7 @@ export default function Navbar({isLandingPage=false}: NavbarProps){
                                    {NAVBAR_LINKS.map(({id,name,href})=>(
                                         <NavigationMenuItem key={id}>
                                              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                                                  <Link href={href}>{name}</Link>
+                                                  <Link href={href}>{navLinks(name)}</Link>
                                              </NavigationMenuLink>
                                         </NavigationMenuItem>
                                    ))}
@@ -84,15 +94,15 @@ export default function Navbar({isLandingPage=false}: NavbarProps){
                          </NavigationMenu>
                          <Sheet open={open} onOpenChange={setIsOpen}>
                               <SheetTrigger asChild>
-                                   <Button className="flex xl:hidden" variant="outline" size="icon" title="Մենյու"><Menu/></Button>
+                                   <Button className="flex xl:hidden" variant="outline" size="icon" title={navLinks("menu")}><Menu/></Button>
                               </SheetTrigger>
                               <SheetContent className="flex flex-col items-center justify-center z-50">
                                    <SheetHeader>
-                                        <SheetTitle>CV-ագիր</SheetTitle>
+                                        <SheetTitle>{t("title")}</SheetTitle>
                                    </SheetHeader>
                                    <ul className="flex flex-col items-center justify-center w-full">
                                         {NAVBAR_LINKS.map(({id,name,href})=>(
-                                             <li key={id}><Link href={href} className={buttonVariants({variant: "link"})} onClick={()=>setIsOpen(false)}>{name}</Link></li>
+                                             <li key={id}><Link href={href} className={buttonVariants({variant: "link"})} onClick={()=>setIsOpen(false)}>{navLinks(name)}</Link></li>
                                         ))}
                                    </ul>
                                    <AuthButton className="mt-3"/>

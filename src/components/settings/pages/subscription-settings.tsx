@@ -25,7 +25,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import CreditCardItem from "../premium/cc-components/credit-card-item";
 import CreditCardModal from "@/components/settings/premium/cc-components/credit-card-modal";
 import { UpdateSession, useSession } from "next-auth/react";
-import { ERROR_MESSAGES } from "@/data/constants";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 export default function SubscriptionSettings({subscriptions, isExpired}: SettingsContentProps){
      const {update} = useSession()

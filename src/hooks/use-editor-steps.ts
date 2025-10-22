@@ -1,4 +1,4 @@
-import { IEditorStep } from "@/data/types";
+import { IEditorStep } from "@/lib/types";
 
 export default function useEditorSteps<Props>(steps: IEditorStep<Props>[], currStep: string){
      const prevStep = steps.find(

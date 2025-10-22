@@ -1,4 +1,4 @@
-import { getResumeTemplates } from "@/data/db/resumes";
+import { getResumeTemplates } from "@/data/resumes";
 import PageLayout from "@/components/layout/page-layout";
 import TemplateList from "@/components/templates/template-list";
 import { Metadata } from "next";
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
      title: "Ռեզյումեի շաբլոններ"
 }
 
-const TemplateHero = dynamic(()=>import("@/components/landing-page/landing-hero"),{
+const TemplateHero = dynamic(()=>import("@/components/landing-page/sections/landing-hero"),{
      loading: () => <LandingHeroLoader loaderType="template"/>
 })
 

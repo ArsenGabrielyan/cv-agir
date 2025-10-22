@@ -1,4 +1,4 @@
-import { DocStyleType } from "@/data/types/schema"
+import { DocStyleType } from "@/lib/types/schema"
 
 interface PreviewSectionWrapperProps{
      title?: string,

@@ -1,6 +1,6 @@
 import { CoverLetter, CreditCard, Resume, User, VerificationToken as PrismaVerificationToken  } from "@db";
-import { CoverLetterFormType, CreditCardType, ResumeFormType } from "@/data/types/schema";
-import { AccountServerData } from "@/data/types"
+import { CoverLetterFormType, CreditCardType, ResumeFormType } from "@/lib/types/schema";
+import { AccountServerData } from "@/lib/types"
 import { formatDate } from "date-fns";
 import type { AdapterAccount, AdapterAccountType, AdapterUser, VerificationToken } from "next-auth/adapters"
 

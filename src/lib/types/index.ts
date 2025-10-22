@@ -1,11 +1,12 @@
 import { SettingsContentProps } from "@/components/settings/settings-tabs";
-import { ExtendedUser } from "@/next-auth";
-import { SettingsType, CoverLetterFormType, ResumeFormType } from "@/data/types/schema";
+import { ExtendedUser } from "@/global";
+import { SettingsType, CoverLetterFormType, ResumeFormType } from "@/lib/types/schema";
 import { AuditAction, Prisma, ResumeTemplate, ResumeTemplateCategory, UserPlan } from "@db";
 import { LucideProps } from "lucide-react";
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
 import { LangCodeType } from "@/i18n/types";
+import { Features, NavLinks } from "./enums";
 
 // Themes
 export type ThemeColors = "Zinc" | "Rose" | "Blue" | "Green" | "Orange";
@@ -17,36 +18,26 @@ export interface ThemeColorStateParams{
 // Pricing
 export interface IPricing{
      id: number,
-     name: string,
-     description: string,
      price: number,
      perks: IPricingPerk[],
      highlighted: boolean,
      planName: UserPlan
 }
 export interface IPricingPerk{
-     id: number
-     name: string,
+     name: `free.perks.perk-${1 | 2 | 3}` | `premium.perks.perk-${1 | 2 | 3}` | `other-perks.perk-${1 | 2 | 3}`,
      included: boolean
 }
 
 // Other For Landing Page
 export interface IFeature{
-     id: number,
-     name: string,
-     description: string,
+     feature: Features,
      Icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>
-}
-export interface IQuestionFAQ{
-     id: number,
-     question: string,
-     answer: string
 }
 
 // Links
 export interface INavbarLink{
      id: number,
-     name: string,
+     name: NavLinks,
      href: string,
      isPremium?: boolean
 }

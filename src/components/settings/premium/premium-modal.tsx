@@ -1,5 +1,5 @@
 "use client"
-import { PRICING_DATA } from "@/data/constants/landing-page";
+import { PRICING_DATA } from "@/lib/constants/landing-page";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { CheckCircle, MinusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";

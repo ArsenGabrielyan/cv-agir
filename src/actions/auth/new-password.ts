@@ -1,13 +1,13 @@
 "use server"
 import { NewPasswordSchema } from "@/schemas"
 import { db } from "@/lib/db"
-import { getPasswordResetTokenByToken } from "@/data/db/password-reset-token"
-import { getUserByEmail } from "@/data/db/user"
+import { getPasswordResetTokenByToken } from "@/data/password-reset-token"
+import { getUserByEmail } from "@/data/user"
 import bcrypt from "bcryptjs"
-import { NewPasswordType } from "@/data/types/schema"
+import { NewPasswordType } from "@/lib/types/schema"
 import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter"
-import { logAction } from "@/data/db/logs"
-import { ERROR_MESSAGES } from "@/data/constants"
+import { logAction } from "@/data/logs"
+import { ERROR_MESSAGES } from "@/lib/constants"
 
 export const newPassword = async(
      values: NewPasswordType,

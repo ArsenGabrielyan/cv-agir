@@ -1,5 +1,5 @@
 import { AuditAction, Prisma } from "@db";
-import { AuditLogServerData, AuditMetadata } from "../types";
+import { AuditLogServerData, AuditMetadata } from "../../lib/types";
 import { AUDIT_QUICK_FILTERS, SEARCH_KEYWORDS } from "../constants";
 
 export function maskEmail(email: string): string {

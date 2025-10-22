@@ -2,7 +2,7 @@
 import { compileHTML } from "@/actions/resume/template";
 import useDimensions from "@/hooks/use-dimensions";
 import { cn } from "@/lib/utils";
-import { ResumeFormType } from "@/data/types/schema";
+import { ResumeFormType } from "@/lib/types/schema";
 import { ResumeTemplate } from "@db";
 import { useEffect, useMemo, useRef, useState } from "react";
 import DOMPurify from "isomorphic-dompurify"

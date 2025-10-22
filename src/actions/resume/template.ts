@@ -1,6 +1,6 @@
 "use server"
-import { getLanguageLevel } from "@/data/helpers";
-import { ResumeFormType } from "@/data/types/schema";
+import { getLanguageLevel } from "@/lib/helpers";
+import { ResumeFormType } from "@/lib/types/schema";
 import Handlebars from "handlebars"
 import { marked } from "marked"
 import DOMPurify from "isomorphic-dompurify"

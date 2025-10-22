@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from "react";
-import { MAX_FREE_RESUMES } from "@/data/constants";
+import { MAX_FREE_RESUMES } from "@/lib/constants";
 import { Progress } from "@/components/ui/progress";
 import PremiumButton from "@/components/buttons/premium-button";
 

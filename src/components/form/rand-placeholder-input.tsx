@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { PlaceholdersName } from "@/data/types"
-import { getRandomPlaceholder } from "@/data/helpers"
+import { PlaceholdersName } from "@/lib/types"
+import { getRandomPlaceholder } from "@/lib/helpers"
 
 type RandomPlaceholderInputProps = React.ComponentProps<"input"> & {
   placeholderKey: PlaceholdersName

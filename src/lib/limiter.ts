@@ -1,4 +1,4 @@
-import { TrackerType } from "@/data/types";
+import { TrackerType } from "@/lib/types";
 import { headers } from "next/headers";
 
 const trackers: TrackerType = {};

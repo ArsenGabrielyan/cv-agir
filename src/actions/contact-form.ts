@@ -1,11 +1,11 @@
 "use server"
 import { sendMessage } from "@/lib/mail";
 import { ContactSchema } from "@/schemas"
-import { ContactFormType } from "@/data/types/schema";
+import { ContactFormType } from "@/lib/types/schema";
 import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter";
 import { verifyCaptchaToken } from "@/lib/captcha";
-import { ERROR_MESSAGES } from "@/data/constants";
-import { logAction } from "@/data/db/logs";
+import { ERROR_MESSAGES } from "@/lib/constants";
+import { logAction } from "@/data/logs";
 
 export const submitContactForm = async (token: string,values: ContactFormType) => {
      const ip = await getIpAddress();

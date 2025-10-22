@@ -1,6 +1,6 @@
-import { CoverLetterFormType } from "@/data/types/schema"
+import { CoverLetterFormType } from "@/lib/types/schema"
 import Image from "next/image"
-import { getBorderRadius } from "@/data/helpers"
+import { getBorderRadius } from "@/lib/helpers"
 import PreviewSectionWrapper from "../wrappers/section-wrapper"
 import { formatDate } from "date-fns"
 import { useEffect, useState } from "react"

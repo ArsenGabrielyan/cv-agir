@@ -3,7 +3,7 @@ import { FileUser, PenLineIcon, XSquare } from "lucide-react"
 import { Link } from "@/i18n/routing"
 import { steps } from "./steps"
 import useEditorSteps from "@/hooks/use-editor-steps"
-import { EditorFormFooterProps, ResumeFormProps } from "@/data/types"
+import { EditorFormFooterProps, ResumeFormProps } from "@/lib/types"
 
 export default function ResumeFormFooter({
      currStep,

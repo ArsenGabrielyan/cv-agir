@@ -5,7 +5,7 @@ import { Mail, MapPin, Phone, } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Link } from "@/i18n/routing"
 import { Badge } from "@/components/ui/badge"
-import { getLanguageLevel } from "@/data/helpers"
+import { getLanguageLevel } from "@/lib/helpers"
 import {format} from "date-fns"
 import dynamic from "next/dynamic"
 

@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { FormError } from "@/components/form/form-error";
 import { FormSuccess } from "@/components/form/form-success";
 import { reset } from "@/actions/auth/reset";
-import { ResetPassType } from "@/data/types/schema";
+import { ResetPassType } from "@/lib/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
 
 export default function ResetForm(){

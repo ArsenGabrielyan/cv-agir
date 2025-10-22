@@ -1,6 +1,6 @@
 import { decryptData } from "@/actions/encryption";
-import { getBankName, getCreditCardBrandName } from "@/data/helpers/credit-cards";
-import { mapToCreditCardValues } from "@/data/helpers/maps"
+import { getBankName, getCreditCardBrandName } from "@/lib/helpers/credit-cards";
+import { mapToCreditCardValues } from "@/lib/helpers/maps"
 import { CreditCard } from "@db";
 import { formatDate } from "date-fns";
 import CreditCardIcon from "@/components/settings/premium/cc-components/credit-card-icon";
@@ -15,7 +15,7 @@ import useCreditCardModal from "@/hooks/use-credit-card-modal";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { ERROR_MESSAGES } from "@/data/constants";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 interface CreditCardItemProps{
      card: CreditCard,

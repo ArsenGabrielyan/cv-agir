@@ -1,4 +1,4 @@
-import { ICaptchaResult } from "@/data/types"
+import { ICaptchaResult } from "@/lib/types"
 import { env } from "./env"
 
 export async function getCaptchaToken(){

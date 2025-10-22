@@ -1,9 +1,9 @@
-import { ERROR_MESSAGES } from "@/data/constants";
-import { getResumeTemplateById } from "@/data/db/resumes";
+import { ERROR_MESSAGES } from "@/lib/constants";
+import { getResumeTemplateById } from "@/data/resumes";
 import { currentUser, getIsAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
-import { logAction } from "@/data/db/logs";
+import { logAction } from "@/data/logs";
 import { getIpAddress } from "@/lib/limiter";
 import { ResumeTemplate } from "@db";
 

@@ -1,15 +1,15 @@
 import NextAuth from "next-auth"
 import authConfig from "@/auth.config"
 import { db } from "@/lib/db"
-import { getUserById } from "@/data/db/user"
-import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmation"
-import { getAccountByUserId } from "@/data/db/account"
+import { getUserById } from "@/data/user"
+import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation"
+import { getAccountByUserId } from "@/data/account"
 import { CreditCard, CVPageSettings, UserPlan } from "@db"
-import { getSubscriptionById } from "@/data/db/subscription"
+import { getSubscriptionById } from "@/data/subscription"
 import { CustomPrismaAdapter } from "@/lib/auth/prisma-adapter"
 import { getIpAddress } from "./lib/limiter"
-import { logAction } from "./data/db/logs"
-import { ERROR_MESSAGES } from "./data/constants"
+import { logAction } from "./data/logs"
+import { ERROR_MESSAGES } from "./lib/constants"
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {

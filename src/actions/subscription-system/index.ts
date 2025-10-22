@@ -1,18 +1,18 @@
 "use server"
-import { getCurrentSubscription, getSubscriptionById } from "@/data/db/subscription";
-import { getUserById } from "@/data/db/user";
-import { parseExpiryDate } from "@/data/helpers/credit-cards";
+import { getCurrentSubscription, getSubscriptionById } from "@/data/subscription";
+import { getUserById } from "@/data/user";
+import { parseExpiryDate } from "@/lib/helpers/credit-cards";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { CheckoutFormSchema } from "@/schemas"
-import { CheckoutFormType } from "@/data/types/schema"
+import { CheckoutFormType } from "@/lib/types/schema"
 import { SubscriptionPeriod, UserPlan } from "@db";
 import { revalidatePath } from "next/cache";
 import { upsertCard } from "./credit-card";
 import {cache} from "react"
-import { ERROR_MESSAGES } from "@/data/constants";
+import { ERROR_MESSAGES } from "@/lib/constants";
 import { getIpAddress } from "@/lib/limiter";
-import { logAction } from "@/data/db/logs";
+import { logAction } from "@/data/logs";
 
 export const proceedToCheckout = async(values: CheckoutFormType, period: SubscriptionPeriod, price: number, plan: UserPlan) => {
      const currIp = await getIpAddress();

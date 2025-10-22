@@ -1,6 +1,6 @@
 import PageLayout from "@/components/layout/page-layout";
 import LandingHeroLoader from "@/components/loaders/landing-hero-loader";
-import { MAX_FREE_RESUMES } from "@/data/constants";
+import { MAX_FREE_RESUMES } from "@/lib/constants";
 import { CheckCircle } from "lucide-react";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
      title: "Մեր Մասին"
 }
 
-const AboutHero = dynamic(()=>import("@/components/landing-page/landing-hero"),{
+const AboutHero = dynamic(()=>import("@/components/landing-page/sections/landing-hero"),{
      loading: () => <LandingHeroLoader/>
 })
 

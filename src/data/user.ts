@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
-import { SettingsType } from "../types/schema";
+import { SettingsType } from "../lib/types/schema";
 import { clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter";
-import { ERROR_MESSAGES } from "../constants";
+import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "./logs";
 
 export const getUserByEmail = async (email: string) => {

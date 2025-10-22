@@ -1,4 +1,4 @@
-import { MAX_RESUME_MAP } from "@/data/constants";
+import { MAX_RESUME_MAP } from "@/lib/constants";
 import { UserPlan } from "@db";
 
 export const getAvailableFeatures = (level: UserPlan) => {

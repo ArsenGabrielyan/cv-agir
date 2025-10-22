@@ -11,7 +11,7 @@ export const metadata: Metadata = {
      title: "Հետադարձ կապ"
 }
 
-const ContactHero = dynamic(()=>import("@/components/landing-page/landing-hero"),{
+const ContactHero = dynamic(()=>import("@/components/landing-page/sections/landing-hero"),{
      loading: () => <LandingHeroLoader/>
 })
 

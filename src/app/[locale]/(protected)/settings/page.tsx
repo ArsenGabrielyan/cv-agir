@@ -1,6 +1,6 @@
 import PageLayout from "@/components/layout/page-layout"
 import SettingsContent from "@/components/settings/settings-tabs"
-import { getSubscriptionsByUserId, getIsSubscriptionExpired } from "@/data/db/subscription"
+import { getSubscriptionsByUserId, getIsSubscriptionExpired } from "@/data/subscription"
 import { redirect, routing } from "@/i18n/routing"
 import { currentUser } from "@/lib/auth"
 import { Metadata } from "next"

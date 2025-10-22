@@ -7,18 +7,20 @@ export const languages = [
 
 export const messages = [
      "common",
+     "landing-page"
 ] as const
 
 export const locales: LangCodeType[] = languages.map(lang=>lang.code);
 export const defaultLocale: LangCodeType = "hy";
 
 export async function loadMessages(locale: LangCodeType): Promise<MessageSchema>{
-     const [common] = await Promise.all(
+     const [common, landingPage] = await Promise.all(
           messages.map(msg=>
                import(`../../i18n/${locale}/${msg}.json`).then(m=>m.default)
           )
      );
      return {
           ...common,
+          ...landingPage
      }
 }

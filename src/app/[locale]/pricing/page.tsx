@@ -1,5 +1,5 @@
 import PageLayout from "@/components/layout/page-layout";
-import Pricing from "@/components/landing-page/pricing";
+import Pricing from "@/components/landing-page/sections/pricing";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

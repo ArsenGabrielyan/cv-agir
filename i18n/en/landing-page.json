@@ -1,0 +1,107 @@
+{
+     "landing-hero": {
+          "desc1": "Your resume will be created in seconds",
+          "desc2": "Create a professional resume quickly and easily, and download for free",
+          "noCreditCard": "No credit card required.",
+          "langSwitcherLabel": "Change Language",
+          "startFree": "Start for Free!"
+     },
+     "how-it-works": {
+          "title": "How it works",
+          "step1": "Choose a resume template to create a suitable and professional resume.",
+          "step2": "Fill in your resume information.",
+          "step3": "Download your resume as a PDF file or print it."
+     },
+     "features": {
+          "title": "Features",
+          "ai-suggestions": {
+               "name": "AI Suggestions",
+               "description": "Get optimized skills and sentences in your resume."
+          },
+          "easy-editing": {
+               "name": "Easy Editing",
+               "description": "Add and edit your resume without hassle."
+          },
+          "qr-resume": {
+               "name": "QR Code Resume",
+               "description": "Create a QR code that can be easily scanned."
+          },
+          "design": {
+               "name": "Custom Styling",
+               "description": "Change fonts, colors and layout to your preference."
+          }
+     },
+     "pricing": {
+          "title": "Pricing",
+          "subType": "Subscription type",
+          "monthly": {
+               "name": "Monthly",
+               "prefix": "month"
+          },
+          "annual": {
+               "name": "Annual",
+               "prefix": "year"
+          },
+          "buy-it": "Buy It",
+          "free": {
+               "title": "Free",
+               "description": "Create resumes for free. No credit card required. Great for beginners who want to create a quick and easy resume.",
+               "perks": {
+                    "perk-1": "{count} resumes",
+                    "perk-2": "Basic templates",
+                    "perk-3": "PDF download (print)"
+               },
+               "currStatus": "Current Plan"
+          },
+          "premium": {
+               "title": "Premium",
+               "description": "Create more professional resumes and cover letters, get access to all templates, advanced design features, and AI-assistance.",
+               "perks": {
+                    "perk-1": "Unlimited Resumes",
+                    "perk-2": "Access to Every Template",
+                    "perk-3": "Unlimited Downloads (PDF)"
+               },
+               "currStatus": "You are already on the premium plan"
+          },
+          "other-perks": {
+               "perk-1": "Full customization",
+               "perk-2": "AI suggestions",
+               "perk-3": "Cover letter creation"
+          }
+     },
+     "faq": {
+          "title": "Frequently asked questions",
+          "question-1": {
+               "question": "How can I create a resume on this platform?",
+               "answer": "Just sign up, fill in your details and download a ready-made resume."
+          },
+          "question-2": {
+               "question": "Can I use this service for free?",
+               "answer": "Yes, you can create up to {count} resumes for free and download them in PDF format."
+          },
+          "question-3": {
+               "question": "How can I upgrade to the premium version?",
+               "answer": "To upgrade to the premium version, select the \"Buy It\" button and pay."
+          },
+          "question-4": {
+               "question": "Can I edit my resume later?",
+               "answer": "Yes, you can log in and edit your resume at any time."
+          },
+          "question-5": {
+               "question": "What formats can I download my resume in?",
+               "answer": "You can download your resume in PDF format or print it."
+          },
+          "question-6": {
+               "question": "Are there templates I can choose from?",
+               "answer": "Yes, we provide resume templates with different designs that you can choose from and personalize."
+          },
+          "question-7": {
+               "question": "Can I use my resume for job applications?",
+               "answer": "Yes, our resume templates meet international standards and can be used for job applications."
+          },
+          "question-8": {
+               "question": "How can I contact the support team?",
+               "answer": "You can write to us on the \"Contact Us\" page or send an email to our support email address."
+          }
+     }
+}

@@ -1,7 +1,7 @@
 "use client"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getAvailableFeatures } from "@/lib/permission"
-import { ResumeServerData } from "@/data/types"
+import { ResumeServerData } from "@/lib/types"
 import { CoverLetter, UserPlan } from "@db"
 import { useSearchParams } from "next/navigation"
 import usePremiumModal from "@/hooks/use-premium-modal"

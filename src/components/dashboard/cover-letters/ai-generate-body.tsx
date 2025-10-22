@@ -3,11 +3,11 @@ import LoadingButton from "@/components/buttons/loading-button";
 import { useSubscriptionLevel } from "@/context/subscription-level-provider";
 import usePremiumModal from "@/hooks/use-premium-modal";
 import { getAvailableFeatures } from "@/lib/permission";
-import { CoverLetterFormType } from "@/data/types/schema";
+import { CoverLetterFormType } from "@/lib/types/schema";
 import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ERROR_MESSAGES } from "@/data/constants";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 interface GenerateLetterBodyButtonProps{
      coverLetterData: CoverLetterFormType,

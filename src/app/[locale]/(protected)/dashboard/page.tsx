@@ -1,10 +1,10 @@
 import { getSubscriptionLevel } from "@/actions/subscription-system";
 import PageLayout from "@/components/layout/page-layout";
-import { resumeDataInclude } from "@/data/types";
+import { resumeDataInclude } from "@/lib/types";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Metadata } from "next";
-import { getResumeCountByUserId } from "@/data/db/resumes";
+import { getResumeCountByUserId } from "@/data/resumes";
 import DashboardContent from "@/components/dashboard/dashboard-tabs";
 import { getAvailableFeatures } from "@/lib/permission";
 import { redirect, routing } from "@/i18n/routing";

@@ -1,7 +1,7 @@
 import { FormControl, FormField, FormItem, FormMessage, FormLabel } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { ResumeArrayFieldProps } from "@/data/types"
-import { ResumeOptionalDetailsType } from "@/data/types/schema"
+import { ResumeArrayFieldProps } from "@/lib/types"
+import { ResumeOptionalDetailsType } from "@/lib/types/schema"
 import DynamicFieldWrapper from "../../wrappers/field-wrapper"
 
 export default function ResumeLinkField({form,index,remove,id}: ResumeArrayFieldProps<ResumeOptionalDetailsType>){

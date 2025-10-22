@@ -1,13 +1,13 @@
 "use server"
-import { parseExpiryDate } from "@/data/helpers/credit-cards";
+import { parseExpiryDate } from "@/lib/helpers/credit-cards";
 import { currentUser, CurrentUserReturnType } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { decryptData, encryptData } from "@/actions/encryption";
 import { CreditCardSchema } from "@/schemas"
-import { CreditCardType } from "@/data/types/schema"
+import { CreditCardType } from "@/lib/types/schema"
 import { CreditCard } from "@db";
-import { ERROR_MESSAGES } from "@/data/constants";
-import { logAction } from "@/data/db/logs";
+import { ERROR_MESSAGES } from "@/lib/constants";
+import { logAction } from "@/data/logs";
 import { getIpAddress } from "@/lib/limiter";
 
 export const upsertCard = async(values: CreditCardType, user: CurrentUserReturnType, expiryDate: Date) => {

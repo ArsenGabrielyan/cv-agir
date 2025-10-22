@@ -1,6 +1,6 @@
 "use client"
 import { CheckoutFormSchema } from "@/schemas";
-import { CheckoutFormType } from "@/data/types/schema";
+import { CheckoutFormType } from "@/lib/types/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -13,8 +13,8 @@ import { useRouter } from "@/i18n/routing";
 import LoadingButton from "@/components/buttons/loading-button";
 import { SubscriptionPeriod, UserPlan } from "@db";
 import CreditCardInput from "@/components/form/credit-card-input";
-import { getBankName } from "@/data/helpers/credit-cards";
-import { ERROR_MESSAGES } from "@/data/constants";
+import { getBankName } from "@/lib/helpers/credit-cards";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 interface CheckoutFormProps{
      period: SubscriptionPeriod,

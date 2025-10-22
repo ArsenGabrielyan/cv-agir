@@ -17,7 +17,7 @@ import { FormSuccess } from "@/components/form/form-success";
 import { PasswordStrengthInput } from "@/components/form/password-input";
 import { useSearchParams } from "next/navigation";
 import { newPassword } from "@/actions/auth/new-password";
-import { NewPasswordType } from "@/data/types/schema";
+import { NewPasswordType } from "@/lib/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
 
 export default function NewPasswordForm(){

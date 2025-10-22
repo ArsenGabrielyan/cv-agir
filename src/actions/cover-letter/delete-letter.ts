@@ -1,7 +1,7 @@
 "use server"
-import { ERROR_MESSAGES } from "@/data/constants";
-import { getCurrentCoverLetterByUserId } from "@/data/db/cover-letters";
-import { logAction } from "@/data/db/logs";
+import { ERROR_MESSAGES } from "@/lib/constants";
+import { getCurrentCoverLetterByUserId } from "@/data/cover-letters";
+import { logAction } from "@/data/logs";
 import { currentUser } from "@/lib/auth"
 import { db } from "@/lib/db";
 import { getIpAddress } from "@/lib/limiter";

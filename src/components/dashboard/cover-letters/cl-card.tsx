@@ -9,12 +9,12 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Link } from "@/i18n/routing";
 import dynamic from "next/dynamic";
-import { mapToLetterValues } from "@/data/helpers/maps";
+import { mapToLetterValues } from "@/lib/helpers/maps";
 import { formatDate } from "date-fns";
 import { hy } from "date-fns/locale";
 import DocPreviewLoader from "@/components/loaders/doc-preview";
 import usePrint from "@/hooks/use-print";
-import { ERROR_MESSAGES } from "@/data/constants";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 interface CoverLetterCardProps{
      data: CoverLetter

@@ -1,5 +1,5 @@
 import {CoverLetterDetailsFormLoader, CoverLetterInfoFormLoader} from "@/components/loaders/form"
-import { CoverLetterFormProps, IEditorStep} from "@/data/types"
+import { CoverLetterFormProps, IEditorStep} from "@/lib/types"
 import dynamic from "next/dynamic"
 
 export const steps: IEditorStep<CoverLetterFormProps>[] = [

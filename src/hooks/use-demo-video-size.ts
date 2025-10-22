@@ -1,4 +1,4 @@
-import { DEFAULT_VIDEO_DIMENSION } from "@/data/constants";
+import { DEFAULT_VIDEO_DIMENSION } from "@/lib/constants";
 import { useIsMobile } from "./use-mobile";
 
 export default function useDemoVideoSize() : {

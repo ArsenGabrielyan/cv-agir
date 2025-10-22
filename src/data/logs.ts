@@ -1,7 +1,7 @@
 import { db } from "@/lib/db"
 import { AuditAction, Prisma } from "@db"
-import { AuditMetadata } from "../types"
-import { maskEmail } from "../helpers/audit-logs"
+import { AuditMetadata } from "../lib/types"
+import { maskEmail } from "@/lib/helpers/audit-logs"
 
 type LogActionOptions<A extends AuditAction> = AuditMetadata<A> extends undefined ? {
      userId?: string

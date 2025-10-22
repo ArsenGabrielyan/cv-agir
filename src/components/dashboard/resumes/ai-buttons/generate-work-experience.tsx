@@ -8,13 +8,13 @@ import { useSubscriptionLevel } from "@/context/subscription-level-provider";
 import usePremiumModal from "@/hooks/use-premium-modal";
 import { getAvailableFeatures } from "@/lib/permission";
 import { GenerateDescriptionSchema } from "@/schemas/ai";
-import { GenerateDescriptionInput, WorkExperienceType } from "@/data/types/schema";
+import { GenerateDescriptionInput, WorkExperienceType } from "@/lib/types/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { ERROR_MESSAGES } from "@/data/constants";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 interface GenerateWorkExpButtonProps{
      onWorkExpGenerated: (exp: WorkExperienceType) => void

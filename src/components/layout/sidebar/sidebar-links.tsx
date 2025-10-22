@@ -5,7 +5,7 @@ import {
      SidebarGroupLabel,
      SidebarMenu
 } from "@/components/ui/sidebar";
-import { SIDEBAR_LINKS } from "@/data/constants/links";
+import { SIDEBAR_LINKS } from "@/lib/constants/links";
 import SidebarItem from "./sidebar-item";
 import { UserPlan } from "@db";
 import { getAvailableFeatures } from "@/lib/permission";

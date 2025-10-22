@@ -1,6 +1,6 @@
 import { db } from "@/lib/db"
 import { getUserById } from "./user"
-import { ERROR_MESSAGES } from "../constants"
+import { ERROR_MESSAGES } from "@/lib/constants"
 import { logAction } from "./logs"
 import { getIpAddress } from "@/lib/limiter"
 

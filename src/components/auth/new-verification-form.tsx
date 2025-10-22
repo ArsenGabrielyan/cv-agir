@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react"
 import { newVerification } from "@/actions/auth/new-verification"
 import { FormError } from "@/components/form/form-error"
 import { FormSuccess } from "@/components/form/form-success"
-import { ERROR_MESSAGES } from "@/data/constants"
+import { ERROR_MESSAGES } from "@/lib/constants"
 
 export const NewVerificationForm = () => {
      const [error, setError] = useState<string | undefined>("");

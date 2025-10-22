@@ -1,3 +1,6 @@
+import {routing} from '@/i18n/routing';
+import { MessageSchema } from '@/i18n/types';
+
 import { CreditCard, CVPageSettings, UserPlan } from "@db"
 import type {DefaultSession} from "next-auth"
 
@@ -19,5 +22,12 @@ export type ExtendedUser = DefaultSession["user"] & {
 declare module "next-auth"{
   interface Session{
     user: ExtendedUser
+  }
+}
+
+declare module 'next-intl' {
+  interface AppConfig {
+    Locale: (typeof routing.locales)[number];
+    Messages: MessageSchema
   }
 }

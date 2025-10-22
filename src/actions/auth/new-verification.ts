@@ -1,8 +1,8 @@
 "use server"
-import { ERROR_MESSAGES } from "@/data/constants"
-import { logAction } from "@/data/db/logs"
-import { getUserByEmail } from "@/data/db/user"
-import { getVerificationTokenByToken } from "@/data/db/verification-token"
+import { ERROR_MESSAGES } from "@/lib/constants"
+import { logAction } from "@/data/logs"
+import { getUserByEmail } from "@/data/user"
+import { getVerificationTokenByToken } from "@/data/verification-token"
 import { db } from "@/lib/db"
 import { getIpAddress } from "@/lib/limiter"
 

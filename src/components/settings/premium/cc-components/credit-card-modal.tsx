@@ -1,5 +1,5 @@
 import { CreditCardSchema } from "@/schemas";
-import { CreditCardType } from "@/data/types/schema";
+import { CreditCardType } from "@/lib/types/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -12,8 +12,8 @@ import LoadingButton from "@/components/buttons/loading-button";
 import { addCard, editCard } from "@/actions/subscription-system/credit-card";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
-import { getBankName } from "@/data/helpers/credit-cards";
-import { ERROR_MESSAGES } from "@/data/constants";
+import { getBankName } from "@/lib/helpers/credit-cards";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 export default function CreditCardModal(){
      const {update} = useSession();

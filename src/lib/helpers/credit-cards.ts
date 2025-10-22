@@ -1,4 +1,4 @@
-import {BANKS, CREDIT_CARD_BRANDS, ERROR_MESSAGES} from "@/data/constants"
+import {BANKS, CREDIT_CARD_BRANDS, ERROR_MESSAGES} from "@/lib/constants"
 
 export const isValidCard = (card: string) => {
      let s = 0, isSecond = false

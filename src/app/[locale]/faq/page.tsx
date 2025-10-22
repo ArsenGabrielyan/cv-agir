@@ -1,6 +1,6 @@
 import PageLayout from "@/components/layout/page-layout";
 import LandingHeroLoader from "@/components/loaders/landing-hero-loader";
-import { FAQ_DATA } from "@/data/constants/landing-page";
+import { FAQ_DATA } from "@/lib/constants/landing-page";
 import { CircleHelp } from "lucide-react";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
      title: "Հարցեր և պատասխաններ"
 }
 
-const FAQHero = dynamic(()=>import("@/components/landing-page/landing-hero"),{
+const FAQHero = dynamic(()=>import("@/components/landing-page/sections/landing-hero"),{
      loading: () => <LandingHeroLoader/>
 })
 

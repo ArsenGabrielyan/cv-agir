@@ -4,12 +4,12 @@ import Github from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
 import Facebook from "next-auth/providers/facebook"
 import { LoginSchema } from "@/schemas"
-import { getUserByEmail } from "@/data/db/user"
+import { getUserByEmail } from "@/data/user"
 import bcrypt from "bcryptjs"
 import { env } from "@/lib/env"
 import { clearLimiter, getIpAddress, incrementLimiter } from "./lib/limiter"
-import { logAction } from "@/data/db/logs"
-import { ERROR_MESSAGES } from "./data/constants"
+import { logAction } from "@/data/logs"
+import { ERROR_MESSAGES } from "./lib/constants"
 
 export default { 
      providers: [

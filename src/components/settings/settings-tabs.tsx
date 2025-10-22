@@ -1,5 +1,5 @@
 "use client"
-import { ISettingsPage } from "@/data/types";
+import { ISettingsPage } from "@/lib/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {Settings, SubscriptionSettings} from "./pages"
 import { useSearchParams } from "next/navigation";

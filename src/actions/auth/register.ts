@@ -2,13 +2,13 @@
 import { RegisterSchema } from "@/schemas"
 import bcrypt from "bcryptjs"
 import { db } from "@/lib/db"
-import { getUserByEmail } from "@/data/db/user"
+import { getUserByEmail } from "@/data/user"
 import { generateVerificationToken } from "@/lib/tokens"
 import { sendVerificationEmail } from "@/lib/mail"
-import { RegisterFormType } from "@/data/types/schema"
+import { RegisterFormType } from "@/lib/types/schema"
 import { checkLimiter, clearLimiter, getIpAddress, incrementLimiter } from "@/lib/limiter"
-import { logAction } from "@/data/db/logs"
-import { ERROR_MESSAGES } from "@/data/constants"
+import { logAction } from "@/data/logs"
+import { ERROR_MESSAGES } from "@/lib/constants"
 
 export const register = async (values: RegisterFormType) => {
      const currIp = await getIpAddress();

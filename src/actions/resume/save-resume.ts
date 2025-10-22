@@ -2,15 +2,15 @@
 import { currentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { ResumeFormSchema } from "@/schemas"
-import { ResumeFormType } from "@/data/types/schema"
+import { ResumeFormType } from "@/lib/types/schema"
 import {del, put} from "@vercel/blob"
 import path from "path"
 import { getSubscriptionLevel } from "../subscription-system"
 import { getAvailableFeatures } from "@/lib/permission"
-import { getCurrentResumeByUserId, getResumeCountByUserId } from "@/data/db/resumes"
+import { getCurrentResumeByUserId, getResumeCountByUserId } from "@/data/resumes"
 import { getIpAddress } from "@/lib/limiter"
-import { logAction } from "@/data/db/logs"
-import { ERROR_MESSAGES } from "@/data/constants"
+import { logAction } from "@/data/logs"
+import { ERROR_MESSAGES } from "@/lib/constants"
 
 export const saveResume = async(values: ResumeFormType,templateId?: string) => {
      const {id} = values

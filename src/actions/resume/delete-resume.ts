@@ -1,12 +1,12 @@
 "use server"
-import { logAction } from "@/data/db/logs";
-import { getCurrentResumeByUserId } from "@/data/db/resumes";
+import { logAction } from "@/data/logs";
+import { getCurrentResumeByUserId } from "@/data/resumes";
 import { currentUser } from "@/lib/auth"
 import { db } from "@/lib/db";
 import { getIpAddress } from "@/lib/limiter";
 import { del } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
-import {ERROR_MESSAGES} from "@/data/constants"
+import {ERROR_MESSAGES} from "@/lib/constants"
 
 export const deleteResume = async (id: string) => {
      const currIp = await getIpAddress()

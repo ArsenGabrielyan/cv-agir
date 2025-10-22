@@ -1,6 +1,30 @@
 {
      "index": {
           "title": "CV-agir",
+          "desc": "A resume generator that allows you to create, edit, and download resumes for free.",
+          "author": "Arsen G.",
+          "all-rights-reserved": "All Rights Reserved",
           "langSwitcherLabel": "Change Language"
+     },
+     "buttons": {
+          "sign-in": "Log in",
+          "sign-out": "Sign Out",
+          "dashboard": "Dashboard"
+     },
+     "nav-links": {
+          "menu": "Menu",
+          "home": "Homepage",
+          "how-it-works": "How it works",
+          "features": "Features",
+          "pricing": "Pricing",
+          "faq": "FAQs",
+          "qna": "Questions & Answers",
+          "contact": "Contact us",
+          "about-us": "About us",
+          "templates": "Templates"
+     },
+     "footer": {
+          "resources": "Resources",
+          "support": "Support"
      }
 }

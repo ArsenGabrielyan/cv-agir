@@ -1,19 +1,19 @@
 "use server"
 import { signIn } from "@/auth";
-import { getUserByEmail } from "@/data/db/user";
+import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail, sendTwoFactorEmail } from "@/lib/mail";
 import { generateVerificationToken, generateTwoFactorToken } from "@/lib/tokens";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema } from "@/schemas"
 import { AuthError } from "next-auth";
-import { getTwoFactorTokenByEmail } from "@/data/db/two-factor-token";
-import { getTwoFactorConfirmationByUserId } from "@/data/db/two-factor-confirmation";
-import { logAction } from "@/data/db/logs";
+import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
+import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
+import { logAction } from "@/data/logs";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
-import { LoginType } from "@/data/types/schema";
+import { LoginType } from "@/lib/types/schema";
 import { checkLimiter, getIpAddress } from "@/lib/limiter";
-import { ERROR_MESSAGES } from "@/data/constants";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 const authErrorMessages: Record<AuthError["name"], string> = {
      CredentialsSignin: "Սխալ էլ․ փոստ կամ գաղտնաբառ։",

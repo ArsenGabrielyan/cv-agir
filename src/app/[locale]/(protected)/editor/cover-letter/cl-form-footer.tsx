@@ -1,7 +1,7 @@
 import { PenLineIcon, FileText, XSquare } from "lucide-react";
 import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button";
-import { CoverLetterFormProps, EditorFormFooterProps } from "@/data/types";
+import { CoverLetterFormProps, EditorFormFooterProps } from "@/lib/types";
 import useEditorSteps from "@/hooks/use-editor-steps";
 import { steps } from "./steps";
 
