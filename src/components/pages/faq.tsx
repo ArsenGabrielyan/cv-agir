@@ -14,7 +14,7 @@ export default function FAQPageContent(){
      const t = useTranslations("faq")
      return (
           <>
-               <FAQHero title="Հարցեր և պատասխաններ"/>
+               <FAQHero title={t("qna")}/>
                <section className="py-16 px-6 sm:px-12 md:px-24 lg:px-40 flex items-center justify-center">
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-7xl mt-4">
                          {Object.values(Questions).map((question,i)=>(

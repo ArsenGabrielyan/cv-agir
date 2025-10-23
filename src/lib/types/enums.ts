@@ -14,6 +14,13 @@ export enum Questions{
      Q7 = "question-7",
      Q8 = "question-8",
 }
+export enum Reasons{
+     Reason1 = "reason1",
+     Reason2 = "reason2",
+     Reason3 = "reason3",
+     Reason4 = "reason4",
+     Reason5 = "reason5",
+}
 export enum NavLinks{
      Home = "home",
      Demo = "how-it-works",

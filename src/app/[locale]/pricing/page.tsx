@@ -10,8 +10,7 @@ export default function PricingPage(){
      return (
           <PageLayout landingFooter>
                <section className="flex justify-center items-center text-center flex-col space-y-6 pt-4 sm:pt-24 px-5 w-full bg-[url(/bg.svg)]">
-                    <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight tracking-tight">Առաջարկներ և գներ</h1>
-                    <Pricing/>
+                    <Pricing titleClass="text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight tracking-tight"/>
                     <div className="w-full h-24"></div>
                </section>
           </PageLayout>

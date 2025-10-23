@@ -7,7 +7,10 @@ import PricingCard from "@/components/landing-page/pricing-card";
 import { useCurrentSubscriptionLevel, useCurrentUser } from "@/hooks/use-current-user";
 import { useTranslations } from "next-intl";
 
-export default function Pricing(){
+interface PricingProps{
+     titleClass?: string
+}
+export default function Pricing({titleClass = "text-2xl sm:text-3xl md:text-4xl space-y-5 font-bold"}: PricingProps){
      const user = useCurrentUser();
      const subscriptionLevel = useCurrentSubscriptionLevel(user && user?.subscriptionEndDate ? new Date(user?.subscriptionEndDate) < new Date() : true);
      const [isYearly, setIsYearly] = useState(false)
@@ -25,7 +28,7 @@ export default function Pricing(){
      const t = useTranslations("pricing");
      return (
           <section className="flex justify-center items-center flex-col space-y-4 w-full px-3" id="pricing">
-               <h2 className="text-2xl sm:text-3xl md:text-4xl space-y-5 font-bold">{t("title")}</h2>
+               <h2 className={titleClass}>{t("title")}</h2>
                <div className="flex items-center justify-center space-x-3">
                     <p>{t("monthly.name")}</p>
                     <Switch title={t("subType")} id="billing-mode" checked={isYearly} onCheckedChange={handleCheckedChange}/>
