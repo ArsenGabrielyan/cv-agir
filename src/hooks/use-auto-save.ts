@@ -50,7 +50,10 @@ export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: strin
                     toast.error(ERROR_MESSAGES.content.resumeSaveError,{
                          action: {
                               label: "Նորից փորձել",
-                              onClick: () => save()
+                              onClick: () => void save().catch(err=>{
+                                   console.error(err);
+                                   toast.error("Վայ, ինչ-որ բան սխալ գնաց")
+                              })
                          }
                     })
                } finally {
@@ -107,7 +110,10 @@ export function useCoverLetterAutoSave(coverLetterData: CoverLetterFormType){
                     toast.error(ERROR_MESSAGES.content.noCoverLetter,{
                          action: {
                               label: "Նորից փորձել",
-                              onClick: () => save()
+                              onClick: () => void save().catch(err=>{
+                                   console.error(err);
+                                   toast.error("Վայ, ինչ-որ բան սխալ գնաց")
+                              })
                          }
                     })
                } finally {

@@ -38,5 +38,15 @@
                "label": "Փոխել հավելվածի գույնը",
                "label-select": "Ընտրել Գույն"
           }
+     },
+     "ai": {
+          "gen-summary-msg": "\nԽնդրում ենք գեներացնել պրոֆեսիոնալ ռեզյումեի նկարագրություն նշված տվյալներից՝\n\nՄասնագիտություն՝ {jobTitle}\nԱշխատանքային փորձ՝\n{experience}\n\nԿրթություն՝\n{education}\n\nՀմտություններ՝\n{skills}\n\nԼեզուներ՝\n{languages}\n",
+          "work-exp-msg": "\nԽնդրում ենք տրամադրել աշխատանքային փորձի մուտք այս նկարագրությունից:\n     {description}\n",
+          "cover-letter-body-msg": "\nԽնդրում ենք գեներացնել պրոֆեսիոնալ ուղեկցող նամակ նշված տվյալներից՝\n\nԱշխատողի անուն ազգանուն՝ {fname} {lname}\nՄասնագիտություն՝ {jobTitle}\n\nԳործատուի անուն ազգանուն՝ {recipientName}\nԳործատուի մասնագիտություն՝ {recipientTitle}\n\nբայց սկսիր \"Հարգելի պարոն <ազգանուն>\" նախադասությունից և վերջացրու \"Հարգանքով՝ <աշխատողի անուն ազգանուն>\"-ով\n",
+          "experience-msg": "\nԳործ՝ {job} {company} ընկերությունում {startDate}-ից մինչև {endDate}\n\nԳործի մասին նկարագրություն՝ {jobInfo}\n",
+          "edu-msg": "\nԳիտական աստիճան՝ {degree} \"{school}\"-ի \"{faculty}\" ֆակուլտետում {startDate}-ից մինչև {endDate}\n",
+          "lang-msg": "\n{name}՝ {percentage}\n",
+          "instructions-language": "Armenian language",
+          "today": "Այսօր"
      }
 }

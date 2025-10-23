@@ -17,7 +17,7 @@ export default function AccordionFAQ(){
                     {Object.values(Questions).map((question,i)=>(
                          <AccordionItem key={`q-${i+1}`} value={`question-${i+1}`}>
                               <AccordionTrigger>{t(`${question}.question`)}</AccordionTrigger>
-                              <AccordionContent>{t(`${question}.answer`,{count: MAX_FREE_RESUMES})}</AccordionContent>
+                              <AccordionContent>{t(`${question}.answer`,{count: String(MAX_FREE_RESUMES)})}</AccordionContent>
                          </AccordionItem>
                     ))}
                </Accordion>

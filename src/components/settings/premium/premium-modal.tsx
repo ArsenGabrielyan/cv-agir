@@ -33,7 +33,7 @@ export default function PremiumModal(){
                          <p className="text-center text-3xl md:text-4xl xl:text-5xl font-semibold">${cardPrice.toFixed(2)}/{isYearly ? "տարի" : "ամիս"}</p>
                          <ul className="space-y-3">
                               {perks.map((perk,i)=>(
-                                   <li key={`perk-${i+1}`} className={cn("flex gap-x-3",!perk.included && "text-muted-foreground")}>{perk.included ? <CheckCircle className="text-primary"/> : <MinusCircle/>} {t(perk.name,{count: MAX_FREE_RESUMES})}</li>
+                                   <li key={`perk-${i+1}`} className={cn("flex gap-x-3",!perk.included && "text-muted-foreground")}>{perk.included ? <CheckCircle className="text-primary"/> : <MinusCircle/>} {t(perk.name,{count: String(MAX_FREE_RESUMES)})}</li>
                               ))}
                          </ul>
                     </div>

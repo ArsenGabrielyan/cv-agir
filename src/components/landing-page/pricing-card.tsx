@@ -38,7 +38,7 @@ export default function PricingCard({data,isYearly, selected, t}: PricingCardPro
                     <p className="text-4xl md:text-5xl">${cardPrice.toFixed(2)}/{isYearly ? t("annual.prefix") : t("monthly.prefix")}</p>
                     <ul className="flex flex-col space-y-2 mt-5">
                          {perks.map((perk,i)=>(
-                              <li key={`perk-${i+1}`} className={cn("flex gap-x-3",!perk.included && "text-muted-foreground")}>{perk.included ? <CheckCircle className="text-primary"/> : <MinusCircle/>} {t(perk.name,{count: MAX_FREE_RESUMES})}</li>
+                              <li key={`perk-${i+1}`} className={cn("flex gap-x-3",!perk.included && "text-muted-foreground")}>{perk.included ? <CheckCircle className="text-primary"/> : <MinusCircle/>} {t(perk.name,{count: String(MAX_FREE_RESUMES)})}</li>
                          ))}
                     </ul>
                </CardContent>

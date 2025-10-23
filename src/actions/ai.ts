@@ -13,6 +13,7 @@ import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter"
 import { logAction } from "@/data/logs"
 import { maskText } from "@/lib/helpers/audit-logs"
 import { getIpAddress } from "./ip"
+import { getTranslations } from "next-intl/server"
 
 export const generateSummary = async(input: GenerateSummaryInput) => {
      const user = await currentUser();
@@ -65,37 +66,34 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
           throw new Error(ERROR_MESSAGES.rateLimitError)
      }
 
+     const t = await getTranslations("ai");
      const {jobTitle, education, experience, skills, languages} = validatedFields.data
 
-     const sysMsg = `You're a job resume generator AI. Your task is to write a professional introduction summary for a resume given the user's provided data. Only return the summary and don't include any other info in the response. Keep it concise, professional, and return the data in Armenian language. Maximum 70 words and Short.`;
+     const sysMsg = `You're a job resume generator AI. Your task is to write a professional introduction summary for a resume given the user's provided data. Only return the summary and don't include any other info in the response. Keep it concise, professional, and return the data in ${t("instructions-language")}. Maximum 70 words and Short.`;
 
-     const userMessage = `
-     Խնդրում ենք գեներացնել պրոֆեսիոնալ ռեզյումեի նկարագրություն նշված տվյալներից՝
-
-     Մասնագիտություն՝ ${jobTitle || "N/A"}
-     Աշխատանքային փորձ՝
-     ${experience?.map(exp=>`
-          Գործ՝ ${exp.job || "N/A"} ${exp.company || "N/A"} ընկերությունում ${exp.startDate || "N/A"}-ից մինչև ${exp.endDate || "Հիմա"}
-
-          Գործի մասին նկարագրություն՝ ${exp.jobInfo || "N/A"}
-          `
-     ).join("\n\n")}
-
-     Կրթություն՝
-     ${education?.map(edu=>`
-          Գիտական աստիճան՝ ${edu.degree || "N/A"} "${edu.school || "N/A"}"-ի "${edu.faculty}" ֆակուլտետում ${edu.startDate || "N/A"}-ից մինչև ${edu.endDate || "Այսօր"}
-          `
-     ).join("\n\n")}
-
-     Հմտություններ՝
-     ${skills?.map(skill=>skill.name).join(", ")}
-
-     Լեզուներ՝
-     ${languages?.map(lang=>`
-          ${lang.name || "N/A"}՝ ${lang.percentage ? getLanguageLevel(lang.percentage) : "N/A"}
-          `
-     ).join(", ")}
-     `;
+     const userMessage = t("gen-summary-msg",{
+          jobTitle: jobTitle || "N/A",
+          experience: experience?.map(exp=>t("experience-msg",{
+               job: exp.job || "N/A",
+               company: exp.company || "N/A",
+               startDate: exp.startDate || "N/A",
+               endDate: exp.endDate || t("today"),
+               jobInfo: exp.jobInfo || "N/A"
+          })
+          ).join("\n\n") || "",
+          education: education?.map(edu=>t("edu-msg",{
+               degree: edu.degree || "N/A",
+               school: edu.school || "N/A",
+               faculty: edu.faculty || "N/A",
+               startDate: edu.startDate || "N/A",
+               endDate: edu.endDate || t("today")
+          })).join("\n\n") || "",
+          skills: skills?.map(skill=>skill.name).join(", ") || "",
+          languages: languages?.map(lang=>t("lang-msg",{
+               name: lang.name || "N/A",
+               percentage: lang.percentage ? getLanguageLevel(lang.percentage) : "N/A"
+          })).join(", ") ||""
+     });
 
      const model = gemini.getGenerativeModel({
           model: AI_MODEL,
@@ -188,11 +186,12 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
           throw new Error(ERROR_MESSAGES.rateLimitError)
      }
 
+     const t = await getTranslations("ai");
      const {description} = validatedFields.data;
 
      const sysMsg = `
      You're a job resume generator AI. Your task is to generate a single work experience entry based on the user input.
-     Your response must adhere to the following structure. You can omit fields if they can't be infered from the provided data, but don't add any new ones. Reply in Armenian language and format the Description as a Markdown Format.
+     Your response must adhere to the following structure. You can omit fields if they can't be infered from the provided data, but don't add any new ones. Reply in ${t("instructions-language")} and format the Description as a Markdown Format.
 
      Job Title: <job title>
      Company Name: <company name>
@@ -201,10 +200,7 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
      Description: <an optimized description in bullet format might be infered from the job title
      `
 
-     const userMessage = `
-     Խնդրում ենք տրամադրել աշխատանքային փորձի մուտք այս նկարագրությունից:
-     ${description}
-     `
+     const userMessage = t("work-exp-msg",{ description })
 
      const model = gemini.getGenerativeModel({
           model: AI_MODEL,
@@ -305,21 +301,18 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
           throw new Error(ERROR_MESSAGES.rateLimitError)
      }
 
+     const t = await getTranslations("ai");
      const {jobTitle, fname, lname, recipientName, recipientTitle} = validatedFields.data
 
-     const sysMsg = `You're a job cover letter generator AI. Your task is to write a professional cover letter given the user's provided data and recipient's data. Only return the cover letter in markdown and make 3-4 paragraphs explaining why this user is perfect candidate for a specific job. Keep it concise, professional, avoid headings, and return the data in Armenian language.`;
+     const sysMsg = `You're a job cover letter generator AI. Your task is to write a professional cover letter given the user's provided data and recipient's data. Only return the cover letter in markdown and make 3-4 paragraphs explaining why this user is perfect candidate for a specific job. Keep it concise, professional, avoid headings, and return the data in ${t("instructions-language")}.`;
 
-     const userMessage = `
-     Խնդրում ենք գեներացնել պրոֆեսիոնալ ուղեկցող նամակ նշված տվյալներից՝
-
-     Աշխատողի անուն ազգանուն՝ ${fname || "N/A"} ${lname || "N/A"}
-     Մասնագիտություն՝ ${jobTitle || "N/A"}
-     
-     Գործատուի անուն ազգանուն՝ ${recipientName || "N/A"}
-     Գործատուի մասնագիտություն՝ ${recipientTitle || "N/A"}
-
-     բայց սկսիր "Հարգելի պարոն <ազգանուն> նախադասությունից" և վերջացրու "Հարգանքով՝ <աշխատողի անուն ազգանուն>"-ով
-     `;
+     const userMessage = t("cover-letter-body-msg",{
+          fname: fname || "N/A",
+          lname: lname || "N/A",
+          jobTitle: jobTitle || "N/A",
+          recipientName: recipientName || "N/A",
+          recipientTitle: recipientTitle || "N/A"
+     });
 
      const model = gemini.getGenerativeModel({
           model: AI_MODEL,

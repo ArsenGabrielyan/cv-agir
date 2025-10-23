@@ -10,5 +10,5 @@ export interface ILanguage{
 }
 export type MessageSchema = (
      typeof hyLanding &
-     typeof hyCommon
+     typeof hyCommon 
 );

@@ -20,7 +20,7 @@ export default function FAQPageContent(){
                          {Object.values(Questions).map((question,i)=>(
                               <li key={`q-${i+1}`}>
                                    <h2 className="text-xl flex gap-x-2 font-semibold items-center"><CircleHelp className="text-primary w-6 h-6"/> {t(`${question}.question`)}</h2>
-                                   <p>{t(`${question}.answer`,{count: MAX_FREE_RESUMES})}</p>
+                                   <p>{t(`${question}.answer`,{count: String(MAX_FREE_RESUMES)})}</p>
                               </li>
                          ))}
                     </ul>
