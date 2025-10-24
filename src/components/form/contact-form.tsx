@@ -20,6 +20,7 @@ import { ContactFormType } from "@/lib/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
 import { getCaptchaToken } from "@/lib/captcha";
 import { ERROR_MESSAGES } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 
 export default function ContactForm(){
      const [isPending, startTransition] = useTransition();
@@ -50,6 +51,7 @@ export default function ContactForm(){
                }
           })
      }
+     const t = useTranslations("form");
      return (
           <Form {...form}>
                <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -59,12 +61,12 @@ export default function ContactForm(){
                               name="name"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Անուն Ազգանուն</FormLabel>
+                                        <FormLabel>{t("name.label")}</FormLabel>
                                         <FormControl>
                                              <Input
                                                   {...field}
                                                   disabled={isPending}
-                                                  placeholder="Պողոս Պողոսյան"
+                                                  placeholder={t("name.placeholder")}
                                              />
                                         </FormControl>
                                         <FormMessage/>
@@ -77,13 +79,13 @@ export default function ContactForm(){
                                    name="email"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Էլ․ փոստ</FormLabel>
+                                             <FormLabel>{t("email.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
                                                        type="email"
                                                        disabled={isPending}
-                                                       placeholder="name@example.com"
+                                                       placeholder={t("email.placeholder")}
                                                   />
                                              </FormControl>
                                              <FormMessage/>
@@ -95,12 +97,12 @@ export default function ContactForm(){
                                    name="phone"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Հեռախոսահամար</FormLabel>
+                                             <FormLabel>{t("phone.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
                                                        disabled={isPending}
-                                                       placeholder="(012) 34-56-78"
+                                                       placeholder={t("phone.placeholder")}
                                                   />
                                              </FormControl>
                                              <FormMessage/>
@@ -113,12 +115,12 @@ export default function ContactForm(){
                               name="subject"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Թեմա</FormLabel>
+                                        <FormLabel>{t("subject.label")}</FormLabel>
                                         <FormControl>
                                              <Input
                                                   {...field}
                                                   disabled={isPending}
-                                                  placeholder="Թեմայի Անուն"
+                                                  placeholder={t("subject.placeholder")}
                                              />
                                         </FormControl>
                                         <FormMessage/>
@@ -130,12 +132,12 @@ export default function ContactForm(){
                               name="message"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Հաղորդագրություն</FormLabel>
+                                        <FormLabel>{t("message.label")}</FormLabel>
                                         <FormControl>
                                              <Textarea
                                                   {...field}
                                                   disabled={isPending}
-                                                  placeholder="Գրեք հաղորդագրությունն այստեղ"
+                                                  placeholder={t("message.placeholder")}
                                                   rows={5}
                                              />
                                         </FormControl>
@@ -145,7 +147,7 @@ export default function ContactForm(){
                          />
                          <FormError message={error}/>
                          <FormSuccess message={success}/>
-                         <LoadingButton type="submit" loading={isPending}>Ուղարկել հաղորդագրություն</LoadingButton>
+                         <LoadingButton type="submit" loading={isPending}>{t("submit.send")}</LoadingButton>
                     </div>
                </form>
           </Form>

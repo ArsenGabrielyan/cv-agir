@@ -154,6 +154,11 @@ enum AuditAction {
   NO_ADMIN_ACCESS
 }
 
+enum Locale{
+  hy
+  en
+}
+
 model User {
   id                    String                 @id @default(auto()) @map("_id") @db.ObjectId
   name                  String?
@@ -284,6 +289,7 @@ model ResumeTemplateCategory {
 
 model ResumeTemplate {
   id           String                 @id @default(auto()) @map("_id") @db.ObjectId
+  locale Locale @default(hy)
   name         String?
   description  String?
   imageName    String?

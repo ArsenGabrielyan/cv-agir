@@ -1,7 +1,8 @@
 import { useMediaQuery } from "@mui/material";
-import { List, Datagrid, TextField, Create, SimpleForm, Edit, TextInput, required, ReferenceField, ReferenceInput, AutocompleteInput, FunctionField, Show, DateField, EditButton, DeleteButton, SimpleList, SearchInput, BooleanField, BooleanInput, TabbedShowLayout, InfiniteList } from "react-admin"
+import { List, Datagrid, TextField, Create, SimpleForm, Edit, TextInput, required, ReferenceField, ReferenceInput, AutocompleteInput, FunctionField, Show, DateField, EditButton, DeleteButton, SimpleList, SearchInput, BooleanField, BooleanInput, TabbedShowLayout, InfiniteList, SelectInput } from "react-admin"
 import StarIcon from "@mui/icons-material/Star"
 import { QuickFilter, CodeField, ImageUrlField, TemplatesPanel } from ".";
+import { languages } from "@/i18n/config";
 
 const templateFilters = [
      <SearchInput key="search" source="name" alwaysOn/>,
@@ -25,6 +26,10 @@ export const TemplatesList = () => {
      ) : (
           <List filters={templateFilters}>
                <Datagrid expand={<TemplatesPanel/>}>
+                    <SelectInput source="locale" choices={languages.map(lang=>({
+                         id: lang.code,
+                         name: `${lang.label} (${lang.code}-${lang.countryCode})`
+                    }))} emptyText="Ոչ մի լեզու ընտրված չէ" resettable label="Լեզու"/>
                     <TextField source="name" label="Անուն"/>
                     <TextField source="description" label="Նկարագրություն"/>
                     <ReferenceField source="categoryId" reference="categories" label="Կատեգորիա"/>

@@ -1,0 +1,27 @@
+{
+     "form": {
+          "name": {
+               "label": "Անուն Ազգանուն",
+               "placeholder": "Պողոս Պետրոսյան"
+          },
+          "email": {
+               "label": "Էլ․ փոստ",
+               "placeholder": "name@example.com"
+          },
+          "phone": {
+               "label": "Հեռախոսահամար",
+               "placeholder": "(012) 34-56-78"
+          },
+          "subject": {
+               "label": "Թեմա",
+               "placeholder": "Թեմայի Անուն"
+          },
+          "message": {
+               "label": "Հաղորդագրություն",
+               "placeholder": "Գրեք հաղորդագրությունն այստեղ"
+          },
+          "submit": {
+               "send": "Ուղարկել հաղորդագրություն"
+          }
+     }
+}

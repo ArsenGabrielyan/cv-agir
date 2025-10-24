@@ -1,0 +1,27 @@
+{
+     "form": {
+          "name": {
+               "label": "Full Name",
+               "placeholder": "John Doe"
+          },
+          "email": {
+               "label": "Email Address",
+               "placeholder": "john.doe@example.com"
+          },
+          "phone": {
+               "label": "Phone Number",
+               "placeholder": "(012) 345 6789"
+          },
+          "subject": {
+               "label": "Subject",
+               "placeholder": "Subject Name"
+          },
+          "message": {
+               "label": "Message",
+               "placeholder": "Write the message here"
+          },
+          "submit": {
+               "send": "Send Message"
+          }
+     }
+}

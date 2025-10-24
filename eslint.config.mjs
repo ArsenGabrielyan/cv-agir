@@ -9,20 +9,20 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
+const ignoreList = [
+  "prisma/generated/**",
+  "node_modules/**",
+  ".next/**",
+  "out/**",
+  "build/**",
+  "next-env.d.ts",
+  "dockerfile",
+  ".dockerignore"
+]
+
 const eslintConfig = [
+  { ignores: ignoreList },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
-  {
-    ignores: [
-      "prisma/generated",
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "build/**",
-      "next-env.d.ts",
-      "dockerfile",
-      ".dockerignore"
-    ]
-  },
   {
     files: ["**/*.ts"],
     ...(process.env.CI && {
