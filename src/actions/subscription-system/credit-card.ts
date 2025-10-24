@@ -10,33 +10,38 @@ import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "@/data/logs";
 import { getIpAddress } from "@/actions/ip";
 
-export const upsertCard = async(values: CreditCardType, user: CurrentUserReturnType, expiryDate: Date) => {
+export const upsertCard = async(userId: string, values: CreditCardType, user: CurrentUserReturnType, expiryDate: Date) => {
      const creditCards: CreditCard[] = user.creditCards || [];
      const {cardName,cardNumber,city,cvv} = values
      let found = false;
      for(let i=0;i<creditCards.length;i++){
-          const card = creditCards[i];
-          const decrypted = await decryptData(card.cardNumber);
+          const card = await db.creditCard.findFirst({
+               where: {
+                    userId,
+                    cardNumber,
+                    cvv,
+               }
+          });
+          if(!card) continue;
+          const decrypted = await decryptData(card.cardNumber)
           if(decrypted===cardNumber){
-               creditCards[i] = {
+               creditCards[i] = card
+               found = true;
+               break;
+          }
+     }
+     if(!found){
+          const creditCard = await db.creditCard.create({
+               data: {
+                    userId,
                     cardNumber: await encryptData(cardNumber),
                     cvv: await encryptData(cvv),
                     expiryDate,
                     fullName: cardName,
                     city
                }
-               found = true;
-               break;
-          }
-     }
-     if(!found){
-          creditCards.push({
-               cardNumber: await encryptData(cardNumber),
-               cvv: await encryptData(cvv),
-               expiryDate,
-               fullName: cardName,
-               city
           })
+          creditCards.push(creditCard)
      }
      return creditCards
 }
@@ -77,7 +82,7 @@ export const addCard = async(values: CreditCardType) => {
           return {error: expires.error}
      }
      if(expires.date){
-          const creditCards = await upsertCard(values,user,expires.date);
+          const creditCards = await upsertCard(user.id,values,user,expires.date);
           await logAction({
                userId: user.id,
                action: "CREDIT_CARD_ADDED",
@@ -86,13 +91,11 @@ export const addCard = async(values: CreditCardType) => {
                     last4: cardNumber.slice(-4)
                }
           })
-          await db.user.update({
+          await db.creditCard.updateMany({
                where: {
                     id: user.id
                },
-               data: {
-                    creditCards
-               }
+               data: creditCards
           })
      }
      return {success: true}
@@ -136,6 +139,7 @@ export const editCard = async (values: CreditCardType, index: number) => {
      if(expires.date){
           const creditCards = [...user.creditCards];
           creditCards[index] = {
+               ...creditCards[index],
                cardNumber: await encryptData(cardNumber),
                cvv: await encryptData(cvv),
                expiryDate: expires.date,
@@ -150,13 +154,11 @@ export const editCard = async (values: CreditCardType, index: number) => {
                     last4: cardNumber.slice(-4)
                }
           })
-          await db.user.update({
+          await db.creditCard.updateMany({
                where: {
                     id: user.id
                },
-               data: {
-                    creditCards
-               }
+               data: creditCards
           })
      }
      return {success: true}
@@ -194,13 +196,11 @@ export const deleteCard = async(index: number) => {
           return {error: ERROR_MESSAGES.subscription.noCreditCard}
      }
      const creditCards = creditCard.creditCards.filter((_,i)=>i!==index);
-     await db.user.update({
+     await db.creditCard.updateMany({
           where: {
                id: user.id
           },
-          data: {
-               creditCards
-          }
+          data: creditCards
      })
      await logAction({
           userId: user.id,

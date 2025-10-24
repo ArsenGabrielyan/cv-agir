@@ -23,10 +23,13 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         data: {
           emailVerified: new Date(),
           cvPageSettings: {
-            showEmail: true,
-            showAddress: true,
-            showLinks: true,
-            showPhone: true
+            delete: {},
+            create: {
+              showEmail: true,
+              showAddress: true,
+              showLinks: true,
+              showPhone: true
+            }
           }
         }
       })

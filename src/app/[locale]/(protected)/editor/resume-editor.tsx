@@ -1,5 +1,5 @@
 "use client"
-import { Resume, ResumeTemplate } from "@db"
+import { ResumeTemplate } from "@db"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useSearchParams } from "next/navigation"
 import { steps } from "./steps"
@@ -18,9 +18,10 @@ import QRCode from "qrcode";
 import usePrint from "@/hooks/use-print"
 import { ExtendedUser } from "@/global"
 import { useRouter } from "@/i18n/routing"
+import { ResumeServerData } from "@/lib/types"
 
 interface ResumeEditorProps {
-     resumeToEdit: Resume | null;
+     resumeToEdit: ResumeServerData | null;
      template: ResumeTemplate | null;
      resumeId?: string,
      userData: Omit<ExtendedUser,"currentPlan">

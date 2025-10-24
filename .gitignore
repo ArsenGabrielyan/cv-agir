@@ -20,7 +20,10 @@
 # production
 /build
 /public/print.css
-/prisma/generated
+
+# database
+/prisma/migrations/**
+/prisma/generated/**
 
 # misc
 .DS_Store

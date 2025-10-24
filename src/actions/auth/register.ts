@@ -59,10 +59,12 @@ export const register = async (values: RegisterFormType) => {
                email: email.trim().toLowerCase(),
                password: hashedPassword,
                cvPageSettings: {
-                    showEmail: true,
-                    showAddress: true,
-                    showLinks: true,
-                    showPhone: true
+                    create: {
+                         showEmail: true,
+                         showAddress: true,
+                         showLinks: true,
+                         showPhone: true
+                    }
                }
           }
      })

@@ -10,66 +10,108 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
 }
 
-type ResumeLink {
+model ResumeLink {
+  id String @id @default(cuid())
   name String?
   url  String?
+
+  resumeId String
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 
-type ResumeExperience {
+model ResumeExperience {
+  id String @id @default(cuid())
   job       String?
   company   String?
   startDate DateTime?
   endDate   DateTime?
   city      String?
   jobInfo   String?
+
+  resumeId String
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 
-type ResumeEducation {
+model ResumeEducation {
+  id String @id @default(cuid())
   degree    String?
   faculty   String?
   startDate DateTime?
   endDate   DateTime?
   school    String?
   city      String?
+
+  resumeId String
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 
-type ResumeCourses {
+model ResumeCourses {
+  id String @id @default(cuid())
   name        String?
   institution String?
   startDate   DateTime?
   endDate     DateTime?
+
+  resumeId String
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 
-type ResumeReferences {
+model ResumeReferences {
+  id String @id @default(cuid())
   fullName String?
   position String?
   company  String?
   phone    String?
   email    String?
+
+  resumeId String
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 
-type ResumeSkill {
+model ResumeSkill {
+  id String @id @default(cuid())
   name       String?
   percentage Int?
+
+  resumeId String
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 
-type CreditCard {
+model ResumeLanguage{
+  id String @id @default(cuid())
+  name       String?
+  percentage Int?
+  locale Locale?
+
+  resumeId String
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+}
+
+model CreditCard {
+  id String @id @default(cuid())
   cardNumber String
   expiryDate DateTime
   cvv        String
   fullName   String
   city       String
+
+  userId       String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-type CVPageSettings{
+model CVPageSettings{
+  id String @id @default(cuid())
   showEmail Boolean @default(true)
   showAddress Boolean @default(true)
   showPhone Boolean @default(true)
   showLinks Boolean @default(true)
+
+  userId       String @unique
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum UserPlan {
@@ -160,7 +202,7 @@ enum Locale{
 }
 
 model User {
-  id                    String                 @id @default(auto()) @map("_id") @db.ObjectId
+  id                    String                 @id @default(cuid())
   name                  String?
   email                 String?                @unique
   emailVerified         DateTime?
@@ -182,7 +224,7 @@ model User {
   cvPageSettings CVPageSettings?
   logs AuditLog[]
 
-  subscriptionId String?       @db.ObjectId
+  subscriptionId String?       
   subscription   Subscription?
 
   creditCards CreditCard[]
@@ -192,17 +234,17 @@ model User {
 }
 
 model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
+  id                String  @id @default(cuid())
+  userId            String  
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.String
-  access_token      String? @db.String
+  refresh_token     String? 
+  access_token      String? 
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.String
+  id_token          String? 
   session_state     String?
 
   createdAt DateTime @default(now())
@@ -214,9 +256,9 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String   @db.ObjectId
+  userId       String   
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -225,7 +267,7 @@ model Session {
 }
 
 model VerificationToken {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  id      String   @id @default(cuid())
   email   String
   token   String   @unique
   expires DateTime
@@ -234,7 +276,7 @@ model VerificationToken {
 }
 
 model PasswordResetToken {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  id      String   @id @default(cuid())
   email   String
   token   String   @unique
   expires DateTime
@@ -243,7 +285,7 @@ model PasswordResetToken {
 }
 
 model TwoFactorToken {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  id      String   @id @default(cuid())
   email   String
   token   String   @unique
   expires DateTime
@@ -252,8 +294,8 @@ model TwoFactorToken {
 }
 
 model TwoFactorConfirmation {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
+  id     String @id @default(cuid())
+  userId String 
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -265,7 +307,7 @@ model TwoFactorConfirmation {
 
 model Authenticator {
   credentialID         String  @id @map("_id")
-  userId               String  @db.ObjectId
+  userId               String  
   providerAccountId    String
   credentialPublicKey  String
   counter              Int
@@ -279,7 +321,7 @@ model Authenticator {
 }
 
 model ResumeTemplateCategory {
-  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  id        String           @id @default(cuid())
   name      String
   templates ResumeTemplate[]
 
@@ -288,14 +330,14 @@ model ResumeTemplateCategory {
 }
 
 model ResumeTemplate {
-  id           String                 @id @default(auto()) @map("_id") @db.ObjectId
+  id           String                 @id @default(cuid())
   locale Locale @default(hy)
   name         String?
   description  String?
   imageName    String?
   htmlTemplate String?
   cssStyle     String?
-  categoryId   String                 @db.ObjectId
+  categoryId   String                 
   isPremium    Boolean?
   category     ResumeTemplateCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   resumes      Resume[]
@@ -305,7 +347,7 @@ model ResumeTemplate {
 }
 
 model Resume {
-  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  id          String             @id @default(cuid())
   title       String
   description String?
   fname       String?
@@ -322,16 +364,16 @@ model Resume {
   courses     ResumeCourses[]
   references  ResumeReferences[]
   skills      ResumeSkill[]
-  languages   ResumeSkill[]
+  languages   ResumeLanguage[]
   hobbies     String?
 
   colorHex    String?
   borderStyle BorderStyles?
 
-  userId String? @db.ObjectId
+  userId String? 
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  templateId String?         @db.ObjectId
+  templateId String?         
   template   ResumeTemplate? @relation(fields: [templateId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
@@ -339,7 +381,7 @@ model Resume {
 }
 
 model CoverLetter {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  id          String  @id @default(cuid())
   title       String
   description String?
 
@@ -360,7 +402,7 @@ model CoverLetter {
   colorHex    String?
   borderStyle BorderStyles?
 
-  userId String? @db.ObjectId
+  userId String? 
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
@@ -368,8 +410,8 @@ model CoverLetter {
 }
 
 model Subscription {
-  id     String             @id @default(auto()) @map("_id") @db.ObjectId
-  userId String             @unique @db.ObjectId
+  id     String             @id @default(cuid())
+  userId String             @unique 
   plan   UserPlan
   period SubscriptionPeriod
   price  Float
@@ -380,12 +422,12 @@ model Subscription {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model AuditLog{
-  id     String             @id @default(auto()) @map("_id") @db.ObjectId
-  userId String?            @db.ObjectId
+  id     String             @id @default(cuid())
+  userId String?            
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   action AuditAction
   metadata Json?

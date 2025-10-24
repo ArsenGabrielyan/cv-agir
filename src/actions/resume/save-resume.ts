@@ -26,7 +26,7 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
           })
           throw new Error(ERROR_MESSAGES.validationError)
      }
-     const {profileImg, experience, education, courses, ...resumeValues} = validatedFields.data
+     const {profileImg, experience, education, courses, links, references, skills, languages, ...resumeValues} = validatedFields.data
 
      const user = await currentUser();
 
@@ -119,22 +119,47 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
                data: {
                     ...resumeValues,
                     profileImg: newImgUrl,
-                    experience: experience?.map(exp=>({
-                         ...exp,
-                         startDate: exp?.startDate ? new Date(exp.startDate) : undefined,
-                         endDate: exp?.endDate ? new Date(exp.endDate) : undefined
-                    })),
-                    education: education?.map(edu=>({
-                         ...edu,
-                         startDate: edu?.startDate ? new Date(edu.startDate) : undefined,
-                         endDate: edu?.endDate ? new Date(edu.endDate) : undefined
-                    })),
-                    courses: courses?.map(course=>({
-                         ...course,
-                         startDate: course?.startDate ? new Date(course.startDate) : undefined,
-                         endDate: course?.endDate ? new Date(course.endDate) : undefined
-                    })),
-                    templateId,
+                    templateId: !templateId ? null : templateId,
+                    experience: {
+                         deleteMany: {},
+                         create: experience?.map(exp=>({
+                              ...exp,
+                              startDate: exp?.startDate ? new Date(exp.startDate) : undefined,
+                              endDate: exp?.endDate ? new Date(exp.endDate) : undefined
+                         })),
+                    },
+                    education: {
+                         deleteMany: {},
+                         create: education?.map(edu=>({
+                              ...edu,
+                              startDate: edu?.startDate ? new Date(edu.startDate) : undefined,
+                              endDate: edu?.endDate ? new Date(edu.endDate) : undefined
+                         }))
+                    },
+                    courses: {
+                         deleteMany: {},
+                         create: courses?.map(course=>({
+                              ...course,
+                              startDate: course?.startDate ? new Date(course.startDate) : undefined,
+                              endDate: course?.endDate ? new Date(course.endDate) : undefined
+                         }))
+                    },
+                    references: {
+                         deleteMany: {},
+                         create: references
+                    },
+                    links: {
+                         deleteMany: {},
+                         create: links
+                    },
+                    skills: {
+                         deleteMany: {},
+                         create: skills
+                    },
+                    languages: {
+                         deleteMany: {},
+                         create: languages
+                    },
                     updatedAt: new Date()
                }
           })
@@ -143,25 +168,35 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
                data: {
                     ...resumeValues,
                     profileImg: newImgUrl,
+                    templateId: !templateId ? null : templateId,
+                    experience: {
+                         create: experience?.map(exp=>({
+                              ...exp,
+                              startDate: exp?.startDate ? new Date(exp.startDate) : undefined,
+                              endDate: exp?.endDate ? new Date(exp.endDate) : undefined
+                         })),
+                    },
+                    education: {
+                         create: education?.map(edu=>({
+                              ...edu,
+                              startDate: edu?.startDate ? new Date(edu.startDate) : undefined,
+                              endDate: edu?.endDate ? new Date(edu.endDate) : undefined
+                         }))
+                    },
+                    courses: {
+                         create: courses?.map(course=>({
+                              ...course,
+                              startDate: course?.startDate ? new Date(course.startDate) : undefined,
+                              endDate: course?.endDate ? new Date(course.endDate) : undefined
+                         }))
+                    },
+                    references: { create: references },
+                    links: { create: links },
+                    skills: { create: skills },
+                    languages: { create: languages },
                     title: resumeValues.title || "Անանուն ռեզյումե",
                     userId: user.id,
-                    experience: experience?.map(exp=>({
-                         ...exp,
-                         startDate: exp?.startDate ? new Date(exp.startDate) : undefined,
-                         endDate: exp?.endDate ? new Date(exp.endDate) : undefined
-                    })),
-                    education: education?.map(edu=>({
-                         ...edu,
-                         startDate: edu?.startDate ? new Date(edu.startDate) : undefined,
-                         endDate: edu?.endDate ? new Date(edu.endDate) : undefined
-                    })),
-                    courses: courses?.map(course=>({
-                         ...course,
-                         startDate: course?.startDate ? new Date(course.startDate) : undefined,
-                         endDate: course?.endDate ? new Date(course.endDate) : undefined
-                    })),
-                    templateId,
-                    updatedAt: new Date()
+                    updatedAt: new Date(),
                }
           })
           await logAction({

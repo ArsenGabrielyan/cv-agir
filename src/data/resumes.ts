@@ -1,4 +1,5 @@
 import { db } from "@/lib/db"
+import { resumeDataInclude } from "@/lib/types";
 
 export async function getResumeCountByUserId(userId: string){
      try{
@@ -14,7 +15,8 @@ export async function getResumeCountByUserId(userId: string){
 export async function getResumeById(id: string){
      try{
           const resume = await db.resume.findUnique({
-               where: {id}
+               where: {id},
+               include: resumeDataInclude
           });
           return resume
      } catch {
@@ -39,7 +41,8 @@ export async function getCurrentResumeByUserId(userId: string, resumeId: string)
                where: {
                     id: resumeId,
                     userId
-               }
+               },
+               include: resumeDataInclude
           });
           return currResume
      } catch {

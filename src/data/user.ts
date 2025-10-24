@@ -4,11 +4,13 @@ import { clearLimiter, incrementLimiter } from "@/lib/limiter";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "./logs";
 import { getIpAddress } from "@/actions/ip";
+import { userInclude } from "@/lib/types";
 
 export const getUserByEmail = async (email: string) => {
      try{
           const user = await db.user.findUnique({
-               where: {email}
+               where: {email},
+               include: userInclude
           })
           return user
      } catch{
@@ -19,7 +21,8 @@ export const getUserByEmail = async (email: string) => {
 export const getUserById = async (id: string) => {
      try{
           const user = await db.user.findUnique({
-               where: {id}
+               where: {id},
+               include: userInclude
           })
           return user
      } catch{
@@ -44,10 +47,13 @@ export const updateUser = async(userId: string, values: SettingsType, limiterKey
                     summary: rest.summary?.trim(),
                     hobbies: rest.hobbies?.trim(),
                     cvPageSettings: {
-                         showAddress,
-                         showEmail,
-                         showPhone,
-                         showLinks
+                         delete:{},
+                         create: {
+                              showAddress,
+                              showEmail,
+                              showPhone,
+                              showLinks
+                         }
                     }
                }
           })

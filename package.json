@@ -48,6 +48,7 @@
     "handlebars": "^4.7.8",
     "input-otp": "^1.4.2",
     "isomorphic-dompurify": "^2.22.0",
+    "jose": "^6.1.0",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.502.0",
     "markdown-to-jsx": "^7.7.4",

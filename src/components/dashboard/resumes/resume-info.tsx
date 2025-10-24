@@ -1,5 +1,5 @@
 "use client"
-import { CVPageSettings, Resume } from "@db"
+import { CVPageSettings, } from "@db"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Mail, MapPin, Phone, } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -8,9 +8,10 @@ import { Badge } from "@/components/ui/badge"
 import { getLanguageLevel } from "@/lib/helpers"
 import {format} from "date-fns"
 import dynamic from "next/dynamic"
+import { ResumeServerData } from "@/lib/types"
 
 interface ResumeInfoProps{
-     data: Resume,
+     data: ResumeServerData,
      settings: Partial<CVPageSettings>
 }
 const Markdown = dynamic(()=>import("markdown-to-jsx"),{

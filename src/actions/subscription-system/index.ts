@@ -92,7 +92,7 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
                     startDate: new Date()
                }
           })
-          const creditCards = await upsertCard({cardName,cardNumber,city,cvv,expiryDate},user,expires.date);
+          const creditCards = await upsertCard(user.id,{cardName,cardNumber,city,cvv,expiryDate},user,expires.date);
           await db.user.update({
                where: {
                     email,
@@ -101,7 +101,10 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
                data: {
                     currentPlan: currSubscription.plan,
                     subscriptionId: currSubscription.id,
-                    creditCards
+                    creditCards: {
+                         deleteMany: {},
+                         create: creditCards
+                    }
                }
           })
           await logAction({
@@ -186,9 +189,7 @@ export const cancelSubscription = async(userId: string) => {
           where: {id: user.id},
           data: {
                currentPlan: "free",
-               subscriptionId: {
-                    unset: true
-               }
+               subscriptionId: null
           }
      })
      await logAction({

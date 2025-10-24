@@ -59,7 +59,7 @@ export type ISidebarLink = ISidebarSimpleLink | ISidebarDropdownLink;
 // Admin filter types
 export type QuickFilterType = "errors" | "auth" | "coverLetter" | "resume" | "subscription" | "ai" | "app" | "template" | "category"
 export type AuditActionKey = `action-${QuickFilterType}`
-export type IAdminAPISearchParams<T> = T extends ResumeTemplate | ResumeTemplateCategory ?{
+export type IAdminAPISearchParams<T> = T extends ResumeTemplate | ResumeTemplateCategory ? {
      filter: T,
      range?: [number, number],
      sort?: [keyof T, "DESC" | "ASC"]
@@ -167,7 +167,14 @@ export interface IResumeDynamicFields{
      }
 }
 export const resumeDataInclude = {
-     template: true
+     template: true,
+     education: true,
+     experience: true,
+     languages: true,
+     links: true,
+     courses: true,
+     skills: true,
+     references: true
 } satisfies Prisma.ResumeInclude
 export type ResumeServerData = Prisma.ResumeGetPayload<{
      include: typeof resumeDataInclude
@@ -259,4 +266,13 @@ export type AuditLogServerData = Prisma.AuditLogGetPayload<{
      include: {
           user: boolean | undefined
      }
+}>
+
+export const userInclude = {
+     cvPageSettings: true,
+     subscription: true,
+     creditCards: true
+} satisfies Prisma.UserInclude
+export type UserServerData = Prisma.UserGetPayload<{
+     include: typeof userInclude
 }>

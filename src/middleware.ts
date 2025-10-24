@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "@/i18n/routing";
+import { jwtVerify } from "jose";
 import {
      publicRoutes,
      authRoutes,
@@ -8,11 +9,9 @@ import {
      dynamicRoutes,
      DEFAULT_LOGIN_REDIRECT,
 } from "@/routes";
-import NextAuth from "next-auth";
-import authConfig from "./auth.config";
+import { env } from "./lib/env";
 
 const handleI18nRouting = createMiddleware(routing);
-const { auth } = NextAuth(authConfig)
 
 export default async function middleware(req: NextRequest) {
      const i18nResponse = handleI18nRouting(req);
@@ -29,39 +28,55 @@ export default async function middleware(req: NextRequest) {
      const locale =
           routing.locales.find((loc) => pathname.startsWith(`/${loc}`)) ||
           routing.defaultLocale;
-
-     const session = await auth();
-     const isLoggedIn = !!session;
-
      const normalizedPath = pathname.replace(`/${locale}`, "") || "/";
 
-     const isApiAuthRoute = normalizedPath.startsWith(apiAuthPrefix);
+     const sessionToken =
+          req.cookies.get("__Secure-next-auth.session-token")?.value ??
+          req.cookies.get("next-auth.session-token")?.value;
+
      const isPublicRoute = publicRoutes.includes(normalizedPath);
+     if (!sessionToken && !isPublicRoute)
+          return NextResponse.redirect(new URL(`/${locale}/auth/login`, req.url));
+
+     if (sessionToken) try {
+          await jwtVerify(
+               sessionToken,
+               new TextEncoder().encode(env.AUTH_SECRET)
+          );
+     } catch {
+          return NextResponse.redirect(new URL(`/${locale}/auth/login`, req.url));
+     }
+
+     const isApiAuthRoute = normalizedPath.startsWith(apiAuthPrefix);
      const isAuthRoute = authRoutes.includes(normalizedPath);
-     const isDynamicProtectedRoute = dynamicRoutes.some((r) =>
-          r.test(normalizedPath)
-     );
+     const isDynamicProtectedRoute = dynamicRoutes.some(r => r.test(normalizedPath));
 
-     if (isApiAuthRoute) return NextResponse.next();
+     const res = NextResponse.next();
+     res.headers.set("Cache-Control", "no-store");
 
-     if (isAuthRoute && isLoggedIn) {
+     if (isApiAuthRoute) return res;
+
+     if (isAuthRoute && sessionToken) {
           if (normalizedPath !== DEFAULT_LOGIN_REDIRECT)
                return NextResponse.redirect(
                     new URL(`/${locale}${DEFAULT_LOGIN_REDIRECT}`, req.url)
                );
-          return NextResponse.next();
+          return res;
      }
 
-     if (!isLoggedIn && !isPublicRoute && !isDynamicProtectedRoute) {
+     if (!sessionToken && !isPublicRoute && !isDynamicProtectedRoute) {
           const callbackUrl = encodeURIComponent(pathname + url.search);
           return NextResponse.redirect(
                new URL(`/${locale}/auth/login?callbackUrl=${callbackUrl}`, req.url)
           );
      }
 
-     return NextResponse.next();
+     return res;
 }
 
 export const config = {
-     matcher: ['/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|webm|png|gif|svg|ttf|mp4|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)','/((?!api|trpc|_next|_vercel|.*\\..*).*)',]
-}
+     matcher: [
+          '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|webm|png|gif|svg|ttf|mp4|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+          '/((?!api|trpc|_next|_vercel|.*\\..*).*)',
+     ],
+};

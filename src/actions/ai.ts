@@ -90,7 +90,7 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
           })).join("\n\n") || "",
           skills: skills?.map(skill=>skill.name).join(", ") || "",
           languages: languages?.map(lang=>t("lang-msg",{
-               name: lang.name || "N/A",
+               name: `${lang.name} (locale)` || "N/A",
                percentage: lang.percentage ? getLanguageLevel(lang.percentage) : "N/A"
           })).join(", ") ||""
      });

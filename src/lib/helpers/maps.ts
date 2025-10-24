@@ -1,10 +1,10 @@
-import { CoverLetter, CreditCard, Resume, User, VerificationToken as PrismaVerificationToken  } from "@db";
+import { CoverLetter, CreditCard, User, VerificationToken as PrismaVerificationToken  } from "@db";
 import { CoverLetterFormType, CreditCardType, ResumeFormType } from "@/lib/types/schema";
-import { AccountServerData } from "@/lib/types"
+import { AccountServerData, ResumeServerData } from "@/lib/types"
 import { formatDate } from "date-fns";
 import type { AdapterAccount, AdapterAccountType, AdapterUser, VerificationToken } from "next-auth/adapters"
 
-export const mapToResumeValues = (data: Resume): ResumeFormType => ({
+export const mapToResumeValues = (data: ResumeServerData): ResumeFormType => ({
      id: data.id || undefined,
      title: data.title || undefined,
      description: data?.description || undefined,
