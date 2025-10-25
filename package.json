@@ -10,7 +10,8 @@
     "gen-print-css": "tailwindcss -i ./src/app/globals.css -o ./public/print.css --minify",
     "postinstall": "prisma generate && npm run gen-print-css",
     "docker:build": "docker build -t cv-agir .",
-    "docker:start": "docker run -p 3000:3000 cv-agir"
+    "docker:start": "docker run -p 3000:3000 cv-agir",
+    "database:seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -48,7 +49,6 @@
     "handlebars": "^4.7.8",
     "input-otp": "^1.4.2",
     "isomorphic-dompurify": "^2.22.0",
-    "jose": "^6.1.0",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.502.0",
     "markdown-to-jsx": "^7.7.4",
@@ -102,6 +102,7 @@
     "prisma": "^6.18.0",
     "react-router": "^7.5.2",
     "tailwindcss": "^4.1.4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }
