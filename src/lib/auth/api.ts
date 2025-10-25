@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { publicRoutes, dynamicRoutes, apiAuthPrefix } from "@/routes";
 
-export async function withAuth<T>(
+export function withAuth<T>(
      handler: (req: NextRequest, context: T) => Promise<NextResponse> | NextResponse
 ) {
      return async (req: NextRequest, context: T) => {
