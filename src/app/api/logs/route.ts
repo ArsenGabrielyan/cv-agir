@@ -5,9 +5,10 @@ import { AuditActionKey, AuditLogServerData, auditLogsInclude, IAdminAPISearchPa
 import { getIsAdmin, currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { getIpAddress } from "@/actions/ip";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import { withAuth } from "@/lib/auth/api";
 
-export const GET = async(req: NextRequest) => {
+export const GET = withAuth(async req => {
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
@@ -65,4 +66,4 @@ export const GET = async(req: NextRequest) => {
           include: auditLogsInclude
      });
      return NextResponse.json(data)
-}
+})

@@ -7,12 +7,14 @@ import { Star } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { getAvailableFeatures } from "@/lib/permission";
 import PremiumButton from "@/components/buttons/premium-button";
+import { useTranslations } from "next-intl";
 
 interface TemplateCardProps{
      data: ResumeTemplate,
-     subscriptionLevel: UserPlan
+     subscriptionLevel: UserPlan,
+     t: ReturnType<typeof useTranslations<"templates">>
 }
-export default function TemplateCard({data, subscriptionLevel}: TemplateCardProps){
+export default function TemplateCard({data, subscriptionLevel, t}: TemplateCardProps){
      const [imageUrl] = useState(data.imageName ? `/templates/${data.imageName}` : `/template-img.webp`);
      const {canUseTemplates} = getAvailableFeatures(subscriptionLevel)
      return (
@@ -22,7 +24,7 @@ export default function TemplateCard({data, subscriptionLevel}: TemplateCardProp
                     {data.isPremium && (
                          <div className="absolute top-0 left-0 bg-background/95 text-foreground p-2 text-base rounded-br-xl flex items-center gap-2">
                               <Star className="size-6 text-primary"/>
-                              <p className="hidden group-hover:block font-semibold">Պրեմիում</p>
+                              <p className="hidden group-hover:block font-semibold">{t("premium")}</p>
                          </div>
                     )}
                </div>
@@ -31,7 +33,7 @@ export default function TemplateCard({data, subscriptionLevel}: TemplateCardProp
                          {data.name}
                     </h2>
                     <p className="text-sm text-muted-foreground">{data.description}</p>
-                    <ResumeTemplateButton isPremium={data.isPremium as boolean && !canUseTemplates} templateId={data.id}/>
+                    <ResumeTemplateButton isPremium={data.isPremium as boolean && !canUseTemplates} templateId={data.id} useButtonTxt={t("useTemplate")}/>
                </div>
           </div>
      )
@@ -39,14 +41,15 @@ export default function TemplateCard({data, subscriptionLevel}: TemplateCardProp
 
 interface ResumeTemplateButtonProps{
      isPremium: boolean,
-     templateId: string
+     templateId: string,
+     useButtonTxt: string
 }
-function ResumeTemplateButton({isPremium, templateId}: ResumeTemplateButtonProps){
+function ResumeTemplateButton({isPremium, templateId, useButtonTxt}: ResumeTemplateButtonProps){
      return !isPremium ? (
           <Button className="w-full" asChild>
-               <Link href={`/editor?templateId=${templateId}`}>Օգտագործել</Link>
+               <Link href={`/editor?templateId=${templateId}`}>{useButtonTxt}</Link>
           </Button>
      ) : (
-          <PremiumButton>Օգտագործել</PremiumButton>
+          <PremiumButton>{useButtonTxt}</PremiumButton>
      )
 }

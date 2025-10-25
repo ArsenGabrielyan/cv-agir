@@ -44,9 +44,10 @@ export default async function LocaleLayout({children, params}: Props) {
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-  const session = await auth()
+  const session = await auth();
+  console.log(session)
   return (
-    <SessionProvider session={session}>
+    <SessionProvider session={session} basePath="/api/auth">
       <html lang={locale} suppressHydrationWarning>
         <head>
           <link rel="preload" href="/demos/demo-1.webm" as="video" type="video/webm" fetchPriority="high" />

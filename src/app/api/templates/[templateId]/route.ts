@@ -6,11 +6,9 @@ import { NextResponse } from "next/server";
 import { logAction } from "@/data/logs";
 import { getIpAddress } from "@/actions/ip";
 import { ResumeTemplate } from "@db";
+import { withAuth } from "@/lib/auth/api";
 
-export const GET = async(
-     req: Request,
-     {params}: {params: Promise<{templateId: string}>}
-) => {
+export const GET = withAuth<{params: Promise<{templateId: string}>}>(async(req, {params}) => {
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
@@ -39,12 +37,9 @@ export const GET = async(
      const {templateId} = await params
      const data = await getResumeTemplateById(templateId);
      return NextResponse.json(data)
-}
+})
 
-export const PUT = async(
-     req: Request,
-     {params}: {params: Promise<{templateId: string}>}
-) => {
+export const PUT = withAuth<{params: Promise<{templateId: string}>}>(async(req, {params}) => {
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
@@ -92,12 +87,9 @@ export const PUT = async(
           metadata: {ip, templateId}
      })
      return NextResponse.json(data)
-}
+})
 
-export const DELETE = async(
-     req: Request,
-     {params}: {params: Promise<{templateId: string}>}
-) => {
+export const DELETE = withAuth<{params: Promise<{templateId: string}>}>(async(req, {params}) => {
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
@@ -147,4 +139,4 @@ export const DELETE = async(
           metadata: {ip, templateId}
      })
      return NextResponse.json(data)
-}
+})

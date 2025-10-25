@@ -3,12 +3,14 @@ import { ResumeTemplate, UserPlan } from "@db";
 import TemplateCard from "./template-card";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface TemplateListProps{
      templates: ResumeTemplate[],
-     subscriptionLevel: UserPlan
+     subscriptionLevel: UserPlan,
+     t: ReturnType<typeof useTranslations<'templates'>>
 }
-export default function TemplateList({templates, subscriptionLevel}: TemplateListProps){
+export default function TemplateList({templates, subscriptionLevel, t}: TemplateListProps){
      const [count, setCount] = useState(8);
      const handleLoadMore = () => {
           setCount(prev=>prev*2)
@@ -17,10 +19,10 @@ export default function TemplateList({templates, subscriptionLevel}: TemplateLis
           <section className="py-16 px-6 sm:px-12 md:px-24 lg:px-40 flex justify-center items-center flex-col gap-y-4">
                <div className="flex justify-center items-center flex-wrap gap-3">
                     {templates.slice(0,count).map(template=>(
-                         <TemplateCard key={template.id} data={template} subscriptionLevel={subscriptionLevel}/>
+                         <TemplateCard key={template.id} data={template} subscriptionLevel={subscriptionLevel} t={t}/>
                     ))}
                </div>
-               {templates.length>count && <Button className="text-center" onClick={handleLoadMore}>Ցույց տալ մնացածը</Button>}
+               {templates.length>count && <Button className="text-center" onClick={handleLoadMore}>{t("showMore")}</Button>}
           </section>
      )
 }

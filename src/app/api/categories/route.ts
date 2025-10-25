@@ -2,12 +2,13 @@ import { currentUser, getIsAdmin } from "@/lib/auth"
 import { IAdminAPISearchParams } from "@/lib/types";
 import { db } from "@/lib/db";
 import { ResumeTemplateCategory } from "@db";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "@/data/logs";
 import { getIpAddress } from "@/actions/ip";
+import { withAuth } from "@/lib/auth/api";
 
-export const GET = async (req: NextRequest) => {
+export const GET = withAuth(async req => {
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
@@ -47,9 +48,9 @@ export const GET = async (req: NextRequest) => {
           ...(orderbyClause ? {orderBy: orderbyClause} : {})
      });
      return NextResponse.json(range ? data.slice(range[0],range[1]+1) : data);
-}
+})
 
-export const POST = async(req: Request) => {
+export const POST = withAuth(async req => {
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
@@ -90,4 +91,4 @@ export const POST = async(req: Request) => {
           }
      })
      return NextResponse.json(data)
-}
+})

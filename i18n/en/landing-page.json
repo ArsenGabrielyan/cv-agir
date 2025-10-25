@@ -133,5 +133,12 @@
           "email-title": "Send to our email address",
           "support-title": "Support",
           "desc": "For general inquiries and partnership opportunities, email us."
+     },
+     "templates": {
+          "title": "Templates",
+          "desc": "Check out all the resume templates here and use them correctly to get hired.",
+          "showMore": "Show More",
+          "premium": "Premium",
+          "useTemplate": "Use the Template"
      }
 }

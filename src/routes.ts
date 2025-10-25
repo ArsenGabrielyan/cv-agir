@@ -15,19 +15,6 @@ export const publicRoutes: string[] = [
 ]
 
 /**
- * An array of routes that are used for authentication.
- * These routes will redirect logged in users to /dashboard
- * @type {string[]}
- */
-export const authRoutes: string[] = [
-     "/auth/login",
-     "/auth/register",
-     "/auth/error",
-     "/auth/reset",
-     "/auth/new-password"
-]
-
-/**
  * An array of dynamic routes that are accessible to public.
  * These routes do not require authentication.
  * @type {RegExp[]}

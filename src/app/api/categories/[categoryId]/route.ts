@@ -6,11 +6,9 @@ import { logAction } from "@/data/logs";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { getIpAddress } from "@/actions/ip";
 import { ResumeTemplateCategory } from "@db";
+import { withAuth } from "@/lib/auth/api";
 
-export const GET = async(
-     req: Request,
-     {params}: {params: Promise<{categoryId: string}>}
-) => {
+export const GET = withAuth<{params: Promise<{categoryId: string}>}>(async(req, {params}) => {
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
@@ -39,12 +37,9 @@ export const GET = async(
      const {categoryId} = await params
      const data = await getResumeTemplateCategoryById(categoryId)
      return NextResponse.json(data)
-}
+})
 
-export const PUT = async(
-     req: Request,
-     {params}: {params: Promise<{categoryId: string}>}
-) => {
+export const PUT = withAuth<{params: Promise<{categoryId: string}>}>(async(req, {params}) => {
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
@@ -86,12 +81,9 @@ export const PUT = async(
           metadata: { ip, categoryId }
      })
      return NextResponse.json(data)
-}
+})
 
-export const DELETE = async(
-     req: Request,
-     {params}: {params: Promise<{categoryId: string}>}
-) => {
+export const DELETE = withAuth<{params: Promise<{categoryId: string}>}>(async(req, {params}) => {
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
@@ -141,4 +133,4 @@ export const DELETE = async(
           metadata: { ip, categoryId }
      })
      return NextResponse.json(data)
-}
+})

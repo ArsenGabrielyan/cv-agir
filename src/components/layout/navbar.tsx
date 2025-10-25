@@ -67,11 +67,17 @@ function AuthButton({responsive=false,className,showUserButtonOnly=false}:AuthBu
                )}
           </div>
      ) : !user ? (
-          <LoginButton mode="modal" asChild>
-               <Button>{buttonTxt("sign-in")}</Button>
-          </LoginButton>
+          <div className="flex justify-center items-center gap-2.5">
+               <LoginButton mode="modal" asChild>
+                    <Button>{buttonTxt("sign-in")}</Button>
+               </LoginButton>
+               <LanguageSwitcher/>
+          </div>
      ) : (
-          <UserButton/>
+          <div className="flex justify-center items-center gap-2.5">
+               <UserButton/>
+               <LanguageSwitcher/>
+          </div>
      )
 }
 export default function Navbar({isLandingPage=false}: NavbarProps){

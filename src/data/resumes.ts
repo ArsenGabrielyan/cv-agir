@@ -1,3 +1,4 @@
+import { LangCodeType } from "@/i18n/types";
 import { db } from "@/lib/db"
 import { resumeDataInclude } from "@/lib/types";
 
@@ -50,7 +51,11 @@ export async function getCurrentResumeByUserId(userId: string, resumeId: string)
      }
 }
 
-export const getResumeTemplates = async () => await db.resumeTemplate.findMany();
+export const getResumeTemplates = async (locale: LangCodeType) => await db.resumeTemplate.findMany({
+     where: {
+          locale
+     }
+});
 
 export const getResumeTemplateCategoryById = async(id: string) => {
      try{
