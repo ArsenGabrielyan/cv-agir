@@ -20,8 +20,46 @@
                "label": "Հաղորդագրություն",
                "placeholder": "Գրեք հաղորդագրությունն այստեղ"
           },
+          "password-label": "Գաղտնաբառ",
           "submit": {
                "send": "Ուղարկել հաղորդագրություն"
           }
+     },
+     "auth": {
+          "misc-error": "Վայ, մի բան սխալ տեղի ունեցավ։",
+          "buttons": {
+               "returnToLogin": "Վերադառնալ մուտք",
+               "confirm": "Հաստատել",
+               "login": "Մուտք",
+               "register": "Գրանցվել",
+               "reset-password": "Վերականգնել գաղտնաբառը",
+               "send-reset-link": "Ուղարկել վերականգման հղումը"
+          },
+          "social-txt": "Շարունակել {provider}-ով",
+          "password-state": {
+               "show": "Ցուցադրել գաղտնաբառը",
+               "hide": "Թաքցնել գաղտնաբառը"
+          },
+          "password-strength": {
+               "weakest": "Շատ թույլ է",
+               "weak" : "Թույլ է",
+               "medium" : "Բավարար է",
+               "strong" : "Լավ է",
+               "strongest" : "Վստահելի է"
+          },
+          "login": {
+               "title": "Մուտք",
+               "form-title": "Բարի Գալուստ",
+               "sign-up-link-txt": "Չունե՞ք հաշիվ։",
+               "forgot-pass": "Մոռացե՞լ եք գաղտնաբառը։",
+               "2fa-code": "Վավերացման կոդ"
+          },
+          "register": {
+               "title": "Ստեղծել հաշիվ",
+               "login-link-txt": "Արդեն ունե՞ք հաշիվ։"
+          },
+          "verify-email-title": "Հաստատեք Ձեր էլ․ փոստը",
+          "new-password-title": "Ստեղծել նոր գաղտնաբառ",
+          "reset-pass-title": "Վերականգնել գաղտնաբառը"
      }
 }

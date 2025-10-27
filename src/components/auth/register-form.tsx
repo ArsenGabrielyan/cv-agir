@@ -19,6 +19,9 @@ import { register } from "@/actions/auth/register";
 import { PasswordStrengthInput } from "@/components/form/password-input";
 import { RegisterFormType } from "@/lib/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
+import { useTranslations } from "next-intl";
+import { MailIcon } from "lucide-react";
+import { InputGroup, InputGroupInput, InputGroupAddon } from "../ui/input-group";
 
 export default function RegisterForm(){
      const [isPending, startTransition] = useTransition();
@@ -43,10 +46,13 @@ export default function RegisterForm(){
                })
           })
      }
+     const t = useTranslations("auth.register");
+     const formTxt = useTranslations("form");
+     const buttonTxt = useTranslations("auth.buttons")
      return (
           <CardWrapper
-               headerLabel="Ստեղծել հաշիվ"
-               backButtonLabel="Արդեն ունե՞ք հաշիվ։"
+               headerLabel={t("title")}
+               backButtonLabel={t("login-link-txt")}
                backButtonHref="/auth/login"
                showSocial
           >
@@ -61,12 +67,12 @@ export default function RegisterForm(){
                                    name="name"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Անուն Ազգանուն</FormLabel>
+                                             <FormLabel>{formTxt("name.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
                                                        disabled={isPending}
-                                                       placeholder="Պողոս Պետրոսյան"
+                                                       placeholder={formTxt("name.placeholder")}
                                                   />
                                              </FormControl>
                                              <FormMessage/>
@@ -78,14 +84,19 @@ export default function RegisterForm(){
                                    name="email"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Էլ․ փոստ</FormLabel>
+                                             <FormLabel>{formTxt("email.label")}</FormLabel>
                                              <FormControl>
-                                                  <Input
-                                                       {...field}
-                                                       disabled={isPending}
-                                                       placeholder="name@example.com"
-                                                       type="email"
-                                                  />
+                                                  <InputGroup>
+                                                       <InputGroupInput
+                                                            {...field}
+                                                            disabled={isPending}
+                                                            placeholder={formTxt("email.placeholder")}
+                                                            type="email"
+                                                       />
+                                                       <InputGroupAddon>
+                                                            <MailIcon/>
+                                                       </InputGroupAddon>
+                                                  </InputGroup>
                                              </FormControl>
                                              <FormMessage/>
                                         </FormItem>
@@ -96,7 +107,7 @@ export default function RegisterForm(){
                                    name="password"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Գաղտնաբառ</FormLabel>
+                                             <FormLabel>{formTxt("password-label")}</FormLabel>
                                              <FormControl>
                                                   <PasswordStrengthInput
                                                        {...field}
@@ -111,7 +122,7 @@ export default function RegisterForm(){
                          </div>
                          <FormError message={error}/>
                          <FormSuccess message={success}/>
-                         <LoadingButton type="submit" className="w-full" loading={isPending}>Գրանցվել</LoadingButton>
+                         <LoadingButton type="submit" className="w-full" loading={isPending}>{buttonTxt("register")}</LoadingButton>
                     </form>
                </Form>
           </CardWrapper>

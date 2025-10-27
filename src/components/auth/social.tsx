@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { ButtonGroup, ButtonGroupSeparator } from "../ui/button-group";
 
 export const Social = () => {
      const searchParams = useSearchParams();
@@ -14,17 +16,20 @@ export const Social = () => {
                callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT
           })
      }
+     const t = useTranslations("auth")
      return (
-          <div className="flex items-center w-full gap-x-2">
-               <Button size="lg" className="w-full" variant="outline" onClick={()=>onClick("google")}>
+          <ButtonGroup className="w-full">
+               <Button size="lg" title={t("social-txt",{provider: "Google"})} className="flex-1" variant="outline" onClick={()=>onClick("google")}>
                     <FcGoogle className="h-5 w-5"/>
                </Button>
-               <Button size="lg" className="w-full text-[#3b5999]" variant="outline" onClick={()=>onClick("facebook")}>
+               <ButtonGroupSeparator/>
+               <Button size="lg" title={t("social-txt",{provider: "Facebook"})} className="flex-1 text-[#3b5999]" variant="outline" onClick={()=>onClick("facebook")}>
                     <FaFacebook className="h-5 w-5"/>
                </Button>
-               <Button size="lg" className="w-full" variant="outline" onClick={()=>onClick("github")}>
+               <ButtonGroupSeparator/>
+               <Button size="lg" title={t("social-txt",{provider: "GitHub"})} className="flex-1" variant="outline" onClick={()=>onClick("github")}>
                     <FaGithub className="h-5 w-5"/>
                </Button>
-          </div>
+          </ButtonGroup>
      )
 }

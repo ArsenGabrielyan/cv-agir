@@ -58,5 +58,11 @@
      },
      "admin": {
           "title": "Ադմինիստրատորի վահանակ"
+     },
+     "user-button-links": {
+          "my-profile": "Իմ պրոֆիլը",
+          "resumes": "Ռեզյումեներ",
+          "cover-letters": "Ուղեկցող նամակներ",
+          "settings": "Կարգավորումներ"
      }
 }

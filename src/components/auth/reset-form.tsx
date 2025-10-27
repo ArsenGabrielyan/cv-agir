@@ -18,6 +18,7 @@ import { FormSuccess } from "@/components/form/form-success";
 import { reset } from "@/actions/auth/reset";
 import { ResetPassType } from "@/lib/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
+import { useTranslations } from "next-intl";
 
 export default function ResetForm(){
      const [isPending, startTransition] = useTransition();
@@ -40,10 +41,12 @@ export default function ResetForm(){
                })
           })
      }
+     const t = useTranslations("auth")
+     const emailField = useTranslations("form.email")
      return (
           <CardWrapper
-               headerLabel="Մոռացե՞լ եք գաղտնաբառը։"
-               backButtonLabel="Վերադառնալ մուտք"
+               headerLabel={t("login.forgot-pass")}
+               backButtonLabel={t("buttons.returnToLogin")}
                backButtonHref="/auth/login"
           >
                <Form {...form}>
@@ -57,12 +60,12 @@ export default function ResetForm(){
                                    name="email"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Էլ․ փոստ</FormLabel>
+                                             <FormLabel>{emailField("label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
                                                        disabled={isPending}
-                                                       placeholder="name@example.com"
+                                                       placeholder={emailField("placeholder")}
                                                        type="email"
                                                   />
                                              </FormControl>
@@ -73,7 +76,7 @@ export default function ResetForm(){
                          </div>
                          <FormError message={error}/>
                          <FormSuccess message={success}/>
-                         <LoadingButton type="submit" className="w-full" loading={isPending}>Ուղարկել վերականգման հղումը</LoadingButton>
+                         <LoadingButton type="submit" className="w-full" loading={isPending}>{t("buttons.send-reset-link")}</LoadingButton>
                     </form>
                </Form>
           </CardWrapper>

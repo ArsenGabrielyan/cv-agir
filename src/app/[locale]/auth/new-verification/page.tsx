@@ -1,8 +1,11 @@
 import { NewVerificationForm } from "@/components/auth/new-verification-form";
-import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-     title: "Հաստատեք Ձեր էլ․ փոստը"
+export const generateMetadata = async() => {
+     const t = await getTranslations("auth");
+     return {
+          title: t("verify-email-title")
+     }
 }
 
 export default function NewVerificationPage(){

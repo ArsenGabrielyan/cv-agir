@@ -14,7 +14,6 @@ import {
      FormLabel,
      FormMessage
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form/form-error";
 import { FormSuccess } from "@/components/form/form-success";
@@ -25,19 +24,23 @@ import LoadingButton from "@/components/buttons/loading-button";
 import {REGEXP_ONLY_DIGITS} from "input-otp"
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { PasswordInput } from "../form/password-input";
+import { useTranslations } from "next-intl";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
+import { MailIcon } from "lucide-react";
 
-function getOAuthNotLinkedError(searchParams: ReadonlyURLSearchParams){
+function getOAuthNotLinkedError(searchParams: ReadonlyURLSearchParams, message: string){
      const error = searchParams.get("error");
      if(error){
-          return error.includes("OAuthAccountNotLinked") ? "Այս էլ․ փոստով արդեն կա հաշիվ, բայց այլ մուտքի մեթոդով։" : ""
+          return error.includes("OAuthAccountNotLinked") ? message : ""
      }
      return ""
 }
 
 export default function LoginForm(){
      const searchParams = useSearchParams();
-     const callbackUrl = searchParams.get("callbackUrl")
-     const urlError = getOAuthNotLinkedError(searchParams)
+     const callbackUrl = searchParams.get("callbackUrl");
+     const validationMsg = useTranslations("validations")
+     const urlError = getOAuthNotLinkedError(searchParams,validationMsg("acc-not-linked"))
      const [showTwoFactor, setShowTwoFactor] = useState(false);
      const [error, setError] = useState<string | undefined>("");
      const [success, setSuccess] = useState<string | undefined>("");
@@ -72,10 +75,13 @@ export default function LoginForm(){
                })
           })
      }
+     const t = useTranslations("auth.login");
+     const formTxt = useTranslations("form");
+     const buttonTxt = useTranslations("auth.buttons")
      return (
           <CardWrapper
-               headerLabel="Բարի գալուստ"
-               backButtonLabel="Չունե՞ք հաշիվ։"
+               headerLabel={t("form-title")}
+               backButtonLabel={t("sign-up-link-txt")}
                backButtonHref="/auth/register"
                showSocial
           >
@@ -92,14 +98,19 @@ export default function LoginForm(){
                                              name="email"
                                              render={({field})=>(
                                                   <FormItem>
-                                                       <FormLabel>Էլ․ փոստ</FormLabel>
+                                                       <FormLabel>{formTxt("email.label")}</FormLabel>
                                                        <FormControl>
-                                                            <Input
-                                                                 {...field}
-                                                                 disabled={isPending}
-                                                                 placeholder="name@example.com"
-                                                                 type="email"
-                                                            />
+                                                            <InputGroup>
+                                                                 <InputGroupInput
+                                                                      {...field}
+                                                                      disabled={isPending}
+                                                                      placeholder={formTxt("email.placeholder")}
+                                                                      type="email"
+                                                                 />
+                                                                 <InputGroupAddon>
+                                                                      <MailIcon/>
+                                                                 </InputGroupAddon>
+                                                            </InputGroup>
                                                        </FormControl>
                                                        <FormMessage/>
                                                   </FormItem>
@@ -110,7 +121,7 @@ export default function LoginForm(){
                                              name="password"
                                              render={({field})=>(
                                                   <FormItem>
-                                                       <FormLabel>Գաղտնաբառ</FormLabel>
+                                                       <FormLabel>{formTxt("password-label")}</FormLabel>
                                                        <FormControl>
                                                             <PasswordInput
                                                                  {...field}
@@ -119,7 +130,7 @@ export default function LoginForm(){
                                                             />
                                                        </FormControl>
                                                        <Button size="sm" variant="link" asChild className="px-0 font-normal">
-                                                            <Link href="/auth/reset">Մոռացե՞լ եք գաղտնաբառը։</Link>
+                                                            <Link href="/auth/reset">{t("forgot-pass")}</Link>
                                                        </Button>
                                                        <FormMessage/>
                                                   </FormItem>
@@ -133,7 +144,7 @@ export default function LoginForm(){
                                         name="code"
                                         render={({field})=>(
                                              <FormItem>
-                                                  <FormLabel>Վավերացման կոդ</FormLabel>
+                                                  <FormLabel>{t("2fa-code")}</FormLabel>
                                                   <FormControl>
                                                        <InputOTP
                                                             maxLength={6}
@@ -159,7 +170,7 @@ export default function LoginForm(){
                          </div>
                          <FormError message={error || urlError}/>
                          <FormSuccess message={success}/>
-                         <LoadingButton type="submit" className="w-full" loading={isPending}>{showTwoFactor ? 'Հաստատել' : "Մուտք"}</LoadingButton>
+                         <LoadingButton type="submit" className="w-full" loading={isPending}>{showTwoFactor ? buttonTxt("confirm") : buttonTxt("login")}</LoadingButton>
                     </form>
                </Form>
           </CardWrapper>

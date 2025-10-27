@@ -19,6 +19,7 @@ import { useSearchParams } from "next/navigation";
 import { newPassword } from "@/actions/auth/new-password";
 import { NewPasswordType } from "@/lib/types/schema";
 import LoadingButton from "@/components/buttons/loading-button";
+import { useTranslations } from "next-intl";
 
 export default function NewPasswordForm(){
      const [isPending, startTransition] = useTransition();
@@ -43,10 +44,12 @@ export default function NewPasswordForm(){
                })
           })
      }
+     const t = useTranslations("auth");
+     const formTxt = useTranslations("form")
      return (
           <CardWrapper
-               headerLabel="Ստեղծել նոր գաղտնաբառ։"
-               backButtonLabel="Վերադառնալ մուտք"
+               headerLabel={t("new-password-title")}
+               backButtonLabel={t("buttons.returnToLogin")}
                backButtonHref="/auth/login"
           >
                <Form {...form}>
@@ -60,7 +63,7 @@ export default function NewPasswordForm(){
                                    name="password"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Գաղտնաբառ</FormLabel>
+                                             <FormLabel>{formTxt("password-label")}</FormLabel>
                                              <FormControl>
                                                   <PasswordStrengthInput
                                                        {...field}
@@ -75,7 +78,7 @@ export default function NewPasswordForm(){
                          </div>
                          <FormError message={error}/>
                          <FormSuccess message={success}/>
-                         <LoadingButton type="submit" className="w-full" loading={isPending}>Վերականգնել գաղտնաբառը</LoadingButton>
+                         <LoadingButton type="submit" className="w-full" loading={isPending}>{t("buttons.reset-password")}</LoadingButton>
                     </form>
                </Form>
           </CardWrapper>

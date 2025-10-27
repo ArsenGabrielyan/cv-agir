@@ -16,10 +16,13 @@ import { useCurrentSubscriptionLevel, useCurrentUser } from "@/hooks/use-current
 import { LogoutButton } from "./logout-button"
 import { User, LogOut, Settings, FileUser, FileText, LayoutDashboard, } from "lucide-react"
 import { Link } from "@/i18n/routing"
+import { useTranslations } from "next-intl"
 
 export const UserButton = () => {
      const user = useCurrentUser();
      const subscriptionLevel = useCurrentSubscriptionLevel(user && user?.subscriptionEndDate ? new Date(user?.subscriptionEndDate) < new Date() : true);
+     const t = useTranslations("user-button-links");
+     const buttonTxt = useTranslations("buttons");
      return (
           <DropdownMenu modal={false}>
                <DropdownMenuTrigger>
@@ -36,36 +39,36 @@ export const UserButton = () => {
                     <DropdownMenuSeparator/>
                     <DropdownMenuItem asChild className="cursor-pointer">
                          <Link href="/profile">
-                              <User/> Իմ պրոֆիլը
+                              <User/> {t("my-profile")}
                          </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className="cursor-pointer">
                          <Link href="/dashboard">
-                              <LayoutDashboard/> Վահանակ
+                              <LayoutDashboard/> {buttonTxt("dashboard")}
                          </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className="cursor-pointer">
                          <Link href="/dashboard?show=resume">
-                              <FileUser/> Ռեզյումեներ
+                              <FileUser/> {t("resumes")}
                          </Link>
                     </DropdownMenuItem>
                     {subscriptionLevel==="premium" && (
                          <DropdownMenuItem asChild className="cursor-pointer">
                               <Link href="/dashboard?show=cover-letter">
-                                   <FileText/> Ուղեկցող նամակներ
+                                   <FileText/> {t("cover-letters")}
                               </Link>
                          </DropdownMenuItem>
                     )}
                     <DropdownMenuItem asChild className="cursor-pointer">
                          <Link href="/settings">
-                              <Settings/> Կարգավորումներ
+                              <Settings/> {t("settings")}
                          </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator/>
                     <LogoutButton>
                          <DropdownMenuItem className="cursor-pointer text-destructive">
                               <LogOut className="h-4 w-4 mr-2 text-destructive"/>
-                              Դուրս գալ
+                              {buttonTxt("sign-out")}
                          </DropdownMenuItem>
                     </LogoutButton>
                </DropdownMenuContent>

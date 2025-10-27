@@ -58,5 +58,11 @@
      },
      "admin": {
           "title": "Admin Dashboard"
+     },
+     "user-button-links": {
+          "my-profile": "My Profile",
+          "resumes": "Resumes",
+          "cover-letters": "Cover Letters",
+          "settings": "Settings"
      }
 }

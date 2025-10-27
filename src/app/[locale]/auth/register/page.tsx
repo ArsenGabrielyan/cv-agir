@@ -1,8 +1,12 @@
 import RegisterForm from "@/components/auth/register-form";
 import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-     title: "Ստեղծել հաշիվ"
+export const generateMetadata = async(): Promise<Metadata> => {
+     const t = await getTranslations("auth.register");
+     return {
+          title: t("title")
+     }
 }
 
 export default function RegisterPage(){

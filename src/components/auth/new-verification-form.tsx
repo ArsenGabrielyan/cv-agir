@@ -7,6 +7,7 @@ import { newVerification } from "@/actions/auth/new-verification"
 import { FormError } from "@/components/form/form-error"
 import { FormSuccess } from "@/components/form/form-success"
 import { ERROR_MESSAGES } from "@/lib/constants"
+import { useTranslations } from "next-intl"
 
 export const NewVerificationForm = () => {
      const [error, setError] = useState<string | undefined>("");
@@ -33,11 +34,12 @@ export const NewVerificationForm = () => {
           onSubmit()
      },[onSubmit])
 
+     const t = useTranslations("auth");
      return (
           <CardWrapper
-               headerLabel="Հաստատում ենք Ձեր էլ․ փոստը"
+               headerLabel={t("verify-email-title")}
                backButtonHref="/auth/login"
-               backButtonLabel="Վերադառնալ մուտք"
+               backButtonLabel={t("buttons.returnToLogin")}
           >
                <div className="flex items-center justify-center w-full">
                     {!success && !error && (

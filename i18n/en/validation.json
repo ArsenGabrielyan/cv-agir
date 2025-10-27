@@ -1,0 +1,5 @@
+{
+     "validations": {
+          "acc-not-linked": "There's already an account with this email, but with a different login method."
+     }
+}

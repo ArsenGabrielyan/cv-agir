@@ -20,8 +20,46 @@
                "label": "Message",
                "placeholder": "Write the message here"
           },
+          "password-label": "Password",
           "submit": {
                "send": "Send Message"
           }
+     },
+     "auth": {
+          "misc-error": "Oops, something went wrong.",
+          "buttons": {
+               "returnToLogin": "Back to Log In",
+               "confirm": "Confirm",
+               "login": "Log In",
+               "register": "Register"
+          },
+          "social-txt": "Continue with {provider}",
+          "password-state": {
+               "show": "Show Password",
+               "hide": "Hide Password",
+               "reset-password": "Reset password",
+               "send-reset-link": "Send the recovery link"
+          },
+          "password-strength": {
+               "weakest": "Too weak",
+               "weak" : "Still weak",
+               "medium" : "Medium",
+               "strong" : "Strong",
+               "strongest" : "Strongest"
+          },
+          "login": {
+               "title": "Log In",
+               "form-title": "Welcome Back!",
+               "sign-up-link-txt": "Don't have an account?",
+               "forgot-pass": "Forgot your password?",
+               "2fa-code": "2FA Code"
+          },
+          "register": {
+               "title": "Create an account",
+               "login-link-txt": "Already have an account?"
+          },
+          "verify-email-title": "Verify your email address",
+          "new-password-title": "Create a new password",
+          "reset-pass-title": "Reset the password"
      }
 }
