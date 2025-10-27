@@ -1,14 +1,18 @@
-import { Button } from "@/components/ui/button";
 import { currentUser } from "@/lib/auth";
-import { Link, redirect, routing } from "@/i18n/routing";
+import { redirect, routing } from "@/i18n/routing";
 import { getSubscriptionLevel } from "@/actions/subscription-system";
 import { Metadata } from "next";
 import { LocalePageProps } from "@/app/[locale]/layout";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import PremiumUpgradeMsg from "@/components/pages/premium-upgrade-msg";
 
-export const metadata: Metadata = {
-     title: "Դուք անցել եք պրեմիում տարբերակին։"
+export const generateMetadata = async(): Promise<Metadata> => {
+     const t = await getTranslations("pricing.premium-msg");
+     return {
+          title: t("title")
+     }
 }
 
 export default async function Page({params}: LocalePageProps){
@@ -33,12 +37,6 @@ export default async function Page({params}: LocalePageProps){
           return;
      }
      return (
-          <main className="mx-auto max-w-7xl space-y-6 px-3 py-6 text-center">
-               <h1 className="text-3xl font-semibold">Շնորհավորում եմ</h1>
-               <p className="text-muted-foreground">Դուք անցել եք պրեմիում տարբերակին։</p>
-               <Button asChild>
-                    <Link href="/dashboard">Վերադառնալ վահանակ</Link>
-               </Button>
-          </main>
+          <PremiumUpgradeMsg/>
      )
 }

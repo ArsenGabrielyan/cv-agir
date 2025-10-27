@@ -1,5 +1,4 @@
 "use client"
-import { Loader2 } from "lucide-react";
 import CoverLetterFormFooter from "./cl-form-footer";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -16,6 +15,7 @@ import { mapToLetterValues } from "@/lib/helpers/maps";
 import { ExtendedUser } from "@/global";
 import usePrint from "@/hooks/use-print";
 import { useRouter } from "@/i18n/routing";
+import { Spinner } from "@/components/ui/spinner";
 
 interface CoverLetterEditorProps {
      letterToEdit: CoverLetter | null;
@@ -50,7 +50,7 @@ export default function CoverLetterEditor({letterToEdit,userData}: CoverLetterEd
                               Գրել ուղեկցող նամակ
                               {isSaving && (
                                    <span className="text-base font-normal flex items-center gap-2 text-muted-foreground">
-                                        <Loader2 className="animate-spin"/>Պահպանվում է․․․
+                                        <Spinner/>Պահպանվում է․․․
                                    </span>
                               )}
                          </h1>

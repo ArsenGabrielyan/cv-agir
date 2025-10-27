@@ -5,9 +5,13 @@ import { LocalePageProps } from "@/app/[locale]/layout";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { redirect, routing } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-     title: "Ադմինիստրատորի վահանակ"
+export const generateMetadata = async(): Promise<Metadata> => {
+     const t = await getTranslations("admin")
+     return {
+          title: t("title")
+     }
 }
 
 export default async function AdminPage({params}: LocalePageProps){

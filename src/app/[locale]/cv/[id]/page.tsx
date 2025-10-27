@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 import { getUserById } from "@/data/user";
 import { logAction } from "@/data/logs";
 import { getIpAddress } from "@/actions/ip";
+import { getTranslations } from "next-intl/server";
 
 const getResumeData = cache(async(id: string) => {
      if(!isObjectId(id)){
@@ -24,8 +25,11 @@ const getResumeData = cache(async(id: string) => {
 export const generateMetadata = async({params}: CVPageProps): Promise<Metadata> => {
      const {id} = await params;
      const resume = await getResumeData(id);
+     const t = await getTranslations("resume-info")
      return {
-          title: `"${resume.fname} ${resume.lname}"-ի ռեզյումեն`
+          title: t("title",{
+               fullName: `${resume.fname} ${resume.lname}`
+          })
      }
 }
 

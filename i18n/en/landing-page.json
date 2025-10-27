@@ -1,6 +1,6 @@
 {
      "landing-hero": {
-          "desc1": "Your resume will be created in seconds",
+          "desc1": "Your resume in less than 1 minute!",
           "desc2": "Create a professional resume quickly and easily, and download for free",
           "noCreditCard": "No credit card required.",
           "langSwitcherLabel": "Change Language",
@@ -67,6 +67,11 @@
                "perk-1": "Full customization",
                "perk-2": "AI suggestions",
                "perk-3": "Cover letter creation"
+          },
+          "premium-msg": {
+               "title": "You have upgraded to Premium!",
+               "congrats": "Congratulations!",
+               "goBack": "Return to dashboard"
           }
      },
      "faq": {
@@ -136,9 +141,26 @@
      },
      "templates": {
           "title": "Templates",
+          "metaTitle": "Resume Templates",
           "desc": "Check out all the resume templates here and use them correctly to get hired.",
           "showMore": "Show More",
           "premium": "Premium",
           "useTemplate": "Use the Template"
+     },
+     "resume-info": {
+          "title": "\"{fullName}\"'s resume",
+          "sections": {
+               "summary": "Summary",
+               "work-experience": "Work Experience",
+               "education": "Education",
+               "skills": "Skills",
+               "langs": "Languages",
+               "hobbies": "Hobbies",
+               "courses": "Courses",
+               "refs": "References"
+          },
+          "job-title": "{job} at {company}",
+          "today": "Today",
+          "no-data": "There is no data in this Resume."
      }
 }

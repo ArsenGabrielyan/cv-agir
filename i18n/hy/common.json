@@ -9,7 +9,9 @@
      "buttons": {
           "sign-in": "Մուտք",
           "sign-out": "Դուրս գալ",
-          "dashboard": "Վահանակ"
+          "dashboard": "Վահանակ",
+          "loading": "Խնդրում ենք սպասել․․․",
+          "upgrade": "Անցել Պրեմիումի"
      },
      "nav-links": {
           "menu": "Մենյու",
@@ -48,5 +50,13 @@
           "lang-msg": "\n{name}՝ {percentage}\n",
           "instructions-language": "Armenian language",
           "today": "Այսօր"
+     },
+     "not-found": {
+          "title": "Վայ, էջը չի գտնվել",
+          "desc": "Ձեր փնտրած էջը չի գտնվել: Այն կարող է ջնջվել, տեղափոխվել, վերանվանվել կամ ընդհանրապես գոյություն չունենա:",
+          "goBack": "Վերադառնալ Գլխավոր էջ"
+     },
+     "admin": {
+          "title": "Ադմինիստրատորի վահանակ"
      }
 }

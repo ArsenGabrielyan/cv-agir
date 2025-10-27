@@ -1,6 +1,7 @@
 "use client"
-import {Admin, Resource, TranslationMessages, bwLightTheme, bwDarkTheme} from "react-admin"
-import am from "@/i18n/react-admin/am"
+import {Admin, Resource, TranslationMessages, bwLightTheme, bwDarkTheme, resolveBrowserLocale} from "react-admin"
+import hy from "@/i18n/react-admin/am"
+import en from 'ra-language-english';
 import simpleRestProvider from "ra-data-simple-rest"
 import polyglotI18nProvider from 'ra-i18n-polyglot';
 import { TemplatesCreate, TemplatesEdit, TemplatesList, TemplateShow } from "./templates";
@@ -12,9 +13,16 @@ import AdminHomePage from "./admin-homepage";
 import FactCheckIcon from "@mui/icons-material/FactCheck"
 import { AuditLogsList } from "./logs";
 
-const translations: Record<string,TranslationMessages> = {am}
+const translations: Record<string,TranslationMessages> = {hy, en}
 const dataProvider = simpleRestProvider("/api")
-const i18nProvider = polyglotI18nProvider(locale=>translations[locale],"am");
+const i18nProvider = polyglotI18nProvider(
+     locale=>translations[locale],
+     resolveBrowserLocale("hy",{fullLocale: true}),
+     [
+          {locale: "en", name: "English"},
+          {locale: "hy", name: "Հայերեն"}
+     ]
+);
 
 export default function App(){
      return (

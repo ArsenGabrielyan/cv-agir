@@ -1,9 +1,13 @@
 import PageLayout from "@/components/layout/page-layout";
 import Pricing from "@/components/landing-page/sections/pricing";
 import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-     title: "Առաջարկներ և գներ"
+export const generateMetadata = async(): Promise<Metadata> => {
+     const t = await getTranslations("pricing");
+     return {
+          title: t("title")
+     }
 }
 
 export default function PricingPage(){

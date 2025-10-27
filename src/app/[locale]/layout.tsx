@@ -10,27 +10,10 @@ import ReCaptcha from "@/components/recaptcha-script";
 import {hasLocale, NextIntlClientProvider} from 'next-intl';
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { absoluteUrl } from "@/lib/utils";
+import { languages } from "@/i18n/config";
 
-export const metadata: Metadata = {
-  title: {
-    template: "%s | CV-ագիր",
-    absolute: "CV-ագիր - Ստեղծիր CV արագ"
-  },
-  description: "CV-ագիրը ռեզյումե գեներացնելու հավելված է։",
-  authors: {
-    url: "https://github.com/ArsenGabrielyan",
-    name: "Արսեն Գաբրիելյան"
-  },
-  applicationName: "CV-ագիր",
-  icons: {
-    icon: "/app-icon.png",
-    apple: "/app-icon.png"
-  },
-};
-
-export const viewport: Viewport = {
-  themeColor: "#002a4f"
-}
 
 type Props = {
   children: React.ReactNode;
@@ -38,6 +21,37 @@ type Props = {
 };
 
 export type LocalePageProps = Omit<Props,"children">
+
+export const generateMetadata = async({params}: LocalePageProps): Promise<Metadata> => {
+  const {locale} = await params;
+  const t = await getTranslations("index");
+  const landingTxt = await getTranslations("landing-hero");
+  return {
+    metadataBase: new URL(absoluteUrl()),
+    title: {
+      template: `%s | ${t("title")}`,
+      absolute: `${t("title")} - ${landingTxt("desc1")}`
+    },
+    description: t("desc"),
+    authors: {
+      url: "https://github.com/ArsenGabrielyan",
+      name: t("author")
+    },
+    applicationName: t("title"),
+    alternates: {
+      languages: Object.fromEntries(languages.map(l => [l.code, `/${l.code}`])),
+      canonical: absoluteUrl(`/${locale}`)
+    },
+    icons: {
+      icon: "/app-icon.png",
+      apple: "/app-icon.png"
+    },
+  }
+};
+
+export const viewport: Viewport = {
+  themeColor: "#002a4f"
+}
  
 export default async function LocaleLayout({children, params}: Props) {
   const {locale} = await params;

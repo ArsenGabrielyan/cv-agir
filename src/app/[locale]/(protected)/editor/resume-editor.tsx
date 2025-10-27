@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation"
 import { steps } from "./steps"
 import Breadcrumbs from "./breadcrumbs"
 import ResumeFormFooter from "./resume-form-footer"
-import { Loader2 } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { ResumeFormType } from "@/lib/types/schema"
 import ResumePreviewSection from "./resume-preview-section"
@@ -19,6 +18,7 @@ import usePrint from "@/hooks/use-print"
 import { ExtendedUser } from "@/global"
 import { useRouter } from "@/i18n/routing"
 import { ResumeServerData } from "@/lib/types"
+import { Spinner } from "@/components/ui/spinner"
 
 interface ResumeEditorProps {
      resumeToEdit: ResumeServerData | null;
@@ -76,7 +76,7 @@ export default function ResumeEditor({resumeToEdit,template,resumeId,userData}: 
                               Պատրաստել Ձեր ռեզյումեն
                               {isSaving && (
                                    <span className="text-base font-normal flex items-center gap-2 text-muted-foreground">
-                                        <Loader2 className="animate-spin"/>Պահպանվում է․․․
+                                        <Spinner/>Պահպանվում է․․․
                                    </span>
                               )}
                          </h1>

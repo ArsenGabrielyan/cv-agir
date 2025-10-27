@@ -9,7 +9,9 @@
      "buttons": {
           "sign-in": "Log in",
           "sign-out": "Sign Out",
-          "dashboard": "Dashboard"
+          "dashboard": "Dashboard",
+          "loading": "Please Wait...",
+          "upgrade": "Upgrade to Premium"
      },
      "nav-links": {
           "menu": "Menu",
@@ -48,5 +50,13 @@
           "lang-msg": "\n{name}: {percentage}\n",
           "instructions-language": "English language",
           "today": "Today"
+     },
+     "not-found": {
+          "title": "Oops, Page not found",
+          "desc": "The page you are looking for was not found. It may have been deleted, moved, renamed, or doesn't exist at all.",
+          "goBack": "Return to Home Page"
+     },
+     "admin": {
+          "title": "Admin Dashboard"
      }
 }
