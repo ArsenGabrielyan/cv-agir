@@ -31,14 +31,14 @@
                "returnToLogin": "Back to Log In",
                "confirm": "Confirm",
                "login": "Log In",
-               "register": "Register"
+               "register": "Register",
+               "send-reset-link": "Send the recovery link",
+               "reset-password": "Reset password"
           },
           "social-txt": "Continue with {provider}",
           "password-state": {
                "show": "Show Password",
-               "hide": "Hide Password",
-               "reset-password": "Reset password",
-               "send-reset-link": "Send the recovery link"
+               "hide": "Hide Password"
           },
           "password-strength": {
                "weakest": "Too weak",
