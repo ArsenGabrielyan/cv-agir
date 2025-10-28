@@ -3,7 +3,7 @@ import { getGenerateDescriptionSchema, getGenerateLetterBodySchema, getGenerateS
 import { GenerateDescriptionInput, GenerateLetterBodyInput, GenerateSummaryInput, WorkExperienceType } from "@/schemas/types"
 import {getLanguageLevel} from "@/lib/helpers"
 import gemini from "@/lib/gemini"
-import { AI_MODEL, ERROR_MESSAGES, GEN_CONFIG } from "@/lib/constants"
+import { AI_MODEL, GEN_CONFIG } from "@/lib/constants"
 import { currentUser } from "@/lib/auth"
 import { getSubscriptionLevel } from "./subscription-system"
 import { getAvailableFeatures } from "@/lib/permission"
@@ -17,6 +17,7 @@ import { getTranslations } from "next-intl/server"
 export const generateSummary = async(input: GenerateSummaryInput) => {
      const user = await currentUser();
      const currIp = await getIpAddress();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -24,7 +25,7 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
                     ip: currIp,
                }
           })
-          throw new Error(ERROR_MESSAGES.auth.unauthorized)
+          throw new Error(errMsg("auth.unauthorized"))
      }
      const validationMsg = await getTranslations("validations");
      const subscriptionLevel = await getSubscriptionLevel(user.id);
@@ -36,10 +37,10 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.subscription.cantUseFeatures
+                    reason: errMsg("subscription.cantUseFeatures")
                }
           })
-          throw new Error(ERROR_MESSAGES.subscription.cantUseFeatures)
+          throw new Error(errMsg("subscription.cantUseFeatures"))
      }
 
      const validatedFields = getGenerateSummarySchema(validationMsg).safeParse(input);
@@ -51,7 +52,7 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
                     fields: validatedFields.error.issues.map(val=>val.path[0]),
                }
           })
-          throw new Error(ERROR_MESSAGES.validationError)
+          throw new Error(errMsg("validationError"))
      }
      const limiterKey = `ai:${user.id || await getIpAddress()}`;
      if(checkLimiter(limiterKey,10)){
@@ -63,7 +64,7 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
                     route: limiterKey
                }
           })
-          throw new Error(ERROR_MESSAGES.rateLimitError)
+          throw new Error(errMsg("rateLimitError"))
      }
 
      const t = await getTranslations("ai");
@@ -117,10 +118,10 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
                     tool: "Նկարագրության գեներացում",
                     ip: currIp,
                     input: maskText(userMessage,50),
-                    reason: ERROR_MESSAGES.ai.answerError
+                    reason: errMsg("ai.answerError")
                }
           })
-          throw new Error(ERROR_MESSAGES.ai.answerError)
+          throw new Error(errMsg("ai.answerError"))
      }
      clearLimiter(limiterKey)
      await logAction({
@@ -137,6 +138,7 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
 export const generateWorkExperience = async(input: GenerateDescriptionInput) => {
      const user = await currentUser();
      const currIp = await getIpAddress();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -144,7 +146,7 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
                     ip: currIp,
                }
           })
-          throw new Error(ERROR_MESSAGES.auth.unauthorized)
+          throw new Error(errMsg("auth.unauthorized"))
      }
      const subscriptionLevel = await getSubscriptionLevel(user.id);
      const {canUseAITools} = getAvailableFeatures(subscriptionLevel)
@@ -155,10 +157,10 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.subscription.cantUseFeatures
+                    reason: errMsg("subscription.cantUseFeatures")
                }
           })
-          throw new Error(ERROR_MESSAGES.subscription.cantUseFeatures)
+          throw new Error(errMsg("subscription.cantUseFeatures"))
      }
      const validationMsg = await getTranslations("validations");
      const validatedFields = getGenerateDescriptionSchema(validationMsg).safeParse(input);
@@ -168,10 +170,10 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.ai.invalidExperienceInput
+                    reason: errMsg("ai.invalidExperienceInput")
                }
           })
-          throw new Error(ERROR_MESSAGES.ai.invalidExperienceInput)
+          throw new Error(errMsg("ai.invalidExperienceInput"))
      }
      const limiterKey = `ai:${user.id || await getIpAddress()}`;
      if(checkLimiter(limiterKey,10)){
@@ -183,7 +185,7 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
                     route: limiterKey
                }
           })
-          throw new Error(ERROR_MESSAGES.rateLimitError)
+          throw new Error(errMsg("rateLimitError"))
      }
 
      const t = await getTranslations("ai");
@@ -224,10 +226,10 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
                     tool: "Աշխատանքային փորձի գեներացում",
                     ip: currIp,
                     input: maskText(userMessage,50),
-                    reason: ERROR_MESSAGES.ai.answerError
+                    reason: errMsg("ai.answerError")
                }
           })
-          throw new Error(ERROR_MESSAGES.ai.answerError)
+          throw new Error(errMsg("ai.answerError"))
      }
      clearLimiter(limiterKey)
      const parsed = JSON.parse(aiResponse)[0];
@@ -253,6 +255,7 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
 export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => {
      const user = await currentUser();
      const currIp = await getIpAddress();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -260,7 +263,7 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
                     ip: currIp,
                }
           })
-          throw new Error(ERROR_MESSAGES.auth.unauthorized)
+          throw new Error(errMsg("auth.unauthorized"))
      }
      const subscriptionLevel = await getSubscriptionLevel(user.id);
      const {canUseAITools} = getAvailableFeatures(subscriptionLevel)
@@ -271,10 +274,10 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.subscription.cantUseFeatures
+                    reason: errMsg("subscription.cantUseFeatures")
                }
           })
-          throw new Error(ERROR_MESSAGES.subscription.cantUseFeatures)
+          throw new Error(errMsg("subscription.cantUseFeatures"))
      }
      const validationMsg = await getTranslations("validations");
      const validatedFields = getGenerateLetterBodySchema(validationMsg).safeParse(input);
@@ -286,7 +289,7 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
                     fields: validatedFields.error.issues.map(val=>val.path[0]),
                }
           })
-          throw new Error(ERROR_MESSAGES.validationError)
+          throw new Error(errMsg("validationError"))
      }
      const limiterKey = `ai:${user.id || await getIpAddress()}`;
      if(checkLimiter(limiterKey,10)){
@@ -298,7 +301,7 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
                     route: limiterKey
                }
           })
-          throw new Error(ERROR_MESSAGES.rateLimitError)
+          throw new Error(errMsg("rateLimitError"))
      }
 
      const t = await getTranslations("ai");
@@ -336,10 +339,10 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
                     tool: "Ուղեկցող նամակի գեներացում",
                     input: maskText(userMessage,50),
                     ip: currIp,
-                    reason: ERROR_MESSAGES.ai.answerError
+                    reason: errMsg("ai.answerError")
                }
           })
-          throw new Error(ERROR_MESSAGES.ai.answerError)
+          throw new Error(errMsg("ai.answerError"))
      }
      clearLimiter(limiterKey)
      await logAction({

@@ -14,7 +14,6 @@ import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { useTranslations } from "next-intl";
 
 interface GenerateWorkExpButtonProps{
@@ -61,13 +60,14 @@ function InputDialog({open,onOpenChange,onWorkExpGenerated}: InputDialogProps){
                description: ""
           }
      });
+     const errMsg = useTranslations("error-messages")
      const handleSubmit = async (input: GenerateDescriptionInput) => {
           try{
                const response = await generateWorkExperience(input);
                onWorkExpGenerated(response);
           } catch (error) {
                console.error(error);
-               toast.error(ERROR_MESSAGES.unknownError)
+               toast.error(errMsg("unknownError"))
           }
      }
 

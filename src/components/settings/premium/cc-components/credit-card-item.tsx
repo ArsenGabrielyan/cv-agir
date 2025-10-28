@@ -15,7 +15,7 @@ import useCreditCardModal from "@/hooks/use-credit-card-modal";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { ERROR_MESSAGES } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 
 interface CreditCardItemProps{
      card: CreditCard,
@@ -161,6 +161,7 @@ interface DeleteCardDialogProps{
 function DeleteCardDialog({index,open,onOpenChange}: DeleteCardDialogProps){
      const {update} = useSession();
      const [isPending, startTransition] = useTransition();
+     const errMsg = useTranslations("error-messages")
 
      const handleDelete = () => {
           startTransition(()=>{
@@ -173,7 +174,7 @@ function DeleteCardDialog({index,open,onOpenChange}: DeleteCardDialogProps){
                          update();
                          onOpenChange(false);
                     }
-               }).catch(()=>toast.error(ERROR_MESSAGES.unknownError))
+               }).catch(()=>toast.error(errMsg("unknownError")))
           })
      }
 

@@ -3,15 +3,16 @@ import { IAdminAPISearchParams } from "@/lib/types";
 import { db } from "@/lib/db";
 import { ResumeTemplateCategory } from "@db";
 import { NextResponse } from "next/server";
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "@/data/logs";
 import { getIpAddress } from "@/actions/ip";
 import { withAuth } from "@/lib/auth/api";
+import { getTranslations } from "next-intl/server";
 
 export const GET = withAuth(async req => {
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -20,7 +21,7 @@ export const GET = withAuth(async req => {
                     route: req.url
                }
           })
-          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
+          return new NextResponse(errMsg("auth.unauthorized"),{ status: 401 })
      }
      if(!isAdmin){
           await logAction({
@@ -32,7 +33,7 @@ export const GET = withAuth(async req => {
                     method: req.method,
                }
           })
-          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
+          return new NextResponse(errMsg("auth.noAdminAccess"),{ status: 401 })
      }
      const searchParams = req.nextUrl.searchParams;
      const params = Object.fromEntries(searchParams.entries().map(([k,v])=>[k,JSON.parse(v)])) as IAdminAPISearchParams<ResumeTemplateCategory>;
@@ -54,6 +55,7 @@ export const POST = withAuth(async req => {
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -62,7 +64,7 @@ export const POST = withAuth(async req => {
                     route: req.url
                }
           })
-          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
+          return new NextResponse(errMsg("auth.unauthorized"),{ status: 401 })
      }
      if(!isAdmin){
           await logAction({
@@ -74,7 +76,7 @@ export const POST = withAuth(async req => {
                     method: req.method,
                }
           })
-          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
+          return new NextResponse(errMsg("auth.noAdminAccess"),{ status: 401 })
      }
      const {name}: ResumeTemplateCategory = await req.json();
      const data = await db.resumeTemplateCategory.create({

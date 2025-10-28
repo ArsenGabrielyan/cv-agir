@@ -13,7 +13,6 @@ import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { LoginType } from "@/schemas/types";
 import { checkLimiter } from "@/lib/limiter";
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { getIpAddress } from "../ip";
 import { getTranslations } from "next-intl/server";
 
@@ -39,7 +38,8 @@ export const login = async (
      const currIp = await getIpAddress();
      const validationMsg = await getTranslations("validations");
      const validatedFields = getLoginSchema(validationMsg).safeParse(values);
-
+     
+     const errMsg = await getTranslations("error-messages");
      if(!validatedFields.success){
           await logAction({
                action: "VALIDATION_ERROR",
@@ -47,7 +47,7 @@ export const login = async (
                     fields: validatedFields.error.issues.map(issue => issue.path[0]),
                }
           })
-          return {error: ERROR_MESSAGES.validationError}
+          return {error: errMsg("validationError")}
      }
 
      const {email,password, code} = validatedFields.data;
@@ -61,7 +61,7 @@ export const login = async (
                     route: limiterKey
                }
           })
-          return {error: ERROR_MESSAGES.rateLimitError}
+          return {error: errMsg("rateLimitError")}
      }
 
      const existingUser = await getUserByEmail(email);
@@ -73,10 +73,10 @@ export const login = async (
                metadata: {
                     email,
                     ip: currIp,
-                    reason: ERROR_MESSAGES.auth.noUserFound
+                    reason: errMsg("auth.noUserFound")
                }
           })
-          return {error: ERROR_MESSAGES.auth.noUserFound}
+          return {error: errMsg("auth.noUserFound")}
      }
 
      if(!existingUser.emailVerified) {
@@ -104,10 +104,10 @@ export const login = async (
                          metadata: {
                               email,
                               ip: currIp,
-                              reason: ERROR_MESSAGES.auth.wrong2FAcode
+                              reason: errMsg("auth.wrong2FAcode")
                          }
                     })
-                    return {error: ERROR_MESSAGES.auth.wrong2FAcode}
+                    return {error: errMsg("auth.wrong2FAcode")}
                }
 
                const hasExpired = new Date(twoFactorToken.expires) < new Date();
@@ -118,10 +118,10 @@ export const login = async (
                          metadata: {
                               email,
                               ip: currIp,
-                              reason: ERROR_MESSAGES.auth.expired2FAcode
+                              reason: errMsg("auth.expired2FAcode")
                          }
                     })
-                    return {error: ERROR_MESSAGES.auth.expired2FAcode}
+                    return {error: errMsg("auth.expired2FAcode")}
                }
 
                await db.twoFactorToken.delete({

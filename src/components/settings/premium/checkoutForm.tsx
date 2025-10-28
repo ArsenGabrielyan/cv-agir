@@ -14,7 +14,6 @@ import LoadingButton from "@/components/buttons/loading-button";
 import { SubscriptionPeriod, UserPlan } from "@db";
 import CreditCardInput from "@/components/form/credit-card-input";
 import { getBankName } from "@/lib/helpers/credit-cards";
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { useTranslations } from "next-intl";
 
 interface CheckoutFormProps{
@@ -39,6 +38,7 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                city: ""
           }
      });
+     const errMsg = useTranslations("error-messages")
      const handleSubmit = (values: CheckoutFormType) => {
           setError("");
           setSuccess("");
@@ -53,7 +53,7 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                          router.push("/billing-success");
                     }
                })
-               .catch(()=>setError(ERROR_MESSAGES.unknownError))
+               .catch(()=>setError(errMsg("unknownError")))
           })
      }
      const currBank = getBankName(form.watch("cardNumber"));

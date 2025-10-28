@@ -9,7 +9,6 @@ import bcrypt from "bcryptjs"
 import { env } from "@/lib/env"
 import { clearLimiter, incrementLimiter } from "./lib/limiter"
 import { logAction } from "@/data/logs"
-import { ERROR_MESSAGES } from "./lib/constants"
 import { getIpAddress } from "./actions/ip"
 import { getTranslations } from "next-intl/server"
 
@@ -18,6 +17,7 @@ export default {
           Credentials({
                async authorize(credentials) {
                     const validationMsg = await getTranslations("validations");
+                    const errMsg = await getTranslations("error-messages");
                     const validatedFields = getLoginSchema(validationMsg).safeParse(credentials)
                     const currIp = await getIpAddress()
 
@@ -31,7 +31,7 @@ export default {
                                    metadata: {
                                         email,
                                         ip: currIp,
-                                        reason: ERROR_MESSAGES.auth.noUserFound
+                                        reason: errMsg("auth.noUserFound")
                                    }
                               })
                               return null;

@@ -8,7 +8,6 @@ import { sendVerificationEmail } from "@/lib/mail"
 import { RegisterFormType } from "@/schemas/types"
 import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter"
 import { logAction } from "@/data/logs"
-import { ERROR_MESSAGES } from "@/lib/constants"
 import { getIpAddress } from "../ip"
 import { getTranslations } from "next-intl/server"
 
@@ -16,7 +15,7 @@ export const register = async (values: RegisterFormType) => {
      const currIp = await getIpAddress();
      const validationMsg = await getTranslations("validations");
      const validatedFields = getRegisterSchema(validationMsg).safeParse(values);
-
+     const errMsg = await getTranslations("error-messages");
      if(!validatedFields.success){
           await logAction({
                action: "VALIDATION_ERROR",
@@ -24,7 +23,7 @@ export const register = async (values: RegisterFormType) => {
                     fields: validatedFields.error.issues.map(issue => issue.path[0]),
                }
           })
-          return {error: ERROR_MESSAGES.validationError}
+          return {error: errMsg("validationError")}
      }
      const {email,password,name} = validatedFields.data;
      const limiterKey = `register:${email}`;
@@ -37,7 +36,7 @@ export const register = async (values: RegisterFormType) => {
                     route: limiterKey
                }
           })
-          return {error: ERROR_MESSAGES.rateLimitError}
+          return {error: errMsg("rateLimitError")}
      }
 
      const existingUser = await getUserByEmail(email);
@@ -48,10 +47,10 @@ export const register = async (values: RegisterFormType) => {
                metadata: {
                     ip: currIp,
                     email,
-                    reason: ERROR_MESSAGES.auth.takenEmail
+                    reason: errMsg("auth.takenEmail")
                }
           })
-          return {error: ERROR_MESSAGES.auth.takenEmail}
+          return {error: errMsg("auth.takenEmail")}
      }
      const hashedPassword = await bcrypt.hash(password,10);
 

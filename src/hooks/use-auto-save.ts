@@ -6,14 +6,14 @@ import { toast } from "sonner";
 import { saveResume } from "@/actions/resume/save-resume";
 import { fileReplacer } from "@/lib/helpers";
 import { saveCoverLetter } from "@/actions/cover-letter/save-letter";
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { useRouter } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: string){
      const searchParams = useSearchParams();
      const router = useRouter();
-     
      const debouncedData = useDebounce(resumeData,1200);
+     const errMsg = useTranslations("error-messages")
 
      const [resumeId, setResumeId] = useState(resumeData.id)
      const [lastSaved, setLastSaved] = useState(structuredClone(resumeData))
@@ -47,7 +47,7 @@ export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: strin
                } catch(error){
                     setIsError(true);
                     console.error(error)
-                    toast.error(ERROR_MESSAGES.content.resumeSaveError,{
+                    toast.error(errMsg("content.resumeSaveError"),{
                          action: {
                               label: "Նորից փորձել",
                               onClick: () => void save().catch(err=>{
@@ -64,7 +64,7 @@ export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: strin
           if(hasUnsavedChanges && debouncedData && !isSaving && !isError){
                save()
           }
-     },[debouncedData, isError, isSaving, lastSaved, resumeId, router, searchParams, templateId])
+     },[debouncedData, isError, isSaving, lastSaved, resumeId, router, searchParams, templateId, errMsg])
 
      return {
           isSaving,
@@ -75,8 +75,8 @@ export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: strin
 export function useCoverLetterAutoSave(coverLetterData: CoverLetterFormType){
      const searchParams = useSearchParams();
      const router = useRouter();
-     
      const debouncedData = useDebounce(coverLetterData,1200);
+     const errMsg = useTranslations("error-messages")
 
      const [lastSaved, setLastSaved] = useState(structuredClone(coverLetterData))
      const [isSaving, setIsSaving] = useState(false);
@@ -107,7 +107,7 @@ export function useCoverLetterAutoSave(coverLetterData: CoverLetterFormType){
                } catch(error){
                     setIsError(true);
                     console.error(error)
-                    toast.error(ERROR_MESSAGES.content.noCoverLetter,{
+                    toast.error(errMsg("content.noCoverLetter"),{
                          action: {
                               label: "Նորից փորձել",
                               onClick: () => void save().catch(err=>{
@@ -124,7 +124,7 @@ export function useCoverLetterAutoSave(coverLetterData: CoverLetterFormType){
           if(hasUnsavedChanges && debouncedData && !isSaving && !isError){
                save()
           }
-     },[debouncedData, isError, isSaving, lastSaved, router, searchParams])
+     },[debouncedData, isError, isSaving, lastSaved, router, searchParams, errMsg])
 
      return {
           isSaving,

@@ -10,7 +10,6 @@ import { getAvailableFeatures } from "@/lib/permission"
 import { getCurrentCoverLetterByUserId } from "@/data/cover-letters"
 import { getIpAddress } from "@/actions/ip"
 import { logAction } from "@/data/logs"
-import {ERROR_MESSAGES} from "@/lib/constants"
 import { getTranslations } from "next-intl/server"
 
 export const saveCoverLetter = async(values: CoverLetterFormType) => {
@@ -18,6 +17,7 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
      const currIp = await getIpAddress();
      const validationMsg = await getTranslations("validations");
      const validatedFields = getCoverLetterFormSchema(validationMsg).safeParse(values);
+     const errMsg = await getTranslations("error-messages");
      if(!validatedFields.success){
           await logAction({
                action: "VALIDATION_ERROR",
@@ -25,7 +25,7 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
                     fields: validatedFields.error.issues.map(val=>val.path[0]),
                }
           })
-          throw new Error(ERROR_MESSAGES.validationError)
+          throw new Error(errMsg("validationError"))
      }
      const {profileImg, letterDate, ...coverLetterValues} = validatedFields.data
 
@@ -38,7 +38,7 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
                     ip: currIp,
                }
           })
-          throw new Error(ERROR_MESSAGES.auth.unauthorized)
+          throw new Error(errMsg("auth.unauthorized"))
      }
 
      const subscriptionLevel = await getSubscriptionLevel(user.id);
@@ -50,10 +50,10 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.subscription.noAccessToCoverLetter
+                    reason: errMsg("subscription.noAccessToCoverLetter")
                }
           })
-          throw new Error(ERROR_MESSAGES.subscription.noAccessToCoverLetter)
+          throw new Error(errMsg("subscription.noAccessToCoverLetter"))
      }
 
      const existingCoverLetter = id ? await getCurrentCoverLetterByUserId(user.id,id) : null;
@@ -64,10 +64,10 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.content.noCoverLetter
+                    reason: errMsg("content.noCoverLetter")
                }
           })
-          throw new Error(ERROR_MESSAGES.content.noCoverLetter)
+          throw new Error(errMsg("content.noCoverLetter"))
      }
 
      const hasCustomizations = (coverLetterValues.borderStyle && coverLetterValues.borderStyle!==existingCoverLetter?.borderStyle) || (coverLetterValues.colorHex && coverLetterValues.colorHex !== existingCoverLetter?.colorHex);
@@ -80,10 +80,10 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.subscription.noCustomization
+                    reason: errMsg("subscription.noCustomization")
                }
           })
-          throw new Error(ERROR_MESSAGES.subscription.noCustomization)
+          throw new Error(errMsg("subscription.noCustomization"))
      }
 
      let newImgUrl: string | undefined | null = undefined;

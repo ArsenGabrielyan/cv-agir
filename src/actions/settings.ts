@@ -6,9 +6,9 @@ import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
 import { SettingsType } from "@/schemas/types";
 import { checkLimiter, incrementLimiter } from "@/lib/limiter";
-import {ERROR_MESSAGES} from "@/lib/constants"
 import { logAction } from "@/data/logs";
 import { getIpAddress } from "./ip"
+import { getTranslations } from "next-intl/server";
 
 export const applySettings = async(values: SettingsType): Promise<{
      error?: string,
@@ -16,12 +16,13 @@ export const applySettings = async(values: SettingsType): Promise<{
 }> => {
      const user = await currentUser();
      const ip = await getIpAddress();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
                metadata: { ip }
           })
-          return {error: ERROR_MESSAGES.auth.unauthorized}
+          return {error: errMsg("auth.unauthorized")}
      }
      const dbUser = await getUserById(user.id);
      if(!dbUser){
@@ -29,7 +30,7 @@ export const applySettings = async(values: SettingsType): Promise<{
                action: "UNAUTHORIZED",
                metadata: { ip }
           })
-          return {error: ERROR_MESSAGES.auth.unauthorized}
+          return {error: errMsg("auth.unauthorized")}
      }
 
      if(user.isOauth){
@@ -49,7 +50,7 @@ export const applySettings = async(values: SettingsType): Promise<{
                     route: limiterKey
                }
           })
-          return {error: ERROR_MESSAGES.rateLimitError}
+          return {error: errMsg("rateLimitError")}
      }
 
      if(values.email && values.email!==user.email){
@@ -61,10 +62,10 @@ export const applySettings = async(values: SettingsType): Promise<{
                     action: "ACTION_ERROR",
                     metadata: {
                          ip,
-                         reason: ERROR_MESSAGES.auth.takenEmail
+                         reason: errMsg("auth.takenEmail")
                     }
                })
-               return {error: ERROR_MESSAGES.auth.takenEmail}
+               return {error: errMsg("auth.takenEmail")}
           }
           const verificationToken = await generateVerificationToken(values.email);
 
@@ -99,10 +100,10 @@ export const applySettings = async(values: SettingsType): Promise<{
                     action: "ACTION_ERROR",
                     metadata: {
                          ip,
-                         reason: ERROR_MESSAGES.auth.wrongPassword
+                         reason: errMsg("auth.wrongPassword")
                     }
                })
-               return {error: ERROR_MESSAGES.auth.wrongPassword}
+               return {error: errMsg("auth.wrongPassword")}
           }
           const hashedPassword = await bcrypt.hash(values.newPassword,10);
 

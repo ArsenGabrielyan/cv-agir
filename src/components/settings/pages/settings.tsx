@@ -24,7 +24,6 @@ import LoadingButton from "@/components/buttons/loading-button";
 import SettingsCard from "../settings-card";
 import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input";
 import { Textarea } from "@/components/ui/textarea";
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { Label } from "@/components/ui/label";
 import ThemeSettings from "@/components/themes/theme-changer";
 import { PasswordInput } from "@/components/form/password-input";
@@ -59,6 +58,7 @@ export default function Settings(){
           resolver: zodResolver(getSettingsSchema(validationMsg)),
           defaultValues: defaultSettings
      })
+     const errMsg = useTranslations("error-messages")
 
      const onSubmit = (values: SettingsType) => {
           setError("");
@@ -74,7 +74,7 @@ export default function Settings(){
                          setSuccess(data.success)
                     }
                })
-               .catch(()=>setError(ERROR_MESSAGES.unknownError))
+               .catch(()=>setError(errMsg("unknownError")))
           })
      }
 

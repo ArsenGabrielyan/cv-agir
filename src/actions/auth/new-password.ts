@@ -7,7 +7,6 @@ import bcrypt from "bcryptjs"
 import { NewPasswordType } from "@/schemas/types"
 import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter"
 import { logAction } from "@/data/logs"
-import { ERROR_MESSAGES } from "@/lib/constants"
 import { getIpAddress } from "../ip"
 import { getTranslations } from "next-intl/server"
 
@@ -17,15 +16,16 @@ export const newPassword = async(
 ) => {
      const validationMsg = await getTranslations("validations");
      const currIp = await getIpAddress();
+     const errMsg = await getTranslations("error-messages");
      if(!token){
           await logAction({
                action: "PASSWORD_CHANGE_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.auth.noPassResetToken
+                    reason: errMsg("auth.noPassResetToken")
                }
           })
-          return {error: ERROR_MESSAGES.auth.noPassResetToken}
+          return {error: errMsg("auth.noPassResetToken")}
      }
 
      const validatedFields = getNewPasswordSchema(validationMsg).safeParse(values);
@@ -37,7 +37,7 @@ export const newPassword = async(
                     fields: validatedFields.error.issues.map(issue => issue.path[0]),
                }
           })
-          return {error: ERROR_MESSAGES.validationError}
+          return {error: errMsg("validationError")}
      }
      const limiterKey = `new-password:${await getIpAddress()}`;
      if(checkLimiter(limiterKey,5)){
@@ -48,7 +48,7 @@ export const newPassword = async(
                     route: limiterKey
                }
           })
-          return {error: ERROR_MESSAGES.rateLimitError}
+          return {error: errMsg("rateLimitError")}
      }
 
      const {password} = validatedFields.data
@@ -60,10 +60,10 @@ export const newPassword = async(
                action: "PASSWORD_CHANGE_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.auth.wrongPassResetToken
+                    reason: errMsg("auth.wrongPassResetToken")
                }
           })
-          return {error: ERROR_MESSAGES.auth.wrongPassResetToken}
+          return {error: errMsg("auth.wrongPassResetToken")}
      }
 
      const hasExpired = new Date(existingToken.expires) < new Date();
@@ -74,10 +74,10 @@ export const newPassword = async(
                metadata: {
                     email: existingToken.email,
                     ip: currIp,
-                    reason: ERROR_MESSAGES.auth.expiredPassResetToken
+                    reason: errMsg("auth.expiredPassResetToken")
                }
           })
-          return {error: ERROR_MESSAGES.auth.expiredPassResetToken}
+          return {error: errMsg("auth.expiredPassResetToken")}
      }
 
      const existingUser = await getUserByEmail(existingToken.email);
@@ -88,10 +88,10 @@ export const newPassword = async(
                metadata: {
                     email: existingToken.email,
                     ip: currIp,
-                    reason: ERROR_MESSAGES.auth.noUserFound
+                    reason: errMsg("auth.noUserFound")
                }
           })
-          return {error: ERROR_MESSAGES.auth.noUserFound}
+          return {error: errMsg("auth.noUserFound")}
      }
 
      const isSamePassword = await bcrypt.compare(password,existingUser.password);
@@ -103,10 +103,10 @@ export const newPassword = async(
                metadata: {
                     email: existingToken.email,
                     ip: currIp,
-                    reason: ERROR_MESSAGES.auth.wrongNewPassword
+                    reason: errMsg("auth.wrongNewPassword")
                }
           })
-          return {error: ERROR_MESSAGES.auth.wrongNewPassword}
+          return {error: errMsg("auth.wrongNewPassword")}
      }
 
      clearLimiter(limiterKey)

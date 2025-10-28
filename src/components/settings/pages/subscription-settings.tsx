@@ -25,7 +25,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import CreditCardItem from "../premium/cc-components/credit-card-item";
 import CreditCardModal from "@/components/settings/premium/cc-components/credit-card-modal";
 import { UpdateSession, useSession } from "next-auth/react";
-import { ERROR_MESSAGES } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 
 export default function SubscriptionSettings({subscriptions, isExpired}: SettingsContentProps){
      const {update} = useSession()
@@ -37,6 +37,7 @@ export default function SubscriptionSettings({subscriptions, isExpired}: Setting
      const [showCancelDialog, setShowCancelDialog] = useState(false);
      const isMobile = useIsMobile();
      const isCurrent = (subscription: Subscription) => !!currentSubsciption && JSON.stringify(currentSubsciption)===JSON.stringify(subscription);
+     const errMsg = useTranslations("error-messages")
      const handleRenewSub = () => {
           startTransition(()=>{
                if(!user || !user.id) return;
@@ -49,7 +50,7 @@ export default function SubscriptionSettings({subscriptions, isExpired}: Setting
                          update();
                     }
                })
-               .catch(()=>toast.error(ERROR_MESSAGES.unknownError))
+               .catch(()=>toast.error(errMsg("unknownError")))
           })
      }
      return (user && user.id) ? (
@@ -122,6 +123,7 @@ interface CancelSubDialogProps{
 }
 function CancelSubDialog({userId,open,onOpenChange,updateSession}: CancelSubDialogProps){
      const [isPending, startTransition] = useTransition();
+     const errMsg = useTranslations("error-messages")
      const handleCancel = () => {
           startTransition(()=>{
                cancelSubscription(userId)
@@ -134,7 +136,7 @@ function CancelSubDialog({userId,open,onOpenChange,updateSession}: CancelSubDial
                          onOpenChange(false);
                     }
                })
-               .catch(()=>toast.error(ERROR_MESSAGES.unknownError))
+               .catch(()=>toast.error(errMsg("unknownError")))
           })
      }
      return (

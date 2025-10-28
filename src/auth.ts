@@ -9,7 +9,7 @@ import { getSubscriptionById } from "@/data/subscription"
 import { CustomPrismaAdapter } from "@/lib/auth/prisma-adapter"
 import { getIpAddress } from "@/actions/ip"
 import { logAction } from "./data/logs"
-import { ERROR_MESSAGES } from "./lib/constants"
+import { getTranslations } from "next-intl/server"
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -58,7 +58,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         })
         return true;
       } 
-
+      const errMsg = await getTranslations("error-messages");
       const existingUser = await getUserById(user.id as string)
 
       // Prevent Sign In Without a Verification
@@ -69,7 +69,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           metadata: {
             email: user.email || "Անհայտ էլ․ հասցե",
             ip: currIp,
-            reason: ERROR_MESSAGES.auth.notVerified
+            reason: errMsg("auth.notVerified")
           }
         })
         return false
@@ -85,7 +85,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             metadata: {
               email: user.email || "Անհայտ էլ․ հասցե",
               ip: currIp,
-              reason: ERROR_MESSAGES.auth.failed2FA
+              reason: errMsg("auth.failed2FA")
             }
           })
           return false;

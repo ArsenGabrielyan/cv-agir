@@ -13,7 +13,6 @@ import { addCard, editCard } from "@/actions/subscription-system/credit-card";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { getBankName } from "@/lib/helpers/credit-cards";
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { useTranslations } from "next-intl";
 
 export default function CreditCardModal(){
@@ -22,6 +21,7 @@ export default function CreditCardModal(){
      const {open,setOpen,cardToEdit,index} = useCreditCardModal()
      const isEditing = cardToEdit && index!==-1;
      const validationMsg = useTranslations("validations");
+     const errMsg = useTranslations("error-messages")
      const form = useForm<CreditCardType>({
           resolver: zodResolver(getCreditCardSchema(validationMsg)),
           defaultValues: {
@@ -44,7 +44,7 @@ export default function CreditCardModal(){
                          form.reset();
                          setOpen(false);
                     }
-               }).catch(()=>toast.error(ERROR_MESSAGES.unknownError))
+               }).catch(()=>toast.error(errMsg("unknownError")))
           })
      }
      useEffect(()=>{

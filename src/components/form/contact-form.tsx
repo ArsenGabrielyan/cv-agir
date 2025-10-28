@@ -19,7 +19,6 @@ import { FormSuccess } from "./form-success";
 import { ContactFormType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
 import { getCaptchaToken } from "@/lib/captcha";
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { useTranslations } from "next-intl";
 
 export default function ContactForm(){
@@ -27,6 +26,7 @@ export default function ContactForm(){
      const [error, setError] = useState<string | undefined>("");
      const [success, setSuccess] = useState<string | undefined>("");
      const validationMsg = useTranslations("validations");
+     const errMsg = useTranslations("error-messages")
      const form = useForm<ContactFormType>({
           resolver: zodResolver(getContactSchema(validationMsg)),
           defaultValues: {
@@ -48,7 +48,7 @@ export default function ContactForm(){
                     setSuccess(data.success);
                } catch (error) {
                     console.error(error)
-                    setError(ERROR_MESSAGES.unknownError)
+                    setError(errMsg("unknownError"))
                }
           })
      }

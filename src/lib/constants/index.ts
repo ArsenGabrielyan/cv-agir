@@ -97,64 +97,6 @@ export const BANKS = [
      {name: "ameriabank", startNumber: "0830500", title: "Ameriabank"},
      {name: "ardshinbank", startNumber: "4543000", title: "Ardshinbank"},
 ]
-export const ERROR_MESSAGES = {
-     validationError: "Բոլոր դաշտերը վավեր չեն։",
-     rateLimitError: "Շատ հաճախ եք փորձում։ Խնդրում ենք փորձել ավելի ուշ։",
-     unknownError: "Վայ, մի բան սխալ տեղի ունեցավ։ Խնդրում ենք նորից փորձել",
-     settingsError: "Չհաջողվեց թարմացնել կարգավորումները։",
-     auth: {
-          noUserFound: "Այս էլ․ հասցեն գրանցված չէ։",
-          wrong2FAcode: "Վավերացման կոդը սխալ է։",
-          expired2FAcode: "Վավերացման կոդի ժամկետը անցել է։",
-          noPassResetToken: "Բացակայում է վերականգման token-ը։",
-          wrongPassResetToken: "Վերականգման token-ը գոյություն չունի կամ սխալ է։",
-          expiredPassResetToken: "Վերականգման token-ի ժամկետը անցել է։",
-          wrongNewPassword: "Նոր գաղտնաբառը չի կարող համընկնել հին գաղտնաբառի հետ։",
-          noVerificationToken: "Հաստատման token-ը գոյություն չունի կամ սխալ է։",
-          missingVerificationToken: "Բացակայում է հաստատման token-ը",
-          expiredVerificationToken: "Հաստատման token-ի ժամկետը անցել է։",
-          takenEmail: "Էլ․ հասցեն արդեն օգտագործված է։",
-          invalidEmail: "Էլ․ հասցեն վավեր չէ։",
-          wrongPassword: 'Գաղտնաբառը սխալ է։',
-          notVerified: "Այս էլ․ հասցեն հաստատված չէ",
-          failed2FA: "Երկաստիճան վավերացումը չստացվեց",
-          unauthorized: "Դուք նույնականացված չեք։ Խնդրում ենք մուտք գործել հաշվին։",
-          notSubscribed: "Դուք բաժանորդագրված չեք։ Խնդրում ենք բաժանորդագրվել մեր պրեմիում տարբերակին։",
-          noAdminAccess: "Այս հաշիվը մուտք գործված չէ կամ ադմինիստրատորի իրավունքները չունի։",
-     },
-     ai: {
-          answerError: "Չհաջողվեց գեներացնել պատասխանը Արհեստական Բանականության կողմից։",
-          invalidExperienceInput: "Աշխատանքային փորձի նկարագրությունը վավեր չէ։"
-     },
-     subscription: {
-          expiredCreditCard: "Քարտի ժամկետը պարտադիր է։",
-          noCreditCard: "Այսպիսի քարտ գոյություն չունի։",
-          invalidExpiryDate: "Ժամկետի ֆորմատը սխալ է։ Պետք է լինի MM/YY ֆորմատով։",
-          cantUseFeatures: "Այս հմտությունը օգտագործելու համար անցեք պրեմիում տարբերակի։",
-          noAccessToCoverLetter: "Անվճար բաժանորդագրության համար ուղեկցող նամակի հետ աշխատելը արգելված է։",
-          noCustomization: "Ամբողջական դիզայնի ձևափոխությունը այս բաժանորդագրությունում արգելված է",
-          limitedResumeCount: "Անվճար բաժանորդագրության համար առավելագույն ռեզյումեների քանակը սպառվել է",
-          invalidPlan: "Այսպիսի տարբերակ գոյություն չունի։"
-     },
-     contactForm: {
-          noCaptchaToken: "Token-ը չի գտնվել։",
-          failedCaptcha: "Կասկածելի ակտիվություն։ Captcha-ի ստուգումը չստացվեց։",
-     },
-     encryption: {
-          invalidForEncryption: "Մուտքագրեք վավերական տեքստ գաղտնագրելու համար։",
-          invalidForDecryption: "Մուտքագրեք վավերական տեքստ վերծանելու համար։",
-          missingParts: "Տեքստը վերծանելու համար ինչ-որ մաս բացակայում է։"
-     },
-     content: {
-          noCoverLetter: "Ուղեկցող նամակը չի գտնվել",
-          noResume: "Ռեզյումեն չի գտնվել",
-          failedImageDelete: "Չհաջողվեց ջնջել նկարը",
-          resumeSaveError: "Չհաջողվեց պահպանել ռեզյումեն",
-          coverLetterSaveError: "Չհաջողվեց պահպանել նամակը",
-          noCategory: "Այս կատեգորիան գոյություն չունի",
-          noTemplate: "Այս շաբլոնը գոյություն չունի"
-     }
-}
 
 export const SEARCH_KEYWORDS: AuditLogSearchType= {
      // Auth
@@ -245,4 +187,4 @@ export const AUDIT_FILTER_LABELS: Record<QuickFilterType, string> = {
 };
 
 export const DEFAULT_VIDEO_DIMENSION = 270;
-export const STEPS = [ "step1", "step2", "step3" ] as const
+export const STEPS = ["step1", "step2", "step3"] as const

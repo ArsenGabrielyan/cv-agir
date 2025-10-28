@@ -10,7 +10,6 @@ import { getAvailableFeatures } from "@/lib/permission"
 import { getCurrentResumeByUserId, getResumeCountByUserId } from "@/data/resumes"
 import { getIpAddress } from "@/actions/ip"
 import { logAction } from "@/data/logs"
-import { ERROR_MESSAGES } from "@/lib/constants"
 import { getTranslations } from "next-intl/server"
 
 export const saveResume = async(values: ResumeFormType,templateId?: string) => {
@@ -18,6 +17,7 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
      const currIp = await getIpAddress();
      const validationMsg = await getTranslations("validations");
      const validatedFields = getResumeFormSchema(validationMsg).safeParse(values);
+     const errMsg = await getTranslations("error-messages");
      if(!validatedFields.success){
           await logAction({
                action: "VALIDATION_ERROR",
@@ -25,7 +25,7 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
                     fields: validatedFields.error.issues.map(val=>val.path[0]),
                }
           })
-          throw new Error(ERROR_MESSAGES.validationError)
+          throw new Error(errMsg("validationError"))
      }
      const {profileImg, experience, education, courses, links, references, skills, languages, ...resumeValues} = validatedFields.data
 
@@ -38,7 +38,7 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
                     ip: currIp,
                }
           })
-          throw new Error(ERROR_MESSAGES.auth.unauthorized)
+          throw new Error(errMsg("auth.unauthorized"))
      }
 
      const subscriptionLevel = await getSubscriptionLevel(user.id);
@@ -52,10 +52,10 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
                     action: "ACTION_ERROR",
                     metadata: {
                          ip: currIp,
-                         reason: ERROR_MESSAGES.subscription.limitedResumeCount
+                         reason: errMsg("subscription.limitedResumeCount")
                     }
                })
-               throw new Error(ERROR_MESSAGES.subscription.limitedResumeCount)
+               throw new Error(errMsg("subscription.limitedResumeCount"))
           }
      }
 
@@ -67,10 +67,10 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.content.noResume
+                    reason: errMsg("content.noResume")
                }
           })
-          throw new Error(ERROR_MESSAGES.content.noResume)
+          throw new Error(errMsg("content.noResume"))
      }
 
      const hasCustomizations = (resumeValues.borderStyle && resumeValues.borderStyle!==existingResume?.borderStyle) || (resumeValues.colorHex && resumeValues.colorHex !== existingResume?.colorHex);
@@ -83,10 +83,10 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.subscription.noCustomization
+                    reason: errMsg("subscription.noCustomization")
                }
           })
-          throw new Error(ERROR_MESSAGES.subscription.noCustomization)
+          throw new Error(errMsg("subscription.noCustomization"))
      }
 
      let newImgUrl: string | undefined | null = undefined;

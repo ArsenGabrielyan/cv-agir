@@ -6,11 +6,12 @@ import { db } from "@/lib/db";
 import { getIpAddress } from "@/actions/ip";
 import { del } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
-import {ERROR_MESSAGES} from "@/lib/constants"
+import { getTranslations } from "next-intl/server";
 
 export const deleteResume = async (id: string) => {
      const currIp = await getIpAddress()
      const user = await currentUser();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -18,7 +19,7 @@ export const deleteResume = async (id: string) => {
                     ip: currIp,
                }
           })
-          throw new Error(ERROR_MESSAGES.auth.unauthorized)
+          throw new Error(errMsg("auth.unauthorized"))
      }
      const resume = await getCurrentResumeByUserId(user.id,id);
      if(!resume){
@@ -27,10 +28,10 @@ export const deleteResume = async (id: string) => {
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.content.noResume
+                    reason: errMsg("content.noResume")
                }
           })
-          throw new Error(ERROR_MESSAGES.content.noResume)
+          throw new Error(errMsg("content.noResume"))
      }
      if(resume.profileImg){
           try{
@@ -42,7 +43,7 @@ export const deleteResume = async (id: string) => {
                     action: "ACTION_ERROR",
                     metadata: {
                          ip: currIp,
-                         reason: ERROR_MESSAGES.content.failedImageDelete
+                         reason: errMsg("content.failedImageDelete")
                     }
                })
           }

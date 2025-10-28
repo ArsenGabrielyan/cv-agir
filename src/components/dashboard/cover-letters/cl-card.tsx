@@ -14,7 +14,7 @@ import { formatDate } from "date-fns";
 import { hy } from "date-fns/locale";
 import DocPreviewLoader from "@/components/loaders/doc-preview";
 import usePrint from "@/hooks/use-print";
-import { ERROR_MESSAGES } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 
 interface CoverLetterCardProps{
      data: CoverLetter
@@ -115,6 +115,7 @@ interface DeleteCoverLetterDialogProps{
 }
 function DeleteCoverLetterDialog({coverLetterId,open,onOpenChange}: DeleteCoverLetterDialogProps){
      const [isPending, startTransition] = useTransition();
+     const errMsg = useTranslations("error-messages")
 
      const handleDelete = async() => {
           startTransition(async()=>{
@@ -123,7 +124,7 @@ function DeleteCoverLetterDialog({coverLetterId,open,onOpenChange}: DeleteCoverL
                     onOpenChange(false);
                } catch (error) {
                     console.error(error);
-                    toast.error(ERROR_MESSAGES.unknownError)
+                    toast.error(errMsg("unknownError"))
                }
           })
      }

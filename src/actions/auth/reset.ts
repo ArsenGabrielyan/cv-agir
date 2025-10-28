@@ -6,7 +6,6 @@ import { generatePasswordResetToken } from "@/lib/tokens"
 import { ResetPassType } from "@/schemas/types"
 import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter"
 import { logAction } from "@/data/logs"
-import { ERROR_MESSAGES } from "@/lib/constants"
 import { getIpAddress } from "../ip"
 import { getTranslations } from "next-intl/server"
 
@@ -14,7 +13,7 @@ export const reset = async (values: ResetPassType) => {
      const currIp = await getIpAddress();
      const validationMsg = await getTranslations("validations");
      const validatedFields = getResetSchema(validationMsg).safeParse(values);
-
+     const errMsg = await getTranslations("error-messages");
      if(!validatedFields.success){
           await logAction({
                action: "VALIDATION_ERROR",
@@ -22,7 +21,7 @@ export const reset = async (values: ResetPassType) => {
                     fields: validatedFields.error.issues.map(issue => issue.path[0]),
                }
           })
-          return {error: ERROR_MESSAGES.auth.invalidEmail}
+          return {error: errMsg("auth.invalidEmail")}
      }
      const {email} = validatedFields.data;
      const limiterKey = `reset:${email}`
@@ -35,7 +34,7 @@ export const reset = async (values: ResetPassType) => {
                     route: limiterKey
                }
           })
-          return {error: ERROR_MESSAGES.rateLimitError}
+          return {error: errMsg("rateLimitError")}
      }
 
      const existingUser = await getUserByEmail(email);
@@ -46,10 +45,10 @@ export const reset = async (values: ResetPassType) => {
                metadata: {
                     ip: currIp,
                     email,
-                    reason: ERROR_MESSAGES.auth.noUserFound
+                    reason: errMsg("auth.noUserFound")
                }
           })
-          return {error: ERROR_MESSAGES.auth.noUserFound}
+          return {error: errMsg("auth.noUserFound")}
      }
 
      clearLimiter(limiterKey)

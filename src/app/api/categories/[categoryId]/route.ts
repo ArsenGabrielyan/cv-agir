@@ -3,15 +3,16 @@ import { currentUser, getIsAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { logAction } from "@/data/logs";
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { getIpAddress } from "@/actions/ip";
 import { ResumeTemplateCategory } from "@db";
 import { withAuth } from "@/lib/auth/api";
+import { getTranslations } from "next-intl/server";
 
 export const GET = withAuth<{params: Promise<{categoryId: string}>}>(async(req, {params}) => {
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -20,7 +21,7 @@ export const GET = withAuth<{params: Promise<{categoryId: string}>}>(async(req, 
                     route: req.url
                }
           })
-          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
+          return new NextResponse(errMsg("auth.unauthorized"),{ status: 401 })
      }
      if(!isAdmin){
           await logAction({
@@ -32,7 +33,7 @@ export const GET = withAuth<{params: Promise<{categoryId: string}>}>(async(req, 
                     method: req.method,
                }
           })
-          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
+          return new NextResponse(errMsg("auth.noAdminAccess"),{ status: 401 })
      }
      const {categoryId} = await params
      const data = await getResumeTemplateCategoryById(categoryId)
@@ -43,6 +44,7 @@ export const PUT = withAuth<{params: Promise<{categoryId: string}>}>(async(req, 
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -51,7 +53,7 @@ export const PUT = withAuth<{params: Promise<{categoryId: string}>}>(async(req, 
                     route: req.url
                }
           })
-          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
+          return new NextResponse(errMsg("auth.unauthorized"),{ status: 401 })
      }
      if(!isAdmin){
           await logAction({
@@ -63,7 +65,7 @@ export const PUT = withAuth<{params: Promise<{categoryId: string}>}>(async(req, 
                     method: req.method,
                }
           })
-          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
+          return new NextResponse(errMsg("auth.noAdminAccess"),{ status: 401 })
      }
      const {categoryId} = await params
      const {name}: ResumeTemplateCategory = await req.json()
@@ -87,6 +89,7 @@ export const DELETE = withAuth<{params: Promise<{categoryId: string}>}>(async(re
      const isAdmin = await getIsAdmin();
      const ip = await getIpAddress();
      const user = await currentUser();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -95,7 +98,7 @@ export const DELETE = withAuth<{params: Promise<{categoryId: string}>}>(async(re
                     route: req.url
                }
           })
-          return new NextResponse(ERROR_MESSAGES.auth.unauthorized,{ status: 401 })
+          return new NextResponse(errMsg("auth.unauthorized"),{ status: 401 })
      }
      if(!isAdmin){
           await logAction({
@@ -107,7 +110,7 @@ export const DELETE = withAuth<{params: Promise<{categoryId: string}>}>(async(re
                     method: req.method,
                }
           })
-          return new NextResponse(ERROR_MESSAGES.auth.noAdminAccess,{ status: 401 })
+          return new NextResponse(errMsg("auth.noAdminAccess"),{ status: 401 })
      }
      const {categoryId} = await params;
      const currCategory = await getResumeTemplateCategoryById(categoryId);
@@ -117,10 +120,10 @@ export const DELETE = withAuth<{params: Promise<{categoryId: string}>}>(async(re
                action: "ACTION_ERROR",
                metadata: {
                     ip,
-                    reason: ERROR_MESSAGES.content.noCategory,
+                    reason: errMsg("content.noCategory"),
                }
           })
-          return new NextResponse(ERROR_MESSAGES.content.noCategory,{ status: 404 })
+          return new NextResponse(errMsg("content.noCategory"),{ status: 404 })
      }
      const data = await db.resumeTemplateCategory.delete({
           where: {

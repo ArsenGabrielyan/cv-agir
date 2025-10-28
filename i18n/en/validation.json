@@ -76,5 +76,64 @@
           "num-shouldBe-int": "Number must be an integer",
           "2fa-code-tooLong": "Code is too long",
           "text-too-long": "This text is too long"
+     },
+     "error-messages": {
+          "validationError": "All fields are invalid",
+          "rateLimitError": "You are trying too often. Please try again later",
+          "unknownError": "Oops, something went wrong. Please try again",
+          "settingsError": "Failed to update settings",
+          "auth": {
+               "noUserFound": "This email address is not registered",
+               "wrong2FAcode": "Invalid 2FA code",
+               "expired2FAcode": "2FA code has been expired",
+               "noPassResetToken": "Recovery token is missing",
+               "wrongPassResetToken": "Recovery token does not exist or is invalid",
+               "expiredPassResetToken": "Recovery token has been expired",
+               "wrongNewPassword": "New password cannot match old password",
+               "noVerificationToken": "Verification token does not exist or is invalid",
+               "missingVerificationToken": "Missing verification token",
+               "expiredVerificationToken": "Verification token expired",
+               "takenEmail": "Email address already taken",
+               "invalidEmail": "Email address is not valid",
+               "wrongPassword": "Incorrect password",
+               "notVerified": "This email address is not verified",
+               "failed2FA": "Two-factor authentication failed",
+               "unauthorized": "You are not authenticated. Please log in to your account",
+               "notSubscribed": "You are not subscribed. Please subscribe to our premium plan",
+               "noAdminAccess": "This account is not logged in or does not have administrator permissions"
+          },
+          "ai": {
+               "answerError": "Failed to generate answer by AI",
+               "invalidExperienceInput": "Invalid experience description"
+          },
+          "subscription": {
+               "expiredCreditCard": "Card expiration date is required",
+               "noCreditCard": "There is no such card",
+               "invalidExpiryDate": "Invalid expiration date format. Must be in MM/YY format",
+               "cantUseFeatures": "To use this feature, upgrade to premium",
+               "noAccessToCoverLetter": "Cover letter access is disabled for free users",
+               "noCustomization": "Full customization is disabled for free users",
+               "limitedResumeCount": "Maximum number of resumes for free users has been reached",
+               "invalidPlan": "This plan doesn't exist",
+               "invalidDate": "The Date input isn't valid"
+          },
+          "contactForm": {
+               "noCaptchaToken": "Token not found",
+               "failedCaptcha": "Suspicious activity! Captcha verification failed"
+          },
+          "encryption": {
+               "invalidForEncryption": "Enter valid text to encrypt",
+               "invalidForDecryption": "Enter valid text to decrypt",
+               "missingParts": "Some part is missing to decrypt the text"
+          },
+          "content": {
+               "noCoverLetter": "Cover letter not found",
+               "noResume": "Resume not found",
+               "failedImageDelete": "Failed to delete image",
+               "resumeSaveError": "Failed to save resume",
+               "coverLetterSaveError": "Failed to save the cover letter",
+               "noCategory": "This category does not exist",
+               "noTemplate": "This template does not exist"
+          }
      }
 }

@@ -16,7 +16,7 @@ import DeleteConfirmationDialog from "../../delete-confirmation-dialog"
 import dynamic from "next/dynamic"
 import DocPreviewLoader from "@/components/loaders/doc-preview"
 import usePrint from "@/hooks/use-print"
-import { ERROR_MESSAGES } from "@/lib/constants"
+import { useTranslations } from "next-intl"
 
 interface ResumeCardProps{
      data: ResumeServerData
@@ -132,6 +132,7 @@ interface DeleteResumeDialogProps{
 }
 function DeleteResumeDialog({resumeId,open,onOpenChange}: DeleteResumeDialogProps){
      const [isPending, startTransition] = useTransition();
+     const errMsg = useTranslations("error-messages")
 
      const handleDelete = async() => {
           startTransition(async()=>{
@@ -140,7 +141,7 @@ function DeleteResumeDialog({resumeId,open,onOpenChange}: DeleteResumeDialogProp
                     onOpenChange(false);
                } catch (error) {
                     console.error(error);
-                    toast.error(ERROR_MESSAGES.unknownError)
+                    toast.error(errMsg("unknownError"))
                }
           })
      }

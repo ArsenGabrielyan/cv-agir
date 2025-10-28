@@ -1,10 +1,10 @@
 import { db } from "@/lib/db";
 import { SettingsType } from "../schemas/types";
 import { clearLimiter, incrementLimiter } from "@/lib/limiter";
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "./logs";
 import { getIpAddress } from "@/actions/ip";
 import { userInclude } from "@/lib/types";
+import { getTranslations } from "next-intl/server";
 
 export const getUserByEmail = async (email: string) => {
      try{
@@ -31,6 +31,7 @@ export const getUserById = async (id: string) => {
 }
 
 export const updateUser = async(userId: string, values: SettingsType, limiterKey: string, successMsg = "Կարգավորումները թարմացված են") => {
+     const errMsg = await getTranslations("error-messages");
      try {
           const {showAddress,showEmail,showPhone,showLinks,...rest} = values
           clearLimiter(limiterKey)
@@ -65,9 +66,9 @@ export const updateUser = async(userId: string, values: SettingsType, limiterKey
                action: "ACTION_ERROR",
                metadata: {
                     ip: await getIpAddress(),
-                    reason: ERROR_MESSAGES.settingsError
+                    reason: errMsg("settingsError")
                }
           })
-          return {error: ERROR_MESSAGES.settingsError}
+          return {error: errMsg("settingsError")}
      }
 }

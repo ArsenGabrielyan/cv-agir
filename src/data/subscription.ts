@@ -1,8 +1,8 @@
 import { db } from "@/lib/db"
 import { getUserById } from "./user"
-import { ERROR_MESSAGES } from "@/lib/constants"
 import { logAction } from "./logs"
 import { getIpAddress } from "@/actions/ip"
+import { getTranslations } from "next-intl/server"
 
 export const getSubscriptionById = async(id: string) => {
      try{
@@ -42,12 +42,13 @@ export const getCurrentSubscription = async(userId: string,subscriptionId: strin
 
 export const getIsSubscriptionExpired = async(userId: string) => {
      const user = await getUserById(userId);
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
                metadata: { ip: await getIpAddress() }
           })
-          throw new Error(ERROR_MESSAGES.auth.unauthorized)
+          throw new Error(errMsg("auth.unauthorized"))
      }
      const subscription = user.subscriptionId ? await getCurrentSubscription(user.id,user.subscriptionId) : null
      return !!subscription && new Date(subscription.endDate) < new Date()

@@ -22,7 +22,6 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import { LoginType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
 import {REGEXP_ONLY_DIGITS} from "input-otp"
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { PasswordInput } from "../form/password-input";
 import { useTranslations } from "next-intl";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
@@ -52,6 +51,7 @@ export default function LoginForm(){
                password: ""
           }
      });
+     const errMsg = useTranslations("error-messages")
      const handleSubmit = (values: LoginType) => {
           setError("");
           setSuccess("");
@@ -71,7 +71,7 @@ export default function LoginForm(){
                })
                .catch((error)=>{
                     console.error(error)
-                    setError(ERROR_MESSAGES.unknownError)
+                    setError(errMsg("unknownError"))
                })
           })
      }

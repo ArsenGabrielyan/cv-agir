@@ -5,9 +5,9 @@ import usePremiumModal from "@/hooks/use-premium-modal";
 import { getAvailableFeatures } from "@/lib/permission";
 import { CoverLetterFormType } from "@/schemas/types";
 import { Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ERROR_MESSAGES } from "@/lib/constants";
 
 interface GenerateLetterBodyButtonProps{
      coverLetterData: CoverLetterFormType,
@@ -19,6 +19,7 @@ export default function GenerateLetterBodyButton({coverLetterData, onBodyGenerat
      const premiumModal = usePremiumModal();
      const {canUseAITools} = getAvailableFeatures(subscriptionMethod)
      const [loading, setLoading] = useState(false);
+     const errMsg = useTranslations("error-messages")
 
      const handleClick = async()=>{
           if(!canUseAITools){
@@ -31,7 +32,7 @@ export default function GenerateLetterBodyButton({coverLetterData, onBodyGenerat
                onBodyGenerated(aiResponse);
           } catch (error){
                console.error(error);
-               toast.error(ERROR_MESSAGES.unknownError)
+               toast.error(errMsg("unknownError"))
           } finally{
                setLoading(false)
           }

@@ -10,7 +10,6 @@ import { SubscriptionPeriod, UserPlan } from "@db";
 import { revalidatePath } from "next/cache";
 import { upsertCard } from "./credit-card";
 import {cache} from "react"
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { getIpAddress } from "@/actions/ip";
 import { logAction } from "@/data/logs";
 import { getTranslations } from "next-intl/server";
@@ -18,6 +17,7 @@ import { getTranslations } from "next-intl/server";
 export const proceedToCheckout = async(values: CheckoutFormType, period: SubscriptionPeriod, price: number, plan: UserPlan) => {
      const currIp = await getIpAddress();
      const user = await currentUser();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -25,7 +25,7 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
                     ip: currIp,
                }
           })
-          return {error: ERROR_MESSAGES.auth.unauthorized}
+          return {error: errMsg("auth.unauthorized")}
      }
      const validationMsg = await getTranslations("validations");
      const validatedFields = getCheckoutFormSchema(validationMsg).safeParse(values);
@@ -36,7 +36,7 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
                     fields: validatedFields.error.issues.map(val=>val.path[0]),
                }
           })
-          return {error: ERROR_MESSAGES.validationError}
+          return {error: errMsg("validationError")}
      }
      const {email, cardNumber, expiryDate, cvv, cardName, city} = validatedFields.data;
      const existingUser = await db.user.findFirst({
@@ -50,12 +50,12 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.auth.noUserFound
+                    reason: errMsg("auth.noUserFound")
                }
           })
-          return {error: ERROR_MESSAGES.auth.noUserFound}
+          return {error: errMsg("auth.noUserFound")}
      }
-     const expires = parseExpiryDate(expiryDate);
+     const expires = parseExpiryDate(expiryDate,errMsg);
      if(expires.error){
           await logAction({
                userId: existingUser.id,
@@ -121,15 +121,16 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
           action: "ACTION_ERROR",
           metadata: {
                ip: currIp,
-               reason: ERROR_MESSAGES.subscription.expiredCreditCard
+               reason: errMsg("subscription.expiredCreditCard")
           }
      })
-     return {error: ERROR_MESSAGES.subscription.expiredCreditCard}
+     return {error: errMsg("subscription.expiredCreditCard")}
 }
 
 export const getSubscriptionLevel = cache(async(userId: string): Promise<UserPlan> => {
      const user = await getUserById(userId);
      const currIp = await getIpAddress();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -137,7 +138,7 @@ export const getSubscriptionLevel = cache(async(userId: string): Promise<UserPla
                     ip: currIp,
                }
           })
-          throw new Error(ERROR_MESSAGES.auth.unauthorized)
+          throw new Error(errMsg("auth.unauthorized"))
      }
      if(!user.currentPlan){
           await logAction({
@@ -145,10 +146,10 @@ export const getSubscriptionLevel = cache(async(userId: string): Promise<UserPla
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.subscription.invalidPlan
+                    reason: errMsg("subscription.invalidPlan")
                }
           })
-          throw new Error(ERROR_MESSAGES.subscription.invalidPlan)
+          throw new Error(errMsg("subscription.invalidPlan"))
      }
      const subscription = user.subscriptionId ? await getCurrentSubscription(user.id,user.subscriptionId) : null
      if(!subscription){
@@ -161,6 +162,7 @@ export const getSubscriptionLevel = cache(async(userId: string): Promise<UserPla
 export const cancelSubscription = async(userId: string) => {
      const user = await getUserById(userId);
      const currIp = await getIpAddress();
+     const errMsg = await getTranslations("error-messages");
      if(!user){
           await logAction({
                action: "UNAUTHORIZED",
@@ -168,7 +170,7 @@ export const cancelSubscription = async(userId: string) => {
                     ip: currIp,
                }
           })
-          return {error: ERROR_MESSAGES.auth.unauthorized}
+          return {error: errMsg("auth.unauthorized")}
      }
      const subscription = user.subscriptionId ? await getSubscriptionById(user.subscriptionId) : null
      if(!subscription){
@@ -177,10 +179,10 @@ export const cancelSubscription = async(userId: string) => {
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.auth.notSubscribed
+                    reason: errMsg("auth.notSubscribed")
                }
           })
-          return {error: ERROR_MESSAGES.auth.notSubscribed}
+          return {error: errMsg("auth.notSubscribed")}
      }
      await db.subscription.deleteMany({
           where: {
@@ -206,6 +208,7 @@ export const cancelSubscription = async(userId: string) => {
 export const renewSubscription = async(userId: string) => {
      const user = await getUserById(userId);
      const currIp = await getIpAddress();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -213,7 +216,7 @@ export const renewSubscription = async(userId: string) => {
                     ip: currIp
                }
           })
-          return {error: ERROR_MESSAGES.auth.unauthorized}
+          return {error: errMsg("auth.unauthorized")}
      }
      const subscription = user.subscriptionId ? await getSubscriptionById(user.subscriptionId) : null
      if(!subscription){
@@ -222,10 +225,10 @@ export const renewSubscription = async(userId: string) => {
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.auth.notSubscribed
+                    reason: errMsg("auth.notSubscribed")
                }
           })
-          return {error: ERROR_MESSAGES.auth.notSubscribed}
+          return {error: errMsg("auth.notSubscribed")}
      }
      const endDate = new Date();
      if(subscription.period==="monthly"){

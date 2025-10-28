@@ -1,4 +1,5 @@
-import {BANKS, CREDIT_CARD_BRANDS, ERROR_MESSAGES} from "@/lib/constants"
+import {BANKS, CREDIT_CARD_BRANDS} from "@/lib/constants"
+import { useTranslations } from "next-intl";
 
 export const isValidCard = (card: string) => {
      let s = 0, isSecond = false
@@ -14,17 +15,17 @@ export const isValidCard = (card: string) => {
      return s%10===0;
 }
 
-export const parseExpiryDate = (date: string) : {
+export const parseExpiryDate = (date: string, t: ReturnType<typeof useTranslations<"error-messages">>) : {
      error?: string,
      date?: Date
 } => {
      const parts = date.split("/").map(val=>+val)
      if(parts.length!==2){
-          return {error: ERROR_MESSAGES.subscription.invalidExpiryDate}
+          return {error: t("subscription.invalidExpiryDate")}
      }
      const [month, year] = parts;
      if (isNaN(month) || isNaN(year) || month < 1 || month > 12) {
-          throw new Error('Տարեթիվը և ամիսը վավեր չեն');
+          throw new Error(t("subscription.invalidDate"));
      }
      const fullYear = year <= 50 ? 2000 + year : 1900 + year;
 

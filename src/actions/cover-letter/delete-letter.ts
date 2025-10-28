@@ -1,5 +1,4 @@
 "use server"
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { getCurrentCoverLetterByUserId } from "@/data/cover-letters";
 import { logAction } from "@/data/logs";
 import { currentUser } from "@/lib/auth"
@@ -7,10 +6,12 @@ import { db } from "@/lib/db";
 import { getIpAddress } from "@/actions/ip";
 import { del } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 
 export const deleteCoverLetter = async (id: string) => {
      const user = await currentUser();
      const currIp = await getIpAddress();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -18,7 +19,7 @@ export const deleteCoverLetter = async (id: string) => {
                     ip: currIp,
                }
           })
-          throw new Error(ERROR_MESSAGES.auth.unauthorized)
+          throw new Error(errMsg("auth.unauthorized"))
      }
      const coverLetter = await getCurrentCoverLetterByUserId(user.id,id);
      if(!coverLetter){
@@ -27,10 +28,10 @@ export const deleteCoverLetter = async (id: string) => {
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.content.noCoverLetter
+                    reason: errMsg("content.noCoverLetter")
                }
           })
-          throw new Error(ERROR_MESSAGES.content.noCoverLetter)
+          throw new Error(errMsg("content.noCoverLetter"))
      }
      if(coverLetter.profileImg){
           try{
@@ -42,7 +43,7 @@ export const deleteCoverLetter = async (id: string) => {
                     action: "ACTION_ERROR",
                     metadata: {
                          ip: currIp,
-                         reason: ERROR_MESSAGES.content.failedImageDelete
+                         reason: errMsg("content.failedImageDelete")
                     }
                })
           }

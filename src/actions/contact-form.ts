@@ -4,22 +4,22 @@ import { getContactSchema } from "@/schemas"
 import { ContactFormType } from "@/schemas/types";
 import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter";
 import { verifyCaptchaToken } from "@/lib/captcha";
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "@/data/logs";
 import { getIpAddress } from "./ip"
 import { getTranslations } from "next-intl/server";
 
 export const submitContactForm = async (token: string,values: ContactFormType) => {
      const ip = await getIpAddress();
+     const errMsg = await getTranslations("error-messages");
      if(!token){
           await logAction({
                action: "CONTACT_FORM_SUBMISSION_ERROR",
                metadata: {
                     ip,
-                    reason: ERROR_MESSAGES.contactForm.noCaptchaToken
+                    reason: errMsg("contactForm.noCaptchaToken")
                }
           })
-          return {error: ERROR_MESSAGES.contactForm.noCaptchaToken}
+          return {error: errMsg("contactForm.noCaptchaToken")}
      }
      const validationMsg = await getTranslations("validations");
      const validatedFields = getContactSchema(validationMsg).safeParse(values);
@@ -31,7 +31,7 @@ export const submitContactForm = async (token: string,values: ContactFormType) =
                     fields: validatedFields.error.issues.map(val=>val.path[0]),
                }
           })
-          return {error: ERROR_MESSAGES.validationError}
+          return {error: errMsg("validationError")}
      }
 
      const {name,email,phone,subject,message} = validatedFields.data;
@@ -48,7 +48,7 @@ export const submitContactForm = async (token: string,values: ContactFormType) =
                     reasons: verificationResult?.["error-codes"],
                }
           })
-          return {error: ERROR_MESSAGES.contactForm.failedCaptcha}
+          return {error: errMsg("contactForm.failedCaptcha")}
      }
 
      if(checkLimiter(limiterKey,3)){
@@ -59,7 +59,7 @@ export const submitContactForm = async (token: string,values: ContactFormType) =
                     route: limiterKey
                }
           })
-          return {error: ERROR_MESSAGES.rateLimitError}
+          return {error: errMsg("rateLimitError")}
      }
 
      try{
@@ -78,10 +78,10 @@ export const submitContactForm = async (token: string,values: ContactFormType) =
                action: "CONTACT_FORM_SUBMISSION_ERROR",
                metadata: {
                     ip,
-                    reason: ERROR_MESSAGES.unknownError
+                    reason: errMsg("unknownError")
                }
           })
           incrementLimiter(limiterKey,60_000)
-          return {error: ERROR_MESSAGES.unknownError}
+          return {error: errMsg("unknownError")}
      }
 }

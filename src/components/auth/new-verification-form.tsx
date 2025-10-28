@@ -6,7 +6,6 @@ import { useCallback, useEffect, useState } from "react"
 import { newVerification } from "@/actions/auth/new-verification"
 import { FormError } from "@/components/form/form-error"
 import { FormSuccess } from "@/components/form/form-success"
-import { ERROR_MESSAGES } from "@/lib/constants"
 import { useTranslations } from "next-intl"
 
 export const NewVerificationForm = () => {
@@ -15,11 +14,12 @@ export const NewVerificationForm = () => {
 
      const searchParams = useSearchParams();
      const token = searchParams.get("token");
+     const errMsg = useTranslations("error-messages")
      
      const onSubmit = useCallback(()=>{
           if(success || error) return;
           if(!token) {
-               setError(ERROR_MESSAGES.auth.missingVerificationToken);
+               setError(errMsg("auth.missingVerificationToken"));
                return;
           }
           newVerification(token)
@@ -27,8 +27,8 @@ export const NewVerificationForm = () => {
                setSuccess(data.success);
                setError(data.error)
           })
-          .catch(()=>setError(ERROR_MESSAGES.unknownError))
-     },[token, success, error])
+          .catch(()=>setError(errMsg("unknownError")))
+     },[token, success, error, errMsg])
 
      useEffect(()=>{
           onSubmit()

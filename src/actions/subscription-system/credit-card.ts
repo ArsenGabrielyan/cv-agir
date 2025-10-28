@@ -6,7 +6,6 @@ import { decryptData, encryptData } from "@/actions/encryption";
 import { getCreditCardSchema } from "@/schemas"
 import { CreditCardType } from "@/schemas/types"
 import { CreditCard } from "@db";
-import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "@/data/logs";
 import { getIpAddress } from "@/actions/ip";
 import { getTranslations } from "next-intl/server";
@@ -51,6 +50,7 @@ export const addCard = async(values: CreditCardType) => {
      const currIp = await getIpAddress();
      const validationMsg = await getTranslations("validations");
      const validatedFields = getCreditCardSchema(validationMsg).safeParse(values);
+     const errMsg = await getTranslations("error-messages");
      if(!validatedFields.success){
           await logAction({
                action: "VALIDATION_ERROR",
@@ -58,7 +58,7 @@ export const addCard = async(values: CreditCardType) => {
                     fields: validatedFields.error.issues.map(val=>val.path[0]),
                }
           })
-          return {error: ERROR_MESSAGES.validationError}
+          return {error: errMsg("validationError")}
      }
      const {expiryDate, cardNumber} = validatedFields.data
      const user = await currentUser();
@@ -69,9 +69,9 @@ export const addCard = async(values: CreditCardType) => {
                     ip: currIp,
                }
           })
-          return {error: ERROR_MESSAGES.auth.unauthorized}
+          return {error: errMsg("auth.unauthorized")}
      }
-     const expires = parseExpiryDate(expiryDate);
+     const expires = parseExpiryDate(expiryDate,errMsg);
      if(expires.error){
           await logAction({
                userId: user.id,
@@ -107,6 +107,7 @@ export const editCard = async (values: CreditCardType, index: number) => {
      const currIp = await getIpAddress();
      const validationMsg = await getTranslations("validations");
      const validatedFields = getCreditCardSchema(validationMsg).safeParse(values);
+     const errMsg = await getTranslations("error-messages");
      if(!validatedFields.success){
           await logAction({
                action: "VALIDATION_ERROR",
@@ -114,7 +115,7 @@ export const editCard = async (values: CreditCardType, index: number) => {
                     fields: validatedFields.error.issues.map(val=>val.path[0]),
                }
           })
-          return {error: ERROR_MESSAGES.validationError}
+          return {error: errMsg("validationError")}
      }
      const {cardName,cardNumber,city,cvv,expiryDate} = validatedFields.data
      const user = await currentUser();
@@ -125,9 +126,9 @@ export const editCard = async (values: CreditCardType, index: number) => {
                     ip: currIp,
                }
           })
-          return {error: ERROR_MESSAGES.auth.unauthorized}
+          return {error: errMsg("auth.unauthorized")}
      }
-     const expires = parseExpiryDate(expiryDate);
+     const expires = parseExpiryDate(expiryDate,errMsg);
      if(expires.error){
           await logAction({
                userId: user.id,
@@ -170,6 +171,7 @@ export const editCard = async (values: CreditCardType, index: number) => {
 export const deleteCard = async(index: number) => {
      const user = await currentUser();
      const currIp = await getIpAddress();
+     const errMsg = await getTranslations("error-messages");
      if(!user || !user.id){
           await logAction({
                action: "UNAUTHORIZED",
@@ -177,7 +179,7 @@ export const deleteCard = async(index: number) => {
                     ip: currIp,
                }
           })
-          return {error: ERROR_MESSAGES.auth.unauthorized}
+          return {error: errMsg("auth.unauthorized")}
      }
      const creditCard = await db.user.findUnique({
           where: {
@@ -193,10 +195,10 @@ export const deleteCard = async(index: number) => {
                action: "ACTION_ERROR",
                metadata: {
                     ip: currIp,
-                    reason: ERROR_MESSAGES.subscription.noCreditCard
+                    reason: errMsg("subscription.noCreditCard")
                }
           })
-          return {error: ERROR_MESSAGES.subscription.noCreditCard}
+          return {error: errMsg("subscription.noCreditCard")}
      }
      const creditCards = creditCard.creditCards.filter((_,i)=>i!==index);
      await db.creditCard.updateMany({

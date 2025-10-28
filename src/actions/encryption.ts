@@ -1,14 +1,15 @@
 "use server"
 import crypto from "crypto"
 import { env } from "@/lib/env"
-import {ERROR_MESSAGES} from "@/lib/constants"
+import { getTranslations } from "next-intl/server"
 
 const secretKey = env.AES_SECRET
 
 const key = crypto.createHash("sha256").update(secretKey).digest()
 
 export async function encryptData<T extends string>(data: T){
-     if (typeof data !== "string") throw new Error(ERROR_MESSAGES.encryption.invalidForEncryption);
+     const errMsg = await getTranslations("error-messages");
+     if (typeof data !== "string") throw new Error(errMsg("encryption.invalidForEncryption"));
      if (!data) return "";
      const iv = crypto.randomBytes(12);
      const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
@@ -20,12 +21,13 @@ export async function encryptData<T extends string>(data: T){
 }
 
 export async function decryptData<T extends string>(data: T){
+     const errMsg = await getTranslations("error-messages");
      if (typeof data !== "string") {
-          throw new Error(ERROR_MESSAGES.encryption.invalidForDecryption);
+          throw new Error(errMsg("encryption.invalidForDecryption"));
      }
      if (!data) return "";
      const [ivHex, authTagHex, encryptedHex] = data.split(":");
-     if (!ivHex || !authTagHex || !encryptedHex) throw new Error(ERROR_MESSAGES.encryption.missingParts);
+     if (!ivHex || !authTagHex || !encryptedHex) throw new Error(errMsg("encryption.missingParts"));
 
      const iv = Buffer.from(ivHex, "hex");
      const authTag = Buffer.from(authTagHex, "hex");
