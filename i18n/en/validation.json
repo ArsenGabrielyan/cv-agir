@@ -44,7 +44,7 @@
                "tooLong": "Subject is too long"
           },
           "message": {
-          "    required": "Message must be at least 5 characters",
+               "required": "Message must be at least 5 characters",
                "tooLong": "Message is too long"
           },
           "items": {
@@ -129,7 +129,7 @@
           "contactForm": {
                "noCaptchaToken": "Token not found",
                "failedCaptcha": "Suspicious activity! Captcha verification failed",
-               "no-captcha-server": "ReCaptcha is not installed on the server.",
+               "no-captcha-server": "ReCaptcha is not found on the server.",
                "no-captcha": "ReCaptcha is not installed"
           },
           "encryption": {

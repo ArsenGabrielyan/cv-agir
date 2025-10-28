@@ -3,6 +3,7 @@ import hyCommon from "../../i18n/hy/common.json"
 import hyForm from "../../i18n/hy/form.json"
 import hyValidation from "../../i18n/hy/validation.json"
 import hyAuditLog from "../../i18n/hy/audit-log.json"
+import hyEmailTemplates from "../../i18n/hy/email-templates.json"
 
 export type LangCodeType = 'en' | 'hy';
 type CountryCodeType = 'us' | 'am';
@@ -16,5 +17,6 @@ export type MessageSchema = (
      typeof hyCommon &
      typeof hyForm &
      typeof hyValidation &
-     typeof hyAuditLog
+     typeof hyAuditLog &
+     typeof hyEmailTemplates
 );

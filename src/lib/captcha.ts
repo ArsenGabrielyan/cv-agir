@@ -1,15 +1,14 @@
 import { ICaptchaResult } from "@/lib/types"
 import { env } from "./env"
-import { getTranslations } from "next-intl/server"
+import { useTranslations } from "next-intl"
 
-export async function getCaptchaToken(){
-     const errMsg = await getTranslations("error-messages.contactForm")
-     return new Promise<string>((resolve,reject)=>{
+export const getCaptchaToken = (errMsg: ReturnType<typeof useTranslations<"error-messages">>) =>
+     new Promise<string>((resolve,reject)=>{
           if(typeof window === "undefined"){
-               return reject(errMsg("no-captcha-server"))
+               return reject(errMsg("contactForm.no-captcha-server"))
           }
           if(!window.grecaptcha || !window.grecaptcha.execute){
-               return reject(errMsg("no-captcha"))
+               return reject(errMsg("contactForm.no-captcha"))
           }
           window.grecaptcha.ready(()=>{
                try{
@@ -23,7 +22,6 @@ export async function getCaptchaToken(){
                }
           })
      })
-}
 
 export async function verifyCaptchaToken(token: string){
      const url = new URL("https://www.google.com/recaptcha/api/siteverify");

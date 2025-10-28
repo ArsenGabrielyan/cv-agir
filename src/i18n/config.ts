@@ -10,14 +10,15 @@ export const messages = [
      "landing-page",
      "form",
      "validation",
-     "audit-log"
+     "audit-log",
+     "email-templates"
 ] as const
 
 export const locales: LangCodeType[] = languages.map(lang=>lang.code);
 export const defaultLocale: LangCodeType = "hy";
 
 export async function loadMessages(locale: LangCodeType): Promise<MessageSchema>{
-     const [common, landingPage, form, validation, auditLog] = await Promise.all(
+     const [common, landingPage, form, validation, auditLog, emailTemplates] = await Promise.all(
           messages.map(msg=>
                import(`../../i18n/${locale}/${msg}.json`).then(m=>m.default)
           )
@@ -27,6 +28,7 @@ export async function loadMessages(locale: LangCodeType): Promise<MessageSchema>
           ...landingPage,
           ...form,
           ...validation,
-          ...auditLog
+          ...auditLog,
+          ...emailTemplates
      }
 }

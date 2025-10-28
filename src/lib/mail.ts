@@ -17,7 +17,8 @@ export const sendMessage = async (
      message: string
 ) => {
      const t = await getTranslations("index");
-     const emailTxt = await getTranslations("email")
+     const emailTxt = await getTranslations("email");
+     const emailTemplate = await getTranslations("contact-email-template")
      const {error} = await resend.emails.send({
           from: emailTxt("onboarding",{
                title: t("title"),
@@ -25,7 +26,7 @@ export const sendMessage = async (
           }),
           to: env.DEV_EMAIL,
           subject,
-          react: MessageTemplate({name,email,phone,subject,message})
+          react: MessageTemplate({name,email,phone,subject,message,t:emailTemplate})
      })
      if(error){
           console.error(error)
@@ -41,6 +42,7 @@ export const sendVerificationEmail = async(
      const firstName = name.split(" ")[0];
      const t = await getTranslations("index")
      const emailTxt = await getTranslations("email")
+     const emailTemplate = await getTranslations("verification-template")
      const {error} = await resend.emails.send({
           from: emailTxt("onboarding",{
                title: t("title"),
@@ -48,7 +50,7 @@ export const sendVerificationEmail = async(
           }),
           to: email,
           subject: emailTxt("subject-titles.verification"),
-          react: VerificationTemplate({firstName,confirmLink})
+          react: VerificationTemplate({firstName,confirmLink,t:emailTemplate})
      })
      if(error){
           console.error(error)
@@ -64,6 +66,7 @@ export const sendPasswordResetEmail = async (
      const firstName = name.split(" ")[0];
      const t = await getTranslations("index")
      const emailTxt = await getTranslations("email")
+     const emailTemplate = await getTranslations("pass-reset-template")
      await resend.emails.send({
           from: emailTxt("onboarding",{
                title: t("title"),
@@ -71,7 +74,7 @@ export const sendPasswordResetEmail = async (
           }),
           to: email,
           subject: emailTxt("subject-titles.pass-reset"),
-          react: PassResetTemplate({firstName,resetLink}),
+          react: PassResetTemplate({firstName,resetLink,t:emailTemplate}),
      })
 }
 
@@ -83,6 +86,7 @@ export const sendTwoFactorEmail = async (
      const firstName = name.split(" ")[0];
      const t = await getTranslations("index")
      const emailTxt = await getTranslations("email")
+     const emailTemplate = await getTranslations("2fa-template")
      await resend.emails.send({
           from: emailTxt("onboarding",{
                title: t("title"),
@@ -90,6 +94,6 @@ export const sendTwoFactorEmail = async (
           }),
           to: email,
           subject: emailTxt("subject-titles.2fa"),
-          react: TwoFactorTemplate({firstName,token})
+          react: TwoFactorTemplate({firstName,token,t:emailTemplate})
      })
 }

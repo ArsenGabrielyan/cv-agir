@@ -42,7 +42,7 @@ export default function ContactForm(){
           setSuccess("");
           startTransition(async()=>{
                try{
-                    const token = await getCaptchaToken();
+                    const token = await getCaptchaToken(errMsg);
                     const data = await submitContactForm(token,values)
                     setError(data.error);
                     setSuccess(data.success);

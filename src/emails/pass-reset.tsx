@@ -1,15 +1,17 @@
 import EmailTemplate from "@/components/email-template"
 import {Button, Heading, Text, Link } from "@react-email/components"
+import { useTranslations } from "next-intl"
 
 interface PassResetTemplateProps{
      firstName: string,
      resetLink: string,
+     t: ReturnType<typeof useTranslations<"pass-reset-template">>
 }
-export default function PassResetTemplate({firstName,resetLink}: PassResetTemplateProps){
+export default function PassResetTemplate({firstName,resetLink,t}: PassResetTemplateProps){
      return (
-          <EmailTemplate title="Գաղտնաբառի վերականգնում">
-               <Heading as="h2" className="text-xl font-semibold">Բարև {firstName},</Heading>
-               <Text>Դուք խնդրել եք վերականգնել Ձեր գաղտնաբառը։ Խնդրում ենք սեղմել ներքևի կոճակը՝ նոր գաղտնաբառ սահմանելու համար։</Text>
+          <EmailTemplate title={t("title")} copyrightText={t("copyright-text")}>
+               <Heading as="h2" className="text-xl font-semibold">{t("line1",{firstName})},</Heading>
+               <Text>{t("line2")}</Text>
                <Text className="text-center">
                     <Button
                          href={`${resetLink}`}
@@ -19,17 +21,17 @@ export default function PassResetTemplate({firstName,resetLink}: PassResetTempla
                               minWidth: "200px",
                          }}
                     >
-                         Վերականգնել գաղտնաբառը
+                         {t("reset-link")}
                     </Button>
                </Text>
                <div className="border-solid border-slate-300" style={{borderWidth: "1px 0"}}>
-                    <Text className="text-slate-500 my-2 text-center">Կամ պատճենեք այս հղումը և տեղադրեք Ձեր վեբ դիտարկիչում՝ <Link href={`${resetLink}`}>{resetLink}</Link></Text>
+                    <Text className="text-slate-500 my-2 text-center">{t("line3")} <Link href={`${resetLink}`}>{resetLink}</Link></Text>
                </div>
-               <Text className="mb-0">Եթե Դուք չեք խնդրել գաղտնաբառի վերականգնում, կարող եք անտեսել այս նամակը։</Text>
+               <Text className="mb-0">{t("line4")}</Text>
           </EmailTemplate>
      )
 }
 PassResetTemplate.PreviewProps = {
-     firstName: "Արսեն",
+     firstName: "Arsen",
      resetLink: "https://example.com",
 } as PassResetTemplateProps

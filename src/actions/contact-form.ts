@@ -28,7 +28,7 @@ export const submitContactForm = async (token: string,values: ContactFormType) =
           await logAction({
                action: "VALIDATION_ERROR",
                metadata: {
-                    fields: validatedFields.error.issues.map(val=>val.path[0]),
+                    fields: validatedFields.error.issues.map(val=>val.path[0].toString()),
                }
           })
           return {error: errMsg("validationError")}

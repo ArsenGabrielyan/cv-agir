@@ -1,28 +1,32 @@
 import EmailTemplate from "@/components/email-template"
 import {Heading, Text } from "@react-email/components"
+import { useTranslations } from "next-intl"
 
 interface TwoFactorTemplateProps{
      firstName: string,
      token: string
+     t: ReturnType<typeof useTranslations<"2fa-template">>
 }
-export default function TwoFactorTemplate({firstName,token}: TwoFactorTemplateProps){
+export default function TwoFactorTemplate({firstName,token,t}: TwoFactorTemplateProps){
      return (
-          <EmailTemplate title="Երկաստիճան վավերացում">
-               <Heading as="h2" className="text-xl font-semibold">Բարև {firstName},</Heading>
-               <Text>Ձեր հաշվի անվտանգության ապահովելու համար մուտք գործելիս անհրաժեշտ է մուտքագրել այս հաստատման կոդը։</Text>
+          <EmailTemplate title={t("title")} copyrightText={t("copyright-text")}>
+               <Heading as="h2" className="text-xl font-semibold">{t("line1",{firstName})},</Heading>
+               <Text>{t("line2")}</Text>
                <Text
                     className="text-center text-3xl font-bold tracking-widest my-4 text-blue-800 bg-blue-100 rounded-md p-4"
                >
                     {token}
                </Text>
                <div className="border-solid border-slate-300" style={{borderWidth: "1px 0"}}>
-                    <Text className="text-slate-500 my-2 text-center">Այս կոդը վավեր է միայն <span className="font-semibold">5 րոպե</span>, խնդրում ենք մուտքագրել այն հնարավորինս արագ:</Text>
+                    <Text className="text-slate-500 my-2 text-center">{t.rich("line3",{
+                         bold: (chunks) => <span className="font-semibold">{chunks}</span>
+                    })}</Text>
                </div>
-               <Text className="mb-0">Եթե Դուք չեք խնդրել այս հաստատման կոդը, խնդրում ենք անտեսել այս նամակը:</Text>
+               <Text className="mb-0">{t("line4")}</Text>
           </EmailTemplate>
      )
 }
 TwoFactorTemplate.PreviewProps = {
-     firstName: "Արսեն",
+     firstName: "Arsen",
      token: "123456",
 } as TwoFactorTemplateProps

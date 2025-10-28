@@ -1,15 +1,17 @@
 import EmailTemplate from "@/components/email-template"
 import {Button, Heading, Text, Link } from "@react-email/components"
+import { useTranslations } from "next-intl"
 
 interface VerificationTemplateProps{
      firstName: string,
      confirmLink: string,
+     t: ReturnType<typeof useTranslations<"verification-template">>
 }
-export default function VerificationTemplate({firstName,confirmLink}: VerificationTemplateProps){
+export default function VerificationTemplate({firstName,confirmLink,t}: VerificationTemplateProps){
      return (
-          <EmailTemplate title="Հաստատեք Ձեր էլ․ հասցեն">
-               <Heading as="h2" className="text-xl font-semibold">Բարև {firstName},</Heading>
-               <Text>Շնորհակալություն մեր հարթակում գրանցվելու համար։ Ձեր հաշիվը ակտիվացնելու համար, խնդրում ենք հաստատել Ձեր էլ․ փոստի հասցեն՝ սեղմելով ներքևի կոճակը։</Text>
+          <EmailTemplate title={t("title")} copyrightText={t("copyright-text")}>
+               <Heading as="h2" className="text-xl font-semibold">{t("line1",{firstName})},</Heading>
+               <Text>{t("line2")}</Text>
                <Text className="text-center">
                     <Button
                          href={`${confirmLink}`}
@@ -19,17 +21,17 @@ export default function VerificationTemplate({firstName,confirmLink}: Verificati
                               minWidth: "200px",
                          }}
                     >
-                         Հաստատել էլ․ փոստը
+                         {t("verification-link")}
                     </Button>
                </Text>
                <div className="border-solid border-slate-300" style={{borderWidth: "1px 0"}}>
-                    <Text className="text-slate-500 my-2 text-center">Կամ պատճենեք այս հղումը և տեղադրեք Ձեր վեբ դիտարկիչում՝ <Link href={`${confirmLink}`}>{confirmLink}</Link></Text>
+                    <Text className="text-slate-500 my-2 text-center">{t("line3")} <Link href={`${confirmLink}`}>{confirmLink}</Link></Text>
                </div>
-               <Text className="mb-0">Եթե Դուք չեք գրանցվել մեր կայքում, ապա կարող եք անտեսել այս նամակը։</Text>
+               <Text className="mb-0">{t("line4")}</Text>
           </EmailTemplate>
      )
 }
 VerificationTemplate.PreviewProps = {
-     firstName: "Արսեն",
+     firstName: "Arsen",
      confirmLink: "https://example.com",
 } as VerificationTemplateProps

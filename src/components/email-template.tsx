@@ -1,11 +1,12 @@
 import {Body, Container, Font, Head, Heading, Html, Img, Preview, Section, Tailwind, Text} from "@react-email/components"
 
 interface TemplateLayoutProps{
-     title: string
+     title: string,
+     copyrightText: string,
      children: React.ReactNode,
 }
 
-export default function EmailTemplate({title, children}: TemplateLayoutProps){
+export default function EmailTemplate({title, children, copyrightText}: TemplateLayoutProps){
      const year = new Date().getFullYear();
      return (
           <Html>
@@ -40,7 +41,7 @@ export default function EmailTemplate({title, children}: TemplateLayoutProps){
                               </Section>
                               <Section className="text-center mt-8 mb-8">
                                    <Text className="m-0 text-sm text-gray-600">
-                                        &copy; {year} CV-ագիր։ Բոլոր իրավունքները պաշտպանված են։
+                                        &copy; {year} {copyrightText}
                                    </Text>
                               </Section>
                          </Container>
