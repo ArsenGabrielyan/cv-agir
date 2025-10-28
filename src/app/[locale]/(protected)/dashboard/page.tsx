@@ -11,6 +11,7 @@ import { redirect, routing } from "@/i18n/routing";
 import { LocalePageProps } from "@/app/[locale]/layout";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
      title: "Վահանակ"
@@ -41,7 +42,8 @@ export default async function DashboardPage({searchParams, params}: LocalePagePr
                orderBy: { updatedAt: "desc" },
           })
      ])
-     const {canCreateCoverLetters} = getAvailableFeatures(subscriptionLevel);
+     const errMsg = await getTranslations("error-messages")
+     const {canCreateCoverLetters} = getAvailableFeatures(subscriptionLevel,errMsg)
      if(show==="cover-letter" && !canCreateCoverLetters){
           redirect({
                href: "/pricing",

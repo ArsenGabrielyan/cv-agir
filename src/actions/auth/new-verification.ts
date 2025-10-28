@@ -61,10 +61,12 @@ export const newVerification = async (token: string) => {
                id: existingToken.id
           }
      })
+     const t = await getTranslations("audit-log");
+     const successMsg = await getTranslations("success-messages")
      await logAction({
           userId: existingUser.id,
           action: "EMAIL_VERIFIED",
-          metadata: { email: existingUser.email || "Անհայտ էլ․ հասցե" }
+          metadata: { email: existingUser.email || t("unknown-email") }
      })
-     return {success: "Ձեր էլ․ փոստը հաջողությամբ հաստատվել է։"}
+     return {success: successMsg("email-verified")}
 }

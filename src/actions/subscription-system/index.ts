@@ -109,12 +109,13 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
                     }
                }
           })
+          const buttonTxt = await getTranslations("buttons")
           await logAction({
                userId: existingUser.id,
                action: "PLAN_UPGRADED",
                metadata: { ip: currIp }
           })
-          return {success: 'Խնդրում ենք սպասել․․․'}
+          return {success: buttonTxt("loading")}
      }
      await logAction({
           userId: existingUser.id,

@@ -16,20 +16,19 @@ import { checkLimiter } from "@/lib/limiter";
 import { getIpAddress } from "../ip";
 import { getTranslations } from "next-intl/server";
 
-const authErrorMessages: Record<AuthError["name"], string> = {
-     CredentialsSignin: "Սխալ էլ․ փոստ կամ գաղտնաբառ։",
-     AccessDenied: "Դուք չեք կարող մուտք գործել։",
-     Configuration: "Սխալ կոնֆիգուրացիա։",
-     Verification: "Ստուգման սխալ։",
-     OAuthSignin: "OAuth մուտք գործելու սխալ։",
-     OAuthCallback: "OAuth-ի հետ կանչման սխալ։",
-     OAuthCreateAccount: "OAuth հաշվի ստեղծման սխալ։",
-     EmailCreateAccount: "Էլ․ փոստի հաշվին ստեղծման սխալ։",
-     Callback: "Հետ կանչման սխալ։",
-     OAuthAccountNotLinked: "Այս էլ․ փոստով արդեն կա հաշիվ, բայց այլ մուտքի մեթոդով։",
-     SessionRequired: "Խնդրում ենք մուտք գործել՝ այս էջը դիտելու համար։",
-     Default: "Մի բան սխալ տեղի ունեցավ։",
-};
+const getAuthErrorMessages = (t: Awaited<ReturnType<typeof getTranslations<"error-messages">>>): Record<AuthError["name"], string> => ({
+     CredentialsSignin: t("auth.credentials"),
+     AccessDenied: t("auth.denied-access"),
+     Configuration: t("auth.config"),
+     Verification: t("auth.verification"),
+     OAuthSignin: t("auth.oauth-login"),
+     OAuthCallback: t("auth.oauth-callback"),
+     OAuthCreateAccount: t("auth.oath-registration"),
+     EmailCreateAccount: t("auth.email-registration"),
+     Callback: t("auth.callback"),
+     OAuthAccountNotLinked: t("auth.acc-not-linked"),
+     SessionRequired: t("auth.session-required"),
+});
 
 export const login = async (
      values: LoginType,
@@ -79,6 +78,7 @@ export const login = async (
           return {error: errMsg("auth.noUserFound")}
      }
 
+     const successMsg = await getTranslations("success-messages")
      if(!existingUser.emailVerified) {
           const verificationToken = await generateVerificationToken(email);
           await sendVerificationEmail(
@@ -91,7 +91,7 @@ export const login = async (
                action: "VERIFICATION_REQUEST",
                metadata: { email }
           })
-          return {success: "Հաստատեք Ձեր Էլ․ Հասցեն"}
+          return {success: successMsg("verify-email")}
      }
 
      if(existingUser.isTwoFactorEnabled && existingUser.email && isSamePass){
@@ -177,10 +177,10 @@ export const login = async (
                     metadata: {
                          email,
                          ip: currIp,
-                         reason: authErrorMessages[error.name] || authErrorMessages.Default
+                         reason: getAuthErrorMessages(errMsg)[error.name] || errMsg("unknownError")
                     }
                })
-               return {error: authErrorMessages[error.name] || authErrorMessages.Default}
+               return {error: getAuthErrorMessages(errMsg)[error.name] || errMsg("unknownError")}
           }
           throw error
      }

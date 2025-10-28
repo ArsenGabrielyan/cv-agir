@@ -11,6 +11,7 @@ import { LocalePageProps } from "@/app/[locale]/layout";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { redirect, routing } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
      title: "Ձևավորել Ձեր ռեզյումեն"
@@ -36,7 +37,8 @@ export default async function ResumeEditorPage({searchParams, params}: LocalePag
      }
 
      const subscriptionLevel = await getSubscriptionLevel(user.id);
-     const {canUseTemplates} = getAvailableFeatures(subscriptionLevel)
+     const errMsg = await getTranslations("error-messages")
+     const {canUseTemplates} = getAvailableFeatures(subscriptionLevel,errMsg)
 
      const resumeToEdit = resumeId ? await getCurrentResumeByUserId(user.id,resumeId) : null;
 

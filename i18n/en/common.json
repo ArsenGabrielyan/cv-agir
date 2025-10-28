@@ -64,5 +64,13 @@
           "resumes": "Resumes",
           "cover-letters": "Cover Letters",
           "settings": "Settings"
+     },
+     "email": {
+          "onboarding": "{title} <{email}>",
+          "subject-titles": {
+               "verification": "Verify Your Email",
+               "pass-reset": "Reset the Password",
+               "2fa": "Two-Factor Authentication"
+          }
      }
 }

@@ -16,7 +16,8 @@ interface TemplateCardProps{
 }
 export default function TemplateCard({data, subscriptionLevel, t}: TemplateCardProps){
      const [imageUrl] = useState(data.imageName ? `/templates/${data.imageName}` : `/template-img.webp`);
-     const {canUseTemplates} = getAvailableFeatures(subscriptionLevel)
+     const errMsg = useTranslations("error-messages")
+     const {canUseTemplates} = getAvailableFeatures(subscriptionLevel,errMsg)
      return (
           <div className="group rounded-xl bg-card text-card-foreground border shadow max-w-[350px]">
                <div className="relative">

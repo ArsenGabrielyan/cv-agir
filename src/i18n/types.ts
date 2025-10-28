@@ -2,6 +2,7 @@ import hyLanding from "../../i18n/hy/landing-page.json"
 import hyCommon from "../../i18n/hy/common.json"
 import hyForm from "../../i18n/hy/form.json"
 import hyValidation from "../../i18n/hy/validation.json"
+import hyAuditLog from "../../i18n/hy/audit-log.json"
 
 export type LangCodeType = 'en' | 'hy';
 type CountryCodeType = 'us' | 'am';
@@ -14,5 +15,6 @@ export type MessageSchema = (
      typeof hyLanding &
      typeof hyCommon &
      typeof hyForm &
-     typeof hyValidation
+     typeof hyValidation &
+     typeof hyAuditLog
 );

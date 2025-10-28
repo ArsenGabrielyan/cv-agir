@@ -64,5 +64,13 @@
           "resumes": "Ռեզյումեներ",
           "cover-letters": "Ուղեկցող նամակներ",
           "settings": "Կարգավորումներ"
+     },
+     "email": {
+          "onboarding": "{title} <{email}>",
+          "subject-titles": {
+               "verification": "Հաստատեք Ձեր էլ․ հասցեն",
+               "pass-reset": "Գաղտնաբառի վերականգնում",
+               "2fa": "Երկաստիճան վավերացում"
+          }
      }
 }

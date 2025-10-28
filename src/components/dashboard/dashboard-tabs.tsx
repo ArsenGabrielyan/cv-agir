@@ -8,6 +8,7 @@ import usePremiumModal from "@/hooks/use-premium-modal"
 import dynamic from "next/dynamic"
 import DocPageLoader from "../loaders/doc-page"
 import { useRouter } from "@/i18n/routing"
+import { useTranslations } from "next-intl"
 
 interface DashboardContentProps{
      resumes: ResumeServerData[],
@@ -30,7 +31,8 @@ export default function DashboardContent({resumes, totalCount, subscriptionLevel
      const searchParams = useSearchParams();
      const show = searchParams.get("show") || initialValue;
      const router = useRouter();
-     const {canCreateResume, canCreateCoverLetters} = getAvailableFeatures(subscriptionLevel);
+     const errMsg = useTranslations("error-messages")
+     const {canCreateResume, canCreateCoverLetters} = getAvailableFeatures(subscriptionLevel,errMsg);
      const premiumModal = usePremiumModal();
      const onChangeTabs = (tab: string) => {
           if(tab==="cover-letter" && !canCreateCoverLetters){

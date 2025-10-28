@@ -125,15 +125,16 @@ export const newPassword = async(
                id: existingToken.id
           }
      })
-
+     const t = await getTranslations("audit-log");
+     const successMsg = await getTranslations("success-messages")
      await logAction({
           userId: existingUser.id,
           action: "PASSWORD_CHANGED",
           metadata: {
                ip: currIp,
-               email: existingUser.email || "Անհայտ էլ․ հասցե"
+               email: existingUser.email || t("unknown-email")
           }
      })
 
-     return {success: "Գաղտնաբառը թարմացված է"}
+     return {success: successMsg("password-updated")}
 }

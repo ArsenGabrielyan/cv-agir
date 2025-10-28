@@ -1,13 +1,15 @@
 import { ICaptchaResult } from "@/lib/types"
 import { env } from "./env"
+import { getTranslations } from "next-intl/server"
 
 export async function getCaptchaToken(){
+     const errMsg = await getTranslations("error-messages.contactForm")
      return new Promise<string>((resolve,reject)=>{
           if(typeof window === "undefined"){
-               return reject("ReCaptcha-ն սերվերում չկա։")
+               return reject(errMsg("no-captcha-server"))
           }
           if(!window.grecaptcha || !window.grecaptcha.execute){
-               return reject("ReCaptcha-ն տեղադրված չէ")
+               return reject(errMsg("no-captcha"))
           }
           window.grecaptcha.ready(()=>{
                try{

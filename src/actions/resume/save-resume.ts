@@ -42,7 +42,7 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
      }
 
      const subscriptionLevel = await getSubscriptionLevel(user.id);
-     const {canCreateResume, canUseCustomization} = getAvailableFeatures(subscriptionLevel)
+     const {canCreateResume, canUseCustomization} = getAvailableFeatures(subscriptionLevel,errMsg)
 
      if(!id){
           const resumeCount = await getResumeCountByUserId(user.id);

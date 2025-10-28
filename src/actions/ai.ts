@@ -29,7 +29,7 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
      }
      const validationMsg = await getTranslations("validations");
      const subscriptionLevel = await getSubscriptionLevel(user.id);
-     const {canUseAITools} = getAvailableFeatures(subscriptionLevel)
+     const {canUseAITools} = getAvailableFeatures(subscriptionLevel,errMsg)
 
      if(!canUseAITools){
           await logAction({
@@ -106,6 +106,7 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
           history: []
      })
      const result = await chatSession.sendMessage(userMessage);
+     const auditLogTxt = await getTranslations("audit-log.ai");
 
      const aiResponse = result.response.text()
 
@@ -115,7 +116,7 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
                userId: user.id,
                action: "AI_ERROR",
                metadata: {
-                    tool: "Նկարագրության գեներացում",
+                    tool: auditLogTxt("desc-gen"),
                     ip: currIp,
                     input: maskText(userMessage,50),
                     reason: errMsg("ai.answerError")
@@ -149,7 +150,7 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
           throw new Error(errMsg("auth.unauthorized"))
      }
      const subscriptionLevel = await getSubscriptionLevel(user.id);
-     const {canUseAITools} = getAvailableFeatures(subscriptionLevel)
+     const {canUseAITools} = getAvailableFeatures(subscriptionLevel,errMsg)
 
      if(!canUseAITools){
           await logAction({
@@ -214,7 +215,7 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
           history: []
      })
      const result = await chatSession.sendMessage(userMessage);
-
+     const auditLogTxt = await getTranslations("audit-log.ai");
      const aiResponse = result.response.text()
 
      if(!aiResponse){
@@ -223,7 +224,7 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
                userId: user.id,
                action: "AI_ERROR",
                metadata: {
-                    tool: "Աշխատանքային փորձի գեներացում",
+                    tool: auditLogTxt("exp-gen"),
                     ip: currIp,
                     input: maskText(userMessage,50),
                     reason: errMsg("ai.answerError")
@@ -266,7 +267,7 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
           throw new Error(errMsg("auth.unauthorized"))
      }
      const subscriptionLevel = await getSubscriptionLevel(user.id);
-     const {canUseAITools} = getAvailableFeatures(subscriptionLevel)
+     const {canUseAITools} = getAvailableFeatures(subscriptionLevel,errMsg)
 
      if(!canUseAITools){
           await logAction({
@@ -327,7 +328,7 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
           history: []
      })
      const result = await chatSession.sendMessage(userMessage);
-
+     const auditLogTxt = await getTranslations("audit-log.ai");
      const aiResponse = result.response.text()
 
      if(!aiResponse){
@@ -336,7 +337,7 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
                userId: user.id,
                action: "AI_ERROR",
                metadata: {
-                    tool: "Ուղեկցող նամակի գեներացում",
+                    tool: auditLogTxt("letter-gen"),
                     input: maskText(userMessage,50),
                     ip: currIp,
                     reason: errMsg("ai.answerError")

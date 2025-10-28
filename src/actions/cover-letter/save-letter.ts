@@ -42,7 +42,7 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
      }
 
      const subscriptionLevel = await getSubscriptionLevel(user.id);
-     const {canCreateCoverLetters, canUseCustomization} = getAvailableFeatures(subscriptionLevel);
+     const {canCreateCoverLetters, canUseCustomization} = getAvailableFeatures(subscriptionLevel,errMsg)
 
      if(!id && !canCreateCoverLetters){
           await logAction({

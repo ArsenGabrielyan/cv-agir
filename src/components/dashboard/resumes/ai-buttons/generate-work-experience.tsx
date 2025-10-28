@@ -23,7 +23,8 @@ export default function GenerateWorkExpButton({onWorkExpGenerated}: GenerateWork
      const [showInputDialog, setShowInputDialog] = useState(false);
      const subscriptionMethod = useSubscriptionLevel();
      const premiumModal = usePremiumModal();
-     const {canUseAITools} = getAvailableFeatures(subscriptionMethod)
+     const errMsg = useTranslations("error-messages")
+     const {canUseAITools} = getAvailableFeatures(subscriptionMethod,errMsg)
      return (
           <>
                <Button variant="outline" type="button" onClick={()=>{

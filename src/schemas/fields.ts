@@ -11,10 +11,10 @@ export function optionalArray<T>(
           itemName: itemName.toLowerCase()
      }))) : z.optional(z.array(arr))
 }
-export const zDescField = (t: ReturnType<typeof useTranslations<'validations'>>, name: "description" | "hobbies" = "description") => z.string().min(20,t(`${name}.20-chars`)).max(1000,t(`${name}.tooLong`))
+export const zDescField = (t: ReturnType<typeof useTranslations<'validations'>>, name: "summary" | "hobbies" = "summary") => z.string().min(20,t(`${name}.20-chars`)).max(1000,t(`${name}.tooLong`))
 export const emailField = (t: ReturnType<typeof useTranslations<'validations'>>) => z.string().email(t("email.invalid")).max(254, t("email.tooLong"))
 export const passwordField = (t: ReturnType<typeof useTranslations<'validations'>>) => z.string().min(8,t("password.8-chars")).max(64, t("password.tooLong"))
-export const jobTitleField = (t: ReturnType<typeof useTranslations<'validations'>>) => z.string().max(100,t("jobTitle.tooLong"))
+export const jobTitleField = (t: ReturnType<typeof useTranslations<'validations'>>) => z.string().max(100,t("jobTitle-tooLong"))
 export const descriptionField = (t: ReturnType<typeof useTranslations<'validations'>>) => zDescField(t);
 export const nameField = (t: ReturnType<typeof useTranslations<'validations'>>) => z.string().min(2,t("fullName.tooShort")).max(100,t("fullName.tooLong"))
 export const fileField = (t: ReturnType<typeof useTranslations<'validations'>>) => z.instanceof(File, { message: t("image.shouldBeImage") })

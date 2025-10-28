@@ -61,7 +61,7 @@ export const submitContactForm = async (token: string,values: ContactFormType) =
           })
           return {error: errMsg("rateLimitError")}
      }
-
+     const successMsg = await getTranslations("success-messages")
      try{
           await sendMessage(name,email,phone,subject,message);
           await logAction({
@@ -72,7 +72,7 @@ export const submitContactForm = async (token: string,values: ContactFormType) =
                }
           })
           clearLimiter(limiterKey)
-          return {success: "Հաղորդագրությունը ուղարկված է!"}
+          return {success: successMsg("contact")}
      } catch {
           await logAction({
                action: "CONTACT_FORM_SUBMISSION_ERROR",

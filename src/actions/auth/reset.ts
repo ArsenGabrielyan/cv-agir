@@ -59,12 +59,14 @@ export const reset = async (values: ResetPassType) => {
           passwordResetToken.email,
           passwordResetToken.token
      )
+     const t = await getTranslations("audit-log");
+     const successMsg = await getTranslations("success-messages")
      await logAction({
           userId: existingUser.id,
           action: "PASSWORD_CHANGE_REQUEST",
           metadata: {
-               email: existingUser.email || "Անհայտ էլ․ հասցե"
+               email: existingUser.email || t("unknown-email")
           }
      })
-     return {success: "Վերականգման հղումը ուղարկված է։"}
+     return {success: successMsg("recovery-link-sent")}
 }

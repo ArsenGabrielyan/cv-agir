@@ -10,6 +10,7 @@ import { LocalePageProps } from "@/app/[locale]/layout";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { redirect, routing } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
      title: "Գրել ուղեկցող նամակ"
@@ -34,7 +35,8 @@ export default async function CoverLetterEditorPage({searchParams, params}: Loca
           return;
      }
      const subscriptionLevel = await getSubscriptionLevel(user.id);
-     const {canCreateCoverLetters} = getAvailableFeatures(subscriptionLevel);
+     const errMsg = await getTranslations("error-messages")
+     const {canCreateCoverLetters} = getAvailableFeatures(subscriptionLevel,errMsg)
      if(!canCreateCoverLetters){
           redirect({
                href: "/pricing",

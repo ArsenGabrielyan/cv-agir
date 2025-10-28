@@ -1,10 +1,11 @@
 import { MAX_RESUME_MAP } from "@/lib/constants";
 import { UserPlan } from "@db";
+import { useTranslations } from "next-intl";
 
-export const getAvailableFeatures = (level: UserPlan) => {
+export const getAvailableFeatures = (level: UserPlan, t: ReturnType<typeof useTranslations<"error-messages">>) => {
      const isValidPlan = level in MAX_RESUME_MAP;
      if(!isValidPlan){
-          throw new Error(`Այսպիսի տարբերակ (${level}) գոյություն չունի`)
+          throw new Error(t("subscription.no-plan",{level}))
      }
      const isPremium = level==="premium"
      return {

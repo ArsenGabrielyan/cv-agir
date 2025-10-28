@@ -5,6 +5,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import usePremiumModal from "@/hooks/use-premium-modal";
 import { getAvailableFeatures } from "@/lib/permission";
 import { PaletteIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react"
 import {Color, ColorChangeHandler, TwitterPicker} from "react-color"
 
@@ -15,7 +16,8 @@ interface ColorPickerProps{
 export default function ColorPicker({color,onChange}: ColorPickerProps){
      const subscriptionMethod = useSubscriptionLevel();
      const premiumModal = usePremiumModal();
-     const {canUseCustomization} = getAvailableFeatures(subscriptionMethod)
+     const errMsg = useTranslations("error-messages")
+     const {canUseCustomization} = getAvailableFeatures(subscriptionMethod,errMsg)
      const [showPopover, setShowPopover] = useState(false);
      const isMobile = useIsMobile();
      return (

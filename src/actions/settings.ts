@@ -52,7 +52,7 @@ export const applySettings = async(values: SettingsType): Promise<{
           })
           return {error: errMsg("rateLimitError")}
      }
-
+     const successMsg = await getTranslations("success-messages")
      if(values.email && values.email!==user.email){
           const existingUser = await getUserByEmail(values.email);
           if(existingUser && existingUser.id!==user.id){
@@ -85,7 +85,7 @@ export const applySettings = async(values: SettingsType): Promise<{
           return await updateUser(user.id,{
                ...values,
                email: verificationToken.email
-          },limiterKey,"Հաստատման հղումը ուղարկվել է նոր էլ․ հասցեին։");
+          },limiterKey,successMsg("email-settings"));
      }
 
      if(values.password && values.newPassword && dbUser.password){
@@ -147,5 +147,5 @@ export const applySettings = async(values: SettingsType): Promise<{
                changedFields,
           }
      })
-     return await updateUser(user.id,values,limiterKey);
+     return await updateUser(user.id,values,limiterKey,successMsg("updated-settings"));
 }

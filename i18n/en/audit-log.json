@@ -1,0 +1,10 @@
+{
+     "audit-log": {
+          "unknown-email": "Unknown Email",
+          "ai": {
+               "desc-gen": "Summary Generation",
+               "exp-gen": "Work Experience Generation",
+               "letter-gen": "Cover Letter Generation"
+          }
+     }
+}

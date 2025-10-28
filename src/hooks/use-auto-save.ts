@@ -52,7 +52,7 @@ export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: strin
                               label: "Նորից փորձել",
                               onClick: () => void save().catch(err=>{
                                    console.error(err);
-                                   toast.error("Վայ, ինչ-որ բան սխալ գնաց")
+                                   toast.error(errMsg("unknownError"))
                               })
                          }
                     })
@@ -112,7 +112,7 @@ export function useCoverLetterAutoSave(coverLetterData: CoverLetterFormType){
                               label: "Նորից փորձել",
                               onClick: () => void save().catch(err=>{
                                    console.error(err);
-                                   toast.error("Վայ, ինչ-որ բան սխալ գնաց")
+                                   toast.error(errMsg("unknownError"))
                               })
                          }
                     })

@@ -1,6 +1,5 @@
 {
      "validations": {
-          "acc-not-linked": "There's already an account with this email, but with a different login method.",
           "email": {
                "invalid": "Please enter a valid email address",
                "tooLong": "Email address is too long"
@@ -12,12 +11,10 @@
                "empty-new-password": "New password required",
                "empty-password": "Password required"
           },
-          "jobTitle": {
-               "tooLong": "Job title is too long"
-          },
-          "description": {
-               "20-chars": "Description must be at least 20 characters",
-               "tooLong": "Description is too long"
+          "jobTitle-tooLong": "Job title is too long",
+          "summary": {
+               "20-chars": "Summary must be at least 20 characters",
+               "tooLong": "Summary is too long"
           },
           "hobbies": {
                "20-chars": "Hobbies must be at least 20 characters",
@@ -100,7 +97,18 @@
                "failed2FA": "Two-factor authentication failed",
                "unauthorized": "You are not authenticated. Please log in to your account",
                "notSubscribed": "You are not subscribed. Please subscribe to our premium plan",
-               "noAdminAccess": "This account is not logged in or does not have administrator permissions"
+               "noAdminAccess": "This account is not logged in or does not have administrator permissions",
+               "credentials": "Wrong email or password",
+               "denied-access": "Access is denied",
+               "config": "Wrong Configuration",
+               "verification": "Verification error",
+               "oauth-login": "OAuth Login error",
+               "oauth-callback": "OAuth callback error",
+               "oath-registration": "OAuth account creation error",
+               "email-registration": "Email account creation error",
+               "callback": "Callback Error",
+               "acc-not-linked": "There's already an account with this email, but with a different login method.",
+               "session-required": "Please log in to view this page."
           },
           "ai": {
                "answerError": "Failed to generate answer by AI",
@@ -115,11 +123,14 @@
                "noCustomization": "Full customization is disabled for free users",
                "limitedResumeCount": "Maximum number of resumes for free users has been reached",
                "invalidPlan": "This plan doesn't exist",
-               "invalidDate": "The Date input isn't valid"
+               "invalidDate": "The Date input isn't valid",
+               "no-plan": "No such ssubscription plan ({level}) exists"
           },
           "contactForm": {
                "noCaptchaToken": "Token not found",
-               "failedCaptcha": "Suspicious activity! Captcha verification failed"
+               "failedCaptcha": "Suspicious activity! Captcha verification failed",
+               "no-captcha-server": "ReCaptcha is not installed on the server.",
+               "no-captcha": "ReCaptcha is not installed"
           },
           "encryption": {
                "invalidForEncryption": "Enter valid text to encrypt",
@@ -135,5 +146,15 @@
                "noCategory": "This category does not exist",
                "noTemplate": "This template does not exist"
           }
+     },
+     "success-messages": {
+          "contact": "Message has been sent!",
+          "email-settings": "A verification link has been sent to the new email address",
+          "verify-email": "Verify Your Email Address",
+          "password-updated": "Password has been updated",
+          "email-verified": "Your email has been successfully verified.",
+          "register": "There is only one step left - verify your email address.",
+          "recovery-link-sent": "The password reset link has been sent.",
+          "updated-settings": "Settings Updated"
      }
 }

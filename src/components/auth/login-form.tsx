@@ -39,7 +39,8 @@ export default function LoginForm(){
      const searchParams = useSearchParams();
      const callbackUrl = searchParams.get("callbackUrl");
      const validationMsg = useTranslations("validations");
-     const urlError = getOAuthNotLinkedError(searchParams,validationMsg("acc-not-linked"))
+     const errMsg = useTranslations("error-messages")
+     const urlError = getOAuthNotLinkedError(searchParams,errMsg("auth.acc-not-linked"))
      const [showTwoFactor, setShowTwoFactor] = useState(false);
      const [error, setError] = useState<string | undefined>("");
      const [success, setSuccess] = useState<string | undefined>("");
@@ -51,7 +52,6 @@ export default function LoginForm(){
                password: ""
           }
      });
-     const errMsg = useTranslations("error-messages")
      const handleSubmit = (values: LoginType) => {
           setError("");
           setSuccess("");

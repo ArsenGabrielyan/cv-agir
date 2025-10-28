@@ -73,13 +73,15 @@ export const register = async (values: RegisterFormType) => {
      
      const verificationToken = await generateVerificationToken(email);
      await sendVerificationEmail(name,verificationToken.email,verificationToken.token)
+     const t = await getTranslations("audit-log");
+     const successMsg = await getTranslations("success-messages")
      await logAction({
           userId: user.id,
           action: "USER_REGISTERED",
           metadata: {
                ip: currIp,
-               email: user.email || "Անհայտ էլ․ հասցե"
+               email: user.email || t("unknown-email") 
           }
      })
-     return {success: "Միայն մեկ քայլ է մնացել՝ հաստատեք Ձեր էլ․ փոստը"}
+     return {success: successMsg("register")}
 }

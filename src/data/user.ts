@@ -30,7 +30,7 @@ export const getUserById = async (id: string) => {
      }
 }
 
-export const updateUser = async(userId: string, values: SettingsType, limiterKey: string, successMsg = "Կարգավորումները թարմացված են") => {
+export const updateUser = async(userId: string, values: SettingsType, limiterKey: string, successMsg: string) => {
      const errMsg = await getTranslations("error-messages");
      try {
           const {showAddress,showEmail,showPhone,showLinks,...rest} = values

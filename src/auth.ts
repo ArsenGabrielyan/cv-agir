@@ -18,6 +18,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   events: {
     async linkAccount({user, account}){
+      const t = await getTranslations("audit-log")
       await db.user.update({
         where: {id: user.id},
         data: {
@@ -37,7 +38,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         userId: user.id,
         action: "OAUTH_SIGNIN",
         metadata: {
-          email: user.email || "Անհայտ էլ․ հասցե",
+          email: user.email || t("unknown-email"),
           provider: account.provider
         }
       })
@@ -45,6 +46,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async signIn({user, account}){
+      const t = await getTranslations("audit-log")
       const currIp = await getIpAddress();
       // Allow OAuth Without Email Verification
       if(account?.provider!=="credentials"){
@@ -52,7 +54,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           userId: user.id,
           action: "LOGIN_SUCCESS",
           metadata: {
-            email: user.email || "Անհայտ էլ․ հասցե",
+            email: user.email || t("unknown-email"),
             ip: currIp,
           }
         })
@@ -67,7 +69,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           userId: existingUser?.id,
           action: "LOGIN_ERROR",
           metadata: {
-            email: user.email || "Անհայտ էլ․ հասցե",
+            email: user.email || t("unknown-email"),
             ip: currIp,
             reason: errMsg("auth.notVerified")
           }
@@ -83,7 +85,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             userId: existingUser?.id,
             action: "FAILED_2FA_ATTEMPT",
             metadata: {
-              email: user.email || "Անհայտ էլ․ հասցե",
+              email: user.email || t("unknown-email"),
               ip: currIp,
               reason: errMsg("auth.failed2FA")
             }
@@ -102,7 +104,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         userId: user.id,
         action: "LOGIN_SUCCESS",
         metadata: {
-          email: user.email || "Անհայտ էլ․ հասցե",
+          email: user.email || t("unknown-email"),
           ip: currIp,
         }
       })

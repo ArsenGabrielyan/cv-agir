@@ -4,6 +4,7 @@ import {BorderStyles} from "@db"
 import { useSubscriptionLevel } from "@/context/subscription-level-provider";
 import usePremiumModal from "@/hooks/use-premium-modal";
 import { getAvailableFeatures } from "@/lib/permission";
+import { useTranslations } from "next-intl";
 
 const borderStyles = Object.values(BorderStyles);
 
@@ -14,7 +15,8 @@ interface BorderStyleButtonProps{
 export default function BorderStyleButton({borderStyle, onChange}: BorderStyleButtonProps){
      const subscriptionMethod = useSubscriptionLevel();
      const premiumModal = usePremiumModal();
-     const {canUseCustomization} = getAvailableFeatures(subscriptionMethod)
+     const errMsg = useTranslations("error-messages")
+     const {canUseCustomization} = getAvailableFeatures(subscriptionMethod,errMsg)
      const handleClick = () => {
           if(!canUseCustomization){
                premiumModal.setOpen(true);

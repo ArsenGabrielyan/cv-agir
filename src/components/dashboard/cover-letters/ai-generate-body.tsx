@@ -17,9 +17,9 @@ interface GenerateLetterBodyButtonProps{
 export default function GenerateLetterBodyButton({coverLetterData, onBodyGenerated, disabled}: GenerateLetterBodyButtonProps){
      const subscriptionMethod = useSubscriptionLevel();
      const premiumModal = usePremiumModal();
-     const {canUseAITools} = getAvailableFeatures(subscriptionMethod)
-     const [loading, setLoading] = useState(false);
      const errMsg = useTranslations("error-messages")
+     const {canUseAITools} = getAvailableFeatures(subscriptionMethod,errMsg)
+     const [loading, setLoading] = useState(false);
 
      const handleClick = async()=>{
           if(!canUseAITools){
