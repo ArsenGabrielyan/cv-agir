@@ -1,8 +1,8 @@
 "use server"
 import { currentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { CoverLetterFormSchema } from "@/schemas"
-import { CoverLetterFormType } from "@/lib/types/schema"
+import { getCoverLetterFormSchema } from "@/schemas"
+import { CoverLetterFormType } from "@/schemas/types"
 import {del, put} from "@vercel/blob"
 import path from "path"
 import { getSubscriptionLevel } from "../subscription-system"
@@ -11,12 +11,13 @@ import { getCurrentCoverLetterByUserId } from "@/data/cover-letters"
 import { getIpAddress } from "@/actions/ip"
 import { logAction } from "@/data/logs"
 import {ERROR_MESSAGES} from "@/lib/constants"
+import { getTranslations } from "next-intl/server"
 
 export const saveCoverLetter = async(values: CoverLetterFormType) => {
      const {id} = values
      const currIp = await getIpAddress();
-
-     const validatedFields = CoverLetterFormSchema.safeParse(values);
+     const validationMsg = await getTranslations("validations");
+     const validatedFields = getCoverLetterFormSchema(validationMsg).safeParse(values);
      if(!validatedFields.success){
           await logAction({
                action: "VALIDATION_ERROR",

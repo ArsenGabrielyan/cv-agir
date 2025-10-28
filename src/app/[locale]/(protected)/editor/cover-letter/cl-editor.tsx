@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CoverLetterPreviewSection from "./cl-preview-section";
 import { useCallback, useRef, useState } from "react";
-import { CoverLetterFormType } from "@/lib/types/schema";
+import { CoverLetterFormType } from "@/schemas/types";
 import { useSearchParams } from "next/navigation";
 import { steps } from "./steps";
 import Breadcrumbs from "./breadcrumbs";

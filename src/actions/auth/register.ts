@@ -1,19 +1,21 @@
 "use server"
-import { RegisterSchema } from "@/schemas"
+import { getRegisterSchema } from "@/schemas"
 import bcrypt from "bcryptjs"
 import { db } from "@/lib/db"
 import { getUserByEmail } from "@/data/user"
 import { generateVerificationToken } from "@/lib/tokens"
 import { sendVerificationEmail } from "@/lib/mail"
-import { RegisterFormType } from "@/lib/types/schema"
+import { RegisterFormType } from "@/schemas/types"
 import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter"
 import { logAction } from "@/data/logs"
 import { ERROR_MESSAGES } from "@/lib/constants"
 import { getIpAddress } from "../ip"
+import { getTranslations } from "next-intl/server"
 
 export const register = async (values: RegisterFormType) => {
      const currIp = await getIpAddress();
-     const validatedFields = RegisterSchema.safeParse(values);
+     const validationMsg = await getTranslations("validations");
+     const validatedFields = getRegisterSchema(validationMsg).safeParse(values);
 
      if(!validatedFields.success){
           await logAction({

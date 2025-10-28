@@ -7,14 +7,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { useSubscriptionLevel } from "@/context/subscription-level-provider";
 import usePremiumModal from "@/hooks/use-premium-modal";
 import { getAvailableFeatures } from "@/lib/permission";
-import { GenerateDescriptionSchema } from "@/schemas/ai";
-import { GenerateDescriptionInput, WorkExperienceType } from "@/lib/types/schema";
+import { getGenerateDescriptionSchema } from "@/schemas/ai";
+import { GenerateDescriptionInput, WorkExperienceType } from "@/schemas/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ERROR_MESSAGES } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 
 interface GenerateWorkExpButtonProps{
      onWorkExpGenerated: (exp: WorkExperienceType) => void
@@ -53,13 +54,13 @@ interface InputDialogProps{
      onWorkExpGenerated: (exp: WorkExperienceType) => void
 }
 function InputDialog({open,onOpenChange,onWorkExpGenerated}: InputDialogProps){
+     const validationMsg = useTranslations("validations");
      const form = useForm<GenerateDescriptionInput>({
-          resolver: zodResolver(GenerateDescriptionSchema),
+          resolver: zodResolver(getGenerateDescriptionSchema(validationMsg)),
           defaultValues: {
                description: ""
           }
      });
-
      const handleSubmit = async (input: GenerateDescriptionInput) => {
           try{
                const response = await generateWorkExperience(input);

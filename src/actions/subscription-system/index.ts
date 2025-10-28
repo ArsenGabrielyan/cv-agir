@@ -4,8 +4,8 @@ import { getUserById } from "@/data/user";
 import { parseExpiryDate } from "@/lib/helpers/credit-cards";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { CheckoutFormSchema } from "@/schemas"
-import { CheckoutFormType } from "@/lib/types/schema"
+import { getCheckoutFormSchema } from "@/schemas"
+import { CheckoutFormType } from "@/schemas/types"
 import { SubscriptionPeriod, UserPlan } from "@db";
 import { revalidatePath } from "next/cache";
 import { upsertCard } from "./credit-card";
@@ -13,6 +13,7 @@ import {cache} from "react"
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { getIpAddress } from "@/actions/ip";
 import { logAction } from "@/data/logs";
+import { getTranslations } from "next-intl/server";
 
 export const proceedToCheckout = async(values: CheckoutFormType, period: SubscriptionPeriod, price: number, plan: UserPlan) => {
      const currIp = await getIpAddress();
@@ -26,7 +27,8 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
           })
           return {error: ERROR_MESSAGES.auth.unauthorized}
      }
-     const validatedFields = CheckoutFormSchema.safeParse(values);
+     const validationMsg = await getTranslations("validations");
+     const validatedFields = getCheckoutFormSchema(validationMsg).safeParse(values);
      if(!validatedFields.success){
           await logAction({
                action: "VALIDATION_ERROR",

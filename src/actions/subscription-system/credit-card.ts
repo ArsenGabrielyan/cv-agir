@@ -3,12 +3,13 @@ import { parseExpiryDate } from "@/lib/helpers/credit-cards";
 import { currentUser, CurrentUserReturnType } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { decryptData, encryptData } from "@/actions/encryption";
-import { CreditCardSchema } from "@/schemas"
-import { CreditCardType } from "@/lib/types/schema"
+import { getCreditCardSchema } from "@/schemas"
+import { CreditCardType } from "@/schemas/types"
 import { CreditCard } from "@db";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "@/data/logs";
 import { getIpAddress } from "@/actions/ip";
+import { getTranslations } from "next-intl/server";
 
 export const upsertCard = async(userId: string, values: CreditCardType, user: CurrentUserReturnType, expiryDate: Date) => {
      const creditCards: CreditCard[] = user.creditCards || [];
@@ -48,7 +49,8 @@ export const upsertCard = async(userId: string, values: CreditCardType, user: Cu
 
 export const addCard = async(values: CreditCardType) => {
      const currIp = await getIpAddress();
-     const validatedFields = CreditCardSchema.safeParse(values);
+     const validationMsg = await getTranslations("validations");
+     const validatedFields = getCreditCardSchema(validationMsg).safeParse(values);
      if(!validatedFields.success){
           await logAction({
                action: "VALIDATION_ERROR",
@@ -103,7 +105,8 @@ export const addCard = async(values: CreditCardType) => {
 
 export const editCard = async (values: CreditCardType, index: number) => {
      const currIp = await getIpAddress();
-     const validatedFields = CreditCardSchema.safeParse(values);
+     const validationMsg = await getTranslations("validations");
+     const validatedFields = getCreditCardSchema(validationMsg).safeParse(values);
      if(!validatedFields.success){
           await logAction({
                action: "VALIDATION_ERROR",

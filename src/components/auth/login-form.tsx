@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form"
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import {zodResolver} from "@hookform/resolvers/zod"
-import { LoginSchema } from "@/schemas";
+import { getLoginSchema } from "@/schemas";
 import { CardWrapper } from "./card-wrapper";
 import {
      Form,
@@ -19,7 +19,7 @@ import { FormError } from "@/components/form/form-error";
 import { FormSuccess } from "@/components/form/form-success";
 import { login } from "@/actions/auth/login";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { LoginType } from "@/lib/types/schema";
+import { LoginType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
 import {REGEXP_ONLY_DIGITS} from "input-otp"
 import { ERROR_MESSAGES } from "@/lib/constants";
@@ -39,14 +39,14 @@ function getOAuthNotLinkedError(searchParams: ReadonlyURLSearchParams, message: 
 export default function LoginForm(){
      const searchParams = useSearchParams();
      const callbackUrl = searchParams.get("callbackUrl");
-     const validationMsg = useTranslations("validations")
+     const validationMsg = useTranslations("validations");
      const urlError = getOAuthNotLinkedError(searchParams,validationMsg("acc-not-linked"))
      const [showTwoFactor, setShowTwoFactor] = useState(false);
      const [error, setError] = useState<string | undefined>("");
      const [success, setSuccess] = useState<string | undefined>("");
      const [isPending, startTransition] = useTransition();
      const form = useForm<LoginType>({
-          resolver: zodResolver(LoginSchema),
+          resolver: zodResolver(getLoginSchema(validationMsg)),
           defaultValues: {
                email: "",
                password: ""

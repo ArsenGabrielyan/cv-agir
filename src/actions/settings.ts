@@ -4,7 +4,7 @@ import { getUserByEmail, getUserById, updateUser } from "@/data/user";
 import { currentUser } from "@/lib/auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
-import { SettingsType } from "@/lib/types/schema";
+import { SettingsType } from "@/schemas/types";
 import { checkLimiter, incrementLimiter } from "@/lib/limiter";
 import {ERROR_MESSAGES} from "@/lib/constants"
 import { logAction } from "@/data/logs";

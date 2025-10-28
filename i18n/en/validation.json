@@ -1,5 +1,80 @@
 {
      "validations": {
-          "acc-not-linked": "There's already an account with this email, but with a different login method."
+          "acc-not-linked": "There's already an account with this email, but with a different login method.",
+          "email": {
+               "invalid": "Please enter a valid email address",
+               "tooLong": "Email address is too long"
+          },
+          "password": {
+               "required": "Please enter a password to log in",
+               "8-chars": "Password must be at least 8 characters",
+               "tooLong": "Password is too long",
+               "empty-new-password": "New password required",
+               "empty-password": "Password required"
+          },
+          "jobTitle": {
+               "tooLong": "Job title is too long"
+          },
+          "description": {
+               "20-chars": "Description must be at least 20 characters",
+               "tooLong": "Description is too long"
+          },
+          "hobbies": {
+               "20-chars": "Hobbies must be at least 20 characters",
+               "tooLong": "Hobbies is too long"
+          },
+          "fullName": {
+               "tooShort": "Full name is too short",
+               "tooLong": "Full name is too long"
+          },
+          "image": {
+               "shouldBeImage": "Must be an image",
+               "inavlidFormat": "File format must be an image (.png, .jpg, etc.)",
+               "empty": "File is empty",
+               "under-4mb": "Image must be under 4 MB"
+          },
+          "ai": {
+               "under-20": "Minimum 20 characters",
+               "over-400": "More than 400 characters"
+          },
+          "phone": {
+               "invalidFormat": "Phone number must contain only numbers and symbols (+, -, (, ))",
+               "tooShort": "Phone number is too short",
+               "tooLong": "Phone number is too long"
+          },
+          "subject": {
+               "required": "Enter a message subject name",
+               "tooLong": "Subject is too long"
+          },
+          "message": {
+          "    required": "Message must be at least 5 characters",
+               "tooLong": "Message is too long"
+          },
+          "items": {
+               "work-exp": "work experience",
+               "school": "school",
+               "skill": "skill",
+               "lang": "language",
+               "link": "web link",
+               "course": "course",
+               "ref": "reference link",
+               "no-more-items": "You cannot add more than {maxCount} {itemName}"
+          },
+          "credit-card": {
+               "required": "Credit card must be a maximum of 16 characters",
+               "invalidCard": "Please enter a valid credit card",
+               "invalidDate": "Card expiration date must be in MM/YY format",
+               "requiredCVV": "CVV must be 3-4 digits",
+               "requiredOwner": "Cardholder name is required",
+               "requiredCity": "City is required"
+          },
+          "link": {
+               "invalid": "Please enter a valid link",
+               "insecure": "This link is not secure"
+          },
+          "end-after-start-date": "End date must be after start date",
+          "num-shouldBe-int": "Number must be an integer",
+          "2fa-code-tooLong": "Code is too long",
+          "text-too-long": "This text is too long"
      }
 }

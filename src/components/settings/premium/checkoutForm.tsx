@@ -1,6 +1,6 @@
 "use client"
-import { CheckoutFormSchema } from "@/schemas";
-import { CheckoutFormType } from "@/lib/types/schema";
+import { getCheckoutFormSchema } from "@/schemas";
+import { CheckoutFormType } from "@/schemas/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -15,6 +15,7 @@ import { SubscriptionPeriod, UserPlan } from "@db";
 import CreditCardInput from "@/components/form/credit-card-input";
 import { getBankName } from "@/lib/helpers/credit-cards";
 import { ERROR_MESSAGES } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 
 interface CheckoutFormProps{
      period: SubscriptionPeriod,
@@ -26,8 +27,9 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
      const [success, setSuccess] = useState<string | undefined>("");
      const [isPending, startTransition] = useTransition();
      const router = useRouter();
+     const validationMsg = useTranslations("validations");
      const form = useForm<CheckoutFormType>({
-          resolver: zodResolver(CheckoutFormSchema),
+          resolver: zodResolver(getCheckoutFormSchema(validationMsg)),
           defaultValues: {
                email: "",
                cardNumber: "",

@@ -1,7 +1,7 @@
-import { ResumeInfoType } from "@/lib/types/schema"
+import { ResumeInfoType } from "@/schemas/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useWatch } from "react-hook-form"
-import {ResumeInfoSchema} from "@/schemas"
+import {getResumeInfoSchema} from "@/schemas"
 import {
      Form,
      FormField,
@@ -20,10 +20,12 @@ import { ResumeFormProps } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import GenerateSummaryButton from "../ai-buttons/generate-summary"
 import debounce from "lodash.debounce"
+import { useTranslations } from "next-intl"
 
 export default function ResumeInfoForm({resumeData, setResumeData,userData}: ResumeFormProps){
+     const validationMsg = useTranslations("validations");
      const form = useForm<ResumeInfoType>({
-          resolver: zodResolver(ResumeInfoSchema),
+          resolver: zodResolver(getResumeInfoSchema(validationMsg)),
           defaultValues: {
                title: resumeData.title || "",
                description: resumeData.description || "",

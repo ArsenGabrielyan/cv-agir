@@ -1,6 +1,6 @@
 import { SettingsContentProps } from "@/components/settings/settings-tabs";
 import { ExtendedUser } from "@/global";
-import { SettingsType, CoverLetterFormType, ResumeFormType } from "@/lib/types/schema";
+import { SettingsType, CoverLetterFormType, ResumeFormType } from "@/schemas/types";
 import { AuditAction, Prisma, ResumeTemplate, ResumeTemplateCategory, UserPlan } from "@db";
 import { LucideProps } from "lucide-react";
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";

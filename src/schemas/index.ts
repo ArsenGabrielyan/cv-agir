@@ -13,121 +13,122 @@ import {
      jobTitleField
 } from "./fields"
 import {
-     ResumeLinkSchema,
-     WorkExperienceSchema,
-     ResumeEducationSchema,
-     ResumeCourseSchema,
-     ResumeReferenceSchema,
-     ResumeSkillSchema,
+     getResumeLinkSchema,
+     getWorkExperienceSchema,
+     getResumeEducationSchema,
+     getResumeCourseSchema,
+     getResumeReferenceSchema,
+     getResumeSkillSchema,
 } from "./resume"
 import {BorderStyles, UserPlan} from "@db"
 import { isValidCard } from "@/lib/helpers/credit-cards"
+import { useTranslations } from "next-intl"
 
-export const ResetSchema = z.object({
-     email: emailField.trim().transform(email => email.toLowerCase()),
+export const getResetSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     email: emailField(t).trim().transform(email => email.toLowerCase()),
 })
 
-export const NewPasswordSchema = z.object({
-     password: passwordField.trim()
+export const getNewPasswordSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     password: passwordField(t).trim()
 })
 
-export const LoginSchema = z.object({
-     email: emailField.trim().transform(email => email.toLowerCase()),
-     password: z.string().min(1,"Մուտքագրեք գաղտնաբառը մուտք գործելու համար").max(64, "Գաղտնաբառը շատ երկար է").trim(),
-     code: z.optional(z.string().max(6,"Կոդը շատ երկար է").trim())
+export const getLoginSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     email: emailField(t).trim().transform(email => email.toLowerCase()),
+     password: z.string().min(1,t("password.required")).max(64, t("password.tooLong")).trim(),
+     code: z.optional(z.string().max(6,t("2fa-code-tooLong")).trim())
 })
 
-export const RegisterSchema = z.object({
-     name: nameField.trim(),
-     email: emailField.trim().transform(email => email.toLowerCase()),
-     password: passwordField.trim()
+export const getRegisterSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     name: nameField(t).trim(),
+     email: emailField(t).trim().transform(email => email.toLowerCase()),
+     password: passwordField(t).trim()
 })
 
-export const ContactSchema = z.object({
-     name: nameField.trim(),
-     email: emailField.trim().transform(email => email.toLowerCase()),
-     phone: z.string().regex(/^[0-9+() -]*$/,"Հեռախոսահամարը պետք է պարունակի միայն թվեր և նշաններ (+, -, (, ))").min(8, "Հեռախոսահամարը շատ կարճ է").max(20, "Հեռախոսահամարը շատ երկար է").trim(),
-     subject: z.string().min(1,"Մուտքագրեք հաղորդագրության թեմայի անունը").max(100, "Թեման շատ երկար է").trim(),
-     message: z.string().min(5, "Հաղորդագրությունը պետք է լինի առնվազն 5 տառ").max(500,"Հաղորդագրությունը շատ երկար է").trim()
+export const getContactSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     name: nameField(t).trim(),
+     email: emailField(t).trim().transform(email => email.toLowerCase()),
+     phone: z.string().regex(/^[0-9+() -]*$/,t("phone.invalidFormat")).min(8, t("phone.tooShort")).max(20, t("phone.tooLong")).trim(),
+     subject: z.string().min(1,t("subject.required")).max(100,t("subject.tooLong")).trim(),
+     message: z.string().min(5,t("message.required")).max(500,t("message.tooLong")).trim()
 })
 
-export const ResumeInfoSchema = z.object({
-     title: optionalString,
-     description: optionalString,
-     fname: optionalString,
-     lname: optionalString,
-     jobTitle: optionalJobTitleString,
-     phone: optionalString,
-     address: optionalString,
-     email: optionalEmailString,
-     summary: optionalDescString,
-     hobbies: z.optional(zDescField("Հոբբիներ").trim()).or(z.literal("")),
-     profileImg: fileField,
+export const getResumeInfoSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     title: optionalString(t),
+     description: optionalString(t),
+     fname: optionalString(t),
+     lname: optionalString(t),
+     jobTitle: optionalJobTitleString(t),
+     phone: optionalString(t),
+     address: optionalString(t),
+     email: optionalEmailString(t),
+     summary: optionalDescString(t),
+     hobbies: z.optional(zDescField(t,"hobbies").trim()).or(z.literal("")),
+     profileImg: fileField(t),
 })
 
-export const ResumeDetailsSchema = z.object({
-     experience: optionalArray(WorkExperienceSchema,50,"աշխատանքային փորձ"),
-     education: optionalArray(ResumeEducationSchema,40,"ուսումնական հաստատություն"),
-     skills: optionalArray(ResumeSkillSchema,30,"հմտություն"),
-     languages: optionalArray(ResumeSkillSchema,35,"լեզու"),
+export const getResumeDetailsSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     experience: optionalArray(t,getWorkExperienceSchema(t),50,t("items.work-exp")),
+     education: optionalArray(t,getResumeEducationSchema(t),40,t("items.school")),
+     skills: optionalArray(t,getResumeSkillSchema(t),30,t("items.skill")),
+     languages: optionalArray(t,getResumeSkillSchema(t),35,t("items.lang")),
 })
 
-export const ResumeOptionalDetailsSchema = z.object({
-     links: optionalArray(ResumeLinkSchema,50,"վեբ հղում"),
-     courses: optionalArray(ResumeCourseSchema,40,"դասընթաց"),
-     references: optionalArray(ResumeReferenceSchema,20,"կոնտակտային հղում"),
+export const getResumeOptionalDetailsSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     links: optionalArray(t,getResumeLinkSchema(t),50,t("items.link")),
+     courses: optionalArray(t,getResumeCourseSchema(t),40,t("items.course")),
+     references: optionalArray(t,getResumeReferenceSchema(t),20,t("items.ref")),
 })
 
-export const DocStyleSchema = z.object({
-     colorHex: optionalString,
+export const getDocStyleSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     colorHex: optionalString(t),
      borderStyle: z.custom<BorderStyles>().optional()
 })
 
-export const ResumeFormSchema = z.object({
-     ...ResumeInfoSchema.shape,
-     ...ResumeDetailsSchema.shape,
-     ...ResumeOptionalDetailsSchema.shape,
-     ...DocStyleSchema.shape
+export const getResumeFormSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     ...getResumeInfoSchema(t).shape,
+     ...getResumeDetailsSchema(t).shape,
+     ...getResumeOptionalDetailsSchema(t).shape,
+     ...getDocStyleSchema(t).shape
 })
 
-export const CreditCardSchema = z.object({
-     cardNumber: z.string().regex(/^\d{16}$/, "Վարկային քարտը պետք է լինի մաքսիմում 16 նիշ").trim().refine(data=>isValidCard(data),"Մուտքագրեք վավերական վարկային քարտ"),
-     expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Քարտի ժամկետը պետք է լինի MM/YY ֆորմատով").trim(),
-     cvv: z.string().regex(/^\d{3,4}$/, "CVV-ն պետք է լինի 3-4 նիշ").trim(),
-     cardName: z.string().min(1,"Պետք է նշել քարտի օգտատիրոջ անունը").trim(),
-     city: z.string().min(1,"Նշել քաղաքը").trim()
+export const getCreditCardSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     cardNumber: z.string().regex(/^\d{16}$/,t("credit-card.required")).trim().refine(data=>isValidCard(data),t("credit-card.invalidCard")),
+     expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, t("credit-card.invalidDate")).trim(),
+     cvv: z.string().regex(/^\d{3,4}$/,t("credit-card.requiredCVV")).trim(),
+     cardName: z.string().min(1,t("credit-card.requiredOwner")).trim(),
+     city: z.string().min(1,t("credit-card.requiredCity")).trim()
 })
 
-export const CheckoutFormSchema = z.object({
-     email: emailField.trim().transform(email => email.toLowerCase()),
-     ...CreditCardSchema.shape
+export const getCheckoutFormSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     email: emailField(t).trim().transform(email => email.toLowerCase()),
+     ...getCreditCardSchema(t).shape
 })
 
-export const CoverLetterInfoSchema = z.object({
-     title: optionalString,
-     description: optionalString,
-     fname: optionalString,
-     lname: optionalString,
-     jobTitle: optionalJobTitleString,
-     phone: optionalString,
-     address: optionalString,
-     email: optionalEmailString,
-     profileImg: fileField
+export const getCoverLetterInfoSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     title: optionalString(t),
+     description: optionalString(t),
+     fname: optionalString(t),
+     lname: optionalString(t),
+     jobTitle: optionalJobTitleString(t),
+     phone: optionalString(t),
+     address: optionalString(t),
+     email: optionalEmailString(t),
+     profileImg: fileField(t)
 })
 
-export const CoverLetterDetailsSchema = z.object({
-     recipientName: optionalString,
-     recipientTitle: optionalString,
-     companyName: optionalString,
-     companyAddress: optionalString,
-     letterContent: optionalString,
+export const getCoverLetterDetailsSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     recipientName: optionalString(t),
+     recipientTitle: optionalString(t),
+     companyName: optionalString(t),
+     companyAddress: optionalString(t),
+     letterContent: optionalString(t),
      letterDate: z.optional(z.date())
 })
 
-export const CoverLetterFormSchema = z.object({
-     ...CoverLetterInfoSchema.shape,
-     ...CoverLetterDetailsSchema.shape,
-     ...DocStyleSchema.shape
+export const getCoverLetterFormSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     ...getCoverLetterInfoSchema(t).shape,
+     ...getCoverLetterDetailsSchema(t).shape,
+     ...getDocStyleSchema(t).shape
 })
 
 export const CheckoutPageSearchSchema = z.object({
@@ -135,16 +136,16 @@ export const CheckoutPageSearchSchema = z.object({
      planType: z.enum(["yearly","monthly"])
 })
 
-export const SettingsSchema = z.object({
+export const getSettingsSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
      name: z.optional(z.string().trim()),
-     email: z.optional(emailField.trim().transform(email => email.toLowerCase())),
-     jobTitle: z.optional(jobTitleField.trim()),
+     email: z.optional(emailField(t).trim().transform(email => email.toLowerCase())),
+     jobTitle: z.optional(jobTitleField(t).trim()),
      phone: z.optional(z.string().trim()),
      address: z.optional(z.string().trim()),
      summary: z.optional(z.string().trim()),
      hobbies: z.optional(z.string().trim()),
-     password: z.optional(passwordField.trim()),
-     newPassword: z.optional(passwordField.trim()),
+     password: z.optional(passwordField(t).trim()),
+     newPassword: z.optional(passwordField(t).trim()),
      isTwoFactorEnabled: z.optional(z.boolean()),
      showEmail: z.optional(z.boolean()),
      showAddress: z.optional(z.boolean()),
@@ -157,7 +158,7 @@ export const SettingsSchema = z.object({
      }
      return true;
 },{
-     message: "Պարտադիր է գրել նոր գաղտնաբառ",
+     message: t("password.empty-new-password"),
      path: ["newPassword"]
 })
 .refine(data=>{
@@ -166,6 +167,6 @@ export const SettingsSchema = z.object({
      }
      return true
 },{
-     message: "Պարտադիր է գրել գաղտնաբառ",
+     message: t("password.empty-password"),
      path: ["password"]
 })

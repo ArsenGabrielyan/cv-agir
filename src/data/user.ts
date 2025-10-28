@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { SettingsType } from "../lib/types/schema";
+import { SettingsType } from "../schemas/types";
 import { clearLimiter, incrementLimiter } from "@/lib/limiter";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "./logs";

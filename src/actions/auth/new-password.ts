@@ -1,19 +1,21 @@
 "use server"
-import { NewPasswordSchema } from "@/schemas"
+import { getNewPasswordSchema } from "@/schemas"
 import { db } from "@/lib/db"
 import { getPasswordResetTokenByToken } from "@/data/password-reset-token"
 import { getUserByEmail } from "@/data/user"
 import bcrypt from "bcryptjs"
-import { NewPasswordType } from "@/lib/types/schema"
+import { NewPasswordType } from "@/schemas/types"
 import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter"
 import { logAction } from "@/data/logs"
 import { ERROR_MESSAGES } from "@/lib/constants"
 import { getIpAddress } from "../ip"
+import { getTranslations } from "next-intl/server"
 
 export const newPassword = async(
      values: NewPasswordType,
      token: string | null
 ) => {
+     const validationMsg = await getTranslations("validations");
      const currIp = await getIpAddress();
      if(!token){
           await logAction({
@@ -26,7 +28,7 @@ export const newPassword = async(
           return {error: ERROR_MESSAGES.auth.noPassResetToken}
      }
 
-     const validatedFields = NewPasswordSchema.safeParse(values);
+     const validatedFields = getNewPasswordSchema(validationMsg).safeParse(values);
 
      if(!validatedFields.success){
           await logAction({

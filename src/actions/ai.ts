@@ -1,7 +1,6 @@
 "use server"
-
-import { GenerateDescriptionSchema, GenerateLetterBodySchema, GenerateSummarySchema } from "@/schemas/ai"
-import { GenerateDescriptionInput, GenerateLetterBodyInput, GenerateSummaryInput, WorkExperienceType } from "@/lib/types/schema"
+import { getGenerateDescriptionSchema, getGenerateLetterBodySchema, getGenerateSummarySchema } from "@/schemas/ai"
+import { GenerateDescriptionInput, GenerateLetterBodyInput, GenerateSummaryInput, WorkExperienceType } from "@/schemas/types"
 import {getLanguageLevel} from "@/lib/helpers"
 import gemini from "@/lib/gemini"
 import { AI_MODEL, ERROR_MESSAGES, GEN_CONFIG } from "@/lib/constants"
@@ -27,6 +26,7 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
           })
           throw new Error(ERROR_MESSAGES.auth.unauthorized)
      }
+     const validationMsg = await getTranslations("validations");
      const subscriptionLevel = await getSubscriptionLevel(user.id);
      const {canUseAITools} = getAvailableFeatures(subscriptionLevel)
 
@@ -42,7 +42,7 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
           throw new Error(ERROR_MESSAGES.subscription.cantUseFeatures)
      }
 
-     const validatedFields = GenerateSummarySchema.safeParse(input);
+     const validatedFields = getGenerateSummarySchema(validationMsg).safeParse(input);
      if(!validatedFields.success){
           await logAction({
                userId: user.id,
@@ -160,8 +160,8 @@ export const generateWorkExperience = async(input: GenerateDescriptionInput) => 
           })
           throw new Error(ERROR_MESSAGES.subscription.cantUseFeatures)
      }
-
-     const validatedFields = GenerateDescriptionSchema.safeParse(input);
+     const validationMsg = await getTranslations("validations");
+     const validatedFields = getGenerateDescriptionSchema(validationMsg).safeParse(input);
      if(!validatedFields.success){
           await logAction({
                userId: user.id,
@@ -276,8 +276,8 @@ export const generateCoverLetterBody = async(input: GenerateLetterBodyInput) => 
           })
           throw new Error(ERROR_MESSAGES.subscription.cantUseFeatures)
      }
-
-     const validatedFields = GenerateLetterBodySchema.safeParse(input);
+     const validationMsg = await getTranslations("validations");
+     const validatedFields = getGenerateLetterBodySchema(validationMsg).safeParse(input);
      if(!validatedFields.success){
           await logAction({
                userId: user.id,

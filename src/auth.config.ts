@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials"
 import Github from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
 import Facebook from "next-auth/providers/facebook"
-import { LoginSchema } from "@/schemas"
+import { getLoginSchema } from "@/schemas"
 import { getUserByEmail } from "@/data/user"
 import bcrypt from "bcryptjs"
 import { env } from "@/lib/env"
@@ -11,12 +11,14 @@ import { clearLimiter, incrementLimiter } from "./lib/limiter"
 import { logAction } from "@/data/logs"
 import { ERROR_MESSAGES } from "./lib/constants"
 import { getIpAddress } from "./actions/ip"
+import { getTranslations } from "next-intl/server"
 
 export default { 
      providers: [
           Credentials({
                async authorize(credentials) {
-                    const validatedFields = LoginSchema.safeParse(credentials)
+                    const validationMsg = await getTranslations("validations");
+                    const validatedFields = getLoginSchema(validationMsg).safeParse(credentials)
                     const currIp = await getIpAddress()
 
                     if(validatedFields.success){

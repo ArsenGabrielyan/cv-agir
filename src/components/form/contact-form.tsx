@@ -2,7 +2,7 @@
 import { useState, useTransition } from "react";
 import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
-import { ContactSchema } from "@/schemas";
+import { getContactSchema } from "@/schemas";
 import {
      Form,
      FormControl,
@@ -16,7 +16,7 @@ import { FormError } from "@/components/form/form-error";
 import { submitContactForm } from "@/actions/contact-form";
 import { Textarea } from "@/components/ui/textarea";
 import { FormSuccess } from "./form-success";
-import { ContactFormType } from "@/lib/types/schema";
+import { ContactFormType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
 import { getCaptchaToken } from "@/lib/captcha";
 import { ERROR_MESSAGES } from "@/lib/constants";
@@ -26,8 +26,9 @@ export default function ContactForm(){
      const [isPending, startTransition] = useTransition();
      const [error, setError] = useState<string | undefined>("");
      const [success, setSuccess] = useState<string | undefined>("");
+     const validationMsg = useTranslations("validations");
      const form = useForm<ContactFormType>({
-          resolver: zodResolver(ContactSchema),
+          resolver: zodResolver(getContactSchema(validationMsg)),
           defaultValues: {
                name: "",
                email: "",

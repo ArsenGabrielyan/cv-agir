@@ -1,7 +1,8 @@
-import { CoverLetterInfoType } from "@/lib/types/schema"
+"use client"
+import { CoverLetterInfoType } from "@/schemas/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useWatch } from "react-hook-form"
-import { CoverLetterInfoSchema } from "@/schemas"
+import { getCoverLetterInfoSchema } from "@/schemas"
 import {
      Form,
      FormField,
@@ -19,10 +20,12 @@ import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input
 import { CoverLetterFormProps } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import debounce from "lodash.debounce"
+import { useTranslations } from "next-intl"
 
 export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData,userData}: CoverLetterFormProps){
+     const validationMsg = useTranslations("validations");
      const form = useForm<CoverLetterInfoType>({
-          resolver: zodResolver(CoverLetterInfoSchema),
+          resolver: zodResolver(getCoverLetterInfoSchema(validationMsg)),
           defaultValues: {
                title: coverLetterData.title || "",
                description: coverLetterData.description || "",

@@ -1,9 +1,9 @@
 import { ResumeFormProps } from "@/lib/types"
 import EditorFormCardWrapper from "../../wrappers/card-wrapper"
 import { useForm, useWatch } from "react-hook-form"
-import { ResumeOptionalDetailsType } from "@/lib/types/schema"
+import { ResumeOptionalDetailsType } from "@/schemas/types"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { ResumeOptionalDetailsSchema } from "@/schemas"
+import { getResumeOptionalDetailsSchema } from "@/schemas"
 import { useEffect, useMemo } from "react"
 import {Form} from "@/components/ui/form"
 import { useResumeDynamicField } from "@/hooks/use-resume-dynamic-field"
@@ -15,10 +15,12 @@ import { closestCenter, DndContext } from "@dnd-kit/core"
 import {restrictToVerticalAxis} from "@dnd-kit/modifiers"
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import debounce from "lodash.debounce"
+import { useTranslations } from "next-intl"
 
 export default function ResumeOptionalDetailsForm({resumeData, setResumeData}: ResumeFormProps){
+     const validationMsg = useTranslations("validations");
      const form = useForm<ResumeOptionalDetailsType>({
-          resolver: zodResolver(ResumeOptionalDetailsSchema),
+          resolver: zodResolver(getResumeOptionalDetailsSchema(validationMsg)),
           defaultValues: {
                links: resumeData.links || [],
                courses: resumeData.courses || [],

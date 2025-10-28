@@ -1,17 +1,19 @@
 "use server"
-import { ResetSchema } from "@/schemas"
+import { getResetSchema } from "@/schemas"
 import { getUserByEmail } from "@/data/user"
 import { sendPasswordResetEmail } from "@/lib/mail"
 import { generatePasswordResetToken } from "@/lib/tokens"
-import { ResetPassType } from "@/lib/types/schema"
+import { ResetPassType } from "@/schemas/types"
 import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter"
 import { logAction } from "@/data/logs"
 import { ERROR_MESSAGES } from "@/lib/constants"
 import { getIpAddress } from "../ip"
+import { getTranslations } from "next-intl/server"
 
 export const reset = async (values: ResetPassType) => {
      const currIp = await getIpAddress();
-     const validatedFields = ResetSchema.safeParse(values);
+     const validationMsg = await getTranslations("validations");
+     const validatedFields = getResetSchema(validationMsg).safeParse(values);
 
      if(!validatedFields.success){
           await logAction({

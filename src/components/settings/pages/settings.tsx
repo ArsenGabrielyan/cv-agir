@@ -3,7 +3,7 @@ import {useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition, useState } from "react";
 import { useSession } from "next-auth/react";
-import { SettingsSchema } from "@/schemas";
+import { getSettingsSchema } from "@/schemas";
 import { applySettings } from "@/actions/settings";
 import {
      Form,
@@ -19,7 +19,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { FormSuccess } from "@/components/form/form-success";
 import { FormError } from "@/components/form/form-error";
 import { Switch } from "@/components/ui/switch";
-import { SettingsType } from "@/lib/types/schema";
+import { SettingsType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
 import SettingsCard from "../settings-card";
 import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input";
@@ -28,6 +28,7 @@ import { ERROR_MESSAGES } from "@/lib/constants";
 import { Label } from "@/components/ui/label";
 import ThemeSettings from "@/components/themes/theme-changer";
 import { PasswordInput } from "@/components/form/password-input";
+import { useTranslations } from "next-intl";
 
 export default function Settings(){
      const user = useCurrentUser();
@@ -53,8 +54,9 @@ export default function Settings(){
           showLinks: user?.cvPageSettings.showLinks || undefined
      }
 
+     const validationMsg = useTranslations("validations");
      const form = useForm<SettingsType>({
-          resolver: zodResolver(SettingsSchema),
+          resolver: zodResolver(getSettingsSchema(validationMsg)),
           defaultValues: defaultSettings
      })
 

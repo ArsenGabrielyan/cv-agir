@@ -1,9 +1,9 @@
 import { ResumeFormProps } from "@/lib/types"
 import EditorFormCardWrapper from "../../wrappers/card-wrapper"
 import { useForm, useWatch } from "react-hook-form"
-import { ResumeDetailsType } from "@/lib/types/schema"
+import { ResumeDetailsType } from "@/schemas/types"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { ResumeDetailsSchema } from "@/schemas"
+import { getResumeDetailsSchema } from "@/schemas"
 import { useEffect, useMemo } from "react"
 import {Form} from "@/components/ui/form"
 import { useResumeDynamicField } from "@/hooks/use-resume-dynamic-field"
@@ -16,10 +16,12 @@ import { closestCenter, DndContext } from "@dnd-kit/core"
 import {restrictToVerticalAxis} from "@dnd-kit/modifiers"
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import debounce from "lodash.debounce"
+import { useTranslations } from "next-intl"
 
 export default function ResumeDetailsForm({resumeData, setResumeData}: ResumeFormProps){
+     const validationMsg = useTranslations("validations");
      const form = useForm<ResumeDetailsType>({
-          resolver: zodResolver(ResumeDetailsSchema),
+          resolver: zodResolver(getResumeDetailsSchema(validationMsg)),
           defaultValues: {
                experience: resumeData.experience || [],
                education: resumeData.education || [],

@@ -2,7 +2,7 @@
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
-import { NewPasswordSchema } from "@/schemas";
+import { getNewPasswordSchema } from "@/schemas";
 import { CardWrapper } from "./card-wrapper";
 import {
      Form,
@@ -17,7 +17,7 @@ import { FormSuccess } from "@/components/form/form-success";
 import { PasswordStrengthInput } from "@/components/form/password-input";
 import { useSearchParams } from "next/navigation";
 import { newPassword } from "@/actions/auth/new-password";
-import { NewPasswordType } from "@/lib/types/schema";
+import { NewPasswordType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
 import { useTranslations } from "next-intl";
 
@@ -25,8 +25,9 @@ export default function NewPasswordForm(){
      const [isPending, startTransition] = useTransition();
      const [error, setError] = useState<string | undefined>("");
      const [success, setSuccess] = useState<string | undefined>("");
+     const validationMsg = useTranslations("validations");
      const form = useForm<NewPasswordType>({
-          resolver: zodResolver(NewPasswordSchema),
+          resolver: zodResolver(getNewPasswordSchema(validationMsg)),
           defaultValues: {
                password: ''
           }

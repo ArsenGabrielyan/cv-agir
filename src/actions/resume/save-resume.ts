@@ -1,8 +1,8 @@
 "use server"
 import { currentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { ResumeFormSchema } from "@/schemas"
-import { ResumeFormType } from "@/lib/types/schema"
+import { getResumeFormSchema } from "@/schemas"
+import { ResumeFormType } from "@/schemas/types"
 import {del, put} from "@vercel/blob"
 import path from "path"
 import { getSubscriptionLevel } from "../subscription-system"
@@ -11,12 +11,13 @@ import { getCurrentResumeByUserId, getResumeCountByUserId } from "@/data/resumes
 import { getIpAddress } from "@/actions/ip"
 import { logAction } from "@/data/logs"
 import { ERROR_MESSAGES } from "@/lib/constants"
+import { getTranslations } from "next-intl/server"
 
 export const saveResume = async(values: ResumeFormType,templateId?: string) => {
      const {id} = values
      const currIp = await getIpAddress();
-
-     const validatedFields = ResumeFormSchema.safeParse(values);
+     const validationMsg = await getTranslations("validations");
+     const validatedFields = getResumeFormSchema(validationMsg).safeParse(values);
      if(!validatedFields.success){
           await logAction({
                action: "VALIDATION_ERROR",

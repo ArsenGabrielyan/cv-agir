@@ -1,12 +1,13 @@
 "use server"
 import { sendMessage } from "@/lib/mail";
-import { ContactSchema } from "@/schemas"
-import { ContactFormType } from "@/lib/types/schema";
+import { getContactSchema } from "@/schemas"
+import { ContactFormType } from "@/schemas/types";
 import { checkLimiter, clearLimiter, incrementLimiter } from "@/lib/limiter";
 import { verifyCaptchaToken } from "@/lib/captcha";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { logAction } from "@/data/logs";
 import { getIpAddress } from "./ip"
+import { getTranslations } from "next-intl/server";
 
 export const submitContactForm = async (token: string,values: ContactFormType) => {
      const ip = await getIpAddress();
@@ -20,8 +21,8 @@ export const submitContactForm = async (token: string,values: ContactFormType) =
           })
           return {error: ERROR_MESSAGES.contactForm.noCaptchaToken}
      }
-
-     const validatedFields = ContactSchema.safeParse(values);
+     const validationMsg = await getTranslations("validations");
+     const validatedFields = getContactSchema(validationMsg).safeParse(values);
 
      if(!validatedFields.success){
           await logAction({

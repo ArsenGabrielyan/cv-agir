@@ -2,7 +2,7 @@
 import { useState, useTransition } from "react";
 import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
-import { RegisterSchema } from "@/schemas";
+import { getRegisterSchema } from "@/schemas";
 import { CardWrapper } from "./card-wrapper";
 import {
      Form,
@@ -17,7 +17,7 @@ import { FormError } from "@/components/form/form-error";
 import { FormSuccess } from "@/components/form/form-success";
 import { register } from "@/actions/auth/register";
 import { PasswordStrengthInput } from "@/components/form/password-input";
-import { RegisterFormType } from "@/lib/types/schema";
+import { RegisterFormType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
 import { useTranslations } from "next-intl";
 import { MailIcon } from "lucide-react";
@@ -27,8 +27,9 @@ export default function RegisterForm(){
      const [isPending, startTransition] = useTransition();
      const [error, setError] = useState<string | undefined>("");
      const [success, setSuccess] = useState<string | undefined>("");
+     const validationMsg = useTranslations("validations");
      const form = useForm<RegisterFormType>({
-          resolver: zodResolver(RegisterSchema),
+          resolver: zodResolver(getRegisterSchema(validationMsg)),
           defaultValues: {
                name: "",
                email: "",

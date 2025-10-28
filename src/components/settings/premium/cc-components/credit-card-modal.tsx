@@ -1,5 +1,5 @@
-import { CreditCardSchema } from "@/schemas";
-import { CreditCardType } from "@/lib/types/schema";
+import { getCreditCardSchema } from "@/schemas";
+import { CreditCardType } from "@/schemas/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -14,14 +14,16 @@ import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { getBankName } from "@/lib/helpers/credit-cards";
 import { ERROR_MESSAGES } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 
 export default function CreditCardModal(){
      const {update} = useSession();
      const [isPending, startTransition] = useTransition();
      const {open,setOpen,cardToEdit,index} = useCreditCardModal()
      const isEditing = cardToEdit && index!==-1;
+     const validationMsg = useTranslations("validations");
      const form = useForm<CreditCardType>({
-          resolver: zodResolver(CreditCardSchema),
+          resolver: zodResolver(getCreditCardSchema(validationMsg)),
           defaultValues: {
                cardNumber: "",
                cardName: "",

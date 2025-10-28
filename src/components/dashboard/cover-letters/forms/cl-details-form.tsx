@@ -1,6 +1,6 @@
 import { CoverLetterFormProps } from "@/lib/types";
-import { CoverLetterDetailsType } from "@/lib/types/schema";
-import { CoverLetterDetailsSchema } from "@/schemas";
+import { CoverLetterDetailsType } from "@/schemas/types";
+import { getCoverLetterDetailsSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useWatch } from "react-hook-form"
 import {
@@ -18,10 +18,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { useEffect, useMemo } from "react"
 import GenerateLetterBodyButton from "../ai-generate-body";
 import debounce from "lodash.debounce";
+import { useTranslations } from "next-intl";
 
 export default function CoverLetterDetailsForm({coverLetterData, setCoverLetterData}: CoverLetterFormProps){
+     const validationMsg = useTranslations("validations");
      const form = useForm<CoverLetterDetailsType>({
-          resolver: zodResolver(CoverLetterDetailsSchema),
+          resolver: zodResolver(getCoverLetterDetailsSchema(validationMsg)),
           defaultValues: {
                recipientName: coverLetterData.recipientName || "",
                recipientTitle: coverLetterData.recipientTitle || "",

@@ -4,17 +4,18 @@ import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail, sendTwoFactorEmail } from "@/lib/mail";
 import { generateVerificationToken, generateTwoFactorToken } from "@/lib/tokens";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { LoginSchema } from "@/schemas"
+import { getLoginSchema } from "@/schemas"
 import { AuthError } from "next-auth";
 import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import { logAction } from "@/data/logs";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
-import { LoginType } from "@/lib/types/schema";
+import { LoginType } from "@/schemas/types";
 import { checkLimiter } from "@/lib/limiter";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { getIpAddress } from "../ip";
+import { getTranslations } from "next-intl/server";
 
 const authErrorMessages: Record<AuthError["name"], string> = {
      CredentialsSignin: "Սխալ էլ․ փոստ կամ գաղտնաբառ։",
@@ -36,7 +37,8 @@ export const login = async (
      callbackUrl?: string | null
 ) => {
      const currIp = await getIpAddress();
-     const validatedFields = LoginSchema.safeParse(values);
+     const validationMsg = await getTranslations("validations");
+     const validatedFields = getLoginSchema(validationMsg).safeParse(values);
 
      if(!validatedFields.success){
           await logAction({

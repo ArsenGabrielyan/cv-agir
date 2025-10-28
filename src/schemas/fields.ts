@@ -1,20 +1,28 @@
+import { useTranslations } from "next-intl"
 import * as z from "zod"
 
-export function optionalArray<T>(arr: z.ZodType<T>,maxCount?: number,itemName?: string){
-     return (maxCount && itemName) ? z.optional(z.array(arr).max(maxCount,`${maxCount}-ից ավել ${itemName.toLowerCase()} ավելացնել չի կարելի`)) : z.optional(z.array(arr))
+export function optionalArray<T>(
+     t: ReturnType<typeof useTranslations<'validations'>>,
+     arr: z.ZodType<T>,
+     maxCount?: number,itemName?: string
+){
+     return (maxCount && itemName) ? z.optional(z.array(arr).max(maxCount,t("items.no-more-items",{
+          maxCount: String(maxCount),
+          itemName: itemName.toLowerCase()
+     }))) : z.optional(z.array(arr))
 }
-export const zDescField = (name = "Նկարագրություն") => z.string().min(20,`${name}ը պետք է լինի առնվազն 20 նիշ`).max(1000,`${name}ը շատ երկար է`)
-export const emailField = z.string().email("Մուտքագրեք վավերական էլ․ հասցե").max(254, "Էլ․ հասցեն շատ երկար է")
-export const passwordField = z.string().min(8,"Գաղտնաբառը պետք է ունենա առնվազն 8 նիշ").max(64, "Գաղտնաբառը շատ երկար է")
-export const jobTitleField = z.string().max(100,"Մասնագիտությունը շատ երկար է")
-export const descriptionField = zDescField();
-export const nameField = z.string().min(2,"Անունը և ազգանունը շատ կարճ է").max(100,"Անունը և ազգանունը շատ երկար է")
-export const fileField = z.instanceof(File, { message: "Պետք է լինի նկար" })
-.refine((file) => !file || file.type.startsWith("image/"),"Ֆայլի տեսակը պետք է լինի նկարի (.png, .jpg և այլն)")
-.refine((file) => !file || file.size > 0, "Ֆայլը դատարկ է")
-.refine((file) => !file || file.size <= 4 * 1024 * 1024, "Նկարը պետք է լինի մինչև 4 ՄԲ")
+export const zDescField = (t: ReturnType<typeof useTranslations<'validations'>>, name: "description" | "hobbies" = "description") => z.string().min(20,t(`${name}.20-chars`)).max(1000,t(`${name}.tooLong`))
+export const emailField = (t: ReturnType<typeof useTranslations<'validations'>>) => z.string().email(t("email.invalid")).max(254, t("email.tooLong"))
+export const passwordField = (t: ReturnType<typeof useTranslations<'validations'>>) => z.string().min(8,t("password.8-chars")).max(64, t("password.tooLong"))
+export const jobTitleField = (t: ReturnType<typeof useTranslations<'validations'>>) => z.string().max(100,t("jobTitle.tooLong"))
+export const descriptionField = (t: ReturnType<typeof useTranslations<'validations'>>) => zDescField(t);
+export const nameField = (t: ReturnType<typeof useTranslations<'validations'>>) => z.string().min(2,t("fullName.tooShort")).max(100,t("fullName.tooLong"))
+export const fileField = (t: ReturnType<typeof useTranslations<'validations'>>) => z.instanceof(File, { message: t("image.shouldBeImage") })
+.refine((file) => !file || file.type.startsWith("image/"),t("image.inavlidFormat"))
+.refine((file) => !file || file.size > 0, t("image.empty"))
+.refine((file) => !file || file.size <= 4 * 1024 * 1024, t("image.under-4mb"))
 .nullable().optional()
-export const optionalString = z.optional(z.string().trim().max(1500,"Այս տեքստը շատ երկար է")).or(z.literal(""))
-export const optionalEmailString = z.optional(emailField.trim().transform(email => email.toLowerCase())).or(z.literal(""))
-export const optionalJobTitleString = z.optional(jobTitleField.trim()).or(z.literal(""))
-export const optionalDescString = z.optional(zDescField().trim()).or(z.literal(""))
+export const optionalString = (t: ReturnType<typeof useTranslations<'validations'>>) => z.optional(z.string().trim().max(1500,t("text-too-long"))).or(z.literal(""))
+export const optionalEmailString = (t: ReturnType<typeof useTranslations<'validations'>>) => z.optional(emailField(t).trim().transform(email => email.toLowerCase())).or(z.literal(""))
+export const optionalJobTitleString = (t: ReturnType<typeof useTranslations<'validations'>>) => z.optional(jobTitleField(t).trim()).or(z.literal(""))
+export const optionalDescString = (t: ReturnType<typeof useTranslations<'validations'>>) => z.optional(zDescField(t).trim()).or(z.literal(""))

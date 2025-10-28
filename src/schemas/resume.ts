@@ -1,18 +1,19 @@
 import * as z from "zod"
 import { optionalString, optionalEmailString, optionalDescString } from "./fields"
+import { useTranslations } from "next-intl";
 
-export const ResumeLinkSchema = z.object({
-     name: optionalString,
-     url: z.optional(z.string().url("Մուտքագրեք վավերական վեբ հղում").startsWith("https://","Այս վեբ հղումը ապահով չէ։").trim()).or(z.literal(""))
+export const getResumeLinkSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     name: optionalString(t),
+     url: z.optional(z.string().url(t("link.invalid")).startsWith("https://",t("link.insecure")).trim()).or(z.literal(""))
 })
 
-export const WorkExperienceSchema = z.object({
-     job: optionalString,
-     company: optionalString,
-     startDate: optionalString,
-     endDate: optionalString,
-     city: optionalString,
-     jobInfo: optionalDescString,
+export const getWorkExperienceSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     job: optionalString(t),
+     company: optionalString(t),
+     startDate: optionalString(t),
+     endDate: optionalString(t),
+     city: optionalString(t),
+     jobInfo: optionalDescString(t)
 })
 .refine(data=>{
      if(data.startDate && data.endDate){
@@ -22,17 +23,17 @@ export const WorkExperienceSchema = z.object({
      }
      return true
 },{
-     message: "Ավարտի ամսաթիվը պետք է լինի մեկնարկի ամսաթվից հետո:",
+     message: t("end-after-start-date"),
      path: ["endDate"]
 })
 
-export const ResumeEducationSchema = z.object({
-     degree: optionalString,
-     faculty: optionalString,
-     startDate: optionalString,
-     endDate: optionalString,
-     school: optionalString,
-     city: optionalString
+export const getResumeEducationSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     degree: optionalString(t),
+     faculty: optionalString(t),
+     startDate: optionalString(t),
+     endDate: optionalString(t),
+     school: optionalString(t),
+     city: optionalString(t)
 })
 .refine(data=>{
      if(data.startDate && data.endDate){
@@ -42,15 +43,15 @@ export const ResumeEducationSchema = z.object({
      }
      return true
 },{
-     message: "Ավարտի ամսաթիվը պետք է լինի մեկնարկի ամսաթվից հետո:",
+     message: t("end-after-start-date"),
      path: ["endDate"]
 })
 
-export const ResumeCourseSchema = z.object({
-     name: optionalString,
-     institution: optionalString,
-     startDate: optionalString,
-     endDate: optionalString,
+export const getResumeCourseSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     name: optionalString(t),
+     institution: optionalString(t),
+     startDate: optionalString(t),
+     endDate: optionalString(t),
 })
 .refine(data=>{
      if(data.startDate && data.endDate){
@@ -60,19 +61,19 @@ export const ResumeCourseSchema = z.object({
      }
      return true
 },{
-     message: "Ավարտի ամսաթիվը պետք է լինի մեկնարկի ամսաթվից հետո:",
+     message: t("end-after-start-date"),
      path: ["endDate"]
 })
 
-export const ResumeReferenceSchema = z.object({
-     fullName: optionalString,
-     position: optionalString,
-     company: optionalString,
-     phone: optionalString,
-     email: optionalEmailString
+export const getResumeReferenceSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     fullName: optionalString(t),
+     position: optionalString(t),
+     company: optionalString(t),
+     phone: optionalString(t),
+     email: optionalEmailString(t)
 })
 
-export const ResumeSkillSchema = z.object({
-     name: optionalString,
-     percentage: z.optional(z.number().int("Թիվը պետք է լինի ամբողջ թիվ"))
+export const getResumeSkillSchema = (t: ReturnType<typeof useTranslations<'validations'>>) => z.object({
+     name: optionalString(t),
+     percentage: z.optional(z.number().int(t("num-shouldBe-int")))
 })
