@@ -13,7 +13,8 @@ export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: strin
      const searchParams = useSearchParams();
      const router = useRouter();
      const debouncedData = useDebounce(resumeData,1200);
-     const errMsg = useTranslations("error-messages")
+     const errMsg = useTranslations("error-messages");
+     const buttonTxt = useTranslations("buttons")
 
      const [resumeId, setResumeId] = useState(resumeData.id)
      const [lastSaved, setLastSaved] = useState(structuredClone(resumeData))
@@ -49,7 +50,7 @@ export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: strin
                     console.error(error)
                     toast.error(errMsg("content.resumeSaveError"),{
                          action: {
-                              label: "Նորից փորձել",
+                              label: buttonTxt("tryAgain"),
                               onClick: () => void save().catch(err=>{
                                    console.error(err);
                                    toast.error(errMsg("unknownError"))
@@ -64,7 +65,7 @@ export function useResumeAutoSave(resumeData: ResumeFormType, templateId?: strin
           if(hasUnsavedChanges && debouncedData && !isSaving && !isError){
                save()
           }
-     },[debouncedData, isError, isSaving, lastSaved, resumeId, router, searchParams, templateId, errMsg])
+     },[debouncedData, isError, isSaving, lastSaved, resumeId, router, searchParams, templateId, errMsg, buttonTxt])
 
      return {
           isSaving,
@@ -77,6 +78,7 @@ export function useCoverLetterAutoSave(coverLetterData: CoverLetterFormType){
      const router = useRouter();
      const debouncedData = useDebounce(coverLetterData,1200);
      const errMsg = useTranslations("error-messages")
+     const buttonTxt = useTranslations("buttons")
 
      const [lastSaved, setLastSaved] = useState(structuredClone(coverLetterData))
      const [isSaving, setIsSaving] = useState(false);
@@ -109,7 +111,7 @@ export function useCoverLetterAutoSave(coverLetterData: CoverLetterFormType){
                     console.error(error)
                     toast.error(errMsg("content.noCoverLetter"),{
                          action: {
-                              label: "Նորից փորձել",
+                              label: buttonTxt("tryAgain"),
                               onClick: () => void save().catch(err=>{
                                    console.error(err);
                                    toast.error(errMsg("unknownError"))
@@ -124,7 +126,7 @@ export function useCoverLetterAutoSave(coverLetterData: CoverLetterFormType){
           if(hasUnsavedChanges && debouncedData && !isSaving && !isError){
                save()
           }
-     },[debouncedData, isError, isSaving, lastSaved, router, searchParams, errMsg])
+     },[debouncedData, isError, isSaving, lastSaved, router, searchParams, errMsg, buttonTxt])
 
      return {
           isSaving,

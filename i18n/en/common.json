@@ -11,7 +11,8 @@
           "sign-out": "Sign Out",
           "dashboard": "Dashboard",
           "loading": "Please Wait...",
-          "upgrade": "Upgrade to Premium"
+          "upgrade": "Upgrade to Premium",
+          "tryAgain": "Try Again"
      },
      "nav-links": {
           "menu": "Menu",
