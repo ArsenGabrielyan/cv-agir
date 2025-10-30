@@ -15,7 +15,7 @@ import {
      SheetTitle,
      SheetTrigger,
 } from "@/components/ui/sheet";
-import { LogOut, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { NAVBAR_LINKS } from "@/lib/constants/links";
 import { useState } from "react";
 import { LoginButton } from "../auth/login-button";
@@ -23,7 +23,6 @@ import Logo from "./logo";
 import { cn } from "@/lib/utils";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { UserButton } from "../auth/user-button";
-import { LogoutButton } from "../auth/logout-button";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "../lang-switcher";
 
@@ -48,22 +47,10 @@ function AuthButton({responsive=false,className,showUserButtonOnly=false}:AuthBu
                          <LanguageSwitcher/>
                     </>
                ) : (
-                    !responsive ? (
-                         <>
-                              <Button asChild>
-                                   <Link href="/dashboard">{buttonTxt("dashboard")}</Link>
-                              </Button>
-                              <LanguageSwitcher/>
-                              <LogoutButton>
-                                   <Button variant="outline" size="icon" title={buttonTxt("sign-out")}><LogOut/></Button>
-                              </LogoutButton>
-                         </>
-                    ) : (
-                         <>
-                              <UserButton/>
-                              <LanguageSwitcher/>
-                         </>
-                    )
+                    <>
+                         <UserButton/>
+                         <LanguageSwitcher/>
+                    </>
                )}
           </div>
      ) : !user ? (
