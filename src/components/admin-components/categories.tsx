@@ -5,9 +5,9 @@ export const CategoryShow = () => (
      <Show>
           <SimpleShowLayout>
                <TextField source="id"/>
-               <TextField source="name" label="Կատեգորիայի անուն"/>
-               <DateField source="createdAt" label="Ստեղծվել է"/>
-               <DateField source="updatedAt" label="Թարմացվել է"/>
+               <TextField source="name"/>
+               <DateField source="createdAt"/>
+               <DateField source="updatedAt"/>
           </SimpleShowLayout>
      </Show>
 );
@@ -28,7 +28,7 @@ export const CategoriesList = () => {
      ) : (
           <List filters={categoriesFilter}>
                <Datagrid>
-                    <TextField source="name" label="Կատեգորիայի Անուն"/>
+                    <TextField source="name"/>
                     <EditButton/>
                     <DeleteButton/>
                </Datagrid>
@@ -39,7 +39,7 @@ export const CategoriesList = () => {
 export const CategoriesCreate = () => (
      <Create>
           <SimpleForm>
-               <TextInput validate={[required()]} source="name" label="Կատեգորիայի անուն"/>
+               <TextInput validate={[required()]} source="name"/>
           </SimpleForm>
      </Create>
 )
@@ -47,8 +47,8 @@ export const CategoriesCreate = () => (
 export const CategoriesEdit = () => (
      <Edit>
           <SimpleForm>
-               <TextInput source="id" label="Կատեգորիայի համար" disabled/>
-               <TextInput validate={[required()]} source="name" label="Կատեգորիայի անուն"/>
+               <TextInput source="id" disabled/>
+               <TextInput validate={[required()]} source="name"/>
           </SimpleForm>
      </Edit>
 )

@@ -109,17 +109,6 @@ export const AUDIT_QUICK_FILTERS: Record<QuickFilterType,AuditAction[]> = {
      template: ["TEMPLATE_CREATED","TEMPLATE_UPDATED","TEMPLATE_DELETED"],
      category: ["CATEGORY_CREATED","CATEGORY_UPDATED","CATEGORY_DELETED"],
 }
-export const AUDIT_FILTER_LABELS: Record<QuickFilterType, string> = {
-     errors: "Սխալներ",
-     auth: "Նույնականացում",
-     coverLetter: "Ուղեկցող նամակներ",
-     resume: "Ռեզյումեներ",
-     subscription: "Բաժանորդագրություն",
-     ai: "Արհեստական բանականություն",
-     app: "Հավելվածի գործողություններ",
-     template: "Շաբլոններ",
-     category: "Կատեգորիաներ",
-};
 
 export const DEFAULT_VIDEO_DIMENSION = 270;
 export const STEPS = ["step1", "step2", "step3"] as const

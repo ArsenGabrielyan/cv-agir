@@ -1,4 +1,5 @@
 import en from 'ra-language-english';
+import { TranslationMessages } from "react-admin";
 
 const auditLogTranslations = {
      "audit-log-keywords": {
@@ -129,9 +130,62 @@ const auditLogTranslations = {
      }
 }
 
-const englishTranslation = {
+const englishTranslation: TranslationMessages = {
      ...en,
-     ...auditLogTranslations
+     ...auditLogTranslations,
+     resources: {
+          categories: {
+               name: 'Category |||| Categories',
+               fields: {
+                    id: "ID",
+                    name: "Category Name",
+                    createdAt: "Date Created",
+                    updatedAt: "Date Modified"
+               }
+          },
+          templates: {
+               name: 'Template |||| Templates',
+               fields: {
+                    id: "ID",
+                    locale: "Language",
+                    name: "Name",
+                    description: "Description",
+                    categoryId: "Category",
+                    isPremium: "Premium Template",
+                    imageName: "Image Name",
+                    htmlTemplate: "HTML",
+                    cssStyle: "CSS",
+                    createdAt: "Date Created",
+                    updatedAt: "Date Modified"
+               }
+          },
+          logs: {
+               name: "Audit Log",
+               fields: {
+                    fromDate: "Start Date",
+                    toDate: "End Date",
+                    "action-errors": "Errors",
+                    "action-auth": "Authentication",
+                    "action-coverLetter": "Cover Letters",
+                    "action-resume": "Resumes",
+                    "action-subscription": "Subscription",
+                    "action-ai": "Artificial Intelligence",
+                    "action-app": "App Actions",
+                    "action-template": "Templates",
+                    "action-category": "Categories",
+               }
+          }
+     },
+     dashboard: {
+          title: "Welcome to the Admin Dashboard",
+          desc: "Here, administrators can manage categories and templates, and moderators can monitor the content of this web app to keep things safe.",
+          goBack: "Back to the App"
+     },
+     tabs: {
+          info: "Information",
+          htmlTemplate: "HTML",
+          cssStyle: "CSS",
+     }
 }
 
 export default englishTranslation

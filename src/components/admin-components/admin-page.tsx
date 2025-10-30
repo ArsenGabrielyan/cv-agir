@@ -1,9 +1,6 @@
 "use client"
-import {Admin, Resource, TranslationMessages, bwLightTheme, bwDarkTheme} from "react-admin"
-import am from "@/i18n/react-admin/hy"
-import en from '@/i18n/react-admin/en';
+import {Admin, Resource, bwLightTheme, bwDarkTheme} from "react-admin"
 import simpleRestProvider from "ra-data-simple-rest"
-import polyglotI18nProvider from 'ra-i18n-polyglot';
 import { TemplatesCreate, TemplatesEdit, TemplatesList, TemplateShow } from "./templates";
 import { CategoriesCreate, CategoriesEdit, CategoriesList, CategoryShow } from "./categories";
 import { AdminLayout } from "./admin-layout";
@@ -13,17 +10,9 @@ import AdminHomePage from "./admin-homepage";
 import FactCheckIcon from "@mui/icons-material/FactCheck"
 import { AuditLogsList } from "./logs";
 import { LangCodeType } from "@/i18n/types";
+import { getI18nProvider } from "@/i18n/react-admin";
 
-const translations: Record<string,TranslationMessages> = {am, en}
-const dataProvider = simpleRestProvider("/api")
-const getI18nProvider = (locale: LangCodeType) => polyglotI18nProvider(
-     locale=>translations[locale],
-     locale,
-     [
-          {locale: "en", name: "English"},
-          {locale: "hy", name: "Հայերեն"}
-     ]
-);
+const dataProvider = simpleRestProvider("/api");
 
 interface Props{
      locale: LangCodeType
@@ -46,7 +35,6 @@ export default function App({locale}: Props){
                     create={CategoriesCreate}
                     show={CategoryShow}
                     icon={CategoryIcon}
-                    options={{label: "Կատեգորիաներ"}}
                />
                <Resource
                     name="templates"
@@ -55,13 +43,11 @@ export default function App({locale}: Props){
                     create={TemplatesCreate}
                     show={TemplateShow}
                     icon={DescriptionIcon}
-                    options={{label: "Շաբլոններ"}}
                />
                <Resource
                     name="logs"
                     list={()=>AuditLogsList({locale})}
                     icon={FactCheckIcon}
-                    options={{label: "Ակտիվություն"}}
                />
           </Admin>
      )

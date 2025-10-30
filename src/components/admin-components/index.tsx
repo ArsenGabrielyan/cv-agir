@@ -1,13 +1,15 @@
 import { Chip } from "@mui/material";
 import { ResumeTemplate } from "@db"
-import { useRecordContext, TextFieldProps } from "react-admin"
+import { useRecordContext, TextFieldProps, FieldTitle } from "react-admin"
 
-export function QuickFilter<T>({label,}: {
-     label: string;
+export function QuickFilter<T>({label, source}: {
+     label?: string;
      source?: string;
      defaultValue?: T;
 }){
-     return <Chip sx={{ marginBottom: 1 }} label={label} />;
+     return <Chip sx={{ marginBottom: 1 }} label={
+          <FieldTitle label={label} source={source}/>
+     } />;
 };
 
 export const TemplatesPanel = () => {

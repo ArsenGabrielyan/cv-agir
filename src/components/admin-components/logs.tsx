@@ -1,9 +1,8 @@
-import {QuickFilterType } from "@/lib/types"
 import { DateInput, InfiniteList, SimpleList, useTranslate} from "react-admin"
 import {formatDistanceToNow,} from "date-fns"
 import React from "react"
 import { QuickFilter } from "."
-import { AUDIT_FILTER_LABELS, AUDIT_QUICK_FILTERS } from "@/lib/constants"
+import { AUDIT_QUICK_FILTERS } from "@/lib/constants"
 import Error from "@mui/icons-material/Error"
 import { getFormattedAuditLog } from "@/lib/helpers/audit-logs"
 import { LangCodeType } from "@/i18n/types"
@@ -11,10 +10,10 @@ import { dateFNSLocales } from "@/i18n/config"
 
 const logFilters = [
      ...Object.entries(AUDIT_QUICK_FILTERS).map(([key,value])=>(
-          <QuickFilter key={`${key}-search`} label={AUDIT_FILTER_LABELS[key as QuickFilterType]} defaultValue={value} source={`action-${key}`}/>
+          <QuickFilter key={`${key}-search`} defaultValue={value} source={`action-${key}`}/>
      )),
-     <DateInput key="from" source="fromDate" label="Սկսած ամսաթվից" />,
-     <DateInput key="to" source="toDate" label="Մինչև ամսաթիվ" />,
+     <DateInput key="from" source="fromDate"/>,
+     <DateInput key="to" source="toDate"/>,
 ]
 
 export const AuditLogsList = ({locale}: {locale: LangCodeType}) => {

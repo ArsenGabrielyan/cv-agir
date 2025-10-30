@@ -1,15 +1,15 @@
 import { useMediaQuery } from "@mui/material";
-import { List, Datagrid, TextField, Create, SimpleForm, Edit, TextInput, required, ReferenceField, ReferenceInput, AutocompleteInput, FunctionField, Show, DateField, EditButton, DeleteButton, SimpleList, SearchInput, BooleanField, BooleanInput, TabbedShowLayout, InfiniteList, SelectInput } from "react-admin"
+import { List, Datagrid, TextField, Create, SimpleForm, Edit, TextInput, required, ReferenceField, ReferenceInput, AutocompleteInput, FunctionField, Show, DateField, EditButton, DeleteButton, SimpleList, SearchInput, BooleanField, BooleanInput, TabbedShowLayout, InfiniteList, useTranslate, SelectInput, SelectField } from "react-admin"
 import StarIcon from "@mui/icons-material/Star"
 import { QuickFilter, CodeField, ImageUrlField, TemplatesPanel } from ".";
-import { languages } from "@/i18n/config";
+import { langChoices } from "@/i18n/react-admin";
 
 const templateFilters = [
      <SearchInput key="search" source="name" alwaysOn/>,
-     <ReferenceInput key="filter-categories" label="Կատեգորիա" source="categoryId" reference="categories" alwaysOn>
-          <AutocompleteInput label="Կատեգորիա"/>
+     <ReferenceInput key="filter-categories" source="categoryId" reference="categories" alwaysOn>
+          <AutocompleteInput/>
      </ReferenceInput>,
-     <QuickFilter key="premium-filter" source="isPremium" label="Պրեմիում շաբլոն" defaultValue={true}/>
+     <QuickFilter key="premium-filter" source="isPremium" defaultValue={true}/>
 ]
 
 export const TemplatesList = () => {
@@ -26,17 +26,14 @@ export const TemplatesList = () => {
      ) : (
           <List filters={templateFilters}>
                <Datagrid expand={<TemplatesPanel/>}>
-                    <SelectInput source="locale" choices={languages.map(lang=>({
-                         id: lang.code,
-                         name: `${lang.label} (${lang.code}-${lang.countryCode})`
-                    }))} emptyText="Ոչ մի լեզու ընտրված չէ" resettable label="Լեզու"/>
-                    <TextField source="name" label="Անուն"/>
-                    <TextField source="description" label="Նկարագրություն"/>
-                    <ReferenceField source="categoryId" reference="categories" label="Կատեգորիա"/>
-                    <ImageUrlField source="imageName" label="Նկարի անուն"/>
-                    <BooleanField source="isPremium" label="Պրեմիում շաբլոն"/>
-                    <FunctionField label="HTML կոդ" render={(record)=>`${record.htmlTemplate.substring(0,50)}...`}/>
-                    <FunctionField label="CSS կոդ" render={(record)=>`${record.cssStyle.substring(0,50)}...`}/>
+                    <SelectField optionValue="id" optionText="name" source="locale" choices={langChoices}/>
+                    <TextField source="name"/>
+                    <TextField source="description"/>
+                    <ReferenceField source="categoryId" reference="categories"/>
+                    <ImageUrlField source="imageName"/>
+                    <BooleanField source="isPremium"/>
+                    <FunctionField source="htmlTemplate" render={(record)=>`${record.htmlTemplate.substring(0,50)}...`}/>
+                    <FunctionField source="cssStyle" render={(record)=>`${record.cssStyle.substring(0,50)}...`}/>
                     <EditButton/>
                     <DeleteButton/>
                </Datagrid>
@@ -47,15 +44,16 @@ export const TemplatesList = () => {
 export const TemplatesCreate = () => (
      <Create>
           <SimpleForm>
-               <TextInput validate={[required()]} source="name" label="Անուն"/>
-               <TextInput validate={[required()]} source="description" label="Նկարագրություն"/>
-               <TextInput validate={[required()]} source="imageName" label="Նկարի անուն"/>
+               <SelectInput validate={[required()]} optionValue="id" optionText="name" source="locale" choices={langChoices} resettable/>
+               <TextInput validate={[required()]} source="name"/>
+               <TextInput validate={[required()]} source="description"/>
+               <TextInput validate={[required()]} source="imageName"/>
                <ReferenceInput source="categoryId" reference="categories">
-                    <AutocompleteInput label="Կատեգորիա"/>
+                    <AutocompleteInput/>
                </ReferenceInput>
-               <BooleanInput validate={[required()]} source="isPremium" label="Պրեմիում շաբլոն"/>
-               <TextInput validate={[required()]} multiline source="htmlTemplate" label="HTML կոդ"/>
-               <TextInput validate={[required()]} multiline source="cssStyle" label="CSS կոդ"/>
+               <BooleanInput validate={[required()]} source="isPremium"/>
+               <TextInput validate={[required()]} multiline source="htmlTemplate"/>
+               <TextInput validate={[required()]} multiline source="cssStyle"/>
           </SimpleForm>
      </Create>
 )
@@ -63,39 +61,44 @@ export const TemplatesCreate = () => (
 export const TemplatesEdit = () => (
      <Edit>
           <SimpleForm>
-               <TextInput disabled source="id" label="Id"/>
-               <TextInput validate={[required()]} source="name" label="Անուն"/>
-               <TextInput validate={[required()]} source="description" label="Նկարագրություն"/>
-               <TextInput validate={[required()]} source="imageName" label="Նկարի անուն"/>
+               <TextInput disabled source="id"/>
+               <SelectInput validate={[required()]} optionValue="id" optionText="name" source="locale" choices={langChoices} resettable/>
+               <TextInput validate={[required()]} source="name"/>
+               <TextInput validate={[required()]} source="description"/>
+               <TextInput validate={[required()]} source="imageName"/>
                <ReferenceInput source="categoryId" reference="categories">
-                    <AutocompleteInput label="Կատեգորիա"/>
+                    <AutocompleteInput/>
                </ReferenceInput>
-               <BooleanInput validate={[required()]} source="isPremium" label="Պրեմիում շաբլոն"/>
-               <TextInput validate={[required()]} multiline source="htmlTemplate" label="HTML կոդ"/>
-               <TextInput validate={[required()]} multiline source="cssStyle" label="CSS կոդ"/>
+               <BooleanInput validate={[required()]} source="isPremium"/>
+               <TextInput validate={[required()]} multiline source="htmlTemplate"/>
+               <TextInput validate={[required()]} multiline source="cssStyle"/>
           </SimpleForm>
      </Edit>
 )
 
-export const TemplateShow = () => (
-     <Show>
-          <TabbedShowLayout>
-               <TabbedShowLayout.Tab label="Տեղեկություններ">
-                    <TextField source="id"/>
-                    <TextField source="name" label="Անուն"/>
-                    <TextField source="description" label="Նկարագրություն"/>
-                    <ReferenceField source="categoryId" reference="categories" label="Կատեգորիա"/>
-                    <ImageUrlField source="imageName" label="Նկարի անուն"/>
-                    <BooleanField source="isPremium" label="Պրեմիում շաբլոն"/>
-                    <DateField source="createdAt" label="Ստեղծվել է"/>
-                    <DateField source="updatedAt" label="Թարմացվել է"/>
-               </TabbedShowLayout.Tab>
-               <TabbedShowLayout.Tab label="HTML կոդ">
-                    <CodeField source="htmlTemplate" label="HTML կոդ" language="hbs"/>
-               </TabbedShowLayout.Tab>
-               <TabbedShowLayout.Tab label="CSS կոդ">
-                    <CodeField source="cssStyle" label="CSS կոդ" language="css"/>
-               </TabbedShowLayout.Tab>
-          </TabbedShowLayout>
-     </Show>
-)
+export const TemplateShow = () => {
+     const t = useTranslate()
+     return (
+          <Show>
+               <TabbedShowLayout>
+                    <TabbedShowLayout.Tab label={t("tabs.info")}>
+                         <TextField source="id"/>
+                         <SelectField optionValue="id" optionText="name" source="locale" choices={langChoices}/>
+                         <TextField source="name"/>
+                         <TextField source="description"/>
+                         <ReferenceField source="categoryId" reference="categories"/>
+                         <ImageUrlField source="imageName"/>
+                         <BooleanField source="isPremium"/>
+                         <DateField source="createdAt"/>
+                         <DateField source="updatedAt"/>
+                    </TabbedShowLayout.Tab>
+                    <TabbedShowLayout.Tab label={t("tabs.htmlTemplate")}>
+                         <CodeField source="htmlTemplate" language="hbs"/>
+                    </TabbedShowLayout.Tab>
+                    <TabbedShowLayout.Tab label={t("tabs.cssStyle")}>
+                         <CodeField source="cssStyle" language="css"/>
+                    </TabbedShowLayout.Tab>
+               </TabbedShowLayout>
+          </Show>
+     )
+}

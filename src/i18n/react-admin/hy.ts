@@ -1,4 +1,5 @@
 import am from "./am-base"
+import { TranslationMessages } from "react-admin";
 
 const auditLogTranslations = {
      "audit-log-keywords": {
@@ -129,9 +130,62 @@ const auditLogTranslations = {
      }
 }
 
-const armenianTranslation = {
+const armenianTranslation: TranslationMessages = {
      ...am,
-     ...auditLogTranslations
+     ...auditLogTranslations,
+     resources: {
+          categories: {
+               name: 'Կատեգորիա |||| Կատեգորիաներ',
+               fields: {
+                    id: "#",
+                    name: "Կատեգորիայի անուն",
+                    createdAt: "Ստեղծվել է",
+                    updatedAt: "Թարմացվել է"
+               }
+          },
+          templates: {
+               name: 'Շաբլոն |||| Շաբլոններ',
+               fields: {
+                    id: "#",
+                    locale: "Լեզու",
+                    name: "Անուն",
+                    description: "Նկարագրություն",
+                    categoryId: "Կատեգորիա",
+                    isPremium: "Պրեմիում շաբլոն",
+                    imageName: "Նկարի անուն",
+                    htmlTemplate: "HTML կոդ",
+                    cssStyle: "CSS կոդ",
+                    createdAt: "Ստեղծվել է",
+                    updatedAt: "Թարմացվել է"
+               }
+          },
+          logs: {
+               name: "Ակտիվություն",
+               fields: {
+                    fromDate: "Սկսած ամսաթվից",
+                    toDate: "Մինչև ամսաթիվ",
+                    "action-errors": "Սխալներ",
+                    "action-auth": "Նույնականացում",
+                    "action-coverLetter": "Ուղեկցող նամակներ",
+                    "action-resume": "Ռեզյումեներ",
+                    "action-subscription": "Բաժանորդագրություն",
+                    "action-ai": "Արհեստական բանականություն",
+                    "action-app": "Հավելվածի գործողություններ",
+                    "action-template": "Շաբլոններ",
+                    "action-category": "Կատեգորիաներ",
+               }
+          }
+     },
+     dashboard: {
+          title: "Բարի գալուստ Ադմինիստրատորի վահանակ",
+          desc: "Այստեղ ադմինիստրատորները կարող են կառավարել կատեգորիաները և շաբլոնները, իսկ մոդերատորները կարող են վերահսկել այս վեբ հավելվածի բովանդակությունը՝ իրերը անվտանգ պահելու համար։",
+          goBack: "Վերադառնալ Հավելված"
+     },
+     tabs: {
+          info: "Տեղեկություններ",
+          htmlTemplate: "HTML կոդ",
+          cssStyle: "CSS կոդ",
+     }
 }
 
 export default armenianTranslation
