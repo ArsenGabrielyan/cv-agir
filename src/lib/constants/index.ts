@@ -1,5 +1,5 @@
 import { AuditAction, UserPlan } from "@db"
-import { AuditLogSearchType, IResumeDynamicFields, PlaceholdersName, QuickFilterType } from "../../lib/types"
+import { IResumeDynamicFields, PlaceholdersName, QuickFilterType } from "../../lib/types"
 
 /**
  * Մասնագիտությունների ցուցակ
@@ -89,8 +89,8 @@ export const CREDIT_CARD_BRANDS = {
      unionPay: /^(62[0-9]{14,17})$/,
      arca: /^9[0-9]{15}$/,
 }
-export const BANKS = [
-     {name: "aeb", startNumber: "0512102", title: "Հայէկոնոմբանկ"},
+export const GET_BANKS = (aebName: string) => [
+     {name: "aeb", startNumber: "0512102", title: aebName},
      {name: "idbank", startNumber: "3182900", title: "IDBank"},
      {name: "evocabank", startNumber: "0512202", title: "Evocabank"},
      {name: "inecobank", startNumber: "5788900", title: "Inecobank"},
@@ -98,71 +98,6 @@ export const BANKS = [
      {name: "ardshinbank", startNumber: "4543000", title: "Ardshinbank"},
 ]
 
-export const SEARCH_KEYWORDS: AuditLogSearchType= {
-     // Auth
-     LOGIN_ERROR: "մուտք գործման ընթացքում սխալ առաջացավ։",
-     LOGIN_SUCCESS: "մուտք գործեց այս հավելվածին։",
-     PASSWORD_CHANGE_REQUEST: "ուզում է փոխել իր գաղտնաբառը։",
-     PASSWORD_CHANGE_ERROR: "գաղտնաբառը փոխելու ընթացքում (գաղտնաբառը փոխելուց առաջ) սխալ առաջացավ։",
-     PASSWORD_CHANGED: "փոխել է իր գաղտնաբառը նոր գաղտնաբառով։",
-     VERIFICATION_REQUEST: "Ուզում է հաստատել իր էլ․ հասցեն",
-     VERIFICATION_ERROR: "էլ․ հասցեն հաստատման ընթացքում առաջացել է սխալ։",
-     EMAIL_VERIFIED: "հաստատել է իր էլ․ հասցեն։",
-     USER_REGISTERED: "գրանցվել է այս հավելվածը",
-     REGISTRATION_ERROR: "գրանցվելու ընթացքում առաջացել է սխալ։",
-     TWO_FACTOR_VERIFIED: "երկաստիճան վավերացումը ստացվել է։",
-     LOGOUT: "դուրս եկավ այս հավելվածից։",
-     OAUTH_SIGNIN: "մուտք գործեց այս հավելվածին ուրիշ մեթոդով։",
-     FAILED_2FA_ATTEMPT: "երկաստիճան վավերացումը չստացվեց։",
-   
-     // Content
-     COVER_LETTER_DELETED: "ջնջել է նշված ուղեկցող նամակը։",
-     COVER_LETTER_CREATED: "գրել է նոր ուղեկցող նամակ։",
-     COVER_LETTER_UPDATED: "թարմացրել է նշված ուղեկցող նամակը։",
-     RESUME_DELETED: "ջնջել է նշված ռեզյումեն։",
-     RESUME_CREATED: "ստեղծել է նոր ռեզյումե։",
-     RESUME_UPDATED: "թարմացրել է նշված ռեզյումեն։",
-     CV_PAGE_VIEWED: "դիտել է ռեզյումեի ընդհանուր ինֆորմացիան։",
-   
-     // Subscription
-     CREDIT_CARD_ADDED: "ավելացրել է նոր վարկային քարտ։",
-     CREDIT_CARD_UPDATED: "փոխել է վարկային քարտի տվյալները։",
-     CREDIT_CARD_DELETED: "հեռացրել է վարկային քարտի տվյալները։",
-     PLAN_UPGRADED: "անցել է պրեմիում տարբերակի։",
-     PLAN_CANCELLED: "անցել է անվճար տարբերակի։",
-     PLAN_RENEWED: "վերանայել է պրեմիում տարբերակը։",
-   
-     // AI
-     AI_ERROR: "Արհեստական Բանականության միջոցով գեներացրելու ընթացքում սխալ առաջացավ։",
-     AI_SUMMARY_GENERATED: "Արհեստական Բանականության միջոցով գեներացրել է նկարագրություն։",
-     AI_EXPERIENCE_GENERATED: "Արհեստական Բանականության միջոցով գեներացրել է աշխատանքային փորձ։",
-     AI_COVER_LETTER_GENERATED: "Արհեստական Բանականության միջոցով գեներացրել է ուղեկցող նամակ։",
-   
-     // Contact Form
-     CONTACT_FORM_SUBMISSION_ERROR: "հաղորդագրություն ուղարկելու ընթացքում սխալ առաջացավ։",
-     INVALID_CAPTCHA: "captcha ստուգումը չստացվեց։",
-     CONTACT_FORM_SUBMITTED: "ուղարկել է հաղորդագրություն։",
-   
-     // Settings
-     ACCOUNT_UPDATED: "կարգավորումները թարմացված են։",
-     TWO_FACTOR_UPDATED: "երկաստիճան վավերացումը հաջորդ անգամ մուտք գործելիս։",
-     EMAIL_CHANGE_REQUEST: "ուզում է փոխել իր էլ․ հասցեն։",
-   
-     // Admin
-     TEMPLATE_CREATED: "ավելացրել է նոր ռեզյումեի շաբլոն։",
-     TEMPLATE_UPDATED: "թարմացել է նշված ռեզյումեի շաբլոնը։",
-     TEMPLATE_DELETED: "ջնջել է նշված ռեզյումեի շաբլոնը։",
-     CATEGORY_CREATED: "ավելացրել է նոր կատեգորիա։",
-     CATEGORY_UPDATED: "թարմացրել է նշված կատեգորիան։",
-     CATEGORY_DELETED: "ջնջել է նշված կատեգորիան։",
-   
-     // Forms
-     VALIDATION_ERROR: "փորձել է իրականացնել գործողությունը առանց վավերացնելու։",
-     RATE_LIMIT_EXCEEDED: "շատ հաճախ է փորձում իրականացնել այս գործողություն։",
-     ACTION_ERROR: "գործողություն իրականացնելու ընթացքում սխալ առաջացավ։",
-     UNAUTHORIZED: "փորձել է իրականացնել գործողությունը առանց մուտք գործման",
-     NO_ADMIN_ACCESS: "փորձել է օգտագործել ադմինիստրատորի գործողությունները առանց թույլտվության։"
-}
 export const AUDIT_QUICK_FILTERS: Record<QuickFilterType,AuditAction[]> = {
      errors: ["NO_ADMIN_ACCESS","UNAUTHORIZED","ACTION_ERROR","RATE_LIMIT_EXCEEDED","VALIDATION_ERROR","INVALID_CAPTCHA","CONTACT_FORM_SUBMISSION_ERROR","AI_ERROR","FAILED_2FA_ATTEMPT","REGISTRATION_ERROR","VERIFICATION_ERROR","PASSWORD_CHANGE_ERROR","LOGIN_ERROR"],
      auth: ["LOGIN_SUCCESS","PASSWORD_CHANGE_REQUEST","PASSWORD_CHANGED","VERIFICATION_REQUEST","EMAIL_VERIFIED","USER_REGISTERED","TWO_FACTOR_VERIFIED","LOGOUT","OAUTH_SIGNIN"],

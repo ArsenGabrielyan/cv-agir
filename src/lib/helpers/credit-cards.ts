@@ -1,4 +1,4 @@
-import {BANKS, CREDIT_CARD_BRANDS} from "@/lib/constants"
+import {CREDIT_CARD_BRANDS, GET_BANKS} from "@/lib/constants"
 import { useTranslations } from "next-intl";
 
 export const isValidCard = (card: string) => {
@@ -45,8 +45,8 @@ export const getCreditCardBrandName = (card: string) => {
      if(arca.test(card)) return "ArCa";
      return "Անհայտ քարտ"
 }
-export const getBankName = (card: string) => {
-     const mentionedBank = BANKS.find(val=>card.includes(val.startNumber));
+export const getBankName = (card: string, aebName: string) => {
+     const mentionedBank = GET_BANKS(aebName).find(val=>card.includes(val.startNumber));
      return {
           name: mentionedBank?.name || "",
           title: mentionedBank?.title || ""

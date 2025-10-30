@@ -12,7 +12,8 @@
           "dashboard": "Dashboard",
           "loading": "Please Wait...",
           "upgrade": "Upgrade to Premium",
-          "tryAgain": "Try Again"
+          "tryAgain": "Try Again",
+          "subscribe-btn": "Subscribe"
      },
      "nav-links": {
           "menu": "Menu",

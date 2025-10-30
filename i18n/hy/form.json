@@ -20,7 +20,20 @@
                "label": "Հաղորդագրություն",
                "placeholder": "Գրեք հաղորդագրությունն այստեղ"
           },
+          "credit-card-num": {
+               "label": "Վարկային քարտի համար",
+               "desc": "Բանկ՝ {bankTitle}"
+          },
+          "expiry-date-label": "Քարտի ժամկետ",
           "password-label": "Գաղտնաբառ",
+          "cardholder-name": {
+               "label": "Քարտապանի անուն ազգանուն",
+               "placeholder": "Պետրոս Պողոսյան"
+          },
+          "cardholder-address": {
+               "label": "Քարտապանի հասցեն",
+               "placeholder": "Երևան, Հայաստան"
+          },
           "submit": {
                "send": "Ուղարկել հաղորդագրություն"
           }

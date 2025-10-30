@@ -1,6 +1,4 @@
 import { getSubscriptionLevel } from "@/actions/subscription-system";
-import Logo from "@/components/layout/logo";
-import CheckoutForm from "@/components/settings/premium/checkoutForm";
 import { PRICING_DATA } from "@/lib/constants/landing-page";
 import { redirect, routing } from "@/i18n/routing";
 import { currentUser } from "@/lib/auth";
@@ -10,9 +8,14 @@ import { Metadata } from "next";
 import { LocalePageProps } from "@/app/[locale]/layout";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import CheckoutContent from "@/components/pages/checkout";
 
-export const metadata: Metadata = {
-     title: "Բաժանորդագրվեք պրեմիում տարբերակին"
+export const generateMetadata = async(): Promise<Metadata> => {
+     const t = await getTranslations("checkout-subscription");
+     return {
+          title: t("title")
+     }
 }
 
 export default async function CheckoutPage({searchParams, params}: LocalePageProps & {
@@ -48,20 +51,11 @@ export default async function CheckoutPage({searchParams, params}: LocalePagePro
           });
           return;
      }
-     const planPrice = planType==="yearly" ? selectedPlan.price*12 : selectedPlan.price;
      return (
-          <div className="flex justify-center items-center min-h-dvh p-3 bg-linear-to-br from-primary via-accent to-background">
-               <div className="bg-card text-card-foreground p-4 shadow border rounded-xl space-y-3 max-w-4xl">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                         <div className="space-y-4">
-                              <Logo href="/dashboard" width={200} height={70}/>
-                              <h1 className="text-lg md:text-xl font-semibold">Բաժանորդագրվեք պրեմիում տարբերակին</h1>
-                              <p className="text-2xl md:text-3xl font-semibold">${planPrice.toFixed(2)}/{planType==="yearly" ? "տարի" : "ամիս"}</p>
-                              <p className="text-muted-foreground">Բաժանորդագրվեք մեր պրեմիում տարբերակի լիքը հնարավորություններ ձեռք բերելու համար</p>
-                         </div>
-                         <CheckoutForm period={planType} price={planPrice} plan={plan}/>
-                    </div>
-               </div>
-          </div>
+          <CheckoutContent
+               planType={planType}
+               plan={plan}
+               selectedPlan={selectedPlan}
+          />
      )
 }

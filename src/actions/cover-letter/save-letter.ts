@@ -122,12 +122,13 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
                }
           })
      } else {
+          const t = await getTranslations("cover-letter-editor")
           const newCoverLetter = await db.coverLetter.create({
                data: {
                     ...coverLetterValues,
                     profileImg: newImgUrl,
                     createdAt: letterDate,
-                    title: coverLetterValues.title || "Անանուն նամակ",
+                    title: coverLetterValues.title || t("default-title"),
                     userId: user.id,
                     updatedAt: new Date()
                }

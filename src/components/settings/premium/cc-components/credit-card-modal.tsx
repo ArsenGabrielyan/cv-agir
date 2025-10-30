@@ -66,7 +66,8 @@ export default function CreditCardModal(){
           formValues.city === originalValues.city
      );
      const isSame = !!isEditing && !!cardToEdit && areValuesSame(form.watch(), cardToEdit);
-     const currBank = getBankName(form.watch("cardNumber"));
+     const bankTxt = useTranslations("checkout-subscription")
+     const currBank = getBankName(form.watch("cardNumber"),bankTxt("aeb-bank"));
      return (
           <Dialog open={open} onOpenChange={setOpen}>
                <DialogContent>

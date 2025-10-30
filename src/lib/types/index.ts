@@ -197,7 +197,7 @@ export interface ICaptchaResult{
 }
 
 // Audit Logging
-interface ActionIPResult{ ip: string | null }
+export interface ActionIPResult{ ip: string | null }
 type AuthActionResult<T extends "email-optional" | "email-required" = "email-optional"> = T extends "email-optional" ? {email?: string, ip: string | null} : {email: string, ip: string | null}
 type ContentActionResult<T extends "resume" | "cover-letter" | "template" | "category"> = (T extends "resume" ? {resumeId: string} : T extends "cover-letter" ? {coverLetterId: string} : T extends "template" ? {templateId: string} : T extends "category" ? {categoryId: string} : {id: string}) & ActionIPResult
 type CreditCardActionResult<T extends "optional" | "required" = "required"> = T extends "optional" ? {last4?: string} & ActionIPResult : {last4: string} & ActionIPResult
@@ -267,6 +267,17 @@ export type AuditLogServerData = Prisma.AuditLogGetPayload<{
           user: boolean | undefined
      }
 }>
+export type CategorySecondaryKeys = {
+    auth: "error" | "success" | "email" | "oauth";
+    content: "coverLetter" | "resume";
+    subscription: "creditCard";
+    ai: "aiError";
+    captcha: "invalidCaptcha" | "Submitted" | "defaultError";
+    settings: "accountUpdated" | "emailChangeReq" | "default";
+    admin: "template" | "category";
+    forms: "invalidFields" | "rateLimit" | "unauthorized" | "noAdmin" | "defaultError";
+    misc: "default" | "defaultError";
+};
 
 export const userInclude = {
      cvPageSettings: true,

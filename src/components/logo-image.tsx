@@ -8,7 +8,7 @@ const LogoImage: React.FC<React.SVGProps<SVGElement>> = ({width=740.292, height=
     version='1.1'
     viewBox='0 0 195.869 68.723'
     className={className}
-    aria-label='CV-ագիր'
+    aria-label='CV-agir logo'
   >
     <path
       fill='none'

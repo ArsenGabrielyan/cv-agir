@@ -34,11 +34,12 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
      })
      const [showDeleteDialog, setShowDeleteDialog] = useState(false);
      const creditCardModal = useCreditCardModal();
+     const bankTxt = useTranslations("checkout-subscription")
      useEffect(()=>{
           const getCardNumber = async()=>{
                const cardNum = await decryptData(card.cardNumber);
                const brand = getCreditCardBrandName(cardNum);
-               const bank = getBankName(cardNum);
+               const bank = getBankName(cardNum,bankTxt("aeb-bank"));
                setSafeCardInfo(prev=>({
                     ...prev,
                     cardNumber: cardNum.slice(-4),
@@ -47,7 +48,7 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
                }))
           }
           getCardNumber();
-     },[card.cardNumber]);
+     },[card.cardNumber,bankTxt]);
      const handleEditCard = async () => {
           creditCardModal.setCreditCard({
                ...mapToCreditCardValues(card),

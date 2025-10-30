@@ -67,11 +67,6 @@
                "perk-1": "Full customization",
                "perk-2": "AI suggestions",
                "perk-3": "Cover letter creation"
-          },
-          "premium-msg": {
-               "title": "You have upgraded to Premium!",
-               "congrats": "Congratulations!",
-               "goBack": "Return to dashboard"
           }
      },
      "faq": {

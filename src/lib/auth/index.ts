@@ -1,5 +1,6 @@
 import { auth } from "@/auth"
 import { ExtendedUser } from "@/global";
+import { db } from "../db";
 
 export type CurrentUserReturnType = Omit<ExtendedUser,"currentPlan">
 
@@ -14,11 +15,16 @@ export const currentUser = async (): Promise<CurrentUserReturnType | undefined> 
      return undefined
 }
 
-const adminIds = [
-     "6811284e5e4734e57b6b29fe"
-]
 export const getIsAdmin = async()=>{
      const user = await currentUser();
      if(!user || !user.id) return false;
-     return adminIds.includes(user.id);
+     const adminUser = await db.user.findUnique({
+          where: {
+               id: user.id
+          },
+          select: {
+               isAdmin: true,
+          }
+     })
+     return !!adminUser && adminUser.isAdmin
 }

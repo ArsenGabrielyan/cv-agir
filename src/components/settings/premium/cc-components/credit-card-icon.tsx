@@ -1,15 +1,14 @@
 import { CREDIT_CARD_BRANDS } from "@/lib/constants"
 import {FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover, FaCcDinersClub, FaCcJcb} from "react-icons/fa6"
-import {BsCreditCard2Front} from "react-icons/bs"
 import {Arca, Mir, UnionPay} from "@/components/settings/premium/cc-components/other-credit-card-icons"
+import { CreditCard } from "lucide-react"
 
 interface CreditCardIconProps{
      readonly value?: string,
      readonly brand?: string
 }
 export default function CreditCardIcon({value, brand}: CreditCardIconProps) {
-     const className = "size-11 text-primary"
-     const otherIconClass = "size-11 fill-primary"
+     const className = "size-5"
      if(brand && brand!== ""){
           return brand==="Visa" ? (
                <FaCcVisa className={className}/>
@@ -18,7 +17,7 @@ export default function CreditCardIcon({value, brand}: CreditCardIconProps) {
           ) : brand==="American Express" ? (
                <FaCcAmex className={className}/>
           ) : brand==="Mir" ? (
-               <Mir className={otherIconClass}/>
+               <Mir className={className}/>
           ) : brand==="Discover" ? (
                <FaCcDiscover className={className}/>
           ) : brand==="Diners Club" ? (
@@ -26,11 +25,11 @@ export default function CreditCardIcon({value, brand}: CreditCardIconProps) {
           ) : brand==="JCB" ? (
                <FaCcJcb className={className}/>
           ) : brand==="Union Pay" ? (
-               <UnionPay className={otherIconClass}/>
+               <UnionPay className={className}/>
           ) : brand==="ArCa" ? (
-               <Arca className={otherIconClass}/>
+               <Arca className={className}/>
           ) : (
-               <BsCreditCard2Front className={className}/>
+               <CreditCard className={className}/>
           )
      }
      if(value && value!=="") {
@@ -42,7 +41,7 @@ export default function CreditCardIcon({value, brand}: CreditCardIconProps) {
           ) : amex.test(value) ? (
                <FaCcAmex className={className}/>
           ) : mir.test(value) ? (
-               <Mir className={otherIconClass}/>
+               <Mir className={className}/>
           ) : discover.test(value) ? (
                <FaCcDiscover className={className}/>
           ) : diners.test(value) ? (
@@ -50,14 +49,14 @@ export default function CreditCardIcon({value, brand}: CreditCardIconProps) {
           ) : jcb.test(value) ? (
                <FaCcJcb className={className}/>
           ) : unionPay.test(value) ? (
-               <UnionPay className={otherIconClass}/>
+               <UnionPay className={className}/>
           ) : arca.test(value) ? (
-               <Arca className={otherIconClass}/>
+               <Arca className={className}/>
           ) : (
-               <BsCreditCard2Front className={className}/>
+               <CreditCard className={className}/>
           )
      }
      return (
-          <BsCreditCard2Front className={className}/>
+          <CreditCard className={className}/>
      )
 }

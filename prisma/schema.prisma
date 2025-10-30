@@ -223,6 +223,7 @@ model User {
   currentPlan           UserPlan               @default(free)
   cvPageSettings CVPageSettings?
   logs AuditLog[]
+  isAdmin Boolean @default(false)
 
   subscriptionId String?       
   subscription   Subscription?

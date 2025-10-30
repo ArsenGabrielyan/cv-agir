@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "gen-print-css": "tailwindcss -i ./src/app/globals.css -o ./public/print.css --minify",
-    "postinstall": "prisma generate && npm run gen-print-css",
+    "postinstall": "prisma generate && tailwindcss -i ./src/app/globals.css -o ./public/print.css --minify",
     "docker:build": "docker build -t cv-agir .",
     "docker:start": "docker run -p 3000:3000 cv-agir",
     "database:seed": "tsx scripts/seed.ts"

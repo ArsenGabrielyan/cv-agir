@@ -1,5 +1,4 @@
 import { logAction } from "@/data/logs";
-import { getActionsByFuzzyText } from "@/lib/helpers/audit-logs";
 import { AuditActionKey, AuditLogServerData, auditLogsInclude, IAdminAPISearchParams} from "@/lib/types";
 import { getIsAdmin, currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -38,7 +37,6 @@ export const GET = withAuth(async req => {
      const searchParams = req.nextUrl.searchParams;
      const params = Object.fromEntries(searchParams.entries().map(([k,v])=>[k,JSON.parse(v)])) as IAdminAPISearchParams<AuditLogServerData>
      const {filter} = params
-     const actions = filter.q ? getActionsByFuzzyText(filter.q) : undefined;
      const filters = Object.keys(filter)
           .filter(key => key.startsWith("action-"))
           .map(key => filter[key as AuditActionKey])
@@ -48,9 +46,6 @@ export const GET = withAuth(async req => {
                ...(filter.q && {
                     OR: [
                          {user: {name: {contains: filter.q, mode: "insensitive"}}},
-                         ...(actions?.length ? [
-                              { action: { in: actions } }
-                         ] : []),
                     ]
                }),
                ...(filters.length ? { action: { in: filters } } : {}),

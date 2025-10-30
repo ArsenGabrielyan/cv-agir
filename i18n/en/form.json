@@ -20,7 +20,20 @@
                "label": "Message",
                "placeholder": "Write the message here"
           },
+          "credit-card-num": {
+               "label": "Credit Card Number",
+               "desc": "Bank: {bankTitle}"
+          },
+          "expiry-date-label": "Expiration Date",
           "password-label": "Password",
+          "cardholder-name": {
+               "label": "Cardholder's full name",
+               "placeholder": "Dane Doe"
+          },
+          "cardholder-address": {
+               "label": "Cardholder's address",
+               "placeholder": "Los Angeles, CA, United States"
+          },
           "submit": {
                "send": "Send Message"
           }

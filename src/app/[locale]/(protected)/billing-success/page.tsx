@@ -9,7 +9,7 @@ import { getTranslations } from "next-intl/server";
 import PremiumUpgradeMsg from "@/components/pages/premium-upgrade-msg";
 
 export const generateMetadata = async(): Promise<Metadata> => {
-     const t = await getTranslations("pricing.premium-msg");
+     const t = await getTranslations("premium-msg");
      return {
           title: t("title")
      }

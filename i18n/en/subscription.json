@@ -1,0 +1,16 @@
+{
+     "checkout-subscription": {
+          "title": "Subscribe to Premium",
+          "desc": "Subscribe to get the full features of our premium version",
+          "prefix": {
+               "monthly": "month",
+               "annual": "year"
+          },
+          "aeb-bank": "ArmEconomBank"
+     },
+     "premium-msg": {
+          "title": "You have upgraded to Premium!",
+          "congrats": "Congratulations!",
+          "goBack": "Return to dashboard"
+     }
+}

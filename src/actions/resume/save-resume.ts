@@ -165,6 +165,7 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
                }
           })
      } else {
+          const t = await getTranslations("resume-editor")
           const newResume = await db.resume.create({
                data: {
                     ...resumeValues,
@@ -195,7 +196,7 @@ export const saveResume = async(values: ResumeFormType,templateId?: string) => {
                     links: { create: links },
                     skills: { create: skills },
                     languages: { create: languages },
-                    title: resumeValues.title || "Անանուն ռեզյումե",
+                    title: resumeValues.title || t("default-title"),
                     userId: user.id,
                     updatedAt: new Date(),
                }

@@ -27,6 +27,6 @@ export default async function AdminPage({params}: LocalePageProps){
           });
      }
      return (
-          <AdminPageWrapper/>
+          <AdminPageWrapper locale={locale}/>
      )
 }

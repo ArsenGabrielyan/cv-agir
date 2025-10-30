@@ -15,13 +15,16 @@ import { SubscriptionPeriod, UserPlan } from "@db";
 import CreditCardInput from "@/components/form/credit-card-input";
 import { getBankName } from "@/lib/helpers/credit-cards";
 import { useTranslations } from "next-intl";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import {MailIcon} from "lucide-react"
 
 interface CheckoutFormProps{
      period: SubscriptionPeriod,
      price: number,
-     plan: UserPlan
+     plan: UserPlan,
+     aebName: string
 }
-export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
+export default function CheckoutForm({period, price, plan, aebName}: CheckoutFormProps){
      const [error, setError] = useState<string | undefined>("");
      const [success, setSuccess] = useState<string | undefined>("");
      const [isPending, startTransition] = useTransition();
@@ -56,7 +59,9 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                .catch(()=>setError(errMsg("unknownError")))
           })
      }
-     const currBank = getBankName(form.watch("cardNumber"));
+     const currBank = getBankName(form.watch("cardNumber"),aebName);
+     const formTxt = useTranslations("form");
+     const buttonTxt = useTranslations("buttons")
      return (
           <Form {...form}>
                <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
@@ -65,14 +70,19 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                          name="email"
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Էլ․ հասցե</FormLabel>
+                                   <FormLabel>{formTxt("email.label")}</FormLabel>
                                    <FormControl>
-                                        <Input
-                                             {...field}
-                                             type="email"
-                                             placeholder="name@example.com"
-                                             disabled={isPending}
-                                        />
+                                        <InputGroup>
+                                             <InputGroupInput
+                                                  {...field}
+                                                  type="email"
+                                                  placeholder={formTxt("email.placeholder")}
+                                                  disabled={isPending}
+                                             />
+                                             <InputGroupAddon>
+                                                  <MailIcon/>
+                                             </InputGroupAddon>
+                                        </InputGroup>
                                    </FormControl>
                                    <FormMessage/>
                               </FormItem>
@@ -83,7 +93,7 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                          name="cardNumber"
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Վարկային քարտի համար</FormLabel>
+                                   <FormLabel>{formTxt("credit-card-num.label")}</FormLabel>
                                    <FormControl>
                                         <CreditCardInput
                                              {...field}
@@ -91,7 +101,9 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                                         />
                                    </FormControl>
                                    {currBank.title!=="" && (
-                                        <FormDescription>Բանկ՝ {currBank.title}</FormDescription>
+                                        <FormDescription>{formTxt("credit-card-num.desc",{
+                                             bankTitle: currBank.title
+                                        })}</FormDescription>
                                    )}
                                    <FormMessage/>
                               </FormItem>
@@ -103,7 +115,7 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                               name="expiryDate"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Քարտի ժամկետ</FormLabel>
+                                        <FormLabel>{formTxt("expiry-date-label")}</FormLabel>
                                         <FormControl>
                                              <Input
                                                   {...field}
@@ -140,11 +152,11 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                          name="cardName"
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Օգտատիրոջ անուն ազգանուն</FormLabel>
+                                   <FormLabel>{formTxt("cardholder-name.label")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
-                                             placeholder="Պետրոս Պողոսյան"
+                                             placeholder={formTxt("cardholder-name.placeholder")}
                                              disabled={isPending}
                                         />
                                    </FormControl>
@@ -157,11 +169,11 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                          name="city"
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Օգտատիրոջ հասցեն</FormLabel>
+                                   <FormLabel>{formTxt("cardholder-address.label")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
-                                             placeholder="Երևան, Հայաստան"
+                                             placeholder={formTxt("cardholder-address.placeholder")}
                                              disabled={isPending}
                                         />
                                    </FormControl>
@@ -171,7 +183,7 @@ export default function CheckoutForm({period, price, plan}: CheckoutFormProps){
                     />
                     <FormError message={error}/>
                     <FormSuccess message={success}/>
-                    <LoadingButton type="submit" className="w-full" loading={isPending}>Բաժանորդագրվել</LoadingButton>
+                    <LoadingButton type="submit" className="w-full" loading={isPending}>{buttonTxt("subscribe-btn")}</LoadingButton>
                </form>
           </Form>
      )

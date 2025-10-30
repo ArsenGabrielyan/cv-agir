@@ -4,6 +4,9 @@ import hyForm from "../../i18n/hy/form.json"
 import hyValidation from "../../i18n/hy/validation.json"
 import hyAuditLog from "../../i18n/hy/audit-log.json"
 import hyEmailTemplates from "../../i18n/hy/email-templates.json"
+import hyEditor from "../../i18n/hy/editor.json"
+import hySubscription from "../../i18n/hy/subscription.json"
+import { messages } from "./config"
 
 export type LangCodeType = 'en' | 'hy';
 type CountryCodeType = 'us' | 'am';
@@ -18,5 +21,8 @@ export type MessageSchema = (
      typeof hyForm &
      typeof hyValidation &
      typeof hyAuditLog &
-     typeof hyEmailTemplates
-);
+     typeof hyEmailTemplates &
+     typeof hyEditor &
+     typeof hySubscription
+)
+export type Messages = typeof messages[number]
