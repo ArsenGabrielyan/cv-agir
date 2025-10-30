@@ -4,6 +4,7 @@ import { PlusCircle } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import usePremiumModal from "@/hooks/use-premium-modal"
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface CreateButtonProps{
      canCreate: boolean,
@@ -11,14 +12,17 @@ interface CreateButtonProps{
 }
 export function CreateResumeButton({canCreate, className}: CreateButtonProps){
      const premiumModal = usePremiumModal();
+     const t = useTranslations("dashboard.buttons")
      const buttonClass = cn("flex items-center gap-2",className)
      return canCreate ? (
           <Button asChild className={buttonClass}>
-               <Link href="/editor"><PlusCircle className="size-5"/> Ստեղծել Ռեզյումե</Link>
+               <Link href="/editor">
+                    <PlusCircle className="size-5"/> {t("create-resume")}
+               </Link>
           </Button>
      ) : (
           <Button onClick={()=>premiumModal.setOpen(true)} className={buttonClass}>
-               <PlusCircle className="size-5"/> Ստեղծել Ռեզյումե
+               <PlusCircle className="size-5"/> {t("create-resume")}
           </Button>
      )
 }
@@ -26,14 +30,17 @@ export function CreateResumeButton({canCreate, className}: CreateButtonProps){
 
 export function CreateCoverLetterButton({canCreate, className}: CreateButtonProps){
      const premiumModal = usePremiumModal();
+     const t = useTranslations("dashboard.buttons")
      const buttonClass = cn("flex items-center gap-2",className)
      return canCreate ? (
           <Button asChild className={buttonClass}>
-               <Link href="/editor/cover-letter"><PlusCircle className="size-5"/> Ստեղծել Ուղեկցող նամակ</Link>
+               <Link href="/editor/cover-letter">
+                    <PlusCircle className="size-5"/> {t("create-cover-letter")}
+               </Link>
           </Button>
      ) : (
           <Button onClick={()=>premiumModal.setOpen(true)} className={buttonClass}>
-               <PlusCircle className="size-5"/> Ստեղծել Ուղեկցող նամակ
+               <PlusCircle className="size-5"/> {t("create-cover-letter")}
           </Button>
      )
 }

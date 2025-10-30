@@ -5,7 +5,7 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Metadata } from "next";
 import { getResumeCountByUserId } from "@/data/resumes";
-import DashboardContent from "@/components/dashboard/dashboard-tabs";
+import DashboardContent from "@/components/pages/dashboard";
 import { getAvailableFeatures } from "@/lib/permission";
 import { redirect, routing } from "@/i18n/routing";
 import { LocalePageProps } from "@/app/[locale]/layout";
@@ -13,8 +13,11 @@ import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-     title: "Վահանակ"
+export const generateMetadata = async(): Promise<Metadata> => {
+     const t = await getTranslations("dashboard");
+     return {
+          title: t("title")
+     }
 }
 
 export default async function DashboardPage({searchParams, params}: LocalePageProps & {
@@ -53,10 +56,13 @@ export default async function DashboardPage({searchParams, params}: LocalePagePr
      }
      return (
           <PageLayout sidebarMode>
-               <div className="flex justify-between items-center gap-5 my-4">
-                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold mb-3">Վահանակ</h1>
-               </div>
-               <DashboardContent coverLetters={coverLetters} resumes={resumes} totalCount={totalCount} subscriptionLevel={subscriptionLevel} initialValue={show}/>
+               <DashboardContent
+                    coverLetters={coverLetters}
+                    resumes={resumes}
+                    totalCount={totalCount}
+                    subscriptionLevel={subscriptionLevel}
+                    initialValue={show}
+               />
           </PageLayout>
      )
 }

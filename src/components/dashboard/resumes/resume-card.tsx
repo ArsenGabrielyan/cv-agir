@@ -2,7 +2,6 @@
 import { mapToResumeValues } from "@/lib/helpers/maps"
 import { ResumeServerData } from "@/lib/types"
 import { formatDate } from "date-fns"
-import { hy } from "date-fns/locale"
 import { Link } from "@/i18n/routing"
 import QRCode from "qrcode"
 import { absoluteUrl } from "@/lib/utils"
@@ -16,7 +15,8 @@ import DeleteConfirmationDialog from "../../delete-confirmation-dialog"
 import dynamic from "next/dynamic"
 import DocPreviewLoader from "@/components/loaders/doc-preview"
 import usePrint from "@/hooks/use-print"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
+import { dateFNSLocales } from "@/i18n/config"
 
 interface ResumeCardProps{
      data: ResumeServerData
@@ -29,9 +29,11 @@ export default function ResumeCard({data}: ResumeCardProps){
      const [qrImg, setQrImg] = useState("/qr-placeholder.png");
      const wasUpdated = updatedAt!==createdAt;
      const contentRef = useRef<HTMLDivElement>(null);
+     const t = useTranslations("dashboard");
+     const locale = useLocale()
      const handlePrintResume = usePrint({
           contentRef,
-          documentTitle: title || "Անանուն Ռեզյումե",
+          documentTitle: title || t("resumes.default-title"),
      })
      useEffect(()=>{
           if(id){
@@ -63,14 +65,14 @@ export default function ResumeCard({data}: ResumeCardProps){
                          <span className="inline-block absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-background to-transparent" />
                     </Link>
                     <div className="p-4 space-y-1 text-center">
-                         <p className="line-clamp-1 font-semibold">{title || "Անանուն Ռեզյումե"}</p>
+                         <p className="line-clamp-1 font-semibold">{title || t("resumes.default-title")}</p>
                          {description && (
                               <p className="line-clamp-2 text-sm">{description}</p>
                          )}
                          <p className="text-xs text-muted-foreground">
-                              {wasUpdated ? "Թարմացվել է": 'Ստեղծվել է'}{" "}
+                              {wasUpdated ? t("date.updated") : t("date.created")}{" "}
                               {formatDate(updatedAt,"MMM d, yyyy, HH:mm",{
-                                   locale: hy
+                                   locale: dateFNSLocales[locale]
                               })}
                          </p>
                     </div>
@@ -86,6 +88,7 @@ interface MoreMenuProps{
 }
 function MoreMenu({resumeId,onPrintClick}: MoreMenuProps){
      const [showDelConfirmation, setShowDelConfirmation] = useState(false);
+     const buttonTxt = useTranslations("buttons");
      return (
           <>
           <DropdownMenu modal={false}>
@@ -94,7 +97,7 @@ function MoreMenu({resumeId,onPrintClick}: MoreMenuProps){
                          variant="ghost"
                          size="icon"
                          className="absolute right-0.5 bottom-0.5 opacity-0 transition-opacity group-hover:opacity-100 z-10"
-                         title="Այլ գործողություններ"
+                         title={buttonTxt("actions-menu")}
                     >
                          <MoreVertical className="size-4"/>
                     </Button>
@@ -105,14 +108,14 @@ function MoreMenu({resumeId,onPrintClick}: MoreMenuProps){
                          onClick={()=> setShowDelConfirmation(true)}
                     >
                          <Trash2 className="size-4"/>
-                         Ջնջել
+                         {buttonTxt("delete")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                          className="flex items-center gap-2"
                          onClick={onPrintClick}
                     >
                          <Printer className="size-4"/>
-                         Տպել
+                         {buttonTxt("print")}
                     </DropdownMenuItem>
                </DropdownMenuContent>
           </DropdownMenu>
@@ -132,7 +135,9 @@ interface DeleteResumeDialogProps{
 }
 function DeleteResumeDialog({resumeId,open,onOpenChange}: DeleteResumeDialogProps){
      const [isPending, startTransition] = useTransition();
-     const errMsg = useTranslations("error-messages")
+     const errMsg = useTranslations("error-messages");
+     const t = useTranslations("deletion-confirmation");
+     const buttonTxt = useTranslations("buttons")
 
      const handleDelete = async() => {
           startTransition(async()=>{
@@ -152,6 +157,9 @@ function DeleteResumeDialog({resumeId,open,onOpenChange}: DeleteResumeDialogProp
                onOpenChange={onOpenChange}
                loading={isPending}
                onAccept={handleDelete}
+               acceptButtonText={buttonTxt("delete")}
+               dialogTitle={t("titles.resume")}
+               t={t}
           />
      )
 }

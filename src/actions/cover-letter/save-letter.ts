@@ -122,7 +122,7 @@ export const saveCoverLetter = async(values: CoverLetterFormType) => {
                }
           })
      } else {
-          const t = await getTranslations("cover-letter-editor")
+          const t = await getTranslations("dashboard.cover-letters")
           const newCoverLetter = await db.coverLetter.create({
                data: {
                     ...coverLetterValues,

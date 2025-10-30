@@ -1,0 +1,21 @@
+{
+     "dashboard": {
+          "title": "Dashboard",
+          "buttons": {
+               "create-resume": "Create Resume",
+               "create-cover-letter": "Create Cover Letter"
+          },
+          "resumes": {
+               "title": "Resumes",
+               "default-title": "Untitled Resume"
+          },
+          "cover-letters": {
+               "title": "Cover Letters",
+               "default-title": "Untitled Cover Letter"
+          },
+          "date": {
+               "created": "Created at",
+               "updated": "Updated at"
+          }
+     }
+}

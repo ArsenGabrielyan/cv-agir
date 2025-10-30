@@ -1,29 +1,33 @@
 import { Button } from "@/components/ui/button";
 import LoadingButton from "./buttons/loading-button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useTranslations } from "next-intl";
 
 interface DeleteConfirmationDialogProps{
      open: boolean,
      onOpenChange: (open: boolean) => void
      loading: boolean,
      onAccept: () => void,
-     acceptButtonText?: string,
-     dialogTitle?: string
+     acceptButtonText: string,
+     dialogTitle: string,
+     t: ReturnType<typeof useTranslations<"deletion-confirmation">>
 }
 export default function DeleteConfirmationDialog({
      open,
      onOpenChange,
      loading,
      onAccept,
-     acceptButtonText="Ջնջել",
-     dialogTitle="Համոզվա՞ծ եք, որ ուզում եք ջնջել ռեզյումեն։"
+     acceptButtonText,
+     dialogTitle,
+     t
 }: DeleteConfirmationDialogProps){
+     const buttonTxt = useTranslations("buttons")
      return (
           <Dialog open={open} onOpenChange={onOpenChange}>
                <DialogContent>
                     <DialogHeader>
                          <DialogTitle className="leading-6">{dialogTitle}</DialogTitle>
-                         <DialogDescription>Այս գործողությունը հնարավոր չէ հետարկել:</DialogDescription>
+                         <DialogDescription>{t("desc")}</DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
                          <LoadingButton
@@ -34,7 +38,7 @@ export default function DeleteConfirmationDialog({
                               {acceptButtonText}
                          </LoadingButton>
                          <Button variant="secondary" onClick={()=>onOpenChange(false)}>
-                              Փակել
+                              {buttonTxt("close")}
                          </Button>
                     </DialogFooter>
                </DialogContent>

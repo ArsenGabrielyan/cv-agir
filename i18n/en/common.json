@@ -13,7 +13,12 @@
           "loading": "Please Wait...",
           "upgrade": "Upgrade to Premium",
           "tryAgain": "Try Again",
-          "subscribe-btn": "Subscribe"
+          "subscribe-btn": "Subscribe",
+          "delete": "Delete",
+          "cancel": "Cancel",
+          "close": "Close",
+          "actions-menu": "Other actions",
+          "print": "Print"
      },
      "nav-links": {
           "menu": "Menu",
@@ -74,5 +79,14 @@
                "pass-reset": "Reset the Password",
                "2fa": "Two-Factor Authentication"
           }
+     },
+     "deletion-confirmation": {
+          "titles": {
+               "resume": "Are you sure you want to delete the resume?",
+               "cover-letter": "Are you sure you want to delete the cover letter?",
+               "cancel-sub": "Are you sure you want to cancel your subscription?",
+               "payment-method": "Are you sure you want to delete this payment method?"
+          },
+          "desc": "This action cannot be undone."
      }
 }

@@ -26,9 +26,10 @@ export default function CoverLetterCard({data}: CoverLetterCardProps){
      const {updatedAt, createdAt, title, description, id} = data;
      const wasUpdated = updatedAt!==createdAt;
      const contentRef = useRef<HTMLDivElement>(null);
+     const t = useTranslations("dashboard");
      const handlePrintCoverLetter = usePrint({
           contentRef,
-          documentTitle: title || "Անանուն Ուղեկցող Նամակ",
+          documentTitle: title || t("cover-letters.default-title"),
      })
      return (
           <div className="relative group rounded-lg bg-card text-card-foreground border shadow">
@@ -45,12 +46,12 @@ export default function CoverLetterCard({data}: CoverLetterCardProps){
                          <span className="inline-block absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-background to-transparent" />
                     </Link>
                     <div className="p-4 space-y-1 text-center">
-                         <p className="line-clamp-1 font-semibold">{title || "Անանուն Ուղեկցող նամակ"}</p>
+                         <p className="line-clamp-1 font-semibold">{title || t("cover-letters.default-title")}</p>
                          {description && (
                               <p className="line-clamp-2 text-sm">{description}</p>
                          )}
                          <p className="text-xs text-muted-foreground">
-                              {wasUpdated ? "Թարմացվել է": 'Ստեղծվել է'}{" "}
+                              {wasUpdated ? t("date.updated") : t("date.created")}{" "}
                               {formatDate(updatedAt,"MMM d, yyyy, HH:mm",{
                                    locale: hy
                               })}
@@ -68,6 +69,7 @@ interface MoreMenuProps{
 }
 function MoreMenu({coverLetterId,onPrintClick}: MoreMenuProps){
      const [showDelConfirmation, setShowDelConfirmation] = useState(false);
+     const buttonTxt = useTranslations("buttons");
      return (
           <>
           <DropdownMenu modal={false}>
@@ -76,7 +78,7 @@ function MoreMenu({coverLetterId,onPrintClick}: MoreMenuProps){
                          variant="ghost"
                          size="icon"
                          className="absolute right-0.5 bottom-0.5 opacity-0 transition-opacity group-hover:opacity-100 z-10"
-                         title="Այլ գործողություններ"
+                         title={buttonTxt("actions-menu")}
                     >
                          <MoreVertical className="size-4"/>
                     </Button>
@@ -87,14 +89,14 @@ function MoreMenu({coverLetterId,onPrintClick}: MoreMenuProps){
                          onClick={()=> setShowDelConfirmation(true)}
                     >
                          <Trash2 className="size-4"/>
-                         Ջնջել
+                         {buttonTxt("delete")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                          className="flex items-center gap-2"
                          onClick={onPrintClick}
                     >
                          <Printer className="size-4"/>
-                         Տպել
+                         {buttonTxt("print")}
                     </DropdownMenuItem>
                </DropdownMenuContent>
           </DropdownMenu>
@@ -102,7 +104,6 @@ function MoreMenu({coverLetterId,onPrintClick}: MoreMenuProps){
                coverLetterId={coverLetterId}
                open={showDelConfirmation}
                onOpenChange={setShowDelConfirmation}
-               
           />
           </>
      )
@@ -116,6 +117,8 @@ interface DeleteCoverLetterDialogProps{
 function DeleteCoverLetterDialog({coverLetterId,open,onOpenChange}: DeleteCoverLetterDialogProps){
      const [isPending, startTransition] = useTransition();
      const errMsg = useTranslations("error-messages")
+     const t = useTranslations("deletion-confirmation");
+     const buttonTxt = useTranslations("buttons")
 
      const handleDelete = async() => {
           startTransition(async()=>{
@@ -135,7 +138,9 @@ function DeleteCoverLetterDialog({coverLetterId,open,onOpenChange}: DeleteCoverL
                onOpenChange={onOpenChange}
                loading={isPending}
                onAccept={handleDelete}
-               dialogTitle="Համոզվա՞ծ եք, որ ուզում եք ջնջել ուղեկցող նամակը։"
+               acceptButtonText={buttonTxt("delete")}
+               dialogTitle={t("titles.cover-letter")}
+               t={t}
           />
      )
 }

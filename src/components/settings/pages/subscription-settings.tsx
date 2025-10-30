@@ -123,7 +123,10 @@ interface CancelSubDialogProps{
 }
 function CancelSubDialog({userId,open,onOpenChange,updateSession}: CancelSubDialogProps){
      const [isPending, startTransition] = useTransition();
-     const errMsg = useTranslations("error-messages")
+     const errMsg = useTranslations("error-messages");
+     const t = useTranslations("deletion-confirmation")
+     const buttonTxt = useTranslations("buttons")
+
      const handleCancel = () => {
           startTransition(()=>{
                cancelSubscription(userId)
@@ -145,8 +148,9 @@ function CancelSubDialog({userId,open,onOpenChange,updateSession}: CancelSubDial
                onOpenChange={onOpenChange}
                loading={isPending}
                onAccept={handleCancel}
-               acceptButtonText="Չեղարկել այն"
-               dialogTitle="Համոզվա՞ծ եք, որ ուզում եք չեղարկել բաժանորդագրությունը:"
+               acceptButtonText={buttonTxt("cancel")}
+               dialogTitle={t("titles.cancel-sub")}
+               t={t}
           />
      )
 }

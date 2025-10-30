@@ -1,0 +1,21 @@
+{
+     "dashboard": {
+          "title": "Վահանակ",
+          "buttons": {
+               "create-resume": "Ստեղծել Ռեզյումե",
+               "create-cover-letter": "Ստեղծել Ուղեկցող նամակ"
+          },
+          "resumes": {
+               "title": "Ռեզյումեներ",
+               "default-title": "Անանուն ռեզյումե"
+          },
+          "cover-letters": {
+               "title": "Ուղեկցող նամակներ",
+               "default-title": "Անանուն նամակ"
+          },
+          "date": {
+               "created": "Ստեղծվել է",
+               "updated": "Թարմացվել է"
+          }
+     }
+}
