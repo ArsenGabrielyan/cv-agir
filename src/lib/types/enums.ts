@@ -31,6 +31,13 @@ export enum NavLinks{
      Contact = "contact",
      About = "about-us"
 }
+export enum SidebarLinks{
+     Dashboard = "dashboard",
+     MyProfile = "my-profile",
+     Templates = "templates",
+     Support = "support",
+     Settings = "settings"
+}
 export enum Theme{
      Zinc = "zinc",
      Rose = "rose",

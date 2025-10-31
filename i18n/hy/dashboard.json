@@ -17,7 +17,15 @@
                "created": "Ստեղծվել է",
                "updated": "Թարմացվել է"
           },
-          "free-resumes": "Անվճար ռեզյումեներ"
+          "free-resumes": "Անվճար ռեզյումեներ",
+          "links": {
+               "dashboard": "Վահանակ",
+               "my-profile": "Իմ պրոֆիլը",
+               "templates": "Շաբլոններ",
+               "support": "Աջակցություն",
+               "settings": "Կարգավորումներ"
+          },
+          "menu": "Մենյու"
      },
      "editor": {
           "resume": {

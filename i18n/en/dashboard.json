@@ -17,7 +17,15 @@
                "created": "Created at",
                "updated": "Updated at"
           },
-          "free-resumes": "Free resumes"
+          "free-resumes": "Free resumes",
+          "links": {
+               "dashboard": "Dashboard",
+               "my-profile": "My Profile",
+               "templates": "Templates",
+               "support": "Support",
+               "settings": "Settings"
+          },
+          "menu": "Menu"
      },
      "editor": {
           "resume": {

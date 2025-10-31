@@ -6,7 +6,7 @@ import { LucideProps } from "lucide-react";
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
 import { LangCodeType } from "@/i18n/types";
-import { CoverLetterSteps, Features, NavLinks, ResumeSteps } from "./enums";
+import { CoverLetterSteps, Features, NavLinks, ResumeSteps, SidebarLinks } from "./enums";
 
 // Themes
 export type ThemeColors = "Zinc" | "Rose" | "Blue" | "Green" | "Orange";
@@ -43,7 +43,7 @@ export interface INavbarLink{
 }
 interface ISidebarLinkBase {
      id: number;
-     name: string;
+     name: SidebarLinks
      Icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
 }
 interface ISidebarSimpleLink extends ISidebarLinkBase {

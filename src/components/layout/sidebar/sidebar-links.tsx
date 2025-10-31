@@ -17,9 +17,10 @@ interface SidebarLinksProps{
 export default function SidebarLinks({subscriptionLevel}: SidebarLinksProps){
      const errMsg = useTranslations("error-messages")
      const {canCreateCoverLetters} = getAvailableFeatures(subscriptionLevel,errMsg)
+     const t = useTranslations("dashboard")
      return (
           <SidebarGroup>
-               <SidebarGroupLabel>Մենյու</SidebarGroupLabel>
+               <SidebarGroupLabel>{t("menu")}</SidebarGroupLabel>
                <SidebarGroupContent>
                     <SidebarMenu>
                          {SIDEBAR_LINKS.map((link)=>(

@@ -12,6 +12,7 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/component
 import { ChevronDown } from "lucide-react";
 import usePremiumModal from "@/hooks/use-premium-modal";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface SidebarItemProps{
      data: ISidebarLink,
@@ -21,13 +22,15 @@ export default function SidebarItem({data,canCreateCoverLetters}: SidebarItemPro
      const {name,href,Icon, dropdown} = data
      const currentRoute = usePathname();
      const premiumModal = usePremiumModal();
+     const sidebarLink = useTranslations("dashboard.links");
+     const navLink = useTranslations("nav-links")
      return (dropdown && dropdown.length > 0) ? (
           <Collapsible className="group/collapsible">
                <SidebarMenuItem>
                     <CollapsibleTrigger asChild>
                          <SidebarMenuButton>
                               <Icon/>
-                              <span>{name}</span>
+                              {sidebarLink(name)}
                               <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180"/>
                          </SidebarMenuButton>
                     </CollapsibleTrigger>
@@ -36,10 +39,10 @@ export default function SidebarItem({data,canCreateCoverLetters}: SidebarItemPro
                               {dropdown.map(({id,name,href,isPremium})=>(
                                    <SidebarMenuSubItem key={id}>
                                         {(isPremium && !canCreateCoverLetters) ? (
-                                             <SidebarMenuButton onClick={()=>premiumModal.setOpen(true)}>{name}</SidebarMenuButton>
+                                             <SidebarMenuButton onClick={()=>premiumModal.setOpen(true)}>{navLink(name)}</SidebarMenuButton>
                                         ) : (
                                              <SidebarMenuSubButton asChild>
-                                                  <Link href={href}>{name}</Link>
+                                                  <Link href={href}>{navLink(name)}</Link>
                                              </SidebarMenuSubButton>
                                         )}
                                    </SidebarMenuSubItem>
@@ -54,13 +57,13 @@ export default function SidebarItem({data,canCreateCoverLetters}: SidebarItemPro
                     <SidebarMenuButton asChild>
                          <Link href={href} className={cn(currentRoute===href && "text-primary font-semibold")}>
                               <Icon/>
-                              <span>{name}</span>
+                              {sidebarLink(name)}
                          </Link>
                     </SidebarMenuButton>
                ) : (
                     <SidebarMenuButton>
                          <Icon/>
-                         <span>{name}</span>
+                         {sidebarLink(name)}
                     </SidebarMenuButton>
                )}
           </SidebarMenuItem>
