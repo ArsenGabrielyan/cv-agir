@@ -3,12 +3,14 @@ import { ResumeDetailsType } from "@/schemas/types"
 import DynamicFieldWrapper from "../../wrappers/field-wrapper";
 import { FormField, FormItem, FormMessage, FormLabel, FormControl, FormDescription } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input";
+import { useTranslations } from "next-intl";
+import RandomPlaceholderInput from "@/components/form/rand-placeholder-input";
 
 export default function EducationField({form,index,remove,id}: ResumeArrayFieldProps<ResumeDetailsType>){
+     const t = useTranslations("editor.resume")
      return (
           <DynamicFieldWrapper
-               title="Ուս․ Հաստատություն"
+               title={t("education.item-title")}
                index={index}
                remove={remove}
                id={id}
@@ -19,11 +21,11 @@ export default function EducationField({form,index,remove,id}: ResumeArrayFieldP
                          name={`education.${index}.school`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Հաստատության անուն</FormLabel>
+                                   <FormLabel>{t("education.school.label")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
-                                             placeholder="Երևանի Պետական Համալսարան"
+                                             placeholder={t("education.school.placeholder")}
                                         />
                                    </FormControl>
                                    <FormMessage/>
@@ -35,11 +37,11 @@ export default function EducationField({form,index,remove,id}: ResumeArrayFieldP
                          name={`education.${index}.degree`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Գիտական աստիճան</FormLabel>
+                                   <FormLabel>{t("fields.degree.label")}</FormLabel>
                                    <FormControl>
                                         <RandomPlaceholderInput
                                              {...field}
-                                             placeholderKey="degrees"
+                                             placeholdersList={t("fields.degree.placeholder")}
                                         />
                                    </FormControl>
                                    <FormMessage/>
@@ -53,7 +55,7 @@ export default function EducationField({form,index,remove,id}: ResumeArrayFieldP
                          name={`education.${index}.faculty`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Ֆակուլտետ</FormLabel>
+                                   <FormLabel>{t("education.faculty")}</FormLabel>
                                    <FormControl>
                                         <Input {...field}/>
                                    </FormControl>
@@ -66,11 +68,11 @@ export default function EducationField({form,index,remove,id}: ResumeArrayFieldP
                          name={`education.${index}.city`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Քաղաք, Երկիր</FormLabel>
+                                   <FormLabel>{t("fields.city-country.label")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
-                                             placeholder="Երևան, Հայաստան"
+                                             placeholder={t("fields.city-country.placeholder")}
                                         />
                                    </FormControl>
                                    <FormMessage/>
@@ -84,7 +86,7 @@ export default function EducationField({form,index,remove,id}: ResumeArrayFieldP
                          name={`education.${index}.startDate`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Սկիզբ</FormLabel>
+                                   <FormLabel>{t("fields.dates.start")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
@@ -101,7 +103,7 @@ export default function EducationField({form,index,remove,id}: ResumeArrayFieldP
                          name={`education.${index}.endDate`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Ավարտ</FormLabel>
+                                   <FormLabel>{t("fields.dates.end")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
@@ -114,7 +116,9 @@ export default function EducationField({form,index,remove,id}: ResumeArrayFieldP
                          )}
                     />
                </div>
-               <FormDescription>Թողնել <span className="font-semibold">նշված ավարտի ամիսը</span> դատարկ, եթե դեռ հիմա նշված տեղում սովորում եք</FormDescription>
+               <FormDescription>{t.rich("fields.dates.field-desc-edu",{
+                    bold: chunks => <span className="font-semibold">{chunks}</span>
+               })}</FormDescription>
           </DynamicFieldWrapper>
      )
 }

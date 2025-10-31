@@ -25,6 +25,7 @@ export default function GenerateWorkExpButton({onWorkExpGenerated}: GenerateWork
      const premiumModal = usePremiumModal();
      const errMsg = useTranslations("error-messages")
      const {canUseAITools} = getAvailableFeatures(subscriptionMethod,errMsg)
+     const t = useTranslations("buttons.ai")
      return (
           <>
                <Button variant="outline" type="button" onClick={()=>{
@@ -35,7 +36,7 @@ export default function GenerateWorkExpButton({onWorkExpGenerated}: GenerateWork
                     setShowInputDialog(true)
                }}>
                     <Sparkles className="size-4"/>
-                    Տվյալների լրացում (ԱԲ)
+                    {t("fill")}
                </Button>
                <InputDialog
                     open={showInputDialog}
@@ -71,15 +72,14 @@ function InputDialog({open,onOpenChange,onWorkExpGenerated}: InputDialogProps){
                toast.error(errMsg("unknownError"))
           }
      }
-
+     const t = useTranslations("editor.resume.generate-work-exp")
+     const buttonTxt = useTranslations("buttons.ai")
      return (
           <Dialog open={open} onOpenChange={onOpenChange}>
                <DialogContent>
                     <DialogHeader>
-                         <DialogTitle>Գեներացնել աշխատանքային փորձ</DialogTitle>
-                         <DialogDescription>
-                              Նկարագրեք այս աշխատանքային փորձը և Արհեստական Բանականությունը կգեներացնի օպտիմիզացված մուտք հատուկ Ձեզ համար
-                         </DialogDescription>
+                         <DialogTitle>{t("title")}</DialogTitle>
+                         <DialogDescription>{t("desc")}</DialogDescription>
                     </DialogHeader>
                     <Form {...form}>
                          <form className="space-y-3" onSubmit={form.handleSubmit(handleSubmit)}>
@@ -88,11 +88,11 @@ function InputDialog({open,onOpenChange,onWorkExpGenerated}: InputDialogProps){
                                    name="description"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Նկարագրություն</FormLabel>
+                                             <FormLabel>{t("field.label")}</FormLabel>
                                              <FormControl>
                                                   <Textarea
                                                        {...field}
-                                                       placeholder={`օր․՝ "2016թ. սեպտեմբերից մինչև 2022թ. ապրիլին ես աշխատել եմ Picsart-ում որպես ծրագրավորող։ Իմ հանձնարարությունը ..."`}
+                                                       placeholder={t("field.placeholder")}
                                                        autoFocus
                                                   />
                                              </FormControl>
@@ -101,7 +101,7 @@ function InputDialog({open,onOpenChange,onWorkExpGenerated}: InputDialogProps){
                                    )}
                               />
                               <LoadingButton type="submit" loading={form.formState.isSubmitting}>
-                                   Գեներացնել
+                                   {buttonTxt("generate")}
                               </LoadingButton>
                          </form>
                     </Form>

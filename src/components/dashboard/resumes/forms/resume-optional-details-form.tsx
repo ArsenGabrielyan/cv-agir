@@ -16,9 +16,11 @@ import {restrictToVerticalAxis} from "@dnd-kit/modifiers"
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import debounce from "lodash.debounce"
 import { useTranslations } from "next-intl"
+import { Plus } from "lucide-react"
 
 export default function ResumeOptionalDetailsForm({resumeData, setResumeData}: ResumeFormProps){
      const validationMsg = useTranslations("validations");
+     const t = useTranslations("editor.resume")
      const form = useForm<ResumeOptionalDetailsType>({
           resolver: zodResolver(getResumeOptionalDetailsSchema(validationMsg)),
           defaultValues: {
@@ -52,10 +54,13 @@ export default function ResumeOptionalDetailsForm({resumeData, setResumeData}: R
           <Form {...form}>
                <form className="space-y-4">
                     <EditorFormCardWrapper
-                         title="Վեբ հղումներ"
-                         description="Ավելացրեք այնքան վեբ հղում, որքան ցանկանում եք"
+                         title={t("links.title")}
+                         description={t("links.desc")}
                          renderFooter={()=>(
-                              <Button type="button" onClick={linksField.addValue}>Ավելացնել հղում</Button>
+                              <Button type="button" onClick={linksField.addValue}>
+                                   <Plus/>
+                                   {t("links.add-btn")}
+                              </Button>
                          )}
                     >
                          <DndContext
@@ -81,10 +86,13 @@ export default function ResumeOptionalDetailsForm({resumeData, setResumeData}: R
                          </DndContext>
                     </EditorFormCardWrapper>
                     <EditorFormCardWrapper
-                         title="Դասընթացներ"
-                         description="Ավելացրեք այնքան դասընթաց, որքան ցանկանում եք"
+                         title={t("courses.title")}
+                         description={t("courses.desc")}
                          renderFooter={()=>(
-                              <Button type="button" onClick={coursesField.addValue}>Ավելացնել դասընթաց</Button>
+                              <Button type="button" onClick={coursesField.addValue}>
+                                   <Plus/>
+                                   {t("courses.add-btn")}
+                              </Button>
                          )}
                     >
                          <DndContext
@@ -111,10 +119,13 @@ export default function ResumeOptionalDetailsForm({resumeData, setResumeData}: R
                          
                     </EditorFormCardWrapper>
                     <EditorFormCardWrapper
-                         title="Կոնտակտային հղումներ"
-                         description="Ավելացրեք այնքան կոնտակտային հղում, որքան ցանկանում եք"
+                         title={t("refs.title")}
+                         description={t("refs.desc")}
                          renderFooter={()=>(
-                              <Button type="button" onClick={refsField.addValue}>Ավելացնել կոնտակտային հղում</Button>
+                              <Button type="button" onClick={refsField.addValue}>
+                                   <Plus/>
+                                   {t("refs.add-btn")}
+                              </Button>
                          )}
                     >
                          <DndContext

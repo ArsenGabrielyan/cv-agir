@@ -3,11 +3,13 @@ import { Input } from "@/components/ui/input"
 import { ResumeArrayFieldProps } from "@/lib/types"
 import { ResumeOptionalDetailsType } from "@/schemas/types"
 import DynamicFieldWrapper from "../../wrappers/field-wrapper"
+import { useTranslations } from "next-intl"
 
 export default function ResumeLinkField({form,index,remove,id}: ResumeArrayFieldProps<ResumeOptionalDetailsType>){
+     const t = useTranslations("editor.resume.links")
      return (
           <DynamicFieldWrapper
-               title="Վեբ հղում"
+               title={t("item-title")}
                index={index}
                remove={remove}
                id={id}
@@ -18,11 +20,11 @@ export default function ResumeLinkField({form,index,remove,id}: ResumeArrayField
                          name={`links.${index}.name`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Հղում</FormLabel>
+                                   <FormLabel>{t("link-name.label")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
-                                             placeholder="Վեբ կայք"
+                                             placeholder={t("link-name.placeholder")}
                                         />
                                    </FormControl>
                                    <FormMessage/>
@@ -34,7 +36,7 @@ export default function ResumeLinkField({form,index,remove,id}: ResumeArrayField
                          name={`links.${index}.url`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Հղման հասցե</FormLabel>
+                                   <FormLabel>{t("link-address")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}

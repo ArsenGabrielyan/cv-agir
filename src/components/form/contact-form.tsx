@@ -20,6 +20,8 @@ import { ContactFormType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
 import { getCaptchaToken } from "@/lib/captcha";
 import { useTranslations } from "next-intl";
+import { MailIcon, PhoneIcon } from "lucide-react";
+import { InputGroup, InputGroupInput, InputGroupAddon } from "../ui/input-group";
 
 export default function ContactForm(){
      const [isPending, startTransition] = useTransition();
@@ -82,12 +84,16 @@ export default function ContactForm(){
                                         <FormItem>
                                              <FormLabel>{t("email.label")}</FormLabel>
                                              <FormControl>
-                                                  <Input
-                                                       {...field}
-                                                       type="email"
-                                                       disabled={isPending}
-                                                       placeholder={t("email.placeholder")}
-                                                  />
+                                                  <InputGroup>
+                                                       <InputGroupInput
+                                                            {...field}
+                                                            placeholder={t("email.placeholder")}
+                                                            type="email"
+                                                       />
+                                                       <InputGroupAddon>
+                                                            <MailIcon/>
+                                                       </InputGroupAddon>
+                                                  </InputGroup>
                                              </FormControl>
                                              <FormMessage/>
                                         </FormItem>
@@ -100,11 +106,15 @@ export default function ContactForm(){
                                         <FormItem>
                                              <FormLabel>{t("phone.label")}</FormLabel>
                                              <FormControl>
-                                                  <Input
-                                                       {...field}
-                                                       disabled={isPending}
-                                                       placeholder={t("phone.placeholder")}
-                                                  />
+                                                  <InputGroup>
+                                                       <InputGroupInput
+                                                            {...field}
+                                                            placeholder={t("phone.placeholder")}
+                                                       />
+                                                       <InputGroupAddon>
+                                                            <PhoneIcon/>
+                                                       </InputGroupAddon>
+                                                  </InputGroup>
                                              </FormControl>
                                              <FormMessage/>
                                         </FormItem>

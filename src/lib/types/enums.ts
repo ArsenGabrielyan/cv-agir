@@ -38,3 +38,12 @@ export enum Theme{
      Green = "green",
      Orange = "orange"
 }
+export enum ResumeSteps{
+     Info = "resume-info",
+     Details = "resume-details",
+     OptionalDetails = "optional-details"
+}
+export enum CoverLetterSteps{
+     Details = "cl-details",
+     Info = "cl-info"
+}

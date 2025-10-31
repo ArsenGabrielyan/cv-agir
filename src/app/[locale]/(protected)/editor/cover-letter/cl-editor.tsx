@@ -1,5 +1,5 @@
 "use client"
-import CoverLetterFormFooter from "./cl-form-footer";
+import FormFooter from "../form-footer"
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CoverLetterPreviewSection from "./cl-preview-section";
@@ -7,7 +7,7 @@ import { useCallback, useRef, useState } from "react";
 import { CoverLetterFormType } from "@/schemas/types";
 import { useSearchParams } from "next/navigation";
 import { steps } from "./steps";
-import Breadcrumbs from "./breadcrumbs";
+import Breadcrumbs from "../breadcrumbs";
 import { useCoverLetterAutoSave } from "@/hooks/use-auto-save";
 import useUnsavedChangesWarning from "@/hooks/use-unsaved-changes";
 import { CoverLetter } from "@db";
@@ -16,6 +16,7 @@ import { ExtendedUser } from "@/global";
 import usePrint from "@/hooks/use-print";
 import { useRouter } from "@/i18n/routing";
 import { Spinner } from "@/components/ui/spinner";
+import { useTranslations } from "next-intl";
 
 interface CoverLetterEditorProps {
      letterToEdit: CoverLetter | null;
@@ -29,9 +30,10 @@ export default function CoverLetterEditor({letterToEdit,userData}: CoverLetterEd
      const {isSaving, hasUnsavedChanges} = useCoverLetterAutoSave(coverLetterData)
      const contentRef = useRef<HTMLDivElement>(null);
      const currStep = searchParams.get("step") || steps[0].key;
+     const titles = useTranslations("dashboard.cover-letters")
      const printCoverLetter = usePrint({
           contentRef,
-          documentTitle: "Անանուն նամակ",
+          documentTitle: titles("default-title"),
      })
      const setStep = useCallback((key: string) => {
           const newSearchParams = new URLSearchParams(searchParams);
@@ -42,26 +44,27 @@ export default function CoverLetterEditor({letterToEdit,userData}: CoverLetterEd
           step=>step.key===currStep
      )?.component
      useUnsavedChangesWarning(hasUnsavedChanges);
+     const t = useTranslations("editor")
      return (
           <div className="flex grow flex-col">
                <header className="border-b px-3 py-5 flex flex-col items-center justify-center gap-y-4">
                     <div className="space-y-2 text-center">
                          <h1 className="text-lg md:text-xl lg:text-2xl font-semibold flex flex-col md:flex-row justify-center md:justify-between items-center md:items-start gap-2">
-                              Գրել ուղեկցող նամակ
+                              {t("cover-letter.title")}
                               {isSaving && (
                                    <span className="text-base font-normal flex items-center gap-2 text-muted-foreground">
-                                        <Spinner/>Պահպանվում է․․․
+                                        <Spinner/>{t("saving")}
                                    </span>
                               )}
                          </h1>
-                         <p className="text-sm text-muted-foreground">Գրել ուղեկցող նամակ հետևելով նշված քայլերին։ Ձեր գործընթացը ավտոմատիկ կպահպանվի։</p>
+                         <p className="text-sm text-muted-foreground">{t("cover-letter.desc")}</p>
                     </div>
                </header>
                <main className="relative grow">
                     <div className="absolute bottom-0 top-0 w-full flex">
                          <ScrollArea className={cn("w-full md:w-1/2 p-4 md:block",showSmLetterPreview && "hidden")}>
                               <div className="space-y-6">
-                                   <Breadcrumbs currStep={currStep} setCurrStep={setStep}/>
+                                   <Breadcrumbs type="cover-letter" currStep={currStep} setCurrStep={setStep}/>
                                    {FormComponent && (
                                         <FormComponent
                                              coverLetterData={coverLetterData}
@@ -80,7 +83,8 @@ export default function CoverLetterEditor({letterToEdit,userData}: CoverLetterEd
                          />
                     </div>
                </main>
-               <CoverLetterFormFooter
+               <FormFooter
+                    steps={steps}
                     onPrint={printCoverLetter}
                     currStep={currStep}
                     setCurrStep={setStep}

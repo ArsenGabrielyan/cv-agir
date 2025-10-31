@@ -1,15 +1,5 @@
 import { AuditAction, UserPlan } from "@db"
-import { IResumeDynamicFields, PlaceholdersName, QuickFilterType } from "../../lib/types"
-
-/**
- * Մասնագիտությունների ցուցակ
- */
-export const JOB_NAMES: string[] = ['Բժիշկ', 'Ճարտարապետ', 'Մենեջեր', 'Քարտուղարուհի', 'Իրավաբան', 'Հաշվապահ', 'Ուսուցիչ', 'Ծրագրավորող', 'Ատամնաբույժ', 'Օգնական', 'Գրադարանավար', 'Խորհրդատու', 'Բեռնատարի վարորդ', 'Գնացքի վարորդ', 'Մսագործ', 'Շինարար', 'Ատաղձագործ', 'Էլեկտրիկ', 'Ջրմուղագործ', 'Մեխանիկ', 'Հավաքարար', 'Այգեպան', 'Բուժքույր', 'Օդաչու', 'Բորտուղեկցորդուհի', 'Մանկաբարձուհի', 'Խոհարար', 'Մատուցող', 'Դերձակ', 'Գանձապահ', 'Ընդունարանի աշխատակից', 'Օպտիկայի մասնագետ', 'Ավտոբուսի վարորդ', 'Թիկնապահ', 'Լուսանկարիչ', 'Մրցավար', 'Թղթակից', 'Դերասան', 'Պարուհի', 'Մարզիչ', 'Երգիչ', 'Նկարիչ', 'Դիզայներ']
-
-/**
- * ԲՈՒՀ-երում գիտական աստիճանների ցուցակ
- */
-export const DEGREES: string[] = ["Բակալավր","Մագիստրատուրա","Ասպիրանտուրա","Դիպլոմ"]
+import { IResumeDynamicFields, QuickFilterType } from "../../lib/types"
 
 export const ARR_FIELD_INITIAL_VALUES: IResumeDynamicFields = {
      courses: {
@@ -53,11 +43,6 @@ export const ARR_FIELD_INITIAL_VALUES: IResumeDynamicFields = {
           name: "",
           percentage: 0
      }
-}
-
-export const PLACEHOLDERS: Record<PlaceholdersName,string[]> = {
-     jobName: JOB_NAMES,
-     degrees: DEGREES
 }
 
 export const AI_MODEL = "gemini-2.0-flash-lite"

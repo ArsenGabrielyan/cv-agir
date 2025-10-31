@@ -17,6 +17,7 @@ import {restrictToVerticalAxis} from "@dnd-kit/modifiers"
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import debounce from "lodash.debounce"
 import { useTranslations } from "next-intl"
+import { Plus } from "lucide-react"
 
 export default function ResumeDetailsForm({resumeData, setResumeData}: ResumeFormProps){
      const validationMsg = useTranslations("validations");
@@ -52,14 +53,18 @@ export default function ResumeDetailsForm({resumeData, setResumeData}: ResumeFor
      const educationField = useResumeDynamicField(form,"education");
      const skillsField = useResumeDynamicField(form,"skills");
      const languagesField = useResumeDynamicField(form,"languages");
+     const t = useTranslations("editor.resume")
      return (
           <Form {...form}>
                <form className="space-y-4">
                     <EditorFormCardWrapper
-                         title="Աշխատանքային փորձ"
-                         description="Ավելացրեք այնքան աշխատանքային փորձ, որքան ցանկանում եք"
+                         title={t("work-exp.title")}
+                         description={t("work-exp.desc")}
                          renderFooter={()=>(
-                              <Button type="button" onClick={experienceField.addValue}>Ավելացնել աշխատանքային փորձ</Button>
+                              <Button type="button" onClick={experienceField.addValue}>
+                                   <Plus/>
+                                   {t("work-exp.add-btn")}
+                              </Button>
                          )}
                     >
                          <DndContext
@@ -85,10 +90,13 @@ export default function ResumeDetailsForm({resumeData, setResumeData}: ResumeFor
                          </DndContext>
                     </EditorFormCardWrapper>
                     <EditorFormCardWrapper
-                         title="Ուսումնական հաստատություններ"
-                         description="Ավելացրեք այնքան ուս․ հաստատություն, որքան ցանկանում եք"
+                         title={t("education.title")}
+                         description={t("education.desc")}
                          renderFooter={()=>(
-                              <Button type="button" onClick={educationField.addValue}>Ավելացնել ուս. հաստատություն</Button>
+                              <Button type="button" onClick={educationField.addValue}>
+                                   <Plus/>
+                                   {t("education.add-btn")}
+                              </Button>
                          )}
                     >
                          <DndContext
@@ -114,10 +122,13 @@ export default function ResumeDetailsForm({resumeData, setResumeData}: ResumeFor
                          </DndContext>
                     </EditorFormCardWrapper>
                     <EditorFormCardWrapper
-                         title="Հմտություններ"
-                         description="Ինչո՞վ եք հմուտ։"
+                         title={t("skills.title")}
+                         description={t("skills.desc")}
                          renderFooter={()=>(
-                              <Button type="button" onClick={skillsField.addValue}>Ավելացնել հմտություն</Button>
+                              <Button type="button" onClick={skillsField.addValue}>
+                                   <Plus/>
+                                   {t("skills.add-btn")}
+                              </Button>
                          )}
                     >
                          <DndContext
@@ -143,10 +154,13 @@ export default function ResumeDetailsForm({resumeData, setResumeData}: ResumeFor
                          </DndContext>
                     </EditorFormCardWrapper>
                     <EditorFormCardWrapper
-                         title="Լեզուներ"
-                         description="Քանի՞ լեզու գիտեք։"
+                         title={t("languages.title")}
+                         description={t("languages.desc")}
                          renderFooter={()=>(
-                              <Button type="button" onClick={languagesField.addValue}>Ավելացնել հմտություն</Button>
+                              <Button type="button" onClick={languagesField.addValue}>
+                                   <Plus/>
+                                   {t("languages.add-btn")}
+                              </Button>
                          )}
                     >
                          <DndContext
@@ -170,7 +184,6 @@ export default function ResumeDetailsForm({resumeData, setResumeData}: ResumeFor
                                    ))}
                               </SortableContext>
                          </DndContext>
-                         
                     </EditorFormCardWrapper>
                </form>
           </Form>

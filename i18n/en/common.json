@@ -18,7 +18,18 @@
           "cancel": "Cancel",
           "close": "Close",
           "actions-menu": "Other actions",
-          "print": "Print"
+          "print": "Print",
+          "ai": {
+               "generate": "Generate",
+               "fill": "Fill Data With AI"
+          },
+          "pagination": {
+               "prev": "Previous",
+               "next": "Next"
+          },
+          "edit": "Edit",
+          "preview": "Show Preview",
+          "remove": "Remove"
      },
      "nav-links": {
           "menu": "Menu",
@@ -88,5 +99,13 @@
                "payment-method": "Are you sure you want to delete this payment method?"
           },
           "desc": "This action cannot be undone."
+     },
+     "audit-log": {
+          "unknown-email": "Unknown Email",
+          "ai": {
+               "desc-gen": "Summary Generation",
+               "exp-gen": "Work Experience Generation",
+               "letter-gen": "Cover Letter Generation"
+          }
      }
 }

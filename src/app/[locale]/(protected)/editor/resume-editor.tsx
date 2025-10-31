@@ -4,7 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { useSearchParams } from "next/navigation"
 import { steps } from "./steps"
 import Breadcrumbs from "./breadcrumbs"
-import ResumeFormFooter from "./resume-form-footer"
+import FormFooter from "./form-footer"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { ResumeFormType } from "@/schemas/types"
 import ResumePreviewSection from "./resume-preview-section"
@@ -19,6 +19,7 @@ import { ExtendedUser } from "@/global"
 import { useRouter } from "@/i18n/routing"
 import { ResumeServerData } from "@/lib/types"
 import { Spinner } from "@/components/ui/spinner"
+import { useTranslations } from "next-intl"
 
 interface ResumeEditorProps {
      resumeToEdit: ResumeServerData | null;
@@ -35,9 +36,10 @@ export default function ResumeEditor({resumeToEdit,template,resumeId,userData}: 
      const [qrImg, setQrImg] = useState("/qr-placeholder.png");
      const currStep = searchParams.get("step") || steps[0].key;
      const contentRef = useRef<HTMLDivElement>(null);
+     const titles = useTranslations("dashboard.resumes")
      const printResume = usePrint({
           contentRef,
-          documentTitle: resumeToEdit ? resumeToEdit.title : "Անանուն Ռեզյումե",
+          documentTitle: resumeToEdit ? resumeToEdit.title : titles("default-title")
      })
      const setStep = useCallback((key: string) => {
           const newSearchParams = new URLSearchParams(searchParams);
@@ -68,26 +70,27 @@ export default function ResumeEditor({resumeToEdit,template,resumeId,userData}: 
                setQrImg("/qr-placeholder.png")
           }
      },[resumeId])
+     const t = useTranslations("editor")
      return (
           <div className="flex grow flex-col">
                <header className="border-b px-3 py-5 flex flex-col items-center justify-center gap-y-4">
                     <div className="space-y-2 text-center">
                          <h1 className="text-lg md:text-xl lg:text-2xl font-semibold flex flex-col md:flex-row justify-center md:justify-between items-center md:items-start gap-2">
-                              Պատրաստել Ձեր ռեզյումեն
+                              {t("resume.title")}
                               {isSaving && (
                                    <span className="text-base font-normal flex items-center gap-2 text-muted-foreground">
-                                        <Spinner/>Պահպանվում է․․․
+                                        <Spinner/>{t("saving")}
                                    </span>
                               )}
                          </h1>
-                         <p className="text-sm text-muted-foreground">Պատրաստել Ձեր ռեզյումեն հետևելով նշված քայլերին։ Ձեր գործընթացը ավտոմատիկ կպահպանվի։</p>
+                         <p className="text-sm text-muted-foreground">{t("resume.desc")}</p>
                     </div>
                </header>
                <main className="relative grow">
                     <div className="absolute bottom-0 top-0 w-full flex">
                          <ScrollArea className={cn("w-full md:w-1/2 p-4 md:block",showSmResumePreview && "hidden")}>
                               <div className="space-y-6">
-                                   <Breadcrumbs currStep={currStep} setCurrStep={setStep}/>
+                                   <Breadcrumbs type="resume" currStep={currStep} setCurrStep={setStep}/>
                                    {FormComponent && (
                                         <FormComponent
                                              resumeData={resumeData}
@@ -109,7 +112,8 @@ export default function ResumeEditor({resumeToEdit,template,resumeId,userData}: 
                          />
                     </div>
                </main>
-               <ResumeFormFooter
+               <FormFooter
+                    steps={steps}
                     onPrint={printResume}
                     currStep={currStep}
                     setCurrStep={setStep}

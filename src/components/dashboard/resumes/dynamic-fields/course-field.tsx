@@ -3,11 +3,13 @@ import { ResumeOptionalDetailsType } from "@/schemas/types"
 import DynamicFieldWrapper from "../../wrappers/field-wrapper"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useTranslations } from "next-intl"
 
 export default function ResumeCourseField({form,index,remove,id}: ResumeArrayFieldProps<ResumeOptionalDetailsType>){
+     const t = useTranslations("editor.resume")
      return (
           <DynamicFieldWrapper
-               title="Դասընթաց"
+               title={t("courses.item-title")}
                index={index}
                remove={remove}
                id={id}
@@ -18,7 +20,7 @@ export default function ResumeCourseField({form,index,remove,id}: ResumeArrayFie
                          name={`courses.${index}.name`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Դասընթացի անուն</FormLabel>
+                                   <FormLabel>{t("courses.name")}</FormLabel>
                                    <FormControl>
                                         <Input {...field}/>
                                    </FormControl>
@@ -31,7 +33,7 @@ export default function ResumeCourseField({form,index,remove,id}: ResumeArrayFie
                          name={`courses.${index}.institution`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Հաստատություն</FormLabel>
+                                   <FormLabel>{t("courses.institution")}</FormLabel>
                                    <FormControl>
                                         <Input {...field}/>
                                    </FormControl>
@@ -46,7 +48,7 @@ export default function ResumeCourseField({form,index,remove,id}: ResumeArrayFie
                          name={`courses.${index}.startDate`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Սկիզբ</FormLabel>
+                                   <FormLabel>{t("fields.dates.start")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
@@ -63,7 +65,7 @@ export default function ResumeCourseField({form,index,remove,id}: ResumeArrayFie
                          name={`courses.${index}.endDate`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Ավարտ</FormLabel>
+                                   <FormLabel>{t("fields.dates.end")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}

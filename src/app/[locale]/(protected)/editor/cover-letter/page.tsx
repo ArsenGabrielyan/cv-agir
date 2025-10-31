@@ -12,8 +12,11 @@ import { notFound } from "next/navigation";
 import { redirect, routing } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-     title: "Գրել ուղեկցող նամակ"
+export const generateMetadata = async(): Promise<Metadata> => {
+     const t = await getTranslations("editor.cover-letter");
+     return {
+          title: t("title")
+     }
 }
 const CoverLetterEditor = dynamic(()=>import("./cl-editor"),{
      loading: DocEditorLoader

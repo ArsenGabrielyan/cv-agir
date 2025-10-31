@@ -1,11 +1,8 @@
 import { locales, messages } from "@/i18n/config";
 import type { NextConfig } from "next";
-import { Messages } from "@/i18n/types";
 import createNextIntlPlugin from 'next-intl/plugin';
 
-const exclusions = new Set<Messages>(["audit-log"]);
-
-const messagePaths = locales.flatMap(locale=>messages.filter(val=>!exclusions.has(val)).map(msg=>
+const messagePaths = locales.flatMap(locale=>messages.map(msg=>
   `./i18n/${locale}/${msg}.json`
 ))
 

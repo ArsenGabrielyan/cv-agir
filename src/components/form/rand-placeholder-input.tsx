@@ -1,34 +1,20 @@
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { PlaceholdersName } from "@/lib/types"
-import { getRandomPlaceholder } from "@/lib/helpers"
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react"
+import { Input } from "../ui/input"
 
-type RandomPlaceholderInputProps = React.ComponentProps<"input"> & {
-  placeholderKey: PlaceholdersName
+export default function RandomPlaceholderInput({placeholdersList, ...props}: React.ComponentProps<"input"> & {
+     placeholdersList: string
+}){
+     const [placeholder, setPlaceholder] = useState("");
+     const placeholders = placeholdersList.split(", ")
+     useEffect(()=>{
+          const randomIndex = Math.floor(Math.random()*placeholders.length);
+          setPlaceholder(placeholders[randomIndex]);
+     },[])
+     return (
+          <Input
+               {...props}
+               placeholder={placeholder}
+          />
+     )
 }
-
-const RandomPlaceholderInput = React.forwardRef<HTMLInputElement, RandomPlaceholderInputProps>(
-  ({ className, type, placeholderKey, ...props }, ref) => {
-    const [placeholder, setPlaceholder] = React.useState("");
-
-    React.useEffect(()=>{
-      setPlaceholder(getRandomPlaceholder(placeholderKey))
-    },[placeholderKey])
-    
-    return (
-      <input
-        type={type}
-        className={cn(
-          "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-          className
-        )}
-        ref={ref}
-        placeholder={placeholder}
-        {...props}
-      />
-    )
-  }
-)
-RandomPlaceholderInput.displayName = "RandomPlaceholderInput"
-
-export { RandomPlaceholderInput }

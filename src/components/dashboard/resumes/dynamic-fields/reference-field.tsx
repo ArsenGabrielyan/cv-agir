@@ -3,11 +3,15 @@ import { ResumeOptionalDetailsType } from "@/schemas/types"
 import DynamicFieldWrapper from "../../wrappers/field-wrapper"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useTranslations } from "next-intl"
 
 export default function ReferenceField({form,index,remove,id}: ResumeArrayFieldProps<ResumeOptionalDetailsType>){
+     const formTxt = useTranslations("form");
+     const t = useTranslations("editor.resume");
+     const corpField = useTranslations("editor.corp");
      return (
           <DynamicFieldWrapper
-               title="Կոնտակտային հղում"
+               title={t("refs.item-title")}
                index={index}
                remove={remove}
                id={id}
@@ -18,11 +22,11 @@ export default function ReferenceField({form,index,remove,id}: ResumeArrayFieldP
                          name={`references.${index}.fullName`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Անուն Ազգանուն</FormLabel>
+                                   <FormLabel>{formTxt("name.label")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
-                                             placeholder="Պետրոս Պետրոսյան"
+                                             placeholder={formTxt("name.placeholder")}
                                         />
                                    </FormControl>
                                    <FormMessage/>
@@ -34,11 +38,11 @@ export default function ReferenceField({form,index,remove,id}: ResumeArrayFieldP
                          name={`references.${index}.position`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Պաշտոն</FormLabel>
+                                   <FormLabel>{t("refs.position.label")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
-                                             placeholder="Տնօրեն"
+                                             placeholder={t("refs.position.placeholder")}
                                         />
                                    </FormControl>
                                    <FormMessage/>
@@ -51,11 +55,11 @@ export default function ReferenceField({form,index,remove,id}: ResumeArrayFieldP
                     name={`references.${index}.company`}
                     render={({field})=>(
                          <FormItem>
-                              <FormLabel>Ընկերություն</FormLabel>
+                              <FormLabel>{corpField("label")}</FormLabel>
                               <FormControl>
                                    <Input
                                         {...field}
-                                        placeholder="Մեկ այլ ընկերություն"
+                                        placeholder={corpField("placeholder")}
                                    />
                               </FormControl>
                               <FormMessage/>
@@ -68,11 +72,11 @@ export default function ReferenceField({form,index,remove,id}: ResumeArrayFieldP
                          name={`references.${index}.phone`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Հեռախոսահամար</FormLabel>
+                                   <FormLabel>{formTxt("phone.label")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
-                                             placeholder="098-76-54-32"
+                                             placeholder={formTxt("phone.placeholder")}
                                         />
                                    </FormControl>
                                    <FormMessage/>
@@ -84,7 +88,7 @@ export default function ReferenceField({form,index,remove,id}: ResumeArrayFieldP
                          name={`references.${index}.email`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Էլ․ հասցե</FormLabel>
+                                   <FormLabel>{formTxt("email.label")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}

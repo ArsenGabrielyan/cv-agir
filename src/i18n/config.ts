@@ -17,7 +17,6 @@ export const messages = [
      "landing-page",
      "form",
      "validation",
-     "audit-log",
      "email-templates",
      "dashboard",
      "subscription"

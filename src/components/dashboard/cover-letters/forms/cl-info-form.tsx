@@ -16,11 +16,14 @@ import EditorFormCardWrapper from "../../wrappers/card-wrapper"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useEffect, useMemo, useRef } from "react"
-import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input"
 import { CoverLetterFormProps } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import debounce from "lodash.debounce"
 import { useTranslations } from "next-intl"
+import RandomPlaceholderInput from "@/components/form/rand-placeholder-input"
+import { InputGroup, InputGroupInput, InputGroupAddon } from "@/components/ui/input-group"
+import { ImageIcon, MailIcon, MapPinIcon, PhoneIcon, TrashIcon } from "lucide-react"
+import { ButtonGroup } from "@/components/ui/button-group"
 
 export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData,userData}: CoverLetterFormProps){
      const validationMsg = useTranslations("validations");
@@ -57,22 +60,27 @@ export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData
                debouncedUpdate.cancel();
           }
      },[allValues, debouncedUpdate])
+     const t = useTranslations("editor.cover-letter.cl-info");
+     const formTxt = useTranslations("form")
+     const buttonTxt = useTranslations("buttons")
+     const personalInfoTxt = useTranslations("editor.personal-info")
+     const professionField = useTranslations("editor.profession")
 
      const imgInputRef = useRef<HTMLInputElement>(null);
      return (
           <Form {...form}>
                <form className="space-y-4">
-                    <EditorFormCardWrapper title="Ուղեկցող նամակի ինֆորմացիա" description="Այս ինֆորմացիան նամակին ցույց չի տալիս">
+                    <EditorFormCardWrapper title={t("title")} description={t("desc")}>
                          <FormField
                               control={form.control}
                               name="title"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Նամակի անուն</FormLabel>
+                                        <FormLabel>{t("name-field.label")}</FormLabel>
                                         <FormControl>
                                              <Input
                                                   {...field}
-                                                  placeholder="Պրոֆեսիոնալ ուղեկցող նամակ"
+                                                  placeholder={t("name-field.placeholder")}
                                                   autoFocus
                                              />
                                         </FormControl>
@@ -85,30 +93,31 @@ export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData
                               name="description"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Նամակի նկարագրություն</FormLabel>
+                                        <FormLabel>{t("desc-field.label")}</FormLabel>
                                         <FormControl>
                                              <Textarea
                                                   {...field}
-                                                  placeholder="Հաջորդ աշխատանքի մասին նամակ"
+                                                  placeholder={t("desc-field.placeholder")}
                                              />
                                         </FormControl>
-                                        <FormDescription>Նկարագրեք, թե այս ռեղյումեն ինչի համար է։</FormDescription>
+                                        <FormDescription>{t("desc-field.field-desc")}</FormDescription>
                                         <FormMessage/>
                                    </FormItem>
                               )}
                          />
                     </EditorFormCardWrapper>
-                    <EditorFormCardWrapper title="Անձնական ինֆորմացիա" description="Տեղադրել Ձեր մասին ինֆորմացիան այստեղ">
+                    <EditorFormCardWrapper title={personalInfoTxt("title")} description={personalInfoTxt("desc")}>
                          <FormField
                               control={form.control}
                               name="profileImg"
                               // eslint-disable-next-line @typescript-eslint/no-unused-vars
                               render={({field: {value,...fieldValues}})=>(
                                    <FormItem>
-                                        <FormLabel>Ձեր նկարը</FormLabel>
-                                        <div className="flex items-center gap-2">
-                                             <FormControl>
-                                                  <Input
+                                        <FormLabel>{personalInfoTxt("image")}</FormLabel>
+                                        <FormControl>
+                                        <ButtonGroup className="w-full">
+                                             <InputGroup>
+                                                  <InputGroupInput
                                                        {...fieldValues}
                                                        type="file"
                                                        accept="image/*"
@@ -118,10 +127,13 @@ export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData
                                                        }}
                                                        ref={imgInputRef}
                                                   />
-                                             </FormControl>
+                                                  <InputGroupAddon>
+                                                       <ImageIcon/>
+                                                  </InputGroupAddon>
+                                             </InputGroup>
                                              <Button
                                                   type="button"
-                                                  variant="secondary"
+                                                  variant={!coverLetterData.profileImg ? "secondary" : "destructive"}
                                                   onClick={()=>{
                                                        fieldValues.onChange(null)
                                                        setCoverLetterData(prev=>({
@@ -133,8 +145,12 @@ export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData
                                                        }
                                                   }}
                                                   disabled={!coverLetterData.profileImg}
-                                             >Հեռացնել</Button>
-                                        </div>
+                                             >
+                                                  <TrashIcon/>
+                                                  {buttonTxt("remove")}
+                                             </Button>
+                                        </ButtonGroup>
+                                   </FormControl>
                                         <FormMessage/>
                                    </FormItem>
                               )}
@@ -145,11 +161,11 @@ export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData
                                    name="fname"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Անուն</FormLabel>
+                                             <FormLabel>{personalInfoTxt("fname.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
-                                                       placeholder="Պողոս"
+                                                       placeholder={personalInfoTxt("fname.placeholder")}
                                                   />
                                              </FormControl>
                                              <FormMessage/>
@@ -161,11 +177,11 @@ export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData
                                    name="lname"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Ազգանուն</FormLabel>
+                                             <FormLabel>{personalInfoTxt("lname.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
-                                                       placeholder="Պողոսյան"
+                                                       placeholder={personalInfoTxt("lname.placeholder")}
                                                   />
                                              </FormControl>
                                              <FormMessage/>
@@ -178,11 +194,11 @@ export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData
                               name="jobTitle"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Մասնագիտություն</FormLabel>
+                                        <FormLabel>{professionField("label")}</FormLabel>
                                         <FormControl>
                                              <RandomPlaceholderInput
                                                   {...field}
-                                                  placeholderKey="jobName"
+                                                  placeholdersList={professionField("placeholder")}
                                              />
                                         </FormControl>
                                         <FormMessage/>
@@ -195,12 +211,17 @@ export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData
                                    name="phone"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Հեռախոսահամար</FormLabel>
+                                             <FormLabel>{formTxt("phone.label")}</FormLabel>
                                              <FormControl>
-                                                  <Input
-                                                       {...field}
-                                                       placeholder="012-34-56-78"
-                                                  />
+                                                  <InputGroup>
+                                                       <InputGroupInput
+                                                            {...field}
+                                                            placeholder={formTxt("phone.placeholder")}
+                                                       />
+                                                       <InputGroupAddon>
+                                                            <PhoneIcon/>
+                                                       </InputGroupAddon>
+                                                  </InputGroup>
                                              </FormControl>
                                              <FormMessage/>
                                         </FormItem>
@@ -211,12 +232,17 @@ export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData
                                    name="address"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Բնակության հասցե</FormLabel>
+                                             <FormLabel>{personalInfoTxt("address.label")}</FormLabel>
                                              <FormControl>
-                                                  <Input
-                                                       {...field}
-                                                       placeholder="12 Փողոց, Քաղաք, Երկիր"
-                                                  />
+                                                  <InputGroup>
+                                                       <InputGroupInput
+                                                            {...field}
+                                                            placeholder={personalInfoTxt("address.placeholder")}
+                                                       />
+                                                       <InputGroupAddon>
+                                                            <MapPinIcon/>
+                                                       </InputGroupAddon>
+                                                  </InputGroup>
                                              </FormControl>
                                              <FormMessage/>
                                         </FormItem>
@@ -228,13 +254,18 @@ export default function CoverLetterInfoForm({coverLetterData, setCoverLetterData
                               name="email"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Էլ․ հասցե</FormLabel>
+                                        <FormLabel>{formTxt("email.label")}</FormLabel>
                                         <FormControl>
-                                             <Input
-                                                  {...field}
-                                                  type="email"
-                                                  placeholder="name@example.com"
-                                             />
+                                             <InputGroup>
+                                                  <InputGroupInput
+                                                       {...field}
+                                                       placeholder={formTxt("email.placeholder")}
+                                                       type="email"
+                                                  />
+                                                  <InputGroupAddon>
+                                                       <MailIcon/>
+                                                  </InputGroupAddon>
+                                             </InputGroup>
                                         </FormControl>
                                         <FormMessage/>
                                    </FormItem>

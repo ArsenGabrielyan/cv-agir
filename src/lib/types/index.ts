@@ -6,7 +6,7 @@ import { LucideProps } from "lucide-react";
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
 import { LangCodeType } from "@/i18n/types";
-import { Features, NavLinks } from "./enums";
+import { CoverLetterSteps, Features, NavLinks, ResumeSteps } from "./enums";
 
 // Themes
 export type ThemeColors = "Zinc" | "Rose" | "Blue" | "Green" | "Orange";
@@ -88,22 +88,21 @@ export type AccountServerData = Prisma.AccountGetPayload<{
 export type RouteFN<T> = (lang: LangCodeType) => T
 
 // Editor Related Types
-export type PlaceholdersName = "jobName" | "degrees"
 export interface UseDimensionsReturnType{
      width: number,
      height: number
 }
 export interface IEditorStep<Props>{
-     title: string,
      component: React.ComponentType<Props>,
-     key: string
+     key: ResumeSteps | CoverLetterSteps
 }
-export interface EditorFormFooterProps{
+export interface EditorFormFooterProps<Props>{
      currStep: string,
      setCurrStep: (step: string) => void
      showSmPreview: boolean,
      setShowSmPreview: (show: boolean) => void,
-     onPrint: () => void
+     onPrint: () => void,
+     steps: IEditorStep<Props>[]
 }
 
 // Resume Related

@@ -157,5 +157,9 @@
           "job-title": "{job} at {company}",
           "today": "Today",
           "no-data": "There is no data in this Resume."
+     },
+     "loading": {
+          "original": "Loading...",
+          "video": "Loading video..."
      }
 }

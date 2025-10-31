@@ -4,11 +4,13 @@ import DynamicFieldWrapper from "../../wrappers/field-wrapper"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/ui/slider"
+import { useTranslations } from "next-intl"
 
 export default function LanguageField({form,index,remove,id}: ResumeArrayFieldProps<ResumeDetailsType>){
+     const t = useTranslations("editor.resume.skill-fields")
      return (
           <DynamicFieldWrapper
-               title="Լեզու"
+               title={t("lang.label")}
                index={index}
                remove={remove}
                id={id}
@@ -19,11 +21,11 @@ export default function LanguageField({form,index,remove,id}: ResumeArrayFieldPr
                          name={`languages.${index}.name`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Լեզվի անուն</FormLabel>
+                                   <FormLabel>{t("lang.label")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
-                                             placeholder="Հայերեն"
+                                             placeholder={t("lang.placeholder")}
                                         />
                                    </FormControl>
                                    <FormMessage/>
@@ -35,7 +37,7 @@ export default function LanguageField({form,index,remove,id}: ResumeArrayFieldPr
                          name={`languages.${index}.percentage`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Մակարդակ</FormLabel>
+                                   <FormLabel>{t("level")}</FormLabel>
                                    <FormControl>
                                         <Slider
                                              min={0}

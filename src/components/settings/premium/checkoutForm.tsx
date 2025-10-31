@@ -16,7 +16,7 @@ import CreditCardInput from "@/components/form/credit-card-input";
 import { getBankName } from "@/lib/helpers/credit-cards";
 import { useTranslations } from "next-intl";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import {MailIcon} from "lucide-react"
+import {MailIcon, MapPinIcon} from "lucide-react"
 
 interface CheckoutFormProps{
      period: SubscriptionPeriod,
@@ -171,11 +171,16 @@ export default function CheckoutForm({period, price, plan, aebName}: CheckoutFor
                               <FormItem>
                                    <FormLabel>{formTxt("cardholder-address.label")}</FormLabel>
                                    <FormControl>
-                                        <Input
-                                             {...field}
-                                             placeholder={formTxt("cardholder-address.placeholder")}
-                                             disabled={isPending}
-                                        />
+                                        <InputGroup>
+                                             <InputGroupInput
+                                                  {...field}
+                                                  placeholder={formTxt("cardholder-address.placeholder")}
+                                                  disabled={isPending}
+                                             />
+                                             <InputGroupAddon>
+                                                  <MapPinIcon/>
+                                             </InputGroupAddon>
+                                        </InputGroup>
                                    </FormControl>
                                    <FormMessage/>
                               </FormItem>

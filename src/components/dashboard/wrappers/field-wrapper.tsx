@@ -1,9 +1,10 @@
-import { GripHorizontal } from "lucide-react"
+import { GripHorizontal, Trash } from "lucide-react"
 import React from "react"
 import { Button } from "@/components/ui/button"
 import {CSS} from "@dnd-kit/utilities"
 import { cn } from "@/lib/utils"
 import { useSortable } from "@dnd-kit/sortable"
+import { useTranslations } from "next-intl"
 
 interface DynamicFieldWrapperProps{
      title: string,
@@ -27,6 +28,7 @@ export default React.memo(function DynamicFieldWrapper({
           transition,
           isDragging
      } = useSortable({id})
+     const t = useTranslations("buttons")
      return (
           <div 
                className={cn("space-y-4 border rounded-xl bg-background p-3",isDragging && "shadow-xl z-50 cursor-grab relative")}
@@ -45,7 +47,10 @@ export default React.memo(function DynamicFieldWrapper({
                     />
                </div>
                {children}
-               <Button variant="destructive" type="button" onClick={()=>remove(index)}>Հեռացնել</Button>
+               <Button variant="destructive" type="button" onClick={()=>remove(index)}>
+                    <Trash/>
+                    {t("remove")}
+               </Button>
           </div>
      )
 })

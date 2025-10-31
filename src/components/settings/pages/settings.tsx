@@ -22,12 +22,12 @@ import { Switch } from "@/components/ui/switch";
 import { SettingsType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
 import SettingsCard from "../settings-card";
-import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import ThemeSettings from "@/components/themes/theme-changer";
 import { PasswordInput } from "@/components/form/password-input";
 import { useTranslations } from "next-intl";
+import RandomPlaceholderInput from "@/components/form/rand-placeholder-input";
 
 export default function Settings(){
      const user = useCurrentUser();
@@ -80,7 +80,7 @@ export default function Settings(){
 
      const currData = form.watch();
      const isSameSettings = JSON.stringify(currData) === JSON.stringify(defaultSettings);
-
+     const professionField = useTranslations("editor.profession")
      return (
           <Form {...form}>
                <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -131,12 +131,12 @@ export default function Settings(){
                               name="jobTitle"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Մասնագիտություն</FormLabel>
+                                        <FormLabel>{professionField("label")}</FormLabel>
                                         <FormControl>
                                              <RandomPlaceholderInput
                                                   {...field}
                                                   disabled={isPending}
-                                                  placeholderKey="jobName"
+                                                  placeholdersList={professionField("placeholder")}
                                              />
                                         </FormControl>
                                         <FormMessage/>

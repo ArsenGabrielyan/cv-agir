@@ -1,6 +1,5 @@
 import PageLayout from "@/components/layout/page-layout";
 import { getResumeById } from "@/data/resumes";
-import { isObjectId } from "@/lib/helpers";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import CVInfoLoader from "@/components/loaders/cv-info";
@@ -12,9 +11,6 @@ import { getIpAddress } from "@/actions/ip";
 import { getTranslations } from "next-intl/server";
 
 const getResumeData = cache(async(id: string) => {
-     if(!isObjectId(id)){
-          notFound();
-     }
      const resume = await getResumeById(id);
      if(!resume){
           notFound();

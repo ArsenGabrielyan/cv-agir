@@ -15,12 +15,15 @@ import EditorFormCardWrapper from "../../wrappers/card-wrapper"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useEffect, useMemo, useRef } from "react"
-import { RandomPlaceholderInput } from "@/components/form/rand-placeholder-input"
 import { ResumeFormProps } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import GenerateSummaryButton from "../ai-buttons/generate-summary"
 import debounce from "lodash.debounce"
 import { useTranslations } from "next-intl"
+import { ButtonGroup } from "@/components/ui/button-group"
+import { ImageIcon, MailIcon, MapPinIcon, PhoneIcon, TrashIcon } from "lucide-react"
+import RandomPlaceholderInput from "@/components/form/rand-placeholder-input"
+import { InputGroup, InputGroupInput, InputGroupAddon } from "@/components/ui/input-group"
 
 export default function ResumeInfoForm({resumeData, setResumeData,userData}: ResumeFormProps){
      const validationMsg = useTranslations("validations");
@@ -58,24 +61,29 @@ export default function ResumeInfoForm({resumeData, setResumeData,userData}: Res
           return () => {
                debouncedUpdate.cancel();
           }
-     },[allValues, debouncedUpdate])
+     },[allValues, debouncedUpdate]);
+     const t = useTranslations("editor.resume.resume-info");
+     const formTxt = useTranslations("form");
+     const buttonTxt = useTranslations("buttons");
+     const personalInfoTxt = useTranslations("editor.personal-info")
+     const professionField = useTranslations("editor.profession")
 
      const imgInputRef = useRef<HTMLInputElement>(null);
      const isDisabled = !resumeData.jobTitle && !resumeData.experience?.length && !resumeData.education?.length || !resumeData.skills?.length || !resumeData.languages?.length
      return (
           <Form {...form}>
                <form className="space-y-4">
-                    <EditorFormCardWrapper title="Ռեզյումեի ինֆորմացիա" description="Այս ինֆորմացիան ռեզյումեին ցույց չի տալիս">
+                    <EditorFormCardWrapper title={t("title")} description={t("desc")}>
                          <FormField
                               control={form.control}
                               name="title"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Ռեզյումեի անուն</FormLabel>
+                                        <FormLabel>{t("name-field.label")}</FormLabel>
                                         <FormControl>
                                              <Input
                                                   {...field}
-                                                  placeholder="Իմ ընտիր ռեզյումե"
+                                                  placeholder={t("name-field.placeholder")}
                                                   autoFocus
                                              />
                                         </FormControl>
@@ -88,56 +96,64 @@ export default function ResumeInfoForm({resumeData, setResumeData,userData}: Res
                               name="description"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Ռեզյումեի նկարագրություն</FormLabel>
+                                        <FormLabel>{t("desc-field.label")}</FormLabel>
                                         <FormControl>
                                              <Textarea
                                                   {...field}
-                                                  placeholder="Հաջորդ աշխատանքի մասին ռեզյումե"
+                                                  placeholder={t("desc-field.placeholder")}
                                              />
                                         </FormControl>
-                                        <FormDescription>Նկարագրեք, թե այս ռեղյումեն ինչի համար է։</FormDescription>
+                                        <FormDescription>{t("desc-field.field-desc")}</FormDescription>
                                         <FormMessage/>
                                    </FormItem>
                               )}
                          />
                     </EditorFormCardWrapper>
-                    <EditorFormCardWrapper title="Անձնական ինֆորմացիա" description="Տեղադրել Ձեր մասին ինֆորմացիան այստեղ">
+                    <EditorFormCardWrapper title={personalInfoTxt("title")} description={personalInfoTxt("desc")}>
                          <FormField
                               control={form.control}
                               name="profileImg"
                               // eslint-disable-next-line @typescript-eslint/no-unused-vars
                               render={({field: {value,...fieldValues}})=>(
                                    <FormItem>
-                                        <FormLabel>Ձեր նկարը</FormLabel>
-                                        <div className="flex items-center gap-2">
-                                             <FormControl>
-                                                  <Input
-                                                       {...fieldValues}
-                                                       type="file"
-                                                       accept="image/*"
-                                                       onChange={e=>{
-                                                            const file = e.target.files?.[0];
-                                                            fieldValues.onChange(file)
+                                        <FormLabel>{personalInfoTxt("image")}</FormLabel>
+                                        <FormControl>
+                                             <ButtonGroup className="w-full">
+                                                  <InputGroup>
+                                                       <InputGroupInput
+                                                            {...fieldValues}
+                                                            type="file"
+                                                            accept="image/*"
+                                                            onChange={e=>{
+                                                                 const file = e.target.files?.[0];
+                                                                 fieldValues.onChange(file)
+                                                            }}
+                                                            ref={imgInputRef}
+                                                       />
+                                                       <InputGroupAddon>
+                                                            <ImageIcon/>
+                                                       </InputGroupAddon>
+                                                  </InputGroup>
+                                                  <Button
+                                                       type="button"
+                                                       variant={!resumeData.profileImg ? "secondary" : "destructive"}
+                                                       onClick={()=>{
+                                                            fieldValues.onChange(null)
+                                                            setResumeData(prev=>({
+                                                                 ...prev,
+                                                                 profileImg: null
+                                                            }))
+                                                            if(imgInputRef.current) {
+                                                                 imgInputRef.current.value = ""
+                                                            }
                                                        }}
-                                                       ref={imgInputRef}
-                                                  />
-                                             </FormControl>
-                                             <Button
-                                                  type="button"
-                                                  variant="secondary"
-                                                  onClick={()=>{
-                                                       fieldValues.onChange(null)
-                                                       setResumeData(prev=>({
-                                                            ...prev,
-                                                            profileImg: null
-                                                       }))
-                                                       if(imgInputRef.current) {
-                                                            imgInputRef.current.value = ""
-                                                       }
-                                                  }}
-                                                  disabled={!resumeData.profileImg}
-                                             >Հեռացնել</Button>
-                                        </div>
+                                                       disabled={!resumeData.profileImg}
+                                                  >
+                                                       <TrashIcon/>
+                                                       {buttonTxt("remove")}
+                                                  </Button>
+                                             </ButtonGroup>
+                                        </FormControl>
                                         <FormMessage/>
                                    </FormItem>
                               )}
@@ -148,11 +164,11 @@ export default function ResumeInfoForm({resumeData, setResumeData,userData}: Res
                                    name="fname"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Անուն</FormLabel>
+                                             <FormLabel>{personalInfoTxt("fname.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
-                                                       placeholder="Պողոս"
+                                                       placeholder={personalInfoTxt("fname.placeholder")}
                                                   />
                                              </FormControl>
                                              <FormMessage/>
@@ -164,11 +180,11 @@ export default function ResumeInfoForm({resumeData, setResumeData,userData}: Res
                                    name="lname"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Ազգանուն</FormLabel>
+                                             <FormLabel>{personalInfoTxt("lname.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
-                                                       placeholder="Պողոսյան"
+                                                       placeholder={personalInfoTxt("lname.placeholder")}
                                                   />
                                              </FormControl>
                                              <FormMessage/>
@@ -181,11 +197,11 @@ export default function ResumeInfoForm({resumeData, setResumeData,userData}: Res
                               name="jobTitle"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Մասնագիտություն</FormLabel>
+                                        <FormLabel>{professionField("label")}</FormLabel>
                                         <FormControl>
                                              <RandomPlaceholderInput
                                                   {...field}
-                                                  placeholderKey="jobName"
+                                                  placeholdersList={professionField("placeholder")}
                                              />
                                         </FormControl>
                                         <FormMessage/>
@@ -198,12 +214,17 @@ export default function ResumeInfoForm({resumeData, setResumeData,userData}: Res
                                    name="phone"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Հեռախոսահամար</FormLabel>
+                                             <FormLabel>{formTxt("phone.label")}</FormLabel>
                                              <FormControl>
-                                                  <Input
-                                                       {...field}
-                                                       placeholder="012-34-56-78"
-                                                  />
+                                                  <InputGroup>
+                                                       <InputGroupInput
+                                                            {...field}
+                                                            placeholder={formTxt("phone.placeholder")}
+                                                       />
+                                                       <InputGroupAddon>
+                                                            <PhoneIcon/>
+                                                       </InputGroupAddon>
+                                                  </InputGroup>
                                              </FormControl>
                                              <FormMessage/>
                                         </FormItem>
@@ -214,12 +235,17 @@ export default function ResumeInfoForm({resumeData, setResumeData,userData}: Res
                                    name="address"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Բնակության հասցե</FormLabel>
+                                             <FormLabel>{personalInfoTxt("address.label")}</FormLabel>
                                              <FormControl>
-                                                  <Input
-                                                       {...field}
-                                                       placeholder="12 Փողոց, Քաղաք, Երկիր"
-                                                  />
+                                                  <InputGroup>
+                                                       <InputGroupInput
+                                                            {...field}
+                                                            placeholder={personalInfoTxt("address.placeholder")}
+                                                       />
+                                                       <InputGroupAddon>
+                                                            <MapPinIcon/>
+                                                       </InputGroupAddon>
+                                                  </InputGroup>
                                              </FormControl>
                                              <FormMessage/>
                                         </FormItem>
@@ -231,13 +257,18 @@ export default function ResumeInfoForm({resumeData, setResumeData,userData}: Res
                               name="email"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Էլ․ հասցե</FormLabel>
+                                        <FormLabel>{formTxt("email.label")}</FormLabel>
                                         <FormControl>
-                                             <Input
-                                                  {...field}
-                                                  type="email"
-                                                  placeholder="name@example.com"
-                                             />
+                                             <InputGroup>
+                                                  <InputGroupInput
+                                                       {...field}
+                                                       placeholder={formTxt("email.placeholder")}
+                                                       type="email"
+                                                  />
+                                                  <InputGroupAddon>
+                                                       <MailIcon/>
+                                                  </InputGroupAddon>
+                                             </InputGroup>
                                         </FormControl>
                                         <FormMessage/>
                                    </FormItem>
@@ -248,11 +279,11 @@ export default function ResumeInfoForm({resumeData, setResumeData,userData}: Res
                               name="summary"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Կարճ նկարագրություն</FormLabel>
+                                        <FormLabel>{personalInfoTxt("summary.label")}</FormLabel>
                                         <FormControl>
                                              <Textarea
                                                   {...field}
-                                                  placeholder="Նկարագրեք կարճ տեղեկություն Ձեր մասին"
+                                                  placeholder={personalInfoTxt("summary.placeholder")}
                                              />
                                         </FormControl>
                                         <FormMessage/>
@@ -269,14 +300,14 @@ export default function ResumeInfoForm({resumeData, setResumeData,userData}: Res
                               name="hobbies"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Հոբբիներ</FormLabel>
+                                        <FormLabel>{personalInfoTxt("hobbies.label")}</FormLabel>
                                         <FormControl>
                                              <Textarea
                                                   {...field}
-                                                  placeholder="Լուսանկարչություն, Ֆուտբոլ և այլն․․․"
+                                                  placeholder={personalInfoTxt("hobbies.placeholder")}
                                              />
                                         </FormControl>
-                                        <FormDescription>Լրացրեք Ձեր սիրած հոբբիները այստեղ</FormDescription>
+                                        <FormDescription>{personalInfoTxt("hobbies.field-desc")}</FormDescription>
                                         <FormMessage/>
                                    </FormItem>
                               )}

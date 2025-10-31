@@ -13,8 +13,11 @@ import { notFound } from "next/navigation";
 import { redirect, routing } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-     title: "Ձևավորել Ձեր ռեզյումեն"
+export const generateMetadata = async(): Promise<Metadata> => {
+     const t = await getTranslations("editor.resume");
+     return {
+          title: t("metaTitle")
+     }
 }
 const ResumeEditor = dynamic(()=>import("./resume-editor"),{
      loading: DocEditorLoader

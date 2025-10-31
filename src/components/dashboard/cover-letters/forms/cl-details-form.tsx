@@ -44,21 +44,23 @@ export default function CoverLetterDetailsForm({coverLetterData, setCoverLetterD
                debouncedUpdate.cancel();
           }
      },[allValues, debouncedUpdate])
+     const t = useTranslations("editor.cover-letter.cl-details")
+     const corpField = useTranslations("editor.corp")
      return (
           <Form {...form}>
                <form className="space-y-4">
-                    <EditorFormCardWrapper title="Գործատուի մասին ինֆորմացիա" description="Տեղադրել գործատուի մասին ինֆորմացիան այստեղ">
+                    <EditorFormCardWrapper title={t("title")} description={t("desc")}>
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <FormField
                                    control={form.control}
                                    name="recipientName"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Գործատուի անուն, ազգանուն</FormLabel>
+                                             <FormLabel>{t("name.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
-                                                       placeholder="Կիրակոս Պետրոսյան"
+                                                       placeholder={t("name.placeholder")}
                                                        autoFocus
                                                   />
                                              </FormControl>
@@ -71,11 +73,11 @@ export default function CoverLetterDetailsForm({coverLetterData, setCoverLetterD
                                    name="recipientTitle"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Գործատուի պաշտոն</FormLabel>
+                                             <FormLabel>{t("position.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
-                                                       placeholder="Տնօրեն"
+                                                       placeholder={t("position.placeholder")}
                                                   />
                                              </FormControl>
                                              <FormMessage/>
@@ -89,11 +91,11 @@ export default function CoverLetterDetailsForm({coverLetterData, setCoverLetterD
                                    name="companyName"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Ընկերության անուն</FormLabel>
+                                             <FormLabel>{t("corp-name")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
-                                                       placeholder="Ինչ-որ ընկերություն ՍՊԸ"
+                                                       placeholder={corpField("placeholder")}
                                                   />
                                              </FormControl>
                                              <FormMessage/>
@@ -105,11 +107,11 @@ export default function CoverLetterDetailsForm({coverLetterData, setCoverLetterD
                                    name="companyAddress"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Ընկերության հասցե</FormLabel>
+                                             <FormLabel>{t("corp-address.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
-                                                       placeholder="12 փողոց, Քաղաք, Երկիր"
+                                                       placeholder={t("corp-address.placeholder")}
                                                   />
                                              </FormControl>
                                              <FormMessage/>
@@ -122,18 +124,18 @@ export default function CoverLetterDetailsForm({coverLetterData, setCoverLetterD
                               name="letterContent"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Նամակի բովանդակություն</FormLabel>
+                                        <FormLabel>{t("content.label")}</FormLabel>
                                         <FormControl>
                                              <Textarea
                                                   {...field}
-                                                  placeholder="Հարգելի Կիրակոս Թադևոսյան։ ..."
+                                                  placeholder={t("content.placeholder")}
                                              />
                                         </FormControl>
                                         <GenerateLetterBodyButton
                                              coverLetterData={coverLetterData}
                                              onBodyGenerated={letterContent=>field.onChange(letterContent)}
                                         />
-                                        <FormDescription>Այն օգտագործվում է Markdown ֆորմատավորման համար</FormDescription>
+                                        <FormDescription>{t("content.field-desc")}</FormDescription>
                                         <FormMessage/>
                                    </FormItem>
                               )}

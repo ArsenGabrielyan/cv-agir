@@ -20,6 +20,7 @@ export default function GenerateLetterBodyButton({coverLetterData, onBodyGenerat
      const errMsg = useTranslations("error-messages")
      const {canUseAITools} = getAvailableFeatures(subscriptionMethod,errMsg)
      const [loading, setLoading] = useState(false);
+     const buttonTxt = useTranslations("buttons.ai")
 
      const handleClick = async()=>{
           if(!canUseAITools){
@@ -47,7 +48,7 @@ export default function GenerateLetterBodyButton({coverLetterData, onBodyGenerat
                onClick={handleClick}
           >
                <Sparkles className="size-4"/>
-               Գեներացնել (ԱԲ)
+               {buttonTxt("generate")}
           </LoadingButton>
      )
 }

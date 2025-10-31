@@ -27,12 +27,13 @@ export default function BorderStyleButton({borderStyle, onChange}: BorderStyleBu
           const nextIndex = (currIndex+1) % borderStyles.length;
           onChange(borderStyles[nextIndex])
      }
-     const Icon = borderStyle === "square" ? Square : borderStyle === "circle" ? Circle : Squircle
+     const Icon = borderStyle === "square" ? Square : borderStyle === "circle" ? Circle : Squircle;
+     const t = useTranslations("editor.change-style")
      return (
           <Button
                variant="outline"
                size="icon"
-               title="Փոխել եզրագծի ձևը"
+               title={t("border-style")}
                onClick={handleClick}
           >
                <Icon className="size-5"/>

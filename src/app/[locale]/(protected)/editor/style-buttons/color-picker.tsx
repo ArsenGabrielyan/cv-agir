@@ -20,13 +20,14 @@ export default function ColorPicker({color,onChange}: ColorPickerProps){
      const {canUseCustomization} = getAvailableFeatures(subscriptionMethod,errMsg)
      const [showPopover, setShowPopover] = useState(false);
      const isMobile = useIsMobile();
+     const t = useTranslations("editor.change-style")
      return (
           <Popover open={showPopover} onOpenChange={setShowPopover}>
                <PopoverTrigger asChild>
                     <Button
                          size="icon"
                          variant="outline"
-                         title="Փոխել գույնը"
+                         title={t("color")}
                          onClick={()=>{
                               if(!canUseCustomization){
                                    premiumModal.setOpen(true)

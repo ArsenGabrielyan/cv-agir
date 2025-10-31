@@ -37,7 +37,7 @@ export default function GenerateSummaryButton({resumeData, onSummaryGenerated, d
                setLoading(false)
           }
      }
-
+     const t = useTranslations("buttons.ai")
      return (
           <LoadingButton
                loading={loading}
@@ -47,7 +47,7 @@ export default function GenerateSummaryButton({resumeData, onSummaryGenerated, d
                onClick={handleClick}
           >
                <Sparkles className="size-4"/>
-               Գեներացնել (ԱԲ)
+               {t("generate")}
           </LoadingButton>
      )
 }

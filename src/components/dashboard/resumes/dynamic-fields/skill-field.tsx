@@ -4,11 +4,13 @@ import DynamicFieldWrapper from "../../wrappers/field-wrapper"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/ui/slider"
+import { useTranslations } from "next-intl"
 
 export default function SkillField({form,index,remove,id}: ResumeArrayFieldProps<ResumeDetailsType>){
+     const t = useTranslations("editor.resume.skill-fields")
      return (
           <DynamicFieldWrapper
-               title="Հմտություն"
+               title={t("skill")}
                index={index}
                remove={remove}
                id={id}
@@ -19,7 +21,7 @@ export default function SkillField({form,index,remove,id}: ResumeArrayFieldProps
                          name={`skills.${index}.name`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Հմություն</FormLabel>
+                                   <FormLabel>{t("skill")}</FormLabel>
                                    <FormControl>
                                         <Input
                                              {...field}
@@ -35,7 +37,7 @@ export default function SkillField({form,index,remove,id}: ResumeArrayFieldProps
                          name={`skills.${index}.percentage`}
                          render={({field})=>(
                               <FormItem>
-                                   <FormLabel>Մակարդակ</FormLabel>
+                                   <FormLabel>{t("level")}</FormLabel>
                                    <FormControl>
                                         <Slider
                                              min={0}

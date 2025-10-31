@@ -1,12 +1,4 @@
-import { PLACEHOLDERS } from "../constants"
-import { PlaceholdersName } from "../../lib/types";
 import {BorderStyles} from "@db"
-
-export const getRandomPlaceholder = (placeholderKey: PlaceholdersName) => {
-     const placeholders = PLACEHOLDERS[placeholderKey];
-     const randomIndex = Math.floor(Math.random()*placeholders.length);
-     return placeholders[randomIndex];
-}
 
 export function getLanguageLevel(level: number){
      if(level>=90 && level <= 100) return "Հմուտ"
@@ -29,5 +21,3 @@ export function fileReplacer(_: unknown, value: unknown){
           lastModified: value.lastModified,
      } : value
 }
-
-export const isObjectId = (id: string) => /^[0-9a-fA-F]{24}$/.test(id)
