@@ -5,12 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
 import { UserPlan } from "@db";
+import { useTranslations } from "next-intl";
 
 interface UserInfoProps{
      user?: Omit<ExtendedUser,"currentPlan">,
      subscription: UserPlan
 }
 export const UserInfo = ({user,subscription}: UserInfoProps) => {
+     const t = useTranslations("my-profile")
      return !user ? null : (
           <div className="space-y-3">
                <div className="flex items-center justify-center gap-x-5">
@@ -24,7 +26,7 @@ export const UserInfo = ({user,subscription}: UserInfoProps) => {
                          <div className="space-y-2">
                               <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">{user.name}</h1>
                               <Button variant="outline" asChild>
-                                   <Link href="/settings?tab=account"><Edit/> Խմբագրել պրոֆիլը</Link>
+                                   <Link href="/settings?tab=account"><Edit/> {t("edit-profile")}</Link>
                               </Button>
                          </div>
                     )}
@@ -36,7 +38,7 @@ export const UserInfo = ({user,subscription}: UserInfoProps) => {
                     {user.email && (
                          <div className="flex flex-row items-center justify-between gap-5 rounded-lg border p-3 shadow-sm">
                               <p className="text-sm font-medium">
-                                   Էլ․ Հասցե
+                                   {t("email")}
                               </p>
                               <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-muted rounded-md">
                                    {user.email}
@@ -46,7 +48,7 @@ export const UserInfo = ({user,subscription}: UserInfoProps) => {
                     {user.jobTitle && (
                          <div className="flex flex-row items-center justify-between gap-5 rounded-lg border p-3 shadow-sm">
                               <p className="text-sm font-medium">
-                                   Մասնագիտություն
+                                   {t("profession")}
                               </p>
                               <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-muted rounded-md">
                                    {user.jobTitle}
@@ -56,7 +58,7 @@ export const UserInfo = ({user,subscription}: UserInfoProps) => {
                     {user.phone && (
                          <div className="flex flex-row items-center justify-between gap-5 rounded-lg border p-3 shadow-sm">
                               <p className="text-sm font-medium">
-                                   Հեռախոսահամար
+                                   {t("phone")}
                               </p>
                               <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-muted rounded-md">
                                    {user.phone}
@@ -66,7 +68,7 @@ export const UserInfo = ({user,subscription}: UserInfoProps) => {
                     {user.address && (
                          <div className="flex flex-row items-center justify-between gap-5 rounded-lg border p-3 shadow-sm">
                               <p className="text-sm font-medium">
-                                   Բնակության հասցե
+                                   {t("address")}
                               </p>
                               <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-muted rounded-md">
                                    {user.address}
@@ -76,7 +78,7 @@ export const UserInfo = ({user,subscription}: UserInfoProps) => {
                     {user.hobbies && (
                          <div className="flex flex-row items-center justify-between gap-5 rounded-lg border p-3 shadow-sm">
                               <p className="text-sm font-medium">
-                                   Հոբբիներ
+                                   {t("hobbies")}
                               </p>
                               <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-muted rounded-md">
                                    {user.hobbies}
@@ -85,18 +87,18 @@ export const UserInfo = ({user,subscription}: UserInfoProps) => {
                     )}
                     <div className="flex flex-row items-center justify-between gap-5 rounded-lg border p-3 shadow-sm">
                          <p className="text-sm font-medium">
-                              Երկաստիճան վավերացում
+                              {t("2fa.title")}
                          </p>
                          <Badge variant={user.isTwoFactorEnabled ? "success" : "destructive"}>
-                              {user.isTwoFactorEnabled ? "Միացված է" : "Անջատված է"}
+                              {user.isTwoFactorEnabled ? t("2fa.on") : t("2fa.off")}
                          </Badge>
                     </div>
                     <div className="flex flex-row items-center justify-between gap-5 rounded-lg border p-3 shadow-sm">
                          <p className="text-sm font-medium">
-                              Պրեմիում բաժանորդագրություն
+                              {t("subscription.title")}
                          </p>
                          <Badge variant={subscription==="premium" ? "success" : "destructive"}>
-                              {subscription==="premium" ? "Ակտիվ է" : "Ակտիվ չէ"}
+                              {subscription==="premium" ? t("subscription.active") : t("subscription.inactive")}
                          </Badge>
                     </div>
                </div>

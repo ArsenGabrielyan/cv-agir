@@ -12,5 +12,18 @@
           "title": "You have upgraded to Premium!",
           "congrats": "Congratulations!",
           "goBack": "Return to dashboard"
+     },
+     "premium-modal": {
+          "title": "Upgrade to Premium",
+          "desc": "Subscribe to our premium plan to get more features",
+          "subType": "Subscription type",
+          "monthly": {
+               "name": "Monthly",
+               "prefix": "month"
+          },
+          "annual": {
+               "name": "Annual",
+               "prefix": "year"
+          }
      }
 }

@@ -27,6 +27,32 @@
           },
           "menu": "Menu"
      },
+     "my-profile": {
+          "title": "My Profile",
+          "edit-profile": "Edit Profile",
+          "email": "Email Address",
+          "profession": "Profession",
+          "phone": "Phone Number",
+          "address": "Home Address",
+          "hobbies": "Hobbies",
+          "2fa": {
+               "title": "Two-factor Authentication",
+               "on": "On",
+               "off": "Off"
+          },
+          "subscription": {
+               "title": "Premium Subscription",
+               "active": "Active",
+               "inactive": "Inactive"
+          }
+     },
+     "settings": {
+          "title": "Settings",
+          "tabs": {
+               "settings": "Account & App",
+               "subscription": "Subscription"
+          }
+     },
      "editor": {
           "resume": {
                "metaTitle": "Customize your resume",

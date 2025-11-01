@@ -1,5 +1,5 @@
 import PageLayout from "@/components/layout/page-layout"
-import SettingsContent from "@/components/settings/settings-tabs"
+import SettingsContent from "@/components/pages/settings"
 import { getSubscriptionsByUserId, getIsSubscriptionExpired } from "@/data/subscription"
 import { redirect, routing } from "@/i18n/routing"
 import { currentUser } from "@/lib/auth"
@@ -7,9 +7,13 @@ import { Metadata } from "next"
 import { LocalePageProps } from "@/app/[locale]/layout";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server"
 
-export const metadata: Metadata = {
-     title: "Կարգավորումներ"
+export const generateMetadata = async(): Promise<Metadata> => {
+     const t = await getTranslations("settings");
+     return {
+          title: t("title")
+     }
 }
 
 export default async function SettingsPage({params}: LocalePageProps){
@@ -31,8 +35,10 @@ export default async function SettingsPage({params}: LocalePageProps){
      ])
      return (
           <PageLayout sidebarMode>
-               <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 border-b pb-3">Կարգավորումներ</h1>
-               <SettingsContent subscriptions={subscriptions} isExpired={isExpired}/>
+               <SettingsContent
+                    subscriptions={subscriptions}
+                    isExpired={isExpired}
+               />
           </PageLayout>
      )
 }

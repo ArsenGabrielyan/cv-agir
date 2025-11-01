@@ -80,7 +80,8 @@ export default function Settings(){
 
      const currData = form.watch();
      const isSameSettings = JSON.stringify(currData) === JSON.stringify(defaultSettings);
-     const professionField = useTranslations("editor.profession")
+     const professionField = useTranslations("editor.profession");
+     const formTxt = useTranslations("form")
      return (
           <Form {...form}>
                <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -92,11 +93,11 @@ export default function Settings(){
                               name="name"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Անուն Ազգանուն</FormLabel>
+                                        <FormLabel>{formTxt("name.label")}</FormLabel>
                                         <FormControl>
                                              <Input
                                                   {...field}
-                                                  placeholder="Պողոս Պետրոսյան"
+                                                  placeholder={formTxt("name.placeholder")}
                                                   disabled={isPending}
                                              />
                                         </FormControl>
@@ -110,12 +111,12 @@ export default function Settings(){
                                    name="email"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Էլ․ հասցե</FormLabel>
+                                             <FormLabel>{formTxt("email.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
                                                        type="email"
-                                                       placeholder="name@example.com"
+                                                       placeholder={formTxt("email.placeholder")}
                                                        disabled={isPending}
                                                   />
                                              </FormControl>
@@ -149,11 +150,11 @@ export default function Settings(){
                                    name="phone"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Հեռախոսահամար</FormLabel>
+                                             <FormLabel>{formTxt("phone.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
-                                                       placeholder="(012) 34-56-78"
+                                                       placeholder={formTxt("phone.placeholder")}
                                                        disabled={isPending}
                                                   />
                                              </FormControl>
@@ -297,7 +298,7 @@ export default function Settings(){
                                    name="password"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Գաղտնաբառ</FormLabel>
+                                             <FormLabel>{formTxt("password-label")}</FormLabel>
                                              <FormControl>
                                                   <PasswordInput
                                                        {...field}

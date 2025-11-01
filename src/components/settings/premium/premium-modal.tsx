@@ -16,30 +16,32 @@ export default function PremiumModal(){
      const [isYearly, setIsYearly] = useState(false);
      const cardPrice = useMemo(()=>isYearly ? price * 12 : price,[isYearly, price])
      const {open, setOpen} = usePremiumModal();
-     const t = useTranslations("pricing")
+     const t = useTranslations("premium-modal");
+     const buttonTxt = useTranslations("buttons");
+     const pricingTxt = useTranslations("pricing");
      return (
           <Dialog open={open} onOpenChange={setOpen}>
                <DialogContent>
                     <DialogHeader>
-                         <DialogTitle>Անցեք պրեմիումի</DialogTitle>
-                         <DialogDescription>Բաժանորդագրվեք մեր պրեմիում տարբերակին բազում հնարավորություններ ձեռք բերելու համար</DialogDescription>
+                         <DialogTitle>{t("title")}</DialogTitle>
+                         <DialogDescription>{t("desc")}</DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
                          <div className="flex items-center justify-center space-x-3">
-                              <p>Ամսական</p>
-                              <Switch title="Բաժանորդագրության տեսակ" id="billing-mode" checked={isYearly} onCheckedChange={setIsYearly}/>
-                              <p>Տարեկան</p>
+                              <p>{t("monthly.name")}</p>
+                              <Switch title={t("subType")} id="billing-mode" checked={isYearly} onCheckedChange={setIsYearly}/>
+                              <p>{t("annual.name")}</p>
                          </div>
-                         <p className="text-center text-3xl md:text-4xl xl:text-5xl font-semibold">${cardPrice.toFixed(2)}/{isYearly ? "տարի" : "ամիս"}</p>
+                         <p className="text-center text-3xl md:text-4xl xl:text-5xl font-semibold">${cardPrice.toFixed(2)}/{isYearly ? t("annual.prefix") : t("monthly.prefix")}</p>
                          <ul className="space-y-3">
                               {perks.map((perk,i)=>(
-                                   <li key={`perk-${i+1}`} className={cn("flex gap-x-3",!perk.included && "text-muted-foreground")}>{perk.included ? <CheckCircle className="text-primary"/> : <MinusCircle/>} {t(perk.name,{count: String(MAX_FREE_RESUMES)})}</li>
+                                   <li key={`perk-${i+1}`} className={cn("flex gap-x-3",!perk.included && "text-muted-foreground")}>{perk.included ? <CheckCircle className="text-primary"/> : <MinusCircle/>} {pricingTxt(perk.name,{count: String(MAX_FREE_RESUMES)})}</li>
                               ))}
                          </ul>
                     </div>
                     <DialogFooter>
                          <Button type="button" className="w-full" asChild>
-                              <Link href={`/checkout?plan=${planName}&planType=${isYearly ? "yearly" : "monthly"}`}>Անցել պրեմիումի</Link>
+                              <Link href={`/checkout?plan=${planName}&planType=${isYearly ? "yearly" : "monthly"}`}>{buttonTxt("upgrade")}</Link>
                          </Button>
                     </DialogFooter>
                </DialogContent>

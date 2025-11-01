@@ -7,9 +7,13 @@ import { Metadata } from "next";
 import { LocalePageProps } from "@/app/[locale]/layout";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-     title: "Ձեր պրոֆիլը"
+export const generateMetadata = async(): Promise<Metadata> => {
+     const t = await getTranslations("my-profile");
+     return {
+          title: t("title")
+     }
 }
 
 export default async function ProfilePage({params}: LocalePageProps){

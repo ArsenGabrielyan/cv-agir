@@ -1,6 +1,6 @@
 import SettingsCard from "../settings-card";
 import { useCurrentSubscriptionLevel, useCurrentUser } from "@/hooks/use-current-user";
-import { SettingsContentProps } from "../settings-tabs";
+import { SettingsContentProps } from "@/components/pages/settings";
 import {
      Table,
      TableBody,

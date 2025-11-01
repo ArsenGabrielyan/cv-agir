@@ -1,4 +1,4 @@
-import { SettingsContentProps } from "@/components/settings/settings-tabs";
+import { SettingsContentProps } from "@/components/pages/settings";
 import { ExtendedUser } from "@/global";
 import { SettingsType, CoverLetterFormType, ResumeFormType } from "@/schemas/types";
 import { AuditAction, Prisma, ResumeTemplate, ResumeTemplateCategory, UserPlan } from "@db";
@@ -76,8 +76,7 @@ export type AuditLogSearchAction = AuditAction | keyof AuditLogSearchType
 // Other Types
 export type ISettingsPage = {
      id: number
-     name: string;
-     tabName: string;
+     tabName: "settings" | "subscription";
      SettingsContent: React.ComponentType<SettingsContentProps>
 }
 export type AccountServerData = Prisma.AccountGetPayload<{
