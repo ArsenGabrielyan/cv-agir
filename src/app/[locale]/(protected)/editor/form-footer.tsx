@@ -4,6 +4,7 @@ import { Link } from "@/i18n/routing"
 import useEditorSteps from "@/hooks/use-editor-steps"
 import { EditorFormFooterProps } from "@/lib/types"
 import { useTranslations } from "next-intl"
+import { ButtonGroup } from "@/components/ui/button-group"
 
 export default function FormFooter<Props>({
      currStep,
@@ -18,7 +19,7 @@ export default function FormFooter<Props>({
      return (
           <footer className="w-full border-t px-3 py-5">
                <div className="max-w-7xl mx-auto flex flex-wrap justify-between gap-3 items-center">
-                    <div className="flex items-center gap-4">
+                    <ButtonGroup>
                          <Button
                               variant="secondary"
                               onClick={prevStep ? () => setCurrStep(prevStep) : undefined}
@@ -43,7 +44,7 @@ export default function FormFooter<Props>({
                                    {t("print")}
                               </Button>
                          )}
-                    </div>
+                    </ButtonGroup>
                     <Button
                          variant="outline"
                          size="icon"

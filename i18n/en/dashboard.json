@@ -51,6 +51,80 @@
           "tabs": {
                "settings": "Account & App",
                "subscription": "Subscription"
+          },
+          "sections": {
+               "acc-settings": "Account Settings",
+               "default-value": {
+                    "title": "Default Document Values",
+                    "desc": "These settings apply to both resume and cover letter data."
+               },
+               "privacy": {
+                    "title": "Privacy",
+                    "show-email": {
+                         "title": "Show Email Address",
+                         "desc": "Show Your Email Address on Your Personal Resume Page"
+                    },
+                    "show-address": {
+                         "title": "Show Home Address",
+                         "desc": "Show Your Home Address on Your Personal Resume Page"
+                    },
+                    "show-phone": {
+                         "title": "Show Phone Number",
+                         "desc": "Show Your Phone Number on Your Personal Resume Page"
+                    },
+                    "show-links": {
+                         "title": "Show All Web Links",
+                         "desc": "Show All Web Links on Your Personal Resume Page"
+                    }
+               },
+               "auth": {
+                    "title": "Password & Authentication",
+                    "new-pass": "New Password",
+                    "2fa": {
+                         "title": "Two-factor authentication",
+                         "desc": "Enable two-factor authentication to strengthen account security"
+                    }
+               },
+               "appearance": {
+                    "title": "Design",
+                    "theme": {
+                         "title": "Appearance",
+                         "desc": "App color and theme"
+                    }
+               },
+               "subscription": {
+                    "title": "Subscription",
+                    "currentPlan": {
+                         "text": "Current Plan: <bold>{subscriptionLevel}</bold>",
+                         "premium": "Premium",
+                         "free": "Free"
+                    },
+                    "renew-txt": "Your subscription will renew on",
+                    "cancel-sub": "Cancel Subscription",
+                    "renew-sub": "Renew Subscription",
+                    "payment-method": {
+                         "title": "Payment Method",
+                         "valid-until": "Valid until",
+                         "menu": "Menu",
+                         "add-payment-method": "Add new payment method",
+                         "edit": "Edit",
+                         "add": "Add",
+                         "modal-title": {
+                              "edit": "Edit the method details",
+                              "add": "Add new payment method"
+                         },
+                         "unknown-card": "Unknown Card"
+                    },
+                    "accounts": {
+                         "title": "Accounts",
+                         "cols": {
+                              "date": "Datetime",
+                              "price": "Price",
+                              "plan": "Plan"
+                         },
+                         "paid": "Paid"
+                    }
+               }
           }
      },
      "editor": {
@@ -183,7 +257,7 @@
                     "placeholder": "Doe"
                },
                "address": {
-                    "label": "Residential address",
+                    "label": "Home address",
                     "placeholder": "12 St, City, Country"
                },
                "summary": {

@@ -34,7 +34,7 @@ export default function CreditCardModal(){
      })
      const handleSubmit = (values: CreditCardType) => {
           startTransition(()=>{
-               const action = isEditing ? editCard(values,index) : addCard(values)
+               const action = isEditing ? editCard(values) : addCard(values)
                action.then(data=>{
                     if(data.error){
                          toast.error(data.error)
@@ -68,11 +68,13 @@ export default function CreditCardModal(){
      const isSame = !!isEditing && !!cardToEdit && areValuesSame(form.watch(), cardToEdit);
      const bankTxt = useTranslations("checkout-subscription")
      const currBank = getBankName(form.watch("cardNumber"),bankTxt("aeb-bank"));
+     const t = useTranslations("settings.sections.subscription.payment-method");
+     const formTxt = useTranslations("form")
      return (
           <Dialog open={open} onOpenChange={setOpen}>
                <DialogContent>
                     <DialogHeader>
-                         <DialogTitle>{isEditing ? "Փոխել այդ մեթոդի տվյալները" : "Ավելացնել նոր վճարման մեթոդ"}</DialogTitle>
+                         <DialogTitle>{isEditing ? t("modal-title.edit") : t("modal-title.add")}</DialogTitle>
                     </DialogHeader>
                     <Form {...form}>
                          <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
@@ -81,7 +83,7 @@ export default function CreditCardModal(){
                                    name="cardNumber"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Վարկային քարտի համար</FormLabel>
+                                             <FormLabel>{formTxt("credit-card-num.label")}</FormLabel>
                                              <FormControl>
                                                   <CreditCardInput
                                                        {...field}
@@ -89,7 +91,9 @@ export default function CreditCardModal(){
                                                   />
                                              </FormControl>
                                              {currBank && (
-                                                  <FormDescription>Բանկ՝ {currBank.title}</FormDescription>
+                                                  <FormDescription>{formTxt("credit-card-num.desc",{
+                                                       bankTitle: currBank.title
+                                                  })}</FormDescription>
                                              )}
                                              <FormMessage/>
                                         </FormItem>
@@ -101,7 +105,7 @@ export default function CreditCardModal(){
                                         name="expiryDate"
                                         render={({field})=>(
                                              <FormItem>
-                                                  <FormLabel>Քարտի ժամկետ</FormLabel>
+                                                  <FormLabel>{formTxt("expiry-date-label")}</FormLabel>
                                                   <FormControl>
                                                        <Input
                                                             {...field}
@@ -138,11 +142,11 @@ export default function CreditCardModal(){
                                    name="cardName"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Օգտատիրոջ անուն ազգանուն</FormLabel>
+                                             <FormLabel>{formTxt("cardholder-name.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
-                                                       placeholder="Պետրոս Պողոսյան"
+                                                       placeholder={formTxt("cardholder-name.placeholder")}
                                                        disabled={isPending}
                                                   />
                                              </FormControl>
@@ -155,11 +159,11 @@ export default function CreditCardModal(){
                                    name="city"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Օգտատիրոջ հասցեն</FormLabel>
+                                             <FormLabel>{formTxt("cardholder-address.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
-                                                       placeholder="Երևան, Հայաստան"
+                                                       placeholder={formTxt("cardholder-address.placeholder")}
                                                        disabled={isPending}
                                                   />
                                              </FormControl>
@@ -167,7 +171,7 @@ export default function CreditCardModal(){
                                         </FormItem>
                                    )}
                               />
-                              <LoadingButton type="submit" className="w-full" disabled={isSame} loading={isPending}>{isEditing ? "Փոխել" : "Ավելացնել"}</LoadingButton>
+                              <LoadingButton type="submit" className="w-full" disabled={isSame} loading={isPending}>{isEditing ? t("edit") : t("add")}</LoadingButton>
                          </form>
                     </Form>
                </DialogContent>

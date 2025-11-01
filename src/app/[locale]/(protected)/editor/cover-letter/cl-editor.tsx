@@ -64,7 +64,7 @@ export default function CoverLetterEditor({letterToEdit,userData}: CoverLetterEd
                     <div className="absolute bottom-0 top-0 w-full flex">
                          <ScrollArea className={cn("w-full md:w-1/2 p-4 md:block",showSmLetterPreview && "hidden")}>
                               <div className="space-y-6">
-                                   <Breadcrumbs type="cover-letter" currStep={currStep} setCurrStep={setStep}/>
+                                   <Breadcrumbs steps={steps} type="cover-letter" currStep={currStep} setCurrStep={setStep}/>
                                    {FormComponent && (
                                         <FormComponent
                                              coverLetterData={coverLetterData}

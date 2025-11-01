@@ -90,7 +90,7 @@ export default function ResumeEditor({resumeToEdit,template,resumeId,userData}: 
                     <div className="absolute bottom-0 top-0 w-full flex">
                          <ScrollArea className={cn("w-full md:w-1/2 p-4 md:block",showSmResumePreview && "hidden")}>
                               <div className="space-y-6">
-                                   <Breadcrumbs type="resume" currStep={currStep} setCurrStep={setStep}/>
+                                   <Breadcrumbs steps={steps} type="resume" currStep={currStep} setCurrStep={setStep}/>
                                    {FormComponent && (
                                         <FormComponent
                                              resumeData={resumeData}

@@ -1,16 +1,15 @@
 import { ILanguage, LangCodeType, MessageSchema } from "./types";
-import { Locale } from "date-fns/locale";
-import {hy,enUS} from "date-fns/locale"
+import { Locale, hy, enUS } from "date-fns/locale";
 
 export const languages = [
      {code: "hy", countryCode: "am", label: "Հայերեն"},
      {code: "en", countryCode: "us", label: "English"},
 ] as const satisfies readonly ILanguage[];
 
-export const dateFNSLocales: Record<LangCodeType, Pick<Locale,"formatDistance" | "formatLong" | "localize" | "options">> = {
-     hy,
-     en: enUS
-}
+export const dateFNSLocales: Record<
+     LangCodeType,
+     Pick<Locale,"formatDistance" | "formatLong" | "localize" | "options">
+> = { hy, en: enUS }
 
 export const messages = [
      "common",

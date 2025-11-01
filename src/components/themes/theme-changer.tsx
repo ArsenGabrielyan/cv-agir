@@ -1,10 +1,11 @@
+import { ButtonGroup } from "../ui/button-group";
 import { ThemeColorToggle } from "./theme-color-toggle";
 import { ThemeModeToggle } from "./theme-toggler";
 
 const ThemeSettings = () => (
-     <div className="flex w-fit gap-x-1">
+     <ButtonGroup>
           <ThemeColorToggle/>
           <ThemeModeToggle/>
-     </div>
+     </ButtonGroup>
 )
 export default ThemeSettings

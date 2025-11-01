@@ -35,10 +35,11 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
      const [showDeleteDialog, setShowDeleteDialog] = useState(false);
      const creditCardModal = useCreditCardModal();
      const bankTxt = useTranslations("checkout-subscription")
+     const t = useTranslations("settings.sections.subscription.payment-method");
      useEffect(()=>{
           const getCardNumber = async()=>{
                const cardNum = await decryptData(card.cardNumber);
-               const brand = getCreditCardBrandName(cardNum);
+               const brand = getCreditCardBrandName(cardNum,t("unknown-card"));
                const bank = getBankName(cardNum,bankTxt("aeb-bank"));
                setSafeCardInfo(prev=>({
                     ...prev,
@@ -48,7 +49,7 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
                }))
           }
           getCardNumber();
-     },[card.cardNumber,bankTxt]);
+     },[card.cardNumber,bankTxt,t]);
      const handleEditCard = async () => {
           creditCardModal.setCreditCard({
                ...mapToCreditCardValues(card),
@@ -64,6 +65,7 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
           creditCardModal.setOpen(true);
      }
      const isMobile = useIsMobile();
+     const buttonTxt = useTranslations("buttons")
      return (safeCardInfo.cardNumber && safeCardInfo.brand) ? (
           <>
                <div className="flex justify-between items-center gap-3 flex-wrap">
@@ -78,10 +80,10 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
                                    <p className="text-muted-foreground">•••• {safeCardInfo.cardNumber}</p>
                               </div>
                               <div className="flex items-center gap-4">
-                                   <p>Վավեր է մինչև {formatDate(card.expiryDate,"MM/yyyy")}</p>
+                                   <p>{t("valid-until")} {formatDate(card.expiryDate,"MM/yyyy")}</p>
                                    <DropdownMenu modal={false}>
                                         <DropdownMenuTrigger asChild>
-                                             <Button variant="outline" size="icon" title="Մենյու">
+                                             <Button variant="outline" size="icon" title={t("menu")}>
                                                   <MoreVertical/>
                                              </Button>
                                         </DropdownMenuTrigger>
@@ -90,7 +92,7 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
                                                   className="flex items-center gap-2"
                                                   onClick={handleEditCard}
                                              >
-                                                  <Edit/> Փոխել
+                                                  <Edit/> {t("edit")}
                                              </DropdownMenuItem>
                                              <DropdownMenuItem
                                                   className="flex items-center gap-2"
@@ -100,7 +102,7 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
                                                        setShowDeleteDialog(true)
                                                   }}
                                              >
-                                                  <Trash/> Ջնջել
+                                                  <Trash/> {buttonTxt("delete")}
                                              </DropdownMenuItem>
                                         </DropdownMenuContent>
                                    </DropdownMenu>
@@ -116,11 +118,11 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
                                         <CreditCardIcon brand={safeCardInfo.brand}/>
                                    </div>
                                    <p className="text-xl font-semibold flex items-center gap-4">{safeCardInfo.brand} <span className="text-muted-foreground font-normal">•••• {safeCardInfo.cardNumber}</span></p>
-                                   <p>Վավեր է մինչև {formatDate(card.expiryDate,"MM/yyyy")}</p>
+                                   <p>{t("valid-until")} {formatDate(card.expiryDate,"MM/yyyy")}</p>
                               </div>
                               <DropdownMenu modal={false}>
                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" size="icon" title="Մենյու">
+                                        <Button variant="outline" size="icon" title={t("menu")}>
                                              <MoreVertical/>
                                         </Button>
                                    </DropdownMenuTrigger>
@@ -129,7 +131,7 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
                                              className="flex items-center gap-2"
                                              onClick={handleEditCard}
                                         >
-                                             <Edit/> Փոխել
+                                             <Edit/> {t("edit")}
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                              className="flex items-center gap-2"
@@ -139,7 +141,7 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
                                                   setShowDeleteDialog(true)
                                              }}
                                         >
-                                             <Trash/> Ջնջել
+                                             <Trash/> {buttonTxt("delete")}
                                         </DropdownMenuItem>
                                    </DropdownMenuContent>
                               </DropdownMenu>
@@ -147,7 +149,7 @@ export default function CreditCardItem({card, index, deleteDisabled}: CreditCard
                     )}
                </div>
                <Button variant="ghost" className="hidden last:inline-flex" onClick={handleAddCard}>
-                    <Plus/> Ավելացնել նոր վճարման մեթոդ
+                    <Plus/> {t("add-payment-method")}
                </Button>
                <DeleteCardDialog index={index} open={showDeleteDialog} onOpenChange={setShowDeleteDialog}/>
           </>

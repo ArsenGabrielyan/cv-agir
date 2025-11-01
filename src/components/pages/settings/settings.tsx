@@ -21,7 +21,7 @@ import { FormError } from "@/components/form/form-error";
 import { Switch } from "@/components/ui/switch";
 import { SettingsType } from "@/schemas/types";
 import LoadingButton from "@/components/buttons/loading-button";
-import SettingsCard from "../settings-card";
+import SettingsCard from "../../settings/settings-card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import ThemeSettings from "@/components/themes/theme-changer";
@@ -81,13 +81,17 @@ export default function Settings(){
      const currData = form.watch();
      const isSameSettings = JSON.stringify(currData) === JSON.stringify(defaultSettings);
      const professionField = useTranslations("editor.profession");
-     const formTxt = useTranslations("form")
+     const formTxt = useTranslations("form");
+     const t = useTranslations("settings.sections");
+     const docFields = useTranslations("editor.personal-info");
+     const buttonTxt = useTranslations("buttons")
+
      return (
           <Form {...form}>
                <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
                     <FormError message={error}/>
                     <FormSuccess message={success}/>
-                    <SettingsCard title="Հաշվի կարգավորումներ">
+                    <SettingsCard title={t("acc-settings")}>
                          <FormField
                               control={form.control}
                               name="name"
@@ -126,7 +130,7 @@ export default function Settings(){
                               />
                          )}
                     </SettingsCard>
-                    <SettingsCard title="Փաստաթղթի արժեքներ" description="Այս կարգավորումները կիրառվում են ինչպես ռեզյումեի, այնպես էլ ուղեկցող նամակի տվյալների վրա։">
+                    <SettingsCard title={t("default-value.title")} description={t("default-value.desc")}>
                          <FormField
                               control={form.control}
                               name="jobTitle"
@@ -167,11 +171,11 @@ export default function Settings(){
                                    name="address"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Բնակության հասցե</FormLabel>
+                                             <FormLabel>{docFields("address.label")}</FormLabel>
                                              <FormControl>
                                                   <Input
                                                        {...field}
-                                                       placeholder="12 Փողոցի անուն, Քաղաք, Երկիր"
+                                                       placeholder={docFields("address.placeholder")}
                                                        disabled={isPending}
                                                   />
                                              </FormControl>
@@ -185,11 +189,11 @@ export default function Settings(){
                               name="summary"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Նկարագրություն</FormLabel>
+                                        <FormLabel>{docFields("summary.label")}</FormLabel>
                                         <FormControl>
                                              <Textarea
                                                   {...field}
-                                                  placeholder="Նկարագրեք Ձեր մասին կարճ տեղեկություն"
+                                                  placeholder={docFields("summary.placeholder")}
                                              />
                                         </FormControl>
                                         <FormMessage/>
@@ -201,27 +205,28 @@ export default function Settings(){
                               name="hobbies"
                               render={({field})=>(
                                    <FormItem>
-                                        <FormLabel>Հոբբիներ</FormLabel>
+                                        <FormLabel>{docFields("hobbies.label")}</FormLabel>
                                         <FormControl>
                                              <Textarea
                                                   {...field}
-                                                  placeholder="Նկարագրեք Ձեր սիրած հոբբիները այստեղ"
+                                                  placeholder={docFields("hobbies.placeholder")}
                                              />
                                         </FormControl>
+                                        <FormDescription>{docFields("hobbies.field-desc")}</FormDescription>
                                         <FormMessage/>
                                    </FormItem>
                               )}
                          />
                     </SettingsCard>
-                    <SettingsCard title="Գաղտնիություն">
+                    <SettingsCard title={t("privacy.title")}>
                          <FormField
                               control={form.control}
                               name="showEmail"
                               render={({field})=>(
                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                                         <div className="space-y-0.5">
-                                             <FormLabel>Ցույց տալ էլ․ հասցեն</FormLabel>
-                                             <FormDescription>Ցուցադրել Ձեր էլ․ հասցեն Ձեր անձնական ռեզյումեի էջում</FormDescription>
+                                             <FormLabel>{t("privacy.show-email.title")}</FormLabel>
+                                             <FormDescription>{t("privacy.show-email.desc")}</FormDescription>
                                         </div>
                                         <FormControl>
                                              <Switch
@@ -239,8 +244,8 @@ export default function Settings(){
                               render={({field})=>(
                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                                         <div className="space-y-0.5">
-                                             <FormLabel>Ցույց տալ բնակության հասցեն</FormLabel>
-                                             <FormDescription>Ցուցադրել Ձեր բնակության հասցեն Ձեր անձնական ռեզյումեի էջում</FormDescription>
+                                             <FormLabel>{t("privacy.show-address.title")}</FormLabel>
+                                             <FormDescription>{t("privacy.show-address.desc")}</FormDescription>
                                         </div>
                                         <FormControl>
                                              <Switch
@@ -258,8 +263,8 @@ export default function Settings(){
                               render={({field})=>(
                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                                         <div className="space-y-0.5">
-                                             <FormLabel>Ցույց տալ հեռախոսահամարը</FormLabel>
-                                             <FormDescription>Ցուցադրել Ձեր հեռախոսահամարը Ձեր անձնական ռեզյումեի էջում</FormDescription>
+                                             <FormLabel>{t("privacy.show-phone.title")}</FormLabel>
+                                             <FormDescription>{t("privacy.show-phone.title")}</FormDescription>
                                         </div>
                                         <FormControl>
                                              <Switch
@@ -277,8 +282,8 @@ export default function Settings(){
                               render={({field})=>(
                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                                         <div className="space-y-0.5">
-                                             <FormLabel>Ցույց տալ բոլոր վեբ հղումները</FormLabel>
-                                             <FormDescription>Ցուցադրել Ձեր բոլոր վեբ հղումները Ձեր անձնական ռեզյումեի էջում</FormDescription>
+                                             <FormLabel>{t("privacy.show-links.title")}</FormLabel>
+                                             <FormDescription>{t("privacy.show-links.title")}</FormDescription>
                                         </div>
                                         <FormControl>
                                              <Switch
@@ -292,7 +297,7 @@ export default function Settings(){
                          />
                     </SettingsCard>
                     {!user?.isOauth && (
-                         <SettingsCard title="Գաղտնաբառ և նույնականացում">
+                         <SettingsCard title={t("auth.title")}>
                               <FormField
                                    control={form.control}
                                    name="password"
@@ -315,7 +320,7 @@ export default function Settings(){
                                    name="newPassword"
                                    render={({field})=>(
                                         <FormItem>
-                                             <FormLabel>Նոր գաղտնաբառ</FormLabel>
+                                             <FormLabel>{t("auth.new-pass")}</FormLabel>
                                              <FormControl>
                                                   <PasswordInput
                                                        {...field}
@@ -333,8 +338,8 @@ export default function Settings(){
                                    render={({field})=>(
                                         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                                              <div className="space-y-0.5">
-                                                  <FormLabel>Երկաստիճան վավերացում</FormLabel>
-                                                  <FormDescription>Միացնել երկաստիճան վավերացումը հաշվի պաշտպանությունը ուժեղացնելու համար</FormDescription>
+                                                  <FormLabel>{t("auth.2fa.title")}</FormLabel>
+                                                  <FormDescription>{t("auth.2fa.desc")}</FormDescription>
                                                   <FormMessage/>
                                              </div>
                                              <FormControl>
@@ -349,16 +354,16 @@ export default function Settings(){
                               />
                          </SettingsCard>
                     )}
-                    <SettingsCard title="Դիզայն">
+                    <SettingsCard title={t("appearance.title")}>
                          <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                               <div className="space-y-0.5">
-                                   <Label>Հավելվածի տեսքը</Label>
-                                   <p className="text-[0.8rem] text-muted-foreground">Հավելվածի գույնը և ռեժիմը</p>
+                                   <Label>{t("appearance.theme.title")}</Label>
+                                   <p className="text-[0.8rem] text-muted-foreground">{t("appearance.theme.desc")}</p>
                               </div>
                               <ThemeSettings/>
                          </div>
                     </SettingsCard>
-                    <LoadingButton type="submit" disabled={isSameSettings} loading={isPending}>Պահպանել</LoadingButton>
+                    <LoadingButton type="submit" disabled={isSameSettings} loading={isPending}>{buttonTxt("save")}</LoadingButton>
                </form>
           </Form>
      )

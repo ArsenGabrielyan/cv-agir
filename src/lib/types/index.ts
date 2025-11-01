@@ -75,7 +75,6 @@ export type AuditLogSearchAction = AuditAction | keyof AuditLogSearchType
 
 // Other Types
 export type ISettingsPage = {
-     id: number
      tabName: "settings" | "subscription";
      SettingsContent: React.ComponentType<SettingsContentProps>
 }

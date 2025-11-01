@@ -32,7 +32,7 @@ export const parseExpiryDate = (date: string, t: ReturnType<typeof useTranslatio
      return { date: new Date(fullYear,month,0) }
 }
 
-export const getCreditCardBrandName = (card: string) => {
+export const getCreditCardBrandName = (card: string, unknownCardMsg: string) => {
      const {visa, mastercard, amex, mir, discover, diners, jcb, unionPay, arca} = CREDIT_CARD_BRANDS;
      if(visa.test(card)) return "Visa";
      if(mastercard.test(card)) return "Mastercard";
@@ -43,7 +43,7 @@ export const getCreditCardBrandName = (card: string) => {
      if(jcb.test(card)) return "JCB"
      if(unionPay.test(card)) return "Union Pay";
      if(arca.test(card)) return "ArCa";
-     return "Անհայտ քարտ"
+     return unknownCardMsg
 }
 export const getBankName = (card: string, aebName: string) => {
      const mentionedBank = GET_BANKS(aebName).find(val=>card.includes(val.startNumber));

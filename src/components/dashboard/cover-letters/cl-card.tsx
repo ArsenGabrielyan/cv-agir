@@ -11,10 +11,10 @@ import { Link } from "@/i18n/routing";
 import dynamic from "next/dynamic";
 import { mapToLetterValues } from "@/lib/helpers/maps";
 import { formatDate } from "date-fns";
-import { hy } from "date-fns/locale";
 import DocPreviewLoader from "@/components/loaders/doc-preview";
 import usePrint from "@/hooks/use-print";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { dateFNSLocales } from "@/i18n/config";
 
 interface CoverLetterCardProps{
      data: CoverLetter
@@ -27,6 +27,7 @@ export default function CoverLetterCard({data}: CoverLetterCardProps){
      const wasUpdated = updatedAt!==createdAt;
      const contentRef = useRef<HTMLDivElement>(null);
      const t = useTranslations("dashboard");
+     const locale = useLocale()
      const handlePrintCoverLetter = usePrint({
           contentRef,
           documentTitle: title || t("cover-letters.default-title"),
@@ -53,7 +54,7 @@ export default function CoverLetterCard({data}: CoverLetterCardProps){
                          <p className="text-xs text-muted-foreground">
                               {wasUpdated ? t("date.updated") : t("date.created")}{" "}
                               {formatDate(updatedAt,"MMM d, yyyy, HH:mm",{
-                                   locale: hy
+                                   locale: dateFNSLocales[locale]
                               })}
                          </p>
                     </div>

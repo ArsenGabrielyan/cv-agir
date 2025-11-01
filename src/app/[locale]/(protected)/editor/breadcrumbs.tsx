@@ -1,14 +1,15 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { steps } from "./steps";
 import React from "react";
 import { useTranslations } from "next-intl";
+import { IEditorStep } from "@/lib/types";
 
-interface BreadcrumbsProps{
+interface BreadcrumbsProps<Props>{
      type: "resume" | "cover-letter"
      currStep: string;
      setCurrStep: (step: string) => void;
+     steps: IEditorStep<Props>[]
 }
-export default function Breadcrumbs({currStep,setCurrStep,type}: BreadcrumbsProps){
+export default function Breadcrumbs<Props>({currStep,setCurrStep,type,steps}: BreadcrumbsProps<Props>){
      const t = useTranslations(`editor.${type}.steps`)
      return (
           <div className="flex justify-center items-center">

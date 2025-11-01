@@ -8,11 +8,11 @@ import { getCheckoutFormSchema } from "@/schemas"
 import { CheckoutFormType } from "@/schemas/types"
 import { SubscriptionPeriod, UserPlan } from "@db";
 import { revalidatePath } from "next/cache";
-import { upsertCard } from "./credit-card";
 import {cache} from "react"
 import { getIpAddress } from "@/actions/ip";
 import { logAction } from "@/data/logs";
 import { getTranslations } from "next-intl/server";
+import { encryptData } from "../encryption";
 
 export const proceedToCheckout = async(values: CheckoutFormType, period: SubscriptionPeriod, price: number, plan: UserPlan) => {
      const currIp = await getIpAddress();
@@ -94,7 +94,6 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
                     startDate: new Date()
                }
           })
-          const creditCards = await upsertCard(user.id,{cardName,cardNumber,city,cvv,expiryDate},user,expires.date);
           await db.user.update({
                where: {
                     email,
@@ -105,7 +104,13 @@ export const proceedToCheckout = async(values: CheckoutFormType, period: Subscri
                     subscriptionId: currSubscription.id,
                     creditCards: {
                          deleteMany: {},
-                         create: creditCards
+                         create: {
+                              cardNumber: await encryptData(cardNumber),
+                              cvv: await encryptData(cvv),
+                              expiryDate: expires.date,
+                              fullName: cardName,
+                              city
+                         }
                     }
                }
           })
