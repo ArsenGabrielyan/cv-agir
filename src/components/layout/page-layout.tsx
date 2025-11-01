@@ -4,6 +4,7 @@ import AppSidebar from "./sidebar/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UserButton } from "../auth/user-button";
 import PremiumModal from "../settings/premium/premium-modal";
+import LanguageSwitcher from "../lang-switcher";
 
 interface PageLayoutProps{
      children: React.ReactNode,
@@ -19,7 +20,10 @@ export default function PageLayout({children,isLandingPage=false,sidebarMode=fal
                <main className="px-4 py-2 w-full h-full">
                     <div className="flex justify-between items-center w-full">
                          <SidebarTrigger/>
-                         <UserButton/>
+                         <div className="flex justify-center items-center gap-2.5">
+                              <UserButton/>
+                              <LanguageSwitcher/>
+                         </div>
                     </div>
                     {children}
                </main>

@@ -1,10 +1,12 @@
 import {BorderStyles} from "@db"
 
-export function getLanguageLevel(level: number){
-     if(level>=90 && level <= 100) return "Հմուտ"
-     if(level>=70 && level <= 90) return "Խոսակցական"
-     if(level>=40 && level <= 70) return "Սկսնակ"
-     return "Նվազագույն"
+export function getLanguageLevel(
+     level: number
+): "fluent" | "intermediate" | "beginner" | "few-words" {
+     if(level>=90 && level <= 100) return "fluent"
+     if(level>=70 && level <= 90) return "intermediate"
+     if(level>=40 && level <= 70) return "beginner"
+     return "few-words"
 }
 
 export function getBorderRadius(borderStyle: BorderStyles,type: "default" | "badge" = "default"){

@@ -1,8 +1,11 @@
 import { locales, messages } from "@/i18n/config";
 import type { NextConfig } from "next";
+import type { Messages } from "@/i18n/types";
 import createNextIntlPlugin from 'next-intl/plugin';
 
-const messagePaths = locales.flatMap(locale=>messages.map(msg=>
+const exclusions = new Set<Messages>(["subscription","editor"])
+
+const messagePaths = locales.flatMap(locale=>messages.filter(val=>!exclusions.has(val)).map(msg=>
   `./i18n/${locale}/${msg}.json`
 ))
 

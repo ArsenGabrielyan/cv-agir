@@ -30,7 +30,8 @@
           "edit": "Edit",
           "preview": "Show Preview",
           "remove": "Remove",
-          "save": "Save"
+          "save": "Save",
+          "send-msg": "Send Message"
      },
      "nav-links": {
           "menu": "Menu",

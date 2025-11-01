@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import DOMPurify from "isomorphic-dompurify"
 import {CoursesSection, EducationSection, HeaderSection, HobbiesSection, LanguagesSection, LinksSection, ReferencesSection, SkillsSection, SummarySection, WorkExperienceSection} from "./resume-sections";
 import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 
 interface ResumePreviewProps{
      template: ResumeTemplate | null
@@ -41,6 +42,8 @@ export default function ResumePreview({
           setPhotoSrc(resumeData.profileImg || "");
      }, [resumeData.profileImg]);
 
+     const t = useTranslations("doc-preview")
+
      useEffect(()=>{
           const compile = async() => {
                if(!template || !template.htmlTemplate) return;
@@ -52,17 +55,17 @@ export default function ResumePreview({
                     experience: resumeData.experience?.map(val => ({
                          ...val,
                          startDate: !val.startDate ? "" : format(val.startDate, "MM/yyyy"),
-                         endDate: !val.endDate ? "Այսօր" : format(val.endDate, "MM/yyyy")
+                         endDate: !val.endDate ? t("today") : format(val.endDate, "MM/yyyy")
                     })),
                     education: resumeData.education?.map(val => ({
                          ...val,
                          startDate: !val.startDate ? "" : format(val.startDate, "MM/yyyy"),
-                         endDate: !val.endDate ? "Այսօր" : format(val.endDate, "MM/yyyy")
+                         endDate: !val.endDate ? t("today") : format(val.endDate, "MM/yyyy")
                     })),
                     courses: resumeData.courses?.map(val => ({
                          ...val,
                          startDate: !val.startDate ? "" : format(val.startDate, "MM/yyyy"),
-                         endDate: !val.endDate ? "Այսօր" : format(val.endDate, "MM/yyyy")
+                         endDate: !val.endDate ? t("today") : format(val.endDate, "MM/yyyy")
                     }))
                })
                setRawHTML(compiled)
@@ -70,7 +73,7 @@ export default function ResumePreview({
           if(template){
                compile()
           }
-     },[template, resumeData, qrImg, photoSrc])
+     },[template, resumeData, qrImg, photoSrc, t])
 
      const sanitizedHTML = useMemo(()=>DOMPurify.sanitize(rawHTML,{
           ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|blob):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i

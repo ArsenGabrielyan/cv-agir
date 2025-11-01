@@ -72,6 +72,8 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
 
      const sysMsg = `You're a job resume generator AI. Your task is to write a professional introduction summary for a resume given the user's provided data. Only return the summary and don't include any other info in the response. Keep it concise, professional, and return the data in ${t("instructions-language")}. Maximum 70 words and Short.`;
 
+     const langLevels = await getTranslations("doc-preview.lang-levels")
+
      const userMessage = t("gen-summary-msg",{
           jobTitle: jobTitle || "N/A",
           experience: experience?.map(exp=>t("experience-msg",{
@@ -92,7 +94,7 @@ export const generateSummary = async(input: GenerateSummaryInput) => {
           skills: skills?.map(skill=>skill.name).join(", ") || "",
           languages: languages?.map(lang=>t("lang-msg",{
                name: `${lang.name} (locale)` || "N/A",
-               percentage: lang.percentage ? getLanguageLevel(lang.percentage) : "N/A"
+               percentage: lang.percentage ? langLevels(getLanguageLevel(lang.percentage)) : "N/A"
           })).join(", ") ||""
      });
 

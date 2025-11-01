@@ -26,6 +26,7 @@ export default function ResumeInfo({data, settings}: ResumeInfoProps){
      const links = (settings?.showLinks ?? true) ? data.links : []
      const isEmpty = Object.values({fname, lname, jobTitle, phone, address, profileImg, email, summary, hobbies, links, experience, education, courses, references, skills, languages}).every((val) => Array.isArray(val) ? !(val && val.length!==0) : !val);
      const t = useTranslations("resume-info")
+     const langLevel = useTranslations("doc-preview.lang-levels")
      return !isEmpty ? (
           <div className="max-w-(--breakpoint-xl) w-full p-5 space-y-6">
                <div className="bg-card text-card-foreground border shadow p-4 rounded-xl flex flex-col items-center justify-center gap-3">
@@ -143,7 +144,7 @@ export default function ResumeInfo({data, settings}: ResumeInfoProps){
                               <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">{t("sections.langs")}</h2>
                               <ul className="flex justify-between items-center flex-wrap gap-3">
                                    {languages.map((lang,i)=>(
-                                        <li key={i} className="flex-1"><span className="font-semibold">{lang.name}`</span>{" "+getLanguageLevel(lang.percentage || 0)}</li>
+                                        <li key={i} className="flex-1"><span className="font-semibold">{lang.name}`</span>{" "+langLevel(getLanguageLevel(lang.percentage || 0))}</li>
                                    ))}
                               </ul>
                          </section>

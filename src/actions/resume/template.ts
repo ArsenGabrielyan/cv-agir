@@ -4,8 +4,10 @@ import { ResumeFormType } from "@/schemas/types";
 import Handlebars from "handlebars"
 import { marked } from "marked"
 import DOMPurify from "isomorphic-dompurify"
+import { getTranslations } from "next-intl/server";
 
 export async function compileHTML(html: string, data: ResumeFormType){
+     const t = await getTranslations("doc-preview.lang-levels")
      Handlebars.registerHelper({
           eq: (v1, v2) => v1 === v2,
           ne: (v1, v2) => v1 !== v2,
@@ -21,7 +23,7 @@ export async function compileHTML(html: string, data: ResumeFormType){
           },
           getProficiency(value){
                const level = +value;
-               return getLanguageLevel(level);
+               return t(getLanguageLevel(level));
           },
           mdToHtml(content){
                const markdown = marked(content,{

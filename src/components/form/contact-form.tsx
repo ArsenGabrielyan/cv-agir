@@ -28,7 +28,8 @@ export default function ContactForm(){
      const [error, setError] = useState<string | undefined>("");
      const [success, setSuccess] = useState<string | undefined>("");
      const validationMsg = useTranslations("validations");
-     const errMsg = useTranslations("error-messages")
+     const errMsg = useTranslations("error-messages");
+     const buttonTxt = useTranslations("buttons")
      const form = useForm<ContactFormType>({
           resolver: zodResolver(getContactSchema(validationMsg)),
           defaultValues: {
@@ -158,7 +159,7 @@ export default function ContactForm(){
                          />
                          <FormError message={error}/>
                          <FormSuccess message={success}/>
-                         <LoadingButton type="submit" loading={isPending}>{t("submit.send")}</LoadingButton>
+                         <LoadingButton type="submit" loading={isPending}>{buttonTxt("send-msg")}</LoadingButton>
                     </div>
                </form>
           </Form>

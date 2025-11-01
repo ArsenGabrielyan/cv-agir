@@ -9,6 +9,7 @@ import PreviewSectionWrapper from "../wrappers/section-wrapper"
 import { absoluteUrl } from "@/lib/utils"
 import dynamic from "next/dynamic"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useTranslations } from "next-intl"
 
 interface ResumeSectionProps{
      photoSrc?: string | null,
@@ -25,13 +26,14 @@ const QRCode = dynamic(()=>import("react-qr-code"),{
 })
 export function HeaderSection({photoSrc, resumeData, resumeId}: ResumeSectionProps){
      const {fname, lname, jobTitle, address, phone, email, colorHex, borderStyle} = resumeData;
+     const t = useTranslations("doc-preview")
      return (
           <div className="flex justify-between items-center gap-4">
                <div className="flex items-center gap-6">
                     {photoSrc && (
                          <Image
                               src={photoSrc}
-                              alt="Ռեզյումեի նկար"
+                              alt={t("image-name")}
                               width={100}
                               height={100}
                               className="aspect-square object-cover"
@@ -60,7 +62,7 @@ export function HeaderSection({photoSrc, resumeData, resumeId}: ResumeSectionPro
                ) : (
                     <Image
                          src="/qr-placeholder.png"
-                         alt="Ռեզյումեի նկար"
+                         alt={t("image-name")}
                          width={100}
                          height={100}
                          className="aspect-square object-cover"
@@ -72,8 +74,9 @@ export function HeaderSection({photoSrc, resumeData, resumeId}: ResumeSectionPro
 
 export function SummarySection({resumeData}: ResumeSectionProps){
      const {summary, colorHex} = resumeData
+     const t = useTranslations("doc-preview.sections")
      return !summary ? null : (
-          <PreviewSectionWrapper title="Իմ մասին" style={{colorHex}}>
+          <PreviewSectionWrapper title={t("summary")} style={{colorHex}}>
                <p className="whitespace-pre-line text-sm">{summary}</p>
           </PreviewSectionWrapper>
      )
@@ -81,8 +84,9 @@ export function SummarySection({resumeData}: ResumeSectionProps){
 
 export function HobbiesSection({resumeData}: ResumeSectionProps){
      const {hobbies, colorHex} = resumeData
+     const t = useTranslations("doc-preview.sections")
      return !hobbies ? null : (
-          <PreviewSectionWrapper title="Հոբբիներ" style={{colorHex}}>
+          <PreviewSectionWrapper title={t("hobbies")} style={{colorHex}}>
                <p className="whitespace-pre-line text-sm">{hobbies}</p>
           </PreviewSectionWrapper>
      )
@@ -90,9 +94,10 @@ export function HobbiesSection({resumeData}: ResumeSectionProps){
 
 export function WorkExperienceSection({resumeData}: ResumeSectionProps){
      const {experience, colorHex} = resumeData
+     const t = useTranslations("doc-preview")
      const expNotEmpty = experience?.filter(exp=>Object.values(exp).filter(Boolean).length > 0)
      return !expNotEmpty?.length ? null : (
-          <PreviewSectionWrapper title="Աշխատանքային փորձ" style={{colorHex}}>
+          <PreviewSectionWrapper title={t("sections.work-experience")} style={{colorHex}}>
                {expNotEmpty.map((exp,i)=>(
                     <div key={i} className="break-inside-avoid space-y-1">
                          <div className="flex items-center justify-between text-sm font-semibold">
@@ -100,7 +105,7 @@ export function WorkExperienceSection({resumeData}: ResumeSectionProps){
                               {exp.startDate && (
                                    <span>
                                         {format(exp.startDate,"MM/yyyy")} -{" "}
-                                        {exp.endDate ? format(exp.endDate,"MM/yyyy") : "Այսօր"}
+                                        {exp.endDate ? format(exp.endDate,"MM/yyyy") : t("today")}
                                    </span>
                               )}
                          </div>
@@ -120,9 +125,10 @@ export function WorkExperienceSection({resumeData}: ResumeSectionProps){
 
 export function EducationSection({resumeData}: ResumeSectionProps){
      const {education, colorHex} = resumeData
+     const t = useTranslations("doc-preview")
      const eduNotEmpty = education?.filter(edu=>Object.values(edu).filter(Boolean).length > 0)
      return !eduNotEmpty?.length ? null : (
-          <PreviewSectionWrapper title="Կրթություն" style={{colorHex}}>
+          <PreviewSectionWrapper title={t("sections.education")} style={{colorHex}}>
                {eduNotEmpty.map((edu,i)=>(
                     <div key={i} className="break-inside-avoid space-y-1">
                          <div className="flex items-center justify-between text-sm font-semibold">
@@ -130,7 +136,7 @@ export function EducationSection({resumeData}: ResumeSectionProps){
                               {edu.startDate && (
                                    <span>
                                         {format(edu.startDate,"MM/yyyy")} -{" "}
-                                        {edu.endDate ? format(edu.endDate,"MM/yyyy") : "Այսօր"}
+                                        {edu.endDate ? format(edu.endDate,"MM/yyyy") : t("today")}
                                    </span>
                               )}
                          </div>
@@ -144,8 +150,9 @@ export function EducationSection({resumeData}: ResumeSectionProps){
 
 export function SkillsSection({resumeData}: ResumeSectionProps){
      const {skills, colorHex, borderStyle} = resumeData
+     const t = useTranslations("doc-preview.sections")
      return !skills?.length ? null : (
-          <PreviewSectionWrapper title="Հմտություններ" style={{colorHex}}>
+          <PreviewSectionWrapper title={t("skills")} style={{colorHex}}>
                <div className="flex break-inside-avoid flex-wrap gap-2">
                     {skills.map((skill,i)=>{
                          return skill.name==="" ? null : (
@@ -168,12 +175,17 @@ export function SkillsSection({resumeData}: ResumeSectionProps){
 
 export function LanguagesSection({resumeData}: ResumeSectionProps){
      const {languages, colorHex} = resumeData
+     const t = useTranslations("doc-preview")
      return !languages?.length ? null : (
-          <PreviewSectionWrapper title="Լեզուներ" style={{colorHex}}>
+          <PreviewSectionWrapper title={t("sections.langs")} style={{colorHex}}>
                <div className="break-inside-avoid space-y-2">
                     {languages.map((lang,i)=>{
                          return lang.name==="" ? null : (
-                              <p key={i} className="text-xs"><span className="font-semibold">{lang.name}</span>՝ {getLanguageLevel(lang.percentage || 0)}</p>
+                              <p key={i} className="text-xs">{t.rich("lang-format",{
+                                   bold: chunks => <span className="font-semibold">{chunks}</span>,
+                                   langName: lang.name || "",
+                                   langLevel: t(`lang-levels.${getLanguageLevel(lang.percentage || 0)}`)
+                              })}</p>
                          )
                     })}
                </div>
@@ -183,8 +195,9 @@ export function LanguagesSection({resumeData}: ResumeSectionProps){
 
 export function LinksSection({resumeData,disableLinks=false}: ResumeSectionProps){
      const {links, colorHex} = resumeData
+     const t = useTranslations("doc-preview.sections")
      return !links?.length ? null : (
-          <PreviewSectionWrapper title="Վեբ հղումներ" style={{colorHex}}>
+          <PreviewSectionWrapper title={t("links")} style={{colorHex}}>
                <div className="break-inside-avoid flex flex-col items-start justify-center gap-1">
                     {links.map((link,i)=>{
                          return link.name==="" ? null : disableLinks ? (
@@ -208,9 +221,10 @@ export function LinksSection({resumeData,disableLinks=false}: ResumeSectionProps
 
 export function CoursesSection({resumeData}: ResumeSectionProps){
      const {courses, colorHex} = resumeData;
+     const t = useTranslations("doc-preview")
      const courseNotEmpty = courses?.filter(course=>Object.values(course).filter(Boolean).length > 0)
      return !courseNotEmpty?.length ? null : (
-          <PreviewSectionWrapper title="Դասընթացներ" style={{colorHex}}>
+          <PreviewSectionWrapper title={t("sections.courses")} style={{colorHex}}>
                {courseNotEmpty.map((course,i)=>(
                     <div key={i} className="break-inside-avoid space-y-1">
                          <div className="flex items-center justify-between text-sm font-semibold">
@@ -218,7 +232,7 @@ export function CoursesSection({resumeData}: ResumeSectionProps){
                               {course.startDate && (
                                    <span>
                                         {format(course.startDate,"MM/yyyy")} -{" "}
-                                        {course.endDate ? format(course.endDate,"MM/yyyy") : "Այսօր"}
+                                        {course.endDate ? format(course.endDate,"MM/yyyy") : t("today")}
                                    </span>
                               )}
                          </div>
@@ -231,9 +245,10 @@ export function CoursesSection({resumeData}: ResumeSectionProps){
 
 export function ReferencesSection({resumeData}: ResumeSectionProps){
      const {references, colorHex} = resumeData
+     const t = useTranslations("doc-preview.sections")
      const refNotEmpty = references?.filter(ref=>Object.values(ref).filter(Boolean).length > 0);
      return !refNotEmpty?.length ? null : (
-          <PreviewSectionWrapper title="Կոնտակտային հղումներ" style={{colorHex}}>
+          <PreviewSectionWrapper title={t("refs")} style={{colorHex}}>
                <div className="break-inside-avoid grid grid-cols-2">
                     {refNotEmpty.map((ref,i)=>(
                          <div key={i} className="space-y-1">
