@@ -14,7 +14,6 @@ import { getTranslations } from "next-intl/server";
 import { absoluteUrl } from "@/lib/utils";
 import { languages } from "@/i18n/config";
 
-
 type Props = {
   children: React.ReactNode;
   params: Promise<{locale: string}>;
@@ -43,7 +42,10 @@ export const generateMetadata = async({params}: LocalePageProps): Promise<Metada
       canonical: absoluteUrl(`/${locale}`)
     },
     icons: {
-      icon: "/app-icon.png",
+      icon: [
+        { url: "/favicon.ico", type: "image/x-icon" },
+        { url: "/app-icon.png", sizes: "192x192", type: "image/png"}
+      ],
       apple: "/app-icon.png"
     },
   }
