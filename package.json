@@ -95,7 +95,7 @@
     "@types/zxcvbn": "^4.4.5",
     "cross-env": "^7.0.3",
     "eslint": "^9",
-    "eslint-config-next": "^16.0.6",
+    "eslint-config-next": "16.0.6",
     "handlebars-loader": "^1.7.3",
     "postcss": "^8",
     "prisma": "^6.18.0",
