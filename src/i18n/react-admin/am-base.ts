@@ -27,6 +27,8 @@ const am: TranslationMessages = {
                edit: 'Խմբագրել',
                export: 'Արտահանել',
                list: 'Ցուցակ',
+               reset: "Վերակայել",
+               search_columns: "Որոնել սյունները",
                refresh: 'Թարմացնել',
                remove_filter: 'Հեռացնել այս ֆիլտրը',
                remove_all_filters: "Հեռացնել բոլոր ֆիլտրները",
@@ -149,6 +151,7 @@ const am: TranslationMessages = {
                logout: 'Դուրս գալ',
           },
           notification: {
+               offline: "Կապից դուրս",
                updated: 'Օբյեկտը թարմացվեց |||| %{smart_count} հատ օբյեկտ թարմացվեց',
                created: 'Օբյեկտը ստեղծվեց',
                deleted: 'Օբյեկտը ջնջվեց |||| %{smart_count} հատ օբյեկտ ջնջվեց',
